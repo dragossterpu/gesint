@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form>
+		<p:menubar styleClass="navPrimary">			
+			<p:menuitem value=" Acasă" icon="fa fa-fw fa-home" outcome="/index" styleClass="itemInicio" />			
+			<p:submenu label="Utilizatori" icon="fa fa-fw fa-group" styleClass="itemUsuarios">
+				<p:menuitem value="Utilizatori" outcome="/users/users"/>
+				<p:menuitem value="Equipa de conducere" outcome="/enConstruccion" />
+				<p:menuitem value="Statistică membrii"outcome="/enConstruccion" />
+				<p:separator />	
+				<p:menuitem value="Alerte/Avize"  />
+			</p:submenu>
+			<p:submenu label="Administración" icon="fa fa-fw fa-cogs" styleClass="itemAdministracion">								
+				<p:menuitem value="Actividades" outcome="/enConstruccion" />
+				<p:menuitem value="Puestos de trabajo" outcome="/enConstruccion" />
+				<p:menuitem value="Tareas"  outcome="/enConstruccion"/>
+				<p:menuitem value="Fuentes de daño" outcome="/enConstruccion" />
+				<p:menuitem value="Riesgos" outcome="/enConstruccion" />
+				<p:menuitem value="Medidas"  outcome="/enConstruccion"/>																
+			</p:submenu>
+			<p:submenu label="Estadísticas" icon="fa fa-fw fa-bar-chart" styleClass="itemEstadisticas">
+				<p:menuitem value="Valora-m"  outcome="/enConstruccion"/>
+				<p:menuitem value="Prevencion10.es" outcome="/enConstruccion" />															
+			</p:submenu>
+			<p:submenu label="Formación" icon="fa fa-fw fa-graduation-cap" styleClass="itemFormacion">
+				<p:menuitem value="Generación de exámenes" outcome="/enConstruccion" />				
+				<p:menuitem value="Calificaciones" outcome="/enConstruccion"/>
+				<p:menuitem value="Solicitudes de exámenes"outcome="/enConstruccion" />																											
+			</p:submenu>
+			<p:submenu label="Portal" icon="fa fa-fw fa-globe" styleClass="itemGestorDocumental">
+				<p:submenu label="Gestor Documental" outcome="/enConstruccion">
+					<p:menuitem value="Documentos / Ficheros"  outcome="/enConstruccion"/>
+					<p:menuitem value="Etiquetas" outcome="/enConstruccion" />
+					<p:menuitem value="Categorías" outcome="/enConstruccion" />			
+					<p:menuitem value="Iconos"  outcome="/enConstruccion"/>
+				</p:submenu>
+				<p:submenu label="Ajustes del sistema" >
+					<p:menuitem value="Log de sistema" outcome="/enConstruccion"/>
+					<p:menuitem value="Propiedades" outcome="/enConstruccion"/>
+					<p:menuitem value="Traducciones"  outcome="/enConstruccion"/>
+				</p:submenu>
+				<p:submenu label="Videos Tutoriales">
+					<p:menuitem value="Informacióm portal"  outcome="/enConstruccion"/>
+					<p:menuitem value="Panel de administración" outcome="/enConstruccion" />
+				</p:submenu>
+				<p:separator />
+				<p:menuitem value="Enlaces"  outcome="/enConstruccion"/>
+				<p:menuitem value="Preguntas Frecuentes" outcome="/enConstruccion" />				
+				<p:separator />
+                <p:submenu label="Servicios stop" >
+                    <p:menuitem value="Incidencias"  outcome="/enConstruccion"/>                                                            
+                    <p:menuitem value="Categorias" outcome="/enConstruccion" />                                                            
+                </p:submenu>
+				
+			</p:submenu>
+			<p:submenu label="#{request.remoteUser}" icon="fa fa-fw fa-user" class="ui-menuitem ui-menubar-options" >
+				<p:menuitem value="Mi Perfil" class="miperfi" onclick="" outcome="/enConstruccion" icon="fa fa-fw fa-user"/>
+				<p:menuitem value="Salir"  href='./logout '  icon="fa fa-fw fa-sign-out"/>				
+			</p:submenu>
+		</p:menubar>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,335 @@
+<ui:composition template="../layouts/layoutInterior.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<div class="content_newForm">
+				<div class="titleFormulario">
+					<h3 style="margin-top: 0">Modificar usuario</h3>
+				</div>
+		<div class="container-fluid">
+			<h:form id="form" class="tabsInvert">
+				<p:growl id="msgs" showDetail="true" />
+				<p:accordionPanel multiple="true" activeIndex="0,1,2,3">
+					<p:tab title="Datos personales / comunicación">
+						<div class="tabAccordion">
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="fechaCreacion"
+											value="Fecha de creación:" /></b>
+									<p:calendar id="fechaCreacion" pattern="dd/MM/yyyy" locale="es"
+										navigator="true" maxdate="#{currentDate}"
+										value="#{businessmanBean.usuario.fechaCreacion}"
+										disabled="true" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="username" value="Usuario:" /></b>
+									<p:inputText id="username"
+										value="#{businessmanBean.usuario.username}" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="rolSelect" value="Rol:" /></b>
+									<p:importEnum
+										type="es.mira.insht.persistence.entities.enums.RoleEnum"
+										var="rol" allSuffix="ALL_ENUM_VALUES" />
+									<p:selectOneMenu value="#{businessmanBean.usuario.role}"
+										id="rolSelect"
+										disabled="#{businessmanBean.usuario.usuarioasignado or p:ifAnyGranted('ADMIN_CCAA,ADMIN_STOP,ADMIN_MUTUAS,USER')}"
+										required="true" requiredMessage="Seleccione un rol" styleClass="form-control form-select">
+										<f:selectItem itemLabel="Seleccione uno" itemValue="" />
+										<f:selectItems value="#{rol.ALL_ENUM_VALUES}" var="rol"
+											itemLabel="#{rol.descripcion}" itemValue="#{rol}" />
+									</p:selectOneMenu>
+									<p:messages for="rolSelect" autoUpdate="true" closable="true" />
+								</div>
+
+							</div>
+
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="nombre" value="Nombre:" /></b>
+									<p:inputText id="nombre"
+										value="#{businessmanBean.usuario.name}"
+										requiredMessage="Introduzca el nombre" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="nif" value="NIF:" /></b>
+									<p:inputText id="nif" value="#{businessmanBean.usuario.nif}" />
+								</div>
+
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="mobilePhone" value="Teléfono :" /></b>
+									<p:inputText id="mobilePhone"
+										value="#{businessmanBean.usuario.mobilephone}" />
+								</div>
+							</div>
+
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel 
+											value="Trabajador designado:" /></b>
+									<h:outputLabel value="SI" styleClass="form-control"
+										rendered="#{businessmanBean.usuario.usuarioasignado}" />
+									<h:outputLabel value="NO" styleClass="form-control"
+										rendered="#{not businessmanBean.usuario.usuarioasignado}" />
+								</div>
+
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="provinciaSelect" value="Provincia:" /></b>
+									<p:selectOneMenu value="#{businessmanBean.idProvincia}"
+										id="provinciaSelect" styleClass="form-control form-select">
+										<f:selectItem itemLabel="Seleccione una" itemValue="" />
+										<f:selectItems value="#{businessmanBean.listaProvincias}"
+											var="provincia" itemLabel="#{provincia.nombre}"
+											itemValue="#{provincia.id}" />
+									</p:selectOneMenu>
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="alertChannelSelect" value="Alertas:" /></b>
+									<p:importEnum
+										type="es.mira.insht.persistence.entities.enums.AlertChannelEnum"
+										var="alerta" allSuffix="ALL_ENUM_VALUES" />
+									<p:selectOneMenu
+										value="#{businessmanBean.usuario.alertChannel}"
+										id="alertChannelSelect" required="true" styleClass="form-control form-select"
+										requiredMessage="Seleccione un tipo de alerta"
+										converter="#{selectConverter}">
+										<f:selectItem itemLabel="Seleccione uno" itemValue="" />
+										<f:selectItems value="#{alerta.ALL_ENUM_VALUES}"
+											var="alertaCanal" itemLabel="#{alertaCanal.descripcion}"
+											itemValue="#{alertaCanal}" />
+									</p:selectOneMenu>
+									<p:messages for="alertChannelSelect" autoUpdate="true"
+										closable="true" />
+								</div>
+							</div>
+							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel
+											value="Usuario certificado:" /></b> 
+									<h:outputLabel value="SI" styleClass="form-control"
+										rendered="#{businessmanBean.usuario.firmaDigital}" />
+									<h:outputLabel value="NO" styleClass="form-control"
+										rendered="#{not businessmanBean.usuario.firmaDigital}" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4 text-center">
+									<p:commandButton value="Alertas"
+									icon="fa fa-bell" 
+									action="#{alertaBean.mostrarDialogoAlertas()}" immediate="true"/>
+								</div>
+							</div>
+						</div>
+						<div class="botonesFormulario">
+								<p:commandButton actionListener="#{businessmanBean.restaurarClave}"
+									value="Restaurar contraseña" />
+								<p:commandButton
+									action="#{businessmanBean.guardarCambios(businessmanBean.usuario)}"
+									value="Guardar" />
+							</div>
+					</p:tab>
+
+					<p:tab title="Empresas"
+						rendered="#{not businessmanBean.usuario.usuarioasignado}">
+						<div class="tabAccordion">
+							<div class="ui-g">
+
+								<p:outputPanel layout="block" id="panelCompanys">
+									<p:outputPanel styleClass="mensajeSinResultados"
+										rendered="#{empty businessmanBean.listCompany}">
+                        No existe ningún resultado que cumpla los parámetros de su búsqueda.
+                    </p:outputPanel>
+									<p:dataTable var="empresa"
+										value="#{businessmanBean.listCompany}" rows="10"
+										id="tablaCompanys" paginator="true" resizableColumns="true"
+										rendered="#{not empty businessmanBean.listCompany}" paginatorAlwaysVisible="false"> 
+										<f:facet name="header">
+                        Listado empresas usuario
+                    </f:facet>										
+										<p:column headerText="F. Creación"
+											sortBy="#{empresa.fechaCreacion}" width="70">
+											<h:outputText value="#{empresa.fechaCreacion}">
+												<f:convertDateTime pattern="dd/MM/yyyy"
+													timeZone="Europe/Madrid" />
+											</h:outputText>
+										</p:column>
+										<p:column headerText="Nombre" width="170"
+											sortBy="#{empresa.name}">
+											<h:outputText value="#{empresa.name}" />
+										</p:column>		
+										
+										<p:column headerText="Tipo" width="95"
+										sortBy="#{empresa.tipoAplicacion}">
+
+											<h:panelGroup
+												rendered="#{empresa.tipoAplicacion == '1'}">
+												<div>
+													<span class="logo-directiva"> <span class="negro">autopreven</span>
+														<span class="gris-logo letrat">-</span> <span
+														class="color-t letrat">t</span>
+													</span>
+													<p:graphicImage class="img" id="img"
+														value="../images/registered.png" />
+												</div>
+	
+											</h:panelGroup>
+	
+											<h:panelGroup
+												rendered="#{empresa.tipoAplicacion == '10'}">
+												<div>
+													<span class="logo-directiva"> <span class="negro">evalua</span>
+														<span class="gris-logo letrat">-</span> <span
+														class="color-t letrat">t</span> <span class="color-t img"></span>
+													</span>
+													<p:graphicImage class="img" id="img2"
+														value="../images/registered.png" />
+												</div>
+											</h:panelGroup>
+										</p:column>
+																											
+									</p:dataTable>
+								</p:outputPanel>
+
+							</div>
+						</div>
+					</p:tab>
+
+					<p:tab title="Expedientes">
+						<h:panelGrid columns="3" cellpadding="10">
+							<p:outputPanel layout="block" id="panelExpedientes">
+								<p:outputPanel styleClass="mensajeSinResultados"
+									rendered="#{empty businessmanBean.listaExpedientes}">
+                        No existe ningún resultado que cumpla los parámetros de su búsqueda.
+                    </p:outputPanel>
+								<p:dataTable var="expediente"
+									value="#{businessmanBean.listaExpedientes}" rows="10"
+									id="tablaExpedientes" paginator="true" resizableColumns="true"
+									rendered="#{not empty businessmanBean.listaExpedientes}" paginatorAlwaysVisible="false">
+									<f:facet name="header">
+                        Listado evaluaciones usuario
+                    </f:facet>
+									
+									<p:column headerText="F. Creación"
+										sortBy="#{expediente.fechaCreacion}" width="70">
+										<h:outputText value="#{expediente.fechaCreacion}">
+											<f:convertDateTime pattern="dd/MM/yyyy"
+												timeZone="Europe/Madrid" />
+										</h:outputText>
+									</p:column>									
+									<p:column headerText="Empresa" width="70"
+										sortBy="#{expediente.workplace.empresa.name}">
+										<h:outputText value="#{expediente.workplace.empresa.name}" />
+									</p:column>
+									<p:column headerText="Estado" width="100"
+										sortBy="#{expediente.estado}">
+										<h:outputText value="CREADO"
+											rendered="#{expediente.estado == 0}" />
+										<h:outputText styleClass="fa fa-times-circle"
+											value=" PENDIENTE EVALUACIÓN"
+											rendered="#{expediente.estado == 1}" />
+										<h:outputText styleClass="fa fa-exclamation-triangle"
+											value=" PLANIFICADO" rendered="#{expediente.estado == 2}" />
+										<h:outputText styleClass="fa fa-check-circle"
+											value=" SEGUIMIENTO" rendered="#{expediente.estado == 3}" />
+										<h:outputText styleClass="fa fa-check-circle"
+											value=" FINALIZADO" rendered="#{expediente.estado == 4}" />
+										<h:outputText value="CANCELADO"
+											rendered="#{expediente.estado == 5}" />
+										<h:outputText value="ARCHIVADO"
+											rendered="#{expediente.estado == 6}" />
+										<h:outputText value="EVALUADO"
+											rendered="#{expediente.estado == 10}" />
+										<h:outputText value="NO EVALUADO"
+											rendered="#{expediente.estado == 11}" />
+										<h:outputText value="CON RIESGOS"
+											rendered="#{expediente.estado == 12}" />
+										<h:outputText value="SIN RIESGOS"
+											rendered="#{expediente.estado == 13}" />
+										<h:outputText styleClass="fa fa-remove" value="BORRADO"
+											rendered="#{expediente.estado == 14}" />
+									</p:column>
+
+									
+									
+									<p:column headerText="Ex." styleClass="botonTabla"
+										exportable="false" width="30" toggleable="false">
+										<p:commandButton title="Ver detalle expedientes"
+											immediate="true" disabled="#{expediente.estado == 14}" icon="fa fa-fw fa-eye"
+											action="#{expedienteDetalleBean.verDetalleExpediente(expediente,4)}" />
+									</p:column>									
+
+								</p:dataTable>
+							</p:outputPanel>
+
+						</h:panelGrid>
+					</p:tab>
+
+					<p:tab title="Instruye-t"
+						rendered="#{not businessmanBean.usuario.usuarioasignado}">
+						<div class="tabAccordion">
+							<div class="ui-g">
+
+								<p:outputPanel layout="block" id="panelCursos">
+									<p:outputPanel styleClass="mensajeSinResultados"
+										rendered="#{empty businessmanBean.listCursos}">
+                        		No existe ningún resultado que cumpla los parámetros de su búsqueda.
+                    		</p:outputPanel>
+									<p:dataTable var="curso" value="#{businessmanBean.listCursos}"
+										rows="10" id="tablaCursos" 
+										resizableColumns="true"
+										rendered="#{not empty businessmanBean.listCursos}">
+										<f:facet name="header">
+                        Listado cursos usuario
+                    </f:facet>										
+										<p:column headerText="Fecha Inicio"
+											sortBy="#{curso.user.fechaInicioAprendizaje}" width="170">
+											<h:outputText value="#{curso.user.fechaInicioAprendizaje}">
+												<f:convertDateTime pattern="dd/MM/yyyy"
+													timeZone="Europe/Madrid" />
+											</h:outputText>
+										</p:column>
+										<p:column headerText="Fecha Fin"
+											sortBy="#{curso.user.fechaFinAprendizaje}" width="170">
+											<h:outputText value="#{curso.user.fechaFinAprendizaje}">
+												<f:convertDateTime pattern="dd/MM/yyyy"
+													timeZone="Europe/Madrid" />
+											</h:outputText>
+										</p:column>
+										<p:column headerText="Curso" width="170"
+											sortBy="#{curso.courseId}">
+											<h:outputText value="#{curso.courseId}" />
+										</p:column>										
+									</p:dataTable>
+								</p:outputPanel>
+							</div>
+						</div>
+					</p:tab>
+				</p:accordionPanel>
+				
+				<p:messages autoUpdate="true" closable="true" />
+
+				<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"
+					closable="true">
+					<p:messages for="dialogMessage" autoUpdate="true" showDetail="true"
+						showSummary="true" />
+				</p:dialog>
+			</h:form>
+			<p:dialog header="Alertas del expediente"
+			widgetVar="dialogAlertas" modal="true" 
+			styleClass="modalContentAlertas" resizable="false" id="contenedor" showEffect="fade" hideEffect="fade" onHide="#{alertaBean.clearAlerta()}">
+				<p:ajax event="close" update=":contenedor" />
+				<ui:include src="/plantillas/vistaAlertas.xhtml">
+					<ui:param name="usuario" value="#{businessmanBean.usuario}"></ui:param>
+				</ui:include>
+			</p:dialog>
+		</div>
+		<div class="botonesFormulario">
+					<p:button outcome="users/users" value="Volver"
+						icon="fa fa-fw fa-undo" />
+				</div>
+		</div>
+	</ui:define>
+</ui:composition>

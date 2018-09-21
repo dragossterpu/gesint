@@ -1,0 +1,275 @@
+<ui:composition template="../layouts/layoutInterior.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
+
+	<ui:define name="content">
+		<p:importConstants type="ro.mira.peronline.constantes.Constantes" var="Constantes" />
+ <script type="text/javascript">
+                function showStatus() {
+                    PF('statusDialog').show();
+                }
+                function hideStatus() {
+                    PF('statusDialog').hide();
+                }
+            </script>
+		<h:form id="searchListUsers">
+			<div class="filtro">
+				<div class="bloqueFormulario">
+
+					<DIV class="titleFormulario">Căutare utilizatori </DIV>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="idCard"  styleClass="buscador" value="CNP:" />
+
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="idCard"
+								value="#{userBean.searchUsers.idCard}" />
+						</div>
+					</div>
+
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="name" styleClass="buscador" value="Nume:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="name"
+								value="#{userBean.searchUsers.name}" />
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="username" styleClass="buscador"
+								value="Utilizator:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="username"
+								value="#{userBean.searchUsers.username}" />
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="email" styleClass="buscador"
+								value="Email:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="email"
+								value="#{userBean.searchUsers.email}" />
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="role" value="Rol:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+                    <p:importEnum type="ro.mira.peronline.persistence.entities.enums.RoleEnum" var="roles" allSuffix="ALL_ENUM_VALUES" />
+                    <p:selectOneMenu value="#{userBean.searchUsers.role}" id="role">
+                        <f:selectItem itemLabel="Alege unul..." itemValue="" />
+                        <f:selectItems value="#{roles.ALL_ENUM_VALUES}" var="roleUser" itemLabel="#{roleUser.description}" itemValue="#{roleUser}" />
+                    </p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="sex" value="Sex:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:importEnum
+								type="ro.mira.peronline.persistence.entities.enums.SexEnum"
+								var="sexs" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.searchUsers.sex}"
+								id="sex" class="selectFiltro" style="min-width:initial;" >
+								<f:selectItem itemLabel="Alege unul..." itemValue="" />
+								<f:selectItems value="#{sexs.ALL_ENUM_VALUES}"
+									var="sexUser"
+									itemLabel="#{sexUser.description}"
+									itemValue="#{sexUser}" />
+							</p:selectOneMenu>
+						</div>
+					</div>					
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="civilStatus" value="Starea civilă:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:importEnum
+								type="ro.mira.peronline.persistence.entities.enums.CivilStatusEnum"
+								var="civilStats" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.searchUsers.civilStatus}"
+								id="civilStatus" class="selectFiltro" style="min-width:initial;" >
+								<f:selectItem itemLabel="Alege unul..." itemValue="" />
+								<f:selectItems value="#{civilStats.ALL_ENUM_VALUES}"
+									var="civilStatusUser"
+									itemLabel="#{civilStatusUser.description}"
+									itemValue="#{civilStatusUserUser}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="typeLocality" value="Tipul localității:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:importEnum
+								type="ro.mira.peronline.persistence.entities.enums.TypeLocalityEnum"
+								var="typeLocalitys" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.searchUsers.typeLocality}"
+								id="typeLocality" class="selectFiltro" style="min-width:initial;" >
+								<f:selectItem itemLabel="Alege unul..." itemValue="" />
+								<f:selectItems value="#{typeLocalitys.ALL_ENUM_VALUES}"
+									var="typeLocalityUser"
+									itemLabel="#{typeLocalityUser.description}"
+									itemValue="#{typeLocalityUser}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="education" value="Nivel de educație:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:importEnum type="ro.mira.peronline.persistence.entities.enums.EducationEnum" var="educations" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.searchUsers.education}" id="education" class="selectFiltro" style="min-width:initial;" >
+								<f:selectItem itemLabel="Alege unul..." itemValue="" />
+								<f:selectItems value="#{educations.ALL_ENUM_VALUES}" var="educationUser" itemLabel="#{educationUser.description}" itemValue="#{educationUser}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="provinciasSelect" styleClass="buscador" value="Organizația/Județul:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">							
+						<p:selectOneMenu  value="#{userBean.searchUsers.province}" filterMatchMode="startsWith" id="provinciasSelect" class="selectFiltro" converter="#{selectConverter}">
+							<f:selectItem itemLabel="Alege una..."  />
+							<f:selectItems value="#{userBean.provinces}" var="province" itemLabel="#{province.name}" itemValue="#{province}" />
+							<p:ajax event="change" update="locality" partialSubmit="true" listener="#{userBean.onChangeProvince()}" />								
+						</p:selectOneMenu>	
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="locality" styleClass="buscador" value="Localitatea:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">							
+							<p:selectOneMenu  value="#{userBean.searchUsers.locality}" id="locality" class="selectFiltro" converter="#{trimConverter}">
+								<f:selectItem itemLabel="Alege una..." />
+								<f:selectItems value="#{userBean.localidades}" var="locality" itemLabel="#{locality.name}" itemValue="#{locality}" />								
+							</p:selectOneMenu>	
+						</div>						
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="dateFrom" value="Data înregistrării începând:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:calendar id="dateFrom" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{userBean.searchUsers.dateFrom}" />
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="dateUntil" value="Data înregistrării până :" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:calendar id="dateUntil" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{userBean.searchUsers.dateUntil}" />
+						</div>
+					</div>
+				</div>
+				<div class="botonesFormulario">
+					<p:commandButton actionListener="#{userBean.cleanSearch}" class="left" value="Curățare filtre" update="searchListUsers" icon="fa fa-eraser" />
+					<p:commandButton actionListener="#{userBean.searchUsers}" value="Căutare" update="userPanel" icon="fa fa-search"
+						oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" class="right" onsuccess="PF('statusDialog').hide()" />
+				</div>
+			</div>
+			<div class="resultadosFiltro">
+				<p:outputPanel layout="block" id="userPanel">
+					<p:dataTable var="user" value="#{userBean.model}"  rows="#{Constantes.TAMPAGINA}" id="userTable"  draggableColumns="true" 
+					paginator="true" lazy="true" resizableColumns="true"  sortOrder="descending" styleClass="modHeaderTable"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+					rowKey="#{user.username}" rowsPerPageTemplate="10,25,50" pageLinks="4" paginatorPosition="bottom"
+					emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">
+						<f:facet name="header">
+							<p:outputPanel>
+								<div class="left">
+									<h:commandLink rendered="#{userBean.model.rowCount ne 0}">
+										<p:graphicImage value="/images/xls.png" />
+										<p:dataExporter type="xls" target="userTable" fileName="userList" />
+									</h:commandLink>
+									<h:commandLink rendered="#{userBean.model.rowCount ne 0}">
+										<p:graphicImage value="/images/pdf.png" />
+										<p:dataExporter type="pdf" target="userTable" fileName="userList" />
+									</h:commandLink>
+									<h:commandLink rendered="#{userBean.model.rowCount ne 0}">
+										<p:graphicImage value="/images/csv.png" />
+										<p:dataExporter type="csv" target="userTable" fileName="userList" />
+									</h:commandLink>
+								</div>
+								<span class="titulo">UTILIZATORI/MEMBRII</span>
+							</p:outputPanel>
+						</f:facet>
+						
+						<p:column headerText="Data inregistrării" sortBy="#{user.dateCreate}" style="width:12%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
+							<h:outputText value="#{user.dateCreate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="Europe/Madrid" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Nume" sortBy="#{user.name}" style="width:29%;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
+							<h:outputText value="#{user.name}" />
+						</p:column>
+						<p:column headerText="Prenume" sortBy="#{user.lastName}" style="width:29%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
+							<h:outputText value="#{user.lastName}" />
+						</p:column>
+						<p:column headerText="Email" sortBy="#{user.username}" style="width:29%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
+							<h:outputText value="#{user.username}" />
+						</p:column>
+						<p:column headerText="CNP" sortBy="#{user.idCard}" style="width:10%;" visible="#{userBean.list[4]}" exportable="#{userBean.list[4]}">
+							<h:outputText value="#{user.idCard}" />
+						</p:column>
+						<p:column headerText="Județul/Organizația " sortBy="#{user.province.name}" style="width:10%;" visible="#{userBean.list[5]}" exportable="#{userBean.list[5]}">
+							<h:outputText value="#{user.province.name}" />
+						</p:column>
+						<p:column styleClass="botonTabla text-center" exportable="false" style="width:10%;" toggleable="false">
+							<h:commandLink title="Modificare utilizator"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
+								action="#{userBean.getFormModifyUser(user)}" update="userTable" />
+							<p:commandButton title="Eliminare" icon="fa fa-trash" styleClass="modBtn"  actionListener="#{userBean.removeUser(user)}" 
+							update="searchListUsers" oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">
+								<p:confirm header="Ștergere utilizator" message="Sunteți sigur că doriți să ștergeți acest utilizator?" icon="fa fa-warning-sign" />
+							</p:commandButton>
+						</p:column>
+						<f:facet name="footer">
+       				 		Numărul total:    
+       				 		<h:outputText value="#{userBean.model.rowCount}">
+	    						<f:convertNumber type="number"
+                                 maxIntegerDigits="5"
+                                 maxFractionDigits="0"/>
+							</h:outputText>
+							de utilizatori /membrii
+    					</f:facet>
+					</p:dataTable>
+				</p:outputPanel>
+
+				<p:confirmDialog global="true">
+					<div class="centrarBotonesDialog">
+						<p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+						<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-remove" />
+					</div>
+				</p:confirmDialog>
+			</div>
+			<p:dialog id="dialog" widgetVar="dialogMessage" header="Información" closable="false">
+				<p:messages for="dialogMessage" autoUpdate="true" showDetail="true" showSummary="true" />
+				<div class="centrarBotonesDialog">
+					<p:button value="Cerrar" outcome="/users/users" />
+				</div>
+			</p:dialog>
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loading.gif" />
+			</p:dialog>                      
+                <p:messages globalOnly="true" autoUpdate="true" showSummary="true" showDetail="true" closable="true"/>
+		</h:form>
+	</ui:define>
+</ui:composition>

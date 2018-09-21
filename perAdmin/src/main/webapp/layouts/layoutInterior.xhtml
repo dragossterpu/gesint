@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<f:view>
+	<h:head>
+		<title><ui:insert name="title">	Ecologiştii</ui:insert></title>
+		<script src="#{request.contextPath}/js/primefaceslocale.js" />
+		<link rel="stylesheet" href="#{request.contextPath}/css/styles.css" />
+		<link rel="shortcut icon" type="image/png" href="#{request.contextPath}/2261e.ico"/>
+			
+	</h:head>
+	<h:body>
+
+		<div id="layout">
+			<div id="header">
+				<ui:include src="header.xhtml" />
+			</div>
+			<div id="menuSuperior">
+				<ui:include src="menuSuperior.xhtml" />
+			</div>
+			<div id="contenido">
+				<ui:insert name="content">Default content</ui:insert>
+				<script type="text/javascript">
+		$(document).ready(function() {
+			var ruta = window.location.pathname.substring(1).split('/');
+		       if(ruta[1] == 'users'|| ruta[1] == 'expedientes'|| ruta[1] == 'solicitudes'|| ruta[1] == 'alertas'){
+		    	   $('.itemUsuarios').addClass('activeMenu');
+		    	   return;
+		       }else if(ruta[1] == 'actividades'|| ruta[1] == 'administracionFormulariosEvaluacion'|| ruta[1] == 
+		    		   'fuentes'|| ruta[1] == 'medidas'|| ruta[1] == 'puestos'|| ruta[1] == 'riesgos'|| ruta[1] == 'tareas' ){
+		    	   $('.itemAdministracion').addClass('activeMenu');
+		       }else if(ruta[1] == 'index.xhtml' ){
+		    	   document.getElementsByClassName('itemInicio')[0].parentNode.classList.add('activeMenu');
+		    	   return;
+		       }else if(ruta[1] == 'estadisticas' ){
+		    	   $('.itemEstadisticas').addClass('activeMenu');
+		       }else if(ruta[1] == 'formacion' ){
+		    	   $('.itemFormacion').addClass('activeMenu');
+		       }else if(ruta[1] == 'actividadFuenteIcono' || ruta[1] == 'gestorCategorias' || ruta[1] == 
+		    		   'gestorDocumental' || ruta[1] == 'gestorEtiquetas' || ruta[1] == 'gestorLinks' || ruta[1] == 
+		    		   'gestorParametros' || ruta[1] == 'gestorTerminos' || ruta[1] == 'gestorVideos' || ruta[1] == 'preguntasFrecuentes' ){
+		    	   $('.itemGestorDocumental').addClass('activeMenu');
+		       }
+		})
+	</script>
+			</div>
+			<div id="footer">
+				<ui:include src="footer.xhtml" />
+			</div>
+		</div>
+	</h:body>
+</f:view>
+</html>

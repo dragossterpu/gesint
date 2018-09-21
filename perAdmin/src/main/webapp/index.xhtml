@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<ui:composition template="layouts/layoutInterior.xhtml">
+		<ui:define name="title">Ecologistii</ui:define>
+		<ui:define name="content">	
+			<h:form id="formHome">
+				<p:growl id="msgs" showDetail="true" />
+ PROBAAAAA
+        <p:dashboard id="board" >  
+ 
+            <p:panel id="estadisticas" header="Estadisticas desde">
+            	<p:panelGrid columns="2" >
+
+            		<p:panel id = "datosResumen">            		
+						<h:outputText value="Evaluaciones por día: " styleClass="dialogLabel" />
+						<h:outputText value="#" />
+						<p:separator/>
+						<p:panelGrid columns="2" styleClass="ui-noborder">
+							<p:panel>
+								<h:outputText value="Formularios más utilizados " styleClass="dialogLabel" />
+							
+							</p:panel>
+							<p:panel>
+								<h:outputText value="Categorías más utilizadas " styleClass="dialogLabel" />
+								
+								<span class="logo-directiva"> <span class="negro"
+									id="tipoEvaluacion">evalua</span><span
+									class="gris-logo letrat">-</span><span class="color-t letrat">t</span><span
+									class="color-t img"></span>
+								</span>
+								<p:graphicImage class="img" id="img2"
+									value="../images/registered.png" />					
+							</p:panel>
+						</p:panelGrid>
+						<p:separator/>
+						<h:outputText value="Solicitudes usuarios: " styleClass="dialogLabel" />
+						<h:outputText value="text" />
+						<p:separator/>												 
+            			<p:dataTable id="tablaUsuarios" var="modelo" value="modeloDatosUsuariosMes" >
+							<p:column headerText="Rol">
+								<h:outputText value="descripcion" />
+							</p:column>
+							<p:column headerText="Cantidad">
+								<h:outputText value="modelo.cantidad" />
+							</p:column>
+						</p:dataTable>
+            		</p:panel>
+            		
+            		<script type="text/javascript">
+						function format() {									
+					        this.cfg.axes.xaxis.tickOptions.showGridline = false;
+						}
+					</script>
+            	</p:panelGrid>
+            </p:panel>
+             
+        </p:dashboard>
+ 
+        <div style="clear:both" />			
+			</h:form>
+			
+					
+		</ui:define>
+	</ui:composition>
+</f:view>
+</html>
