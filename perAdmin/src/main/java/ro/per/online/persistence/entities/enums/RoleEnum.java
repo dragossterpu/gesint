@@ -59,9 +59,9 @@ public enum RoleEnum {
 	}
 
 	/**
-	 * @return Numele enum-ului fără prefixul "ROLE_"
+	 * @return Nombre del enum sin el prefijo "ROLE_"
 	 */
-	public String getName() {
+	public String getNombre() {
 		return name().substring(5);
 	}
 }

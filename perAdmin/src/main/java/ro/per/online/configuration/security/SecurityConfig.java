@@ -3,13 +3,14 @@ package ro.per.online.configuration.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
@@ -59,22 +60,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(loginService).passwordEncoder(passwordEncoder());
 	}
 
-	// /**
-	// * Configuración de la codificación de la contraseña usando BCrypt.
-	// * @return PasswordEncoder
-	// */
-	// @Bean
-	// public PasswordEncoder passwordEncoder() {
-	// return new BCryptPasswordEncoder();
-	// }
 	/**
 	 * Configuración de la codificación de la contraseña usando BCrypt.
-	 * 
 	 * @return PasswordEncoder
 	 */
 	@Bean
-	public Md5PasswordEncoder passwordEncoder() {
-		return new Md5PasswordEncoder();
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	/**
@@ -95,8 +87,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(Constantes.RUTALOGIN + "/**").anonymous().antMatchers(Constantes.ACCESO).anonymous()
 				.antMatchers(Constantes.INDEX).authenticated().antMatchers(Constantes.ACCESO).anonymous()
 				// Acceso a la administración sólo para el role ADMIN
-				.antMatchers("/administracion/**").hasRole("ROLE_ADMIN").antMatchers("/usuarioLost/**")
-				.hasAnyRole("ROLE_ADMIN", "ROLE_ADMIN").and().formLogin().loginPage(Constantes.RUTALOGIN)
+				.antMatchers("/administracion/**").hasRole("ADMIN").antMatchers("/usuarioLost/**")
+				.hasAnyRole("ADMIN", "ADMIN").and().formLogin().loginPage(Constantes.RUTALOGIN)
 				.loginProcessingUrl(Constantes.RUTALOGIN).defaultSuccessUrl(Constantes.INDEX)
 				.failureUrl(Constantes.RUTALOGIN).and().logout().logoutUrl("/login/logout")
 				.logoutSuccessUrl(Constantes.RUTALOGIN);

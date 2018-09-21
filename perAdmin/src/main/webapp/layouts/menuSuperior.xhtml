@@ -9,11 +9,11 @@
 			<p:submenu label="Utilizatori" icon="fa fa-fw fa-group" styleClass="itemUsuarios">
 				<p:menuitem value="Utilizatori" outcome="/users/users"/>
 				<p:menuitem value="Equipa de conducere" outcome="/enConstruccion" />
-				<p:menuitem value="Statistică membrii"outcome="/enConstruccion" />
+<!-- 				<p:menuitem value="Statistică membrii" outcome="/enConstruccion" /> -->
 				<p:separator />	
 				<p:menuitem value="Alerte/Avize"  />
 			</p:submenu>
-			<p:submenu label="Administración" icon="fa fa-fw fa-cogs" styleClass="itemAdministracion">								
+			<p:submenu label="Administración" icon="fa fa-fw fa-cogs" styleClass="itemAdministracion" >								
 				<p:menuitem value="Actividades" outcome="/enConstruccion" />
 				<p:menuitem value="Puestos de trabajo" outcome="/enConstruccion" />
 				<p:menuitem value="Tareas"  outcome="/enConstruccion"/>
@@ -21,14 +21,14 @@
 				<p:menuitem value="Riesgos" outcome="/enConstruccion" />
 				<p:menuitem value="Medidas"  outcome="/enConstruccion"/>																
 			</p:submenu>
-			<p:submenu label="Estadísticas" icon="fa fa-fw fa-bar-chart" styleClass="itemEstadisticas">
+			<p:submenu label="Estadísticas" icon="fa fa-fw fa-bar-chart" styleClass="itemEstadisticas" >
 				<p:menuitem value="Valora-m"  outcome="/enConstruccion"/>
 				<p:menuitem value="Prevencion10.es" outcome="/enConstruccion" />															
 			</p:submenu>
-			<p:submenu label="Formación" icon="fa fa-fw fa-graduation-cap" styleClass="itemFormacion">
+			<p:submenu label="Formación" icon="fa fa-fw fa-graduation-cap" styleClass="itemFormacion" >
 				<p:menuitem value="Generación de exámenes" outcome="/enConstruccion" />				
 				<p:menuitem value="Calificaciones" outcome="/enConstruccion"/>
-				<p:menuitem value="Solicitudes de exámenes"outcome="/enConstruccion" />																											
+				<p:menuitem value="Solicitudes de exámenes" outcome="/enConstruccion" />																											
 			</p:submenu>
 			<p:submenu label="Portal" icon="fa fa-fw fa-globe" styleClass="itemGestorDocumental">
 				<p:submenu label="Gestor Documental" outcome="/enConstruccion">
@@ -43,7 +43,7 @@
 					<p:menuitem value="Traducciones"  outcome="/enConstruccion"/>
 				</p:submenu>
 				<p:submenu label="Videos Tutoriales">
-					<p:menuitem value="Informacióm portal"  outcome="/enConstruccion"/>
+					<p:menuitem value="Informacióm portal"  outcome="/enConstruccion" />
 					<p:menuitem value="Panel de administración" outcome="/enConstruccion" />
 				</p:submenu>
 				<p:separator />
@@ -54,11 +54,10 @@
                     <p:menuitem value="Incidencias"  outcome="/enConstruccion"/>                                                            
                     <p:menuitem value="Categorias" outcome="/enConstruccion" />                                                            
                 </p:submenu>
-				
 			</p:submenu>
 			<p:submenu label="#{request.remoteUser}" icon="fa fa-fw fa-user" class="ui-menuitem ui-menubar-options" >
 				<p:menuitem value="Mi Perfil" class="miperfi" onclick="" outcome="/enConstruccion" icon="fa fa-fw fa-user"/>
-				<p:menuitem value="Salir"  href='./logout '  icon="fa fa-fw fa-sign-out"/>				
+				<p:menuitem value="Salir"  outcome='./logout'  icon="fa fa-fw fa-sign-out"/>				
 			</p:submenu>
 		</p:menubar>
 	</h:form>
