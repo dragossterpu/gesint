@@ -209,7 +209,7 @@ public class UserBean implements Serializable {
 	 * Returnează o listă a localităților care aparțin unui judet. Acesta este folosit pentru a reîncărca lista
 	 * localităților în funcție de judetul selectat.
 	 */
-	public void onChangeProvince(PProvince province) {
+	public void onChangeProvince() {
 		if (searchUsers.getProvince() != null) {
 			setLocalidades(localityService.findByProvince(province));
 		}

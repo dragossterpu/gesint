@@ -38,6 +38,11 @@ public class SearchUser implements Serializable {
 	private String username;
 
 	/**
+	 * Filtru cnp de utilizator.
+	 */
+	private String idCard;
+
+	/**
 	 * Filtru rol utilizator.
 	 */
 	private RoleEnum role;
