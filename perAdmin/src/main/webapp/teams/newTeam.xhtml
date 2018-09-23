@@ -1,0 +1,158 @@
+<ui:composition template="../layouts/layoutInterior.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<p:importConstants type="ro.per.online.constantes.Constantes" var="Constantes" />
+		<h:form id="form">
+			<div class="bloqueFormulario">
+				<p:panel header=" Înregistrare nou membru al echipei de conducere" styleClass="panelModCard">
+					<div class="container-fluid">
+						<div class="bloqueFormulario">
+							<p:dataTable var="usuario"
+								value="#{teamBean.usuariosSeleccionadosFinales}"
+								id="tablaUsueriosSeleccionados" rows="5" paginator="true"
+								resizableColumns="true" pageLinks="4" paginatorAlwaysVisible="false" paginatorPosition="botton"
+								rendered="#{not empty teamBean.usuariosSeleccionadosFinales}"
+								rowKey="#{usuario.username}">
+								<f:facet name="header">Posibili utilizatori candidați</f:facet>
+								<p:column headerText="Nume" style="width:65%;">
+									<h:outputText value="#{usuario.name}" />
+								</p:column>
+								<p:column headerText="Prenume" style="width:10%;">
+									<h:outputText value="#{usuario.lastName}" />
+								</p:column>
+								<p:column headerText="Email" style="width:20%;" styleClass="text-center">
+									<h:outputText value="#{usuario.email}" />
+								</p:column>
+								<p:column styleClass="botonTabla text-center" exportable="false"
+									toggleable="false" style="width:5%;">
+									<p:commandButton title="Eliminar" icon="fa fa-trash" styleClass="modBtn"
+										actionListener="#{teamBean.eliminarMembru(usuario)}"
+										update="form" immediate="true" />
+								</p:column>
+							</p:dataTable>
+							<div class="ui-g">
+								<p:outputPanel rendered="#{empty teamBean.usuariosSeleccionadosFinales}" class="ui-g-2">
+									<h:outputLabel for="numeUilizator" value="*Nume:" />
+								</p:outputPanel>			                    
+								<p:outputPanel rendered="#{empty teamBean.usuariosSeleccionadosFinales}" class="ui-g-6">
+									<p:inputText id="numeUilizator" ajax="true"
+										value="#{teamBean.nombreUsuario}"
+										required="#{empty teamBean.nombreUsuario or empty teamBean.usuariosSeleccionadosFinales}"
+										requiredMessage="Trebuie să introduceți un utilizator pentru înregistrare."
+										validatorMessage="Format e-mail nevalid.">
+										<f:validateRegex
+											pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+									</p:inputText>
+									<p:message for="numeUilizator" display="tooltip" />
+								</p:outputPanel>
+								<div class="ui-g-4">
+									<p:commandButton value="Caută membru"
+										action="#{teamBean.abrirDialogoBusquedaUsuarios}"
+										immediate="true" onstart="PF('statusDialog').show()"
+										onsuccess="PF('statusDialog').hide()" update="formBusquedaUsuarios"/>
+								</div>
+							</div>
+							<div class="ui-g">
+								<div class="ui-g-2">
+									<h:outputLabel for="lastName" value="*Prenume:" />
+								</div>
+								<div class="ui-g-10">
+									<p:inputText id="lastName" value="#{teamBean.team.user.lastName}"
+										required="true"
+										requiredMessage="Trebuie să introduceți un Prenume pentru utilizator." />
+									<p:messages for="lastName" autoUpdate="true" closable="true" />
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</p:panel>
+				<div class="botonesFormulario">
+					<p:button outcome="/teams/teams" value="Întoarcere"
+						icon="fa fa-fw fa-undo" />
+					<p:commandButton action="#{teamBean.save}"
+						value="Înregistrare" update="form" icon="fa fa-send"
+						onstart="PF('statusDialog').show()"
+						onsuccess="PF('statusDialog').hide()" />
+				</div>
+			</div>					
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loading.gif" />
+			</p:dialog>
+		</h:form>
+		<h:form id="formBusquedaUsuarios">
+			<p:dialog header="Căutare utilizator" widgetVar="dlgBusqueda" styleClass="botonUsuarios"
+						dynamic="true" width="800" height="500">
+				<p:panelGrid columns="1" id="panelBuscadorUsuarios">					
+					<p:panelGrid id="pestanaUsuarios" columns="1">				
+						<p:panelGrid id="filtroUsuarios" columns="2">
+							<h:outputLabel for="name" styleClass="dialogLabel"
+								value="Nume:" />
+							<p:inputText id="name"
+								value="#{teamBean.usuarioBusqueda.name}" />
+							<h:outputLabel for="Prenume" styleClass="dialogLabel"
+								value="NIF:" />
+							<p:inputText id="lastName"
+								value="#{teamBean.usuarioBusqueda.lastName}" />
+							<h:outputLabel for="provincia" styleClass="dialogLabel"
+								value="Organizația/Județul:" />
+							<p:selectOneMenu  value="#{teamBean.listaProvincias}" id="provincia" class="selectFiltro" converter="#{trimConverter}">
+								<f:selectItem itemLabel="Alege una..." itemValue="" />
+								<f:selectItems value="#{teamBean.usuarioBusqueda.provincia}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia}" />								
+							</p:selectOneMenu>	
+						</p:panelGrid>
+
+						<p:commandButton action="#{teamBean.buscarUsuarios()}"
+							value="Căutare" icon="fa fa-search"
+							update=":formBusquedaUsuarios:tablaUsuarios"
+							onstart="PF('statusDialog').show()"
+							onsuccess="PF('statusDialog').hide()" />
+						<p:dataTable id="tablaUsuarios" var="usuario" 
+							value="#{teamBean.modelUser}" rowIndexVar="rowIndex"
+							selection="#{teamBean.usuariosSeleccionados}" paginatorPosition="bottom" pageLinks="4"
+							paginatorAlwaysVisible="false" styleClass="modHeaderTable"
+							rowKey="#{usuario.username}" rows="5" sortOrder="descending"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							paginator="true" resizableColumns="true" lazy="true"
+							emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs.">
+							<p:ajax event="page" listener="#{teamBean.onChangePageUsuarios()}" />
+							<p:ajax event="rowUnselectCheckbox" listener="#{teamBean.onRowUnSelectedUser}" />
+							<p:ajax event="rowSelectCheckbox" listener="#{teamBean.onRowSelectedUser}" />
+							<p:ajax event="toggleSelect" listener="#{teamBean.onToggleSelectUsers}" global="true" />
+							
+							<p:column selectionMode="multiple"
+								style="width:16px;text-align:center" />
+
+							<p:column headerText="Nume" width="150">										
+								<h:outputText value="#{usuario.name}" />
+							</p:column>
+
+							<p:column headerText="Prenume" width="80">
+								<h:outputText value="#{usuario.lastName}" />
+							</p:column>
+							
+							<f:facet name="footer">
+      				 				Total: #{teamBean.modelUser.rowCount} registros
+   							</f:facet>
+						</p:dataTable>
+								
+
+					</p:panelGrid>
+					
+				</p:panelGrid>	
+			</p:dialog>
+			<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"
+				closable="false" resizable="false" modal="true">
+				<p:messages for="dialogMessage" autoUpdate="true"
+					showDetail="true" showSummary="true" />
+				<p:commandButton value="Aceptar"
+					onclick="PF('dialogMessage').hide()" styleClass="right" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -19,4 +19,19 @@ public interface TeamService {
 	 */
 	List<Team> fiindByTeam();
 
+	/**
+	 * Elimina un membru al echipei de conducere
+	 * 
+	 * @param team membru al echipei de conducere
+	 */
+	void delete(Team team);
+
+	/**
+	 * Salvați sau actualizați un team.
+	 * 
+	 * @param team
+	 * @return Team actualizat
+	 */
+	Team save(Team team);
+
 }

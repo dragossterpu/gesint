@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import ro.per.online.jsf.scope.FacesViewScope;
 
@@ -29,6 +30,7 @@ import ro.per.online.jsf.scope.FacesViewScope;
  *
  */
 @SpringBootApplication
+@EnableScheduling
 public class PerApplication {
 
 	/**

@@ -5,7 +5,7 @@ import java.util.List;
 import org.primefaces.model.SortOrder;
 
 import ro.per.online.persistence.entities.Users;
-import ro.per.online.web.beans.SearchUser;
+import ro.per.online.web.beans.UsuarioBusqueda;
 
 /**
  * Interfață pentru serviciul de Team.
@@ -31,14 +31,14 @@ public interface UserService {
 
 	/**
 	 * Obtiene el conteo de criteria.
-	 * @param busqueda UsuarioBusqueda
+	 * @param searchUser UsuarioBusqueda
 	 * @return int
 	 */
-	int getCounCriteria(SearchUser busqueda);
+	int getCounCriteria(UsuarioBusqueda searchUser);
 
 	/**
 	 * Busca usuarios con los parametros de búsqueda.
-	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @param searchUser UsuarioBusqueda
 	 * @param sortOrder SortOrder
 	 * @param sortField String
 	 * @param pageSize int
@@ -49,6 +49,6 @@ public interface UserService {
 	 *
 	 */
 	List<Users> buscarUsuarioCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
-			SearchUser usuarioBusqueda);
+			UsuarioBusqueda searchUser);
 
 }

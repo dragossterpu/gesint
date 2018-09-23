@@ -12,6 +12,8 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import ro.per.online.constantes.Constantes;
@@ -77,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		// Desactivada protección Cross-Site, incompatible con la implementación actual del sistema
 		http.csrf().disable();
-
+		http.headers().addHeaderWriter(new XFrameOptionsHeaderWriter(XFrameOptionsMode.SAMEORIGIN));
 		// Gestión de peticiones HTTP a recursos del sistema en base a la sesión del usuario
 		http.authorizeRequests()
 				// Recursos comunes

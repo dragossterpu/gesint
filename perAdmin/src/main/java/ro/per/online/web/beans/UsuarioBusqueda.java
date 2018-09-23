@@ -3,10 +3,7 @@ package ro.per.online.web.beans;
 import java.io.Serializable;
 import java.util.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
@@ -16,17 +13,9 @@ import ro.per.online.persistence.entities.enums.RoleEnum;
 import ro.per.online.persistence.entities.enums.SexEnum;
 import ro.per.online.persistence.entities.enums.TypeLocalityEnum;
 
-/**
- * Controlador de las operaciones relacionadas con la búsqueda de usuarios. Reseteo de valores de búsqueda.
- * 
- * @author STAD
- */
 @Setter
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class SearchUser implements Serializable {
+public class UsuarioBusqueda implements Serializable {
 	/**
 	 *
 	 */

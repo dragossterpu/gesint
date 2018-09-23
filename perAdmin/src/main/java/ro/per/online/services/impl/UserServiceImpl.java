@@ -21,7 +21,7 @@ import ro.per.online.persistence.repositories.UserRepository;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
 import ro.per.online.util.UtilitiesCriteria;
-import ro.per.online.web.beans.SearchUser;
+import ro.per.online.web.beans.UsuarioBusqueda;
 
 /**
  * Implementación del servicio de unidades.
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public List<Users> buscarUsuarioCriteria(final int first, final int pageSize, final String sortField,
-			final SortOrder sortOrder, final SearchUser usuarioBusqueda) {
+			final SortOrder sortOrder, final UsuarioBusqueda usuarioBusqueda) {
 		try {
 			this.session = this.sessionFactory.openSession();
 			final Criteria criteria = this.session.createCriteria(Users.class);
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
 			}
 			else {
-				criteria.addOrder(Order.desc(Constantes.FECHACREACION));
+				criteria.addOrder(Order.desc("dateCreate"));
 			}
 
 			final List<Users> usuariosList = gestionarCriteriaUsuarios(usuarioBusqueda, criteria);
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
 	 * @return List<User>
 	 */
 	@SuppressWarnings("unchecked")
-	private List<Users> gestionarCriteriaUsuarios(final SearchUser usuarioBusqueda, final Criteria criteria) {
+	private List<Users> gestionarCriteriaUsuarios(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
 		creaCriteria(usuarioBusqueda, criteria);
 
 		final List<Users> usuariosList = criteria.list();
@@ -154,16 +154,17 @@ public class UserServiceImpl implements UserService {
 	 * @param usuarioBusqueda UsuarioBusqueda
 	 * @param criteria Criteria
 	 */
-	private void creaCriteria(final SearchUser searchUser, final Criteria criteria) {
-		UtilitiesCriteria.setCondicionCriteriaFechaMayor(searchUser.getDateFrom(), criteria, Constantes.FECHACREACION);
-		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(searchUser.getDateUntil(), criteria,
+	private void creaCriteria(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
+		UtilitiesCriteria.setCondicionCriteriaFechaMayor(usuarioBusqueda.getDateFrom(), criteria,
+				Constantes.FECHACREACION);
+		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(usuarioBusqueda.getDateUntil(), criteria,
 				Constantes.FECHACREACION);
 
-		UtilitiesCriteria.setCondicionCriteriaCadenaLike(searchUser.getName(), criteria, "name");
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getName(), criteria, "name");
 
-		UtilitiesCriteria.setCondicionCriteriaCadenaLike(searchUser.getUsername(), criteria, "username");
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getUsername(), criteria, "username");
 
-		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(searchUser.getRole(), criteria, "role");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getRole(), criteria, "role");
 
 	}
 
@@ -173,7 +174,7 @@ public class UserServiceImpl implements UserService {
 	 * @return int
 	 */
 	@Override
-	public int getCounCriteria(final SearchUser busqueda) {
+	public int getCounCriteria(final UsuarioBusqueda busqueda) {
 		try {
 			this.session = this.sessionFactory.openSession();
 			final Criteria teria = this.session.createCriteria(Users.class);

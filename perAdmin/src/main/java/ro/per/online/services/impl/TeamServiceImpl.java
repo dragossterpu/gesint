@@ -34,4 +34,26 @@ public class TeamServiceImpl implements TeamService {
 		return IterableUtils.toList(this.teamRepository.findAllByOrderByRankAsc());
 	}
 
+	/**
+	 * Elimina un membru al echipei de conducere
+	 * 
+	 * @param team membru al echipei de conducere
+	 */
+	@Override
+	public void delete(Team team) {
+		teamRepository.delete(team);
+	}
+
+	/**
+	 * Salvați sau actualizați un team.
+	 * 
+	 * @param team
+	 * @return Team actualizat
+	 */
+	@Override
+	public Team save(Team team) {
+		Team teamActualizado = teamRepository.save(team);
+		return teamActualizado;
+
+	}
 }

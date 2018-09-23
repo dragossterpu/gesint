@@ -3,7 +3,6 @@
 	src: url('../font/OpenSans-Regular.ttf');
 }
 
-@CHARSET "UTF-8";
 
 html, body, .ui-widget {
 	font-family: 'Open Sans', sans-serif;
@@ -21,21 +20,14 @@ label:before {
 	font: normal normal normal 14px/1 FontAwesome;
 }
 
-.ui-menu {
-	background: #ffffff;
-}
 
-.ui-widget-header {
-	background: #056033
-	border-radius: 0;
-}
-
-.ui-widget .ui-widget {
-	font-size: 1em;
-}
 
 .fa:before {
 	color: #056033
+}
+
+.ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left{
+	    border-color: #056033;
 }
 
 .ui-menu-child li:hover .fa:before {
@@ -1059,6 +1051,7 @@ ul ul span {
 	.ui-widget-header .ui-state-default {
 	border: 1px solid #dcdcdc;
 	color: #000;
+	    border-color: #056033;
 }
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button
@@ -1656,5 +1649,45 @@ div#menuSuperior>form {
 	font-family: FontAwesome;
 	font-weight: 100 !important;
 }
+.ui-menu {
+	background: #ffffff;
+}
 
+.ui-datatable-footer ui-widget-header ui-corner-bottom{
+	background:#056033;
+}
+.ui-widget-header {
+    border: 1px solid #e3a1a1;
+    background: #056033;
+    color: #ffffff;
+    font-weight: bold;
+}
 
+.ui-widget-header {
+	background: #056033;
+	border-radius: 0;
+}
+
+.ui-widget .ui-widget {
+	font-size: 1em;
+
+}
+.ui-icon {
+    display: block;
+    text-indent: -99999px;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    color: #056033;
+}
+.ui-icon ui-icon-triangle-1-e{
+	color: #056033;
+}
+.ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only{
+	color: #056033;
+}
+.ui-paginator.ui-paginator-bottom {
+    border: 0 none;
+    }
+.botonUsuarios{
+    border-color: none;
+}

@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.services.UserService;
-import ro.per.online.web.beans.SearchUser;
+import ro.per.online.web.beans.UsuarioBusqueda;
 
 /**
  * 
@@ -35,7 +35,7 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 	/**
 	 * Obiect care conține parametrii de căutare.
 	 */
-	private transient SearchUser searchUser;
+	private transient UsuarioBusqueda searchUser;
 
 	/**
 	 * Listă care servește modelul ca sursă de date.
@@ -123,6 +123,7 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 			this.setRowCount(0);
 		}
 		else {
+
 			this.setRowCount(userService.getCounCriteria(searchUser));
 			listado = userService.buscarUsuarioCriteria(first, pageSize, sortField, sortOrder, searchUser);
 		}

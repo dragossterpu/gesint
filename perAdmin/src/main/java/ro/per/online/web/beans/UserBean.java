@@ -8,12 +8,12 @@ import java.util.stream.IntStream;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.SessionScoped;
 
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -41,10 +41,16 @@ import ro.per.online.util.FacesUtilities;
 @Setter
 @Getter
 @Controller("userBean")
-@Scope(Constantes.SESSION)
+// @Scope("session")
+@SessionScoped
 public class UserBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Ruta buscador de isnpecciones.
+	 */
+	private static final String RUTABUSCAUSERS = "/users/users?faces-redirect=true";
 
 	/**
 	 * Utilizator/Membru.
@@ -54,7 +60,7 @@ public class UserBean implements Serializable {
 	/**
 	 * Objeto de búsqueda de usuario.
 	 */
-	private SearchUser searchUsers;
+	private UsuarioBusqueda searchUsers;
 
 	/**
 	 * Lista de judete.
@@ -90,39 +96,45 @@ public class UserBean implements Serializable {
 	 * Servicio de usuarios.
 	 */
 	@Autowired
-	private transient UserService userService;
+	private UserService userService;
 
 	/**
 	 * Encriptador de palabras clave.
 	 */
 	@Autowired
-	private transient PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
 	 * 
 	 */
 	@Autowired
-	private transient ProvinceService provinceService;
+	private ProvinceService provinceService;
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul tarii.
 	 * 
 	 */
 	@Autowired
-	private transient CountryService countryService;
+	private CountryService countryService;
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul localitatilor.
 	 * 
 	 */
 	@Autowired
-	private transient LocalityService localityService;
+	private LocalityService localityService;
 
 	/**
 	 * Lista de localitati.
 	 */
 	private List<PLocality> localidades;
+
+	/**
+	 * Variabilă folosită pentru a stoca valoarea provinciei selectate.
+	 * 
+	 */
+	private PProvince provinciSelec;
 
 	/**
 	 * Afișează profilul utilizatorului
@@ -163,7 +175,7 @@ public class UserBean implements Serializable {
 	 * 
 	 */
 	public void cleanSearch() {
-		setSearchUsers(new SearchUser());
+		setSearchUsers(new UsuarioBusqueda());
 		model.setRowCount(0);
 	}
 
@@ -209,9 +221,9 @@ public class UserBean implements Serializable {
 	 * Returnează o listă a localităților care aparțin unui judet. Acesta este folosit pentru a reîncărca lista
 	 * localităților în funcție de judetul selectat.
 	 */
-	public void onChangeProvince() {
-		if (searchUsers.getProvince() != null) {
-			setLocalidades(localityService.findByProvince(province));
+	public void onChangeProvince(PProvince provincia) {
+		if (provinciSelec != null) {
+			setLocalidades(localityService.findByProvince(provinciSelec));
 		}
 		else {
 			setLocalidades(null);
@@ -219,16 +231,43 @@ public class UserBean implements Serializable {
 	}
 
 	/**
+	 * 
+	 * Limpia el menú de búsqueda si se accede a través del menú lateral.
+	 * @return ruta siguiente
+	 * 
+	 */
+
+	public String getFormularioBusqueda() {
+		setProvinces(provinceService.fiindAll());
+		// provinces = provinceService.fiindAll();
+		limpiarBusqueda();
+
+		return RUTABUSCAUSERS;
+	}
+
+	/**
+	 * 
+	 * Limpia los valores del objeto de búsqueda de inspecciones.
+	 * 
+	 */
+
+	public void limpiarBusqueda() {
+		searchUsers = new UsuarioBusqueda();
+		provinciSelec = new PProvince();
+		model.setRowCount(0);
+	}
+
+	/**
 	 * Inicializeaza bean-ul.
 	 */
 	@PostConstruct
 	public void init() {
-		this.provinces = new ArrayList<>();
+		// this.provinces = new ArrayList<>();
 		this.localidades = new ArrayList<>();
-		this.province = new PProvince();
+		this.provinciSelec = new PProvince();
 		// setSearchUsers(model.getSearchUser());
-		this.searchUsers = new SearchUser();
-		setProvinces(provinceService.fiindAll());
+		searchUsers = new UsuarioBusqueda();
+
 		// pentru a se încârca în mod implicit opțiunea "Selectați una ..."
 
 		this.list = new ArrayList<>();
@@ -239,4 +278,5 @@ public class UserBean implements Serializable {
 
 		// Utilities.cleanSession("userBean");
 	}
+
 }
