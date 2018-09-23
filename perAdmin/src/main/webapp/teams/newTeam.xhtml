@@ -86,7 +86,7 @@
 			</p:dialog>
 		</h:form>
 		<h:form id="formBusquedaUsuarios">
-			<p:dialog header="Căutare utilizator" widgetVar="dlgBusqueda" styleClass="botonUsuarios"
+			<p:dialog header="Căutare utilizator" widgetVar="dlgBusqueda"
 						dynamic="true" width="800" height="500">
 				<p:panelGrid columns="1" id="panelBuscadorUsuarios">					
 					<p:panelGrid id="pestanaUsuarios" columns="1">				
@@ -95,16 +95,21 @@
 								value="Nume:" />
 							<p:inputText id="name"
 								value="#{teamBean.usuarioBusqueda.name}" />
-							<h:outputLabel for="Prenume" styleClass="dialogLabel"
+							<h:outputLabel for="lastName" styleClass="dialogLabel"
 								value="NIF:" />
 							<p:inputText id="lastName"
 								value="#{teamBean.usuarioBusqueda.lastName}" />
 							<h:outputLabel for="provincia" styleClass="dialogLabel"
-								value="Organizația/Județul:" />
-							<p:selectOneMenu  value="#{teamBean.listaProvincias}" id="provincia" class="selectFiltro" converter="#{trimConverter}">
-								<f:selectItem itemLabel="Alege una..." itemValue="" />
-								<f:selectItems value="#{teamBean.usuarioBusqueda.provincia}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia}" />								
-							</p:selectOneMenu>	
+								value="Organizația/Județul:" />						                   
+                                    <p:selectOneMenu converter="#{trimConverter}" styleClass="dialogLabel" id="provincia" value="#{teamBean.usuarioBusqueda.provinciaSelect}"  >
+                                        <f:selectItem itemLabel="Seleccione una" itemValue="" />
+                                        <f:selectItems value="#{teamBean.listaProvincias}" var="provincia" itemLabel="#{provincia.name}"                                         
+                                                itemValue="#{provincia}" />
+                                    </p:selectOneMenu> 
+<!-- 		                    <p:selectOneMenu value="#{teamBean.provinciaSelect}" id="provincia"  styleClass="dialogLabel"  converter="#{trimConverter}"> -->
+<!-- 		                        <f:selectItem itemLabel="Alege una..." itemValue=""  /> -->
+<!-- 		                        <f:selectItems value="#{teamBean.listaProvincias}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia}" /> -->
+<!-- 		                     </p:selectOneMenu> -->
 						</p:panelGrid>
 
 						<p:commandButton action="#{teamBean.buscarUsuarios()}"

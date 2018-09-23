@@ -54,7 +54,7 @@ public class UsuarioBusqueda implements Serializable {
 	/**
 	 * Filtru judet utilizator.
 	 */
-	private PProvince provincia;
+	private PProvince provinciaSelect;
 
 	/**
 	 * Filtru localitate utilizator.

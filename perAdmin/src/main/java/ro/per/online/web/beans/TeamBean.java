@@ -95,9 +95,14 @@ public class TeamBean implements Serializable {
 	private List<Users> usuariosSeleccionados;
 
 	/**
-	 * Lista utilizatorilor selectați.
+	 * Lista judetelor.
 	 */
 	private List<PProvince> listaProvincias;
+
+	/**
+	 * Judetul selectațat.
+	 */
+	private PProvince provinciaSelect;
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
@@ -191,6 +196,9 @@ public class TeamBean implements Serializable {
 	 * @return
 	 */
 	public List<Users> buscaUsuarios() {
+		if (provinciaSelect != null) {
+			usuarioBusqueda.setProvinciaSelect(provinciaSelect);
+		}
 		modelUser.setSearchUser(usuarioBusqueda);
 		return modelUser.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 	}
@@ -199,6 +207,7 @@ public class TeamBean implements Serializable {
 	 * Căutați utilizatori pe baza unui filtru.
 	 */
 	public void buscarUsuarios() {
+
 		modelUser.setSearchUser(usuarioBusqueda);
 		modelUser.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
 	}
@@ -251,6 +260,7 @@ public class TeamBean implements Serializable {
 	 */
 	@PostConstruct
 	public void init() {
+		// provinciaSelect = new PProvince();
 		usuarioBusqueda = new UsuarioBusqueda();
 		this.listaTeam = new ArrayList<>();
 		this.listaTeam = teamService.fiindByTeam();
