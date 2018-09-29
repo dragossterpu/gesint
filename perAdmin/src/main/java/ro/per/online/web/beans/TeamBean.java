@@ -15,7 +15,6 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleSelectEvent;
-import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -384,21 +383,45 @@ public class TeamBean implements Serializable {
 		this.usuariosSeleccionadosFinales = usuariosSeleccionados;
 	}
 
-	public void onSelect(SelectEvent event) {
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Selected", event.getObject().toString()));
-	}
-
-	public void onUnselect(UnselectEvent event) {
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject().toString()));
+	/**
+	 * Método que se ejecuta al selecccionar.
+	 * @param event SelectEvent
+	 */
+	public void onSelect(final SelectEvent event) {
+		this.team = (Team) event.getObject();
 	}
 
 	public void onReorder() {
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
+		try {
+			reordenarMembru();
+
+			final FacesContext facesContext = FacesContext.getCurrentInstance();
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"Se ha producido un error al guardar las preguntas frecuentes, inténtelo de nuevo más tarde");
+		}
+	}
+
+	/**
+	 * Función que reordena las preguntas.
+	 * @throws DataAccessException excepción de acceso a datos
+	 */
+	private void reordenarMembru() {
+		try {
+			Team team;
+			for (int i = 0; i < this.listaTeams.size(); i++) {
+				team = this.listaTeams.get(i);
+
+				team.setRank(i + 1L);
+				this.teamService.save(team);
+			}
+		}
+		catch (DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"Se ha producido un error al guardar las preguntas frecuentes, inténtelo de nuevo más tarde");
+		}
 	}
 
 	/**
@@ -411,8 +434,8 @@ public class TeamBean implements Serializable {
 		this.listaTeams = new ArrayList<>();
 		this.listaTeams = teamService.fiindByTeam();
 		this.functia = new PTeam();
-		this.team = new Team();
-		this.usuariosSeleccionadosFinales = new ArrayList<>();
+		// this.team = new Team();
+		// this.usuariosSeleccionadosFinales = new ArrayList<>();
 		limpiarBuscadores();
 	}
 

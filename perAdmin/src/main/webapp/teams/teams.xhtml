@@ -40,9 +40,9 @@
 									</h:commandLink>
 								</div>
 								<span class="titulo">Echipa de conducere</span>
-								<p:menuButton value="Nou membru" styleClass="newActionSelectTable" icon="fa fa-plus">
-							        <p:menuitem value="Nou membru"  icon="fa fa-plus" outcome="/teams/newTeam" styleClass="sentenceText" />
-							        <p:menuitem value="Pozitie membru" outcome="/teams/importarxml" icon="fa fa-file-archive-o" styleClass="sentenceText"/>
+								<p:menuButton value="Opțiuni echipa de conducere" styleClass="newActionSelectTable" icon="fa fa-plus">
+							        <p:menuitem value="Nou membru"  icon="fa fa-plus" actionListener="#{teamBean.nuevoMembru()}"  styleClass="sentenceText" />
+							        <p:menuitem value="Pozitie membru" actionListener="#{teamBean.abrirDialogoOrdenaMembru()}"   icon="fa fa-file-archive-o" styleClass="sentenceText"/>
 							    </p:menuButton>
 							</p:outputPanel>
 						</f:facet>						
@@ -135,11 +135,15 @@
 			</div>
 			
 			<h:form id="formOrdenaUsuarios">
-			<p:dialog header="Modifică poziția membrului echipei " widgetVar="dlgOrdena" dynamic="true" width="800" height="500">
-				<p:orderList value="#{teamBean.listaTeams}" var="team" itemValue="#{team.id}"  controlsLocation="left" responsive="true">
-			        <p:ajax event="select" listener="#{orderListView.onSelect}" update="msgs"/>
-			        <p:ajax event="unselect" listener="#{orderListView.onUnselect}" update="msgs"/>
-			        <p:ajax event="reorder" listener="#{orderListView.onReorder}" update="msgs"/>
+			<p:dialog header="Modifică poziția membrului echipei " widgetVar="dlgOrdena" dynamic="true" width="800" height="800">
+				<p:outputPanel layout="block" id="panelTeam" styleClass="containerMargin">
+				<p:orderList
+					value="#{teamBean.listaTeams}"
+					var="team" itemValue="#{team}"
+					converter="#{teamConverter}" controlsLocation="none"
+					responsive="true" styleClass="modListView">
+			        <p:ajax event="select" listener="#{teamBean.onSelect}"  />
+			        <p:ajax event="reorder" listener="#{teamBean.onReorder}" />
 					<f:facet name="caption">Membrii echipei</f:facet>
 					<p:column style="width:30%">
 			            <h:outputText value="#{team.user.name}" />
@@ -151,7 +155,14 @@
 			            <h:outputText value="#{team.team.name}" />
 			        </p:column>
 	   		  </p:orderList>
-			  <p:commandButton value="Submit" update="searchlistTeams" oncomplete="PF('dlgOrdena').show()" style="margin-top:5px" />
+	   		  </p:outputPanel>
+			 <p:commandButton  value="Finalizează modificarea" title="Finalizează modificarea" icon="fa fa-trash" styleClass="modBtn"
+							immediate="true"
+							update="searchlistTeams" id="eliminar">
+							<p:confirm header="Eliminar pregunta"
+								message="Ești sigur că dorești modificarea poziției membrului echipei? "
+								icon="ui-icon-alert" />
+			</p:commandButton>
 			</p:dialog>
 			<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"
 				closable="false" resizable="false" modal="true">
