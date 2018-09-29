@@ -14,8 +14,10 @@ import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.ToggleEvent;
 import org.primefaces.event.ToggleSelectEvent;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
@@ -57,6 +59,11 @@ import ro.per.online.util.Generador;
 public class TeamBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Lista de elemente vizibile.
+	 */
+	private List<Boolean> list;
 
 	/**
 	 * Variala utilizata pentruinjectarea serviciului de team.
@@ -227,6 +234,15 @@ public class TeamBean implements Serializable {
 	 * Deschide dialogul pentru pozitionarea membrilor.
 	 */
 	public void abrirDialogoOrdenaMembru() {
+		listaTeams = teamService.fiindByTeam();
+		final RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlgOrdena').show();");
+	}
+
+	/**
+	 * Deschide dialogul pentru pozitionarea membrilor.
+	 */
+	public void abrirDialogoModificaMembru() {
 		listaTeams = teamService.fiindByTeam();
 		final RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('dlgOrdena').show();");
@@ -425,6 +441,18 @@ public class TeamBean implements Serializable {
 	}
 
 	/**
+	 *
+	 * Controlează coloanele vizibile în lista rezultatelor motorului de căutare.
+	 *
+	 * @param eve ToggleEvent
+	 *
+	 */
+
+	public void onToggle(final ToggleEvent eve) {
+		this.list.set((Integer) eve.getData(), eve.getVisibility() == Visibility.VISIBLE);
+	}
+
+	/**
 	 * Inițializarea datelor.
 	 */
 	@PostConstruct
@@ -434,8 +462,11 @@ public class TeamBean implements Serializable {
 		this.listaTeams = new ArrayList<>();
 		this.listaTeams = teamService.fiindByTeam();
 		this.functia = new PTeam();
-		// this.team = new Team();
-		// this.usuariosSeleccionadosFinales = new ArrayList<>();
+		this.list = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			this.list.add(Boolean.TRUE);
+		}
+
 		limpiarBuscadores();
 	}
 
@@ -483,7 +514,6 @@ public class TeamBean implements Serializable {
 	 * @return dni + letra
 	 */
 	public static String mail(String nume, String prenume) {
-		String email = null;
 		String limpioName = Normalizer.normalize(nume.toLowerCase(), Normalizer.Form.NFD);
 		limpioName.replace(" ", ".");
 		String limpioPrenume = Normalizer.normalize(prenume.toLowerCase(), Normalizer.Form.NFD);
