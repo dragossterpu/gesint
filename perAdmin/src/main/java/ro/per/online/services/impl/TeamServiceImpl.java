@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ro.per.online.persistence.entities.Team;
+import ro.per.online.persistence.entities.Users;
 import ro.per.online.persistence.repositories.TeamRepository;
 import ro.per.online.services.TeamService;
 
@@ -41,7 +42,7 @@ public class TeamServiceImpl implements TeamService {
 	 */
 	@Override
 	public void delete(Team team) {
-		teamRepository.delete(team);
+		this.teamRepository.delete(team);
 	}
 
 	/**
@@ -55,5 +56,30 @@ public class TeamServiceImpl implements TeamService {
 		Team teamActualizado = teamRepository.save(team);
 		return teamActualizado;
 
+	}
+
+	@Override
+	public List<Team> findAllByOrderByRankDesc() {
+		return IterableUtils.toList(this.teamRepository.findAllByOrderByRankDesc());
+	}
+
+	/**
+	 * Verifica existența utilizatorilor care au atribuit o echipa primit ca parametru.
+	 * @param user
+	 * @return resultatul comprobarii
+	 */
+	@Override
+	public boolean existsByUser(final Users user) {
+		return teamRepository.existsByUser(user);
+	}
+
+	/**
+	 * Cauta un registru in baza de date primind ca parametru membrul echipei
+	 * @param team
+	 * @return
+	 */
+	@Override
+	public Team findByUser(Users team) {
+		return teamRepository.findByUser(team);
 	}
 }

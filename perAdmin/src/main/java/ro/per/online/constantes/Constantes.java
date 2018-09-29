@@ -40,7 +40,7 @@ public final class Constantes {
 	/**
 	 * Palabra "Error" para no repetirla n veces dentro de una clase.
 	 */
-	public static final String ERRORMENSAJE = "Error";
+	public static final String ERRORMENSAJE = "Eroare";
 
 	/**
 	 * Constantes para el texto session.

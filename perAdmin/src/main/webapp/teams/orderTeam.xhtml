@@ -17,7 +17,35 @@
 				  rowKey="#{team.user.username}" rowsPerPageTemplate="5,10,25" pageLinks="4" paginatorPosition="bottom"
 				  emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">
                     <p:ajax event="rowEdit" listener="#{teamBean.onRowEdit}" />				
-						
+						<f:facet name="header">
+							<p:outputPanel>
+								<div class="left">
+									<h:commandLink
+										rendered="#{not empty teamBean.listaTeams}">
+										<p:graphicImage value="/images/xls.png" />
+										<p:dataExporter type="xls" target="tablaTeams"
+											fileName="listaTeams" />
+									</h:commandLink>
+									<h:commandLink
+										rendered="#{not empty teamBean.listaTeams}">
+										<p:graphicImage value="/images/pdf.png" />
+										<p:dataExporter type="pdf" target="tablaTeams"
+											fileName="listaTeams" />
+									</h:commandLink>
+									<h:commandLink
+										rendered="#{not empty teamBean.listaTeams}">
+										<p:graphicImage value="/images/csv.png" />
+										<p:dataExporter type="csv" target="tablaTeams"
+											fileName="listaTeams" />
+									</h:commandLink>
+								</div>
+								<span class="titulo">Echipa de conducere</span>
+								<p:menuButton value="Opțiuni membrii" styleClass="newActionSelectTable" icon="fa fa-plus">
+							        <p:menuitem value="Nou membru"  icon="fa fa-plus" action="#{teamBean.nuevoMembru()}" styleClass="sentenceText" />
+							        <p:menuitem value="Modificare poziție membru" action="#{teamBean.modificarePozitie()}" icon="fa fa-file-archive-o" styleClass="sentenceText"/>
+							    </p:menuButton>
+							</p:outputPanel>
+						</f:facet>						
 						<p:column headerText="Nume" style="width:15%;" sortBy="#{team.name}"
 							exportable="#{teamBean.list[0]}">
 							<h:outputText value="#{team.user.name}" />
@@ -87,12 +115,6 @@
 						</h:outputText>
        				 	 membrii în echipa de conducere 
     				</f:facet>
-    				<div class="ui-g-4">
-						<p:commandButton value="Caută alt membru"
-						action="#{teamBean.abrirDialogoOrdenaMembru}"
-						immediate="true" onstart="PF('statusDialog').show()"
-						onsuccess="PF('statusDialog').hide()" update="searchlistTeams"/>
-					</div>
 					</p:dataTable>
 				</p:outputPanel>
 				<p:confirmDialog global="true">
@@ -105,36 +127,6 @@
 				</p:confirmDialog>
 				<!-- <p:messages id="msgs" autoUpdate="true" closable="true" showSummary="true" showDetail="true"/> -->
 			</div>
-			
-			<h:form id="formOrdenaUsuarios">
-			<p:dialog header="Modifică poziția membrului echipei " widgetVar="dlgOrdena" dynamic="true" width="800" height="500">
-				<p:orderList value="#{teamBean.listaTeams}" var="theme" itemValue="#{theme}" converter="theme" controlsLocation="left" responsive="true">
-			        <p:ajax event="select" listener="#{orderListView.onSelect}" update="msgs"/>
-			        <p:ajax event="unselect" listener="#{orderListView.onUnselect}" update="msgs"/>
-			        <p:ajax event="reorder" listener="#{orderListView.onReorder}" update="msgs"/>
-					<f:facet name="caption">Membrii echipei</f:facet>
-					<p:column style="width:30%">
-			            <h:outputText value="#{team.user.name}" />
-			        </p:column>
-			         <p:column style="width:30%">
-			            <h:outputText value="#{team.user.lastName}" />
-			        </p:column>
-			          <p:column style="width:30%">
-			            <h:outputText value="#{team.team.name}" />
-			        </p:column>
-	   		  </p:orderList>
-			  <p:commandButton value="Submit" update="searchlistTeams" oncomplete="PF('dlgOrdena').show()" style="margin-top:5px" />
-			</p:dialog>
-			<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"
-				closable="false" resizable="false" modal="true">
-				<p:messages for="dialogMessage" autoUpdate="true"
-					showDetail="true" showSummary="true" />
-				<p:commandButton value="Aceptar"
-					onclick="PF('dialogMessage').hide()" styleClass="right" />
-			</p:dialog>
-		</h:form>
-			
-			
 			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
 				closable="false" resizable="false" showHeader="false">
 				<p:graphicImage value="/images/loading.gif" />

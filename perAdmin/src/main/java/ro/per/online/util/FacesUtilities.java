@@ -12,97 +12,55 @@ import org.primefaces.context.RequestContext;
 import org.springframework.stereotype.Component;
 
 /**
- * Clase con utilidades para usar con primefaces.
- * 
- * @author STAD
- *
+ * Clase para herramientas de FacesUtilities.
+ * @author Ezentis
  */
 @Component("facesUtilities")
 public class FacesUtilities {
 
 	/**
-	 * Redirige a la página pasada como parámetro.
-	 * 
-	 * @author STAD
-	 * @param pagina deseada
+	 * Establece un mensaje de confirmación.
+	 * @param severity Severity
+	 * @param summary String
+	 * @param detail String
 	 */
-	public void redirect(String pagina) {
-		FacesContext ctx = FacesContext.getCurrentInstance();
-		ExternalContext extContext = ctx.getExternalContext();
+	public static void setMensajeConfirmacionDialog(final Severity severity, final String summary,
+			final String detail) {
+		final RequestContext context = RequestContext.getCurrentInstance();
+		final FacesMessage message = new FacesMessage(severity, summary, detail);
+		FacesContext.getCurrentInstance().addMessage("dialogMessage", message);
+		context.execute("PF('dialogMessage').show()");
+	}
 
-		String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, pagina));
+	/**
+	 * Se muestra mensaje informativo.
+	 * 
+	 * @param severity Severity
+	 * @param summary String
+	 * @param detail String
+	 * @param idMensaje String
+	 */
+	public static void setMensajeInformativo(final Severity severity, final String summary, final String detail,
+			final String idMensaje) {
+		final FacesMessage message = new FacesMessage(severity, summary, detail);
+		FacesContext.getCurrentInstance().addMessage(idMensaje, message);
+	}
+
+	/**
+	 * Redirecciona a otra página.
+	 * @param pagina String
+	 */
+	public void redirect(final String pagina) {
+		final FacesContext ctx = FacesContext.getCurrentInstance();
+		final ExternalContext extContext = ctx.getExternalContext();
+
+		final String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, pagina));
 
 		try {
 			extContext.redirect(url);
 		}
-		catch (IOException ioe) {
+		catch (final IOException ioe) {
 			throw new FacesException(ioe);
 		}
 	}
-
-	/**
-	 * Redirige a la página pasada como parámetro añadiendo parámetros GET a evaluar en destino.
-	 * 
-	 * @author STAD
-	 * @param pagina deseada
-	 * @param paramGET cadena con parametros que se quieran pasar a la página destino separados por '&amp;'
-	 */
-	public void redirect(String pagina, String paramGET) {
-		FacesContext ctx = FacesContext.getCurrentInstance();
-		ExternalContext extContext = ctx.getExternalContext();
-
-		String url = extContext.encodeActionURL(ctx.getApplication().getViewHandler().getActionURL(ctx, pagina));
-
-		try {
-			extContext.redirect(url + "?" + paramGET);
-		}
-		catch (IOException ioe) {
-			throw new FacesException(ioe);
-		}
-	}
-
-	/**
-	 * Muestra una cuadro de diálogo con información. El cuadro de diálogo debe tener como nombre (widgetVar)
-	 * "dialogMessage".
-	 * 
-	 * @author STAD
-	 * @param severity gravedad del aviso
-	 * @param summary resumen
-	 * @param detail detalles del mensaje
-	 */
-	public static void setMensajeConfirmacionDialog(Severity severity, String summary, String detail) {
-		setMensajeConfirmacionDialog(severity, summary, detail, "dialogMessage");
-	}
-
-	/**
-	 * Muestra una cuadro de diálogo con información.
-	 * 
-	 * @author STAD
-	 * @param severity gravedad del aviso
-	 * @param summary resumen
-	 * @param detail detalles del mensaje
-	 * @param widgetVarName Nombre del cuadro de diálogo
-	 */
-	public static void setMensajeConfirmacionDialog(Severity severity, String summary, String detail,
-			String widgetVarName) {
-		RequestContext context = RequestContext.getCurrentInstance();
-		FacesMessage message = new FacesMessage(severity, summary, detail);
-		FacesContext.getCurrentInstance().addMessage(widgetVarName, message);
-		context.execute("PF('" + widgetVarName + "').show()");
-	}
-
-	/**
-	 * Muestra un mensaje por pantalla.
-	 * 
-	 * @author STAD
-	 * @param severity gravedad del aviso
-	 * @param summary resumen
-	 * @param detail detalles del mensaje
-	 * @param idMensaje identificador del componente "message/s" de PrimeFaces donde se desea mostrar
-	 */
-	public static void setMensajeInformativo(Severity severity, String summary, String detail, String idMensaje) {
-		FacesMessage message = new FacesMessage(severity, summary, detail);
-		FacesContext.getCurrentInstance().addMessage(idMensaje, message);
-	}
-
 }

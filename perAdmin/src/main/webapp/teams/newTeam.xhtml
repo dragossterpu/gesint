@@ -17,20 +17,27 @@
 								resizableColumns="true" pageLinks="4" paginatorAlwaysVisible="false" paginatorPosition="botton"
 								rendered="#{not empty teamBean.usuariosSeleccionadosFinales}"
 								rowKey="#{usuario.username}">
-								<f:facet name="header">Posibili utilizatori candidați</f:facet>
-								<p:column headerText="Nume" style="width:65%;">
+								<f:facet name="header"> Membru candidat pentru a intra în echipa de conducere</f:facet>
+								<p:column headerText="Nume" style="width:25%;">
 									<h:outputText value="#{usuario.name}" />
 								</p:column>
-								<p:column headerText="Prenume" style="width:10%;">
+								<p:column headerText="Prenume" style="width:20%;">
 									<h:outputText value="#{usuario.lastName}" />
 								</p:column>
-								<p:column headerText="Email" style="width:20%;" styleClass="text-center">
+								<p:column headerText="Funcția: *" style="width:30%;" for="team" styleClass="text-center">
+				                 <p:selectOneMenu value="#{teamBean.team.id}" id="team" required="true" requiredMessage="Alege o funcție !!">
+				                    <f:selectItem itemLabel="Alege o funcție" itemValue="" />
+				                    <f:selectItems value="#{teamBean.listaFunctii}" var="team" itemLabel="#{team.name}" itemValue="#{team.id}" />				                 	
+				                 </p:selectOneMenu>
+				                 <p:messages for="team" autoUpdate="true" closable="true" />
+								</p:column>
+								<p:column headerText="Email" style="width:25%;" styleClass="text-center">
 									<h:outputText value="#{usuario.email}" />
 								</p:column>
 								<p:column styleClass="botonTabla text-center" exportable="false"
 									toggleable="false" style="width:5%;">
 									<p:commandButton title="Eliminar" icon="fa fa-trash" styleClass="modBtn"
-										actionListener="#{teamBean.eliminarMembru(usuario)}"
+										actionListener="#{teamBean.quitarUsuario(usuario)}"
 										update="form" immediate="true" />
 								</p:column>
 							</p:dataTable>
@@ -50,24 +57,12 @@
 									<p:message for="numeUilizator" display="tooltip" />
 								</p:outputPanel>
 								<div class="ui-g-4">
-									<p:commandButton value="Caută membru"
+									<p:commandButton value="Caută alt membru"
 										action="#{teamBean.abrirDialogoBusquedaUsuarios}"
 										immediate="true" onstart="PF('statusDialog').show()"
 										onsuccess="PF('statusDialog').hide()" update="formBusquedaUsuarios"/>
 								</div>
-							</div>
-							<div class="ui-g">
-								<div class="ui-g-2">
-									<h:outputLabel for="lastName" value="*Prenume:" />
-								</div>
-								<div class="ui-g-10">
-									<p:inputText id="lastName" value="#{teamBean.team.user.lastName}"
-										required="true"
-										requiredMessage="Trebuie să introduceți un Prenume pentru utilizator." />
-									<p:messages for="lastName" autoUpdate="true" closable="true" />
-								</div>
-							</div>
-							
+							</div>							
 						</div>
 					</div>
 				</p:panel>
@@ -89,29 +84,30 @@
 			<p:dialog header="Căutare utilizator" widgetVar="dlgBusqueda"
 						dynamic="true" width="800" height="500">
 				<p:panelGrid columns="1" id="panelBuscadorUsuarios">					
+					<p:selectOneButton value="#{teamBean.opcion}">
+						<p:ajax event="change"
+							update="formBusquedaUsuarios:panelBuscadorUsuarios"
+							listener="#{teamBean.limpiarBuscadores}" />
+						<f:selectItem itemLabel="Membrii" itemValue="1" />
+					</p:selectOneButton>
 					<p:panelGrid id="pestanaUsuarios" columns="1">				
 						<p:panelGrid id="filtroUsuarios" columns="2">
-							<h:outputLabel for="name" styleClass="dialogLabel"
-								value="Nume:" />
-							<p:inputText id="name"
-								value="#{teamBean.usuarioBusqueda.name}" />
-							<h:outputLabel for="lastName" styleClass="dialogLabel"
-								value="NIF:" />
-							<p:inputText id="lastName"
-								value="#{teamBean.usuarioBusqueda.lastName}" />
-							<h:outputLabel for="provincia" styleClass="dialogLabel"
-								value="Organizația/Județul:" />						                   
-                                    <p:selectOneMenu converter="#{trimConverter}" styleClass="dialogLabel" id="provincia" value="#{teamBean.usuarioBusqueda.provinciaSelect}"  >
-                                        <f:selectItem itemLabel="Seleccione una" itemValue="" />
-                                        <f:selectItems value="#{teamBean.listaProvincias}" var="provincia" itemLabel="#{provincia.name}"                                         
-                                                itemValue="#{provincia}" />
-                                    </p:selectOneMenu> 
-<!-- 		                    <p:selectOneMenu value="#{teamBean.provinciaSelect}" id="provincia"  styleClass="dialogLabel"  converter="#{trimConverter}"> -->
-<!-- 		                        <f:selectItem itemLabel="Alege una..." itemValue=""  /> -->
-<!-- 		                        <f:selectItems value="#{teamBean.listaProvincias}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia}" /> -->
-<!-- 		                     </p:selectOneMenu> -->
+							<h:outputLabel for="name" styleClass="dialogLabel" value="Nume:" />
+							<p:inputText id="name" converter="#{trimConverter}" value="#{teamBean.usuarioBusqueda.name}" />
+							
+							<h:outputLabel for="lastName" styleClass="dialogLabel" value="Prenume:" />
+							<p:inputText id="lastName" converter="#{trimConverter}" value="#{teamBean.usuarioBusqueda.lastName}" />
+							
+							<h:outputLabel for="provinciaSelect" value="Organizația/Județul:" styleClass="dialogLabel"/>
+			                 <p:selectOneMenu value="#{teamBean.usuarioBusqueda.id}" id="provinciaSelect" >
+			                    <f:selectItem itemLabel="Alege una..." itemValue="" />
+			                    <f:selectItems value="#{teamBean.listaProvincias}" var="provinciaSelect" itemLabel="#{provinciaSelect.name}" itemValue="#{provinciaSelect.id}" />
+			                 </p:selectOneMenu>
 						</p:panelGrid>
-
+						 <p:commandButton actionListener="#{teamBean.alta}" id="crear" 
+						 value="Alta masiva" icon="fa fa-fw fa-save" onstart="PF('statusDialog').show()" 
+						 onsuccess="PF('statusDialog').hide()" />
+                
 						<p:commandButton action="#{teamBean.buscarUsuarios()}"
 							value="Căutare" icon="fa fa-search"
 							update=":formBusquedaUsuarios:tablaUsuarios"
@@ -128,11 +124,11 @@
 							<p:ajax event="page" listener="#{teamBean.onChangePageUsuarios()}" />
 							<p:ajax event="rowUnselectCheckbox" listener="#{teamBean.onRowUnSelectedUser}" />
 							<p:ajax event="rowSelectCheckbox" listener="#{teamBean.onRowSelectedUser}" />
-							<p:ajax event="toggleSelect" listener="#{teamBean.onToggleSelectUsers}" global="true" />
+							<p:ajax event="toggleSelect" listener="#{teamBean.onToggleSelectUsers}" global="true" />	
 							
 							<p:column selectionMode="multiple"
 								style="width:16px;text-align:center" />
-
+							
 							<p:column headerText="Nume" width="150">										
 								<h:outputText value="#{usuario.name}" />
 							</p:column>
@@ -142,13 +138,14 @@
 							</p:column>
 							
 							<f:facet name="footer">
-      				 				Total: #{teamBean.modelUser.rowCount} registros
+      				 				Total: #{teamBean.modelUser.rowCount} membrii filtrați
    							</f:facet>
-						</p:dataTable>
-								
-
+						</p:dataTable>								
 					</p:panelGrid>
-					
+					<p:outputPanel class="btnModalAcept">
+						<p:commandButton value="Aceptar" onclick="PF('dlgBusqueda').hide()" update="form" 
+						actionListener="#{teamBean.establecerUsuariosFinales}"/>
+					</p:outputPanel>
 				</p:panelGrid>	
 			</p:dialog>
 			<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"

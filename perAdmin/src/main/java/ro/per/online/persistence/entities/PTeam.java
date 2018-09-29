@@ -4,7 +4,10 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -37,10 +40,12 @@ public class PTeam implements Serializable {
 	private static final long serialVersionUID = 8133415273601486902L;
 
 	/**
-	 * Id.
+	 * ID PTEAM.
 	 */
 	@Id
-	@Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PTEAM")
+	@SequenceGenerator(name = "SEQ_PTEAM", sequenceName = "SEQ_PTEAM", allocationSize = 1)
+	@Column(name = "ID", length = 5)
 	private Long id;
 
 	/**

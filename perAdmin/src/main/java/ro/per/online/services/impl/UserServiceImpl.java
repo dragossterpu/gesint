@@ -1,5 +1,6 @@
 package ro.per.online.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ro.per.online.constantes.Constantes;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.repositories.ProvinceRepository;
 import ro.per.online.persistence.repositories.UserRepository;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
@@ -39,6 +41,12 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Autowired
 	private UserRepository userRepository;
+
+	/**
+	 * Repositoriu de PProvince.
+	 */
+	@Autowired
+	private ProvinceRepository provinceRepository;
 
 	/**
 	 * SessionFactory.
@@ -90,49 +98,46 @@ public class UserServiceImpl implements UserService {
 			final SortOrder sortOrder, final UsuarioBusqueda usuarioBusqueda) {
 		try {
 			this.session = this.sessionFactory.openSession();
-			final Criteria criteria = this.session.createCriteria(Users.class);
-
+			final Criteria criteria = this.session.createCriteria(Users.class, "user");
 			criteria.setFirstResult(first);
 			criteria.setMaxResults(pageSize);
-
 			if (sortField != null) {
-
 				if (sortOrder.equals(SortOrder.ASCENDING)) {
 					criteria.addOrder(Order.asc(sortField));
 				}
 				else if (sortOrder.equals(SortOrder.DESCENDING)) {
 					criteria.addOrder(Order.desc(sortField));
 				}
-
 			}
 			else {
 				criteria.addOrder(Order.desc("dateCreate"));
 			}
+			List<Users> usuariosList;
+			creaCriteria(usuarioBusqueda, criteria);
 
-			final List<Users> usuariosList = gestionarCriteriaUsuarios(usuarioBusqueda, criteria);
-
+			usuariosList = criteria.list();
+			this.session.close();
 			return usuariosList;
 		}
 		finally {
 			closeSession();
 		}
-
 	}
 
 	/**
-	 * Obitne el listado de usuario en base a las condiciones de Criteria.
-	 * 
-	 * @param usuarioBusqueda UsuarioBusqueda
-	 * @param criteria Criteria
-	 * @return List<User>
+	 * @param usuarioBusqueda
+	 * @param criteria
 	 */
-	@SuppressWarnings("unchecked")
-	private List<Users> gestionarCriteriaUsuarios(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
-		creaCriteria(usuarioBusqueda, criteria);
-
-		final List<Users> usuariosList = criteria.list();
-		this.session.close();
-		return usuariosList;
+	private void creaCriteria(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
+		List<Users> usuariosList = new ArrayList<>();
+		UtilitiesCriteria.setCondicionCriteriaFechaMayor(usuarioBusqueda.getDateFrom(), criteria,
+				Constantes.FECHACREACION);
+		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(usuarioBusqueda.getDateUntil(), criteria,
+				Constantes.FECHACREACION);
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getName(), criteria, "name");
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getLastName(), criteria, "lastName");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getId(), criteria,
+				"personalData.province.id");
 	}
 
 	/**
@@ -151,24 +156,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * @param usuarioBusqueda UsuarioBusqueda
-	 * @param criteria Criteria
-	 */
-	private void creaCriteria(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
-		UtilitiesCriteria.setCondicionCriteriaFechaMayor(usuarioBusqueda.getDateFrom(), criteria,
-				Constantes.FECHACREACION);
-		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(usuarioBusqueda.getDateUntil(), criteria,
-				Constantes.FECHACREACION);
-
-		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getName(), criteria, "name");
-
-		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getUsername(), criteria, "username");
-
-		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getRole(), criteria, "role");
-
-	}
-
-	/**
 	 * Obtiene el conteo de criteria.
 	 * @param busqueda UsuarioBusqueda
 	 * @return int
@@ -177,7 +164,7 @@ public class UserServiceImpl implements UserService {
 	public int getCounCriteria(final UsuarioBusqueda busqueda) {
 		try {
 			this.session = this.sessionFactory.openSession();
-			final Criteria teria = this.session.createCriteria(Users.class);
+			final Criteria teria = this.session.createCriteria(Users.class, "user");
 			creaCriteria(busqueda, teria);
 			teria.setProjection(Projections.rowCount());
 			final Long cnt = (Long) teria.uniqueResult();
@@ -190,4 +177,14 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	/*
+	 * Metoda care genereaza automat 100 de utilizatori
+	 * 
+	 * @see ro.per.online.services.UserService#save(ro.per.online.persistence.entities.Users)
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public Users save(Users entity) {
+		return userRepository.save(entity);
+	}
 }
