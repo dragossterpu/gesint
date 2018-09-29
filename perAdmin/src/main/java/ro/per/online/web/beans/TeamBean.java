@@ -9,11 +9,13 @@ import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleSelectEvent;
+import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -252,7 +254,9 @@ public class TeamBean implements Serializable {
 	/**
 	 * Înregistrează utilizatorul indicat.
 	 */
-	public void save() {
+	public String save() {
+		String volver = null;
+
 		try {
 			if (usuariosSeleccionadosFinales.isEmpty()) {
 				Users usuario = usuarioService.fiindOne(nombreUsuario);
@@ -268,6 +272,7 @@ public class TeamBean implements Serializable {
 									+ user.getName().concat(".").concat(user.getLastName())
 									+ "'  deoarece acesta există în echipa de conducere ",
 							"");
+
 				}
 				else {
 					final Team tea = new Team();
@@ -283,6 +288,7 @@ public class TeamBean implements Serializable {
 							"Membrul a fost înregistrat corect.");
 					limpiarCamposNewTeam();
 					listaTeams = teamService.fiindByTeam();
+					volver = "/teams/teams?faces-redirect=true";
 				}
 
 			}
@@ -291,7 +297,10 @@ public class TeamBean implements Serializable {
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 					"A apărut o eroare la înregistrarea utilizatorului, încercați din nou mai târziu.");
+			volver = "/teams/newTeam?faces-redirect=true";
 		}
+		return volver;
+
 	}
 
 	/**
@@ -375,6 +384,23 @@ public class TeamBean implements Serializable {
 		this.usuariosSeleccionadosFinales = usuariosSeleccionados;
 	}
 
+	public void onSelect(SelectEvent event) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Selected", event.getObject().toString()));
+	}
+
+	public void onUnselect(UnselectEvent event) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject().toString()));
+	}
+
+	public void onReorder() {
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
+	}
+
 	/**
 	 * Inițializarea datelor.
 	 */
@@ -385,6 +411,8 @@ public class TeamBean implements Serializable {
 		this.listaTeams = new ArrayList<>();
 		this.listaTeams = teamService.fiindByTeam();
 		this.functia = new PTeam();
+		this.team = new Team();
+		this.usuariosSeleccionadosFinales = new ArrayList<>();
 		limpiarBuscadores();
 	}
 

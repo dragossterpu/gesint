@@ -17,7 +17,35 @@
 				  rowKey="#{team.user.username}" rowsPerPageTemplate="5,10,25" pageLinks="4" paginatorPosition="bottom"
 				  emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">
                     <p:ajax event="rowEdit" listener="#{teamBean.onRowEdit}" />				
-						
+						<f:facet name="header">
+							<p:outputPanel>
+								<div class="left">
+									<h:commandLink
+										rendered="#{not empty teamBean.listaTeams}">
+										<p:graphicImage value="/images/xls.png" />
+										<p:dataExporter type="xls" target="tablaTeams"
+											fileName="listaTeams" />
+									</h:commandLink>
+									<h:commandLink
+										rendered="#{not empty teamBean.listaTeams}">
+										<p:graphicImage value="/images/pdf.png" />
+										<p:dataExporter type="pdf" target="tablaTeams"
+											fileName="listaTeams" />
+									</h:commandLink>
+									<h:commandLink
+										rendered="#{not empty teamBean.listaTeams}">
+										<p:graphicImage value="/images/csv.png" />
+										<p:dataExporter type="csv" target="tablaTeams"
+											fileName="listaTeams" />
+									</h:commandLink>
+								</div>
+								<span class="titulo">Echipa de conducere</span>
+								<p:menuButton value="Nou membru" styleClass="newActionSelectTable" icon="fa fa-plus">
+							        <p:menuitem value="Nou membru"  icon="fa fa-plus" outcome="/teams/newTeam" styleClass="sentenceText" />
+							        <p:menuitem value="Pozitie membru" outcome="/teams/importarxml" icon="fa fa-file-archive-o" styleClass="sentenceText"/>
+							    </p:menuButton>
+							</p:outputPanel>
+						</f:facet>						
 						<p:column headerText="Nume" style="width:15%;" sortBy="#{team.name}"
 							exportable="#{teamBean.list[0]}">
 							<h:outputText value="#{team.user.name}" />
@@ -108,7 +136,7 @@
 			
 			<h:form id="formOrdenaUsuarios">
 			<p:dialog header="Modifică poziția membrului echipei " widgetVar="dlgOrdena" dynamic="true" width="800" height="500">
-				<p:orderList value="#{teamBean.listaTeams}" var="theme" itemValue="#{theme}" converter="theme" controlsLocation="left" responsive="true">
+				<p:orderList value="#{teamBean.listaTeams}" var="team" itemValue="#{team.id}"  controlsLocation="left" responsive="true">
 			        <p:ajax event="select" listener="#{orderListView.onSelect}" update="msgs"/>
 			        <p:ajax event="unselect" listener="#{orderListView.onUnselect}" update="msgs"/>
 			        <p:ajax event="reorder" listener="#{orderListView.onReorder}" update="msgs"/>
@@ -139,15 +167,7 @@
 				closable="false" resizable="false" showHeader="false">
 				<p:graphicImage value="/images/loading.gif" />
 			</p:dialog>
-			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
-            
-            <p:dialog id="dialog" widgetVar="dialogMessage" header="Error" closable="false">
-               <p:messages for="dialogMessage" autoUpdate="true" showDetail="true" showSummary="true" />
-               <div class="centrarBotonesDialog">
-                    <p:commandButton value="Cerrar" onclick="PF('dialogMessage').hide()"/>
-               </div>
-           	</p:dialog>
-			
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />           		
 			
 		</h:form>
 
