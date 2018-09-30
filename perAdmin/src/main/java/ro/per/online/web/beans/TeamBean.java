@@ -207,6 +207,7 @@ public class TeamBean implements Serializable {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 					"A apărut o eroare la eliminarea membrului echipei de conducere, încercați din nou mai târziu");
 		}
+
 	}
 
 	/**
@@ -242,10 +243,13 @@ public class TeamBean implements Serializable {
 	/**
 	 * Deschide dialogul pentru pozitionarea membrilor.
 	 */
-	public void abrirDialogoModificaMembru() {
-		listaTeams = teamService.fiindByTeam();
+	public void abrirDialogoModificaMembru(final Team tea) {
+		this.team = new Team();
+		this.team = tea;
+		this.listaFunctii = new ArrayList<>();
+		listaFunctii = pteamService.fiindAll();
 		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dlgOrdena').show();");
+		context.execute("PF('dlgModifica').show();");
 	}
 
 	/**
@@ -315,6 +319,26 @@ public class TeamBean implements Serializable {
 			volver = "/teams/newTeam?faces-redirect=true";
 		}
 		return volver;
+
+	}
+
+	/**
+	 * Înregistrează utilizatorul indicat.
+	 */
+	public void modificaTeam(final Team tea) {
+		this.team = new Team();
+		try {
+			this.team = tea;
+			;
+			teamService.save(tea);
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, " Modificare corectă ",
+					"Membrul a fost modificat corect.");
+
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"A apărut o eroare la modificarea utilizatorului, încercați din nou mai târziu.");
+		}
 
 	}
 

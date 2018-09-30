@@ -41,7 +41,7 @@
 								</div>
 								<span class="titulo">Echipa de conducere</span>
 								<p:menuButton value="Opțiuni echipa de conducere" styleClass="newActionSelectTable" icon="fa fa-plus">
-							        <p:menuitem value="Nou membru"  icon="fa fa-plus" actionListener="#{teamBean.nuevoMembru()}"  styleClass="sentenceText" />
+							        <p:menuitem value="Nou membru"  icon="fa fa-plus" action="#{teamBean.nuevoMembru()}"  styleClass="sentenceText" />
 							        <p:menuitem value="Pozitie membru" actionListener="#{teamBean.abrirDialogoOrdenaMembru()}"   icon="fa fa-file-archive-o" styleClass="sentenceText"/>
 							    </p:menuButton>
 							</p:outputPanel>
@@ -71,20 +71,28 @@
 					 <p:column styleClass="botonTabla" headerText="Modificar" style="width:5%;">
                        <h:commandLink title="Modificar functie membru" 
 								styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
-								actionListener="#{teamBean.abrirDialogoModificaMembru()}"  update="searchlistTeams"  />
+								actionListener="#{teamBean.abrirDialogoModificaMembru(team)}"  update="searchlistTeams"  />
                     </p:column>
                     <p:column  headerText="Eliminar" styleClass="botonTabla text-center"  style="width:5%;" exportable="false"  toggleable="false">
-                    		
                     		<p:commandButton title="Eliminar" icon="fa fa-trash" styleClass="modBtn"
 								actionListener="#{teamBean.eliminarMembru(team.user)}"
-								update="searchlistTeams" 
-								oncomplete="$('.mensajeSinResultados').css('opacity', 1)"
-								onstart="PF('statusDialog').show()"
-								onsuccess="PF('statusDialog').hide()">
+								update=":searchlistTeams:panelTeams">
 								<p:confirm header="Eliminar membru"
 									message="Sigur doriți să ștergeți acest membru al echipei?"
 									icon="fa fa-warning-sign" />
-							</p:commandButton>                   
+							</p:commandButton>
+                    		
+                    		
+                    		
+<!--                     		<p:commandButton title="Eliminar" icon="fa fa-trash" styleClass="modBtn" -->
+<!-- 								actionListener="#{teamBean.eliminarMembru(team.user)}" -->
+<!-- 								update="searchlistTeams"  -->
+<!-- 								onstart="PF('statusDialog').show()" -->
+<!-- 								onsuccess="PF('statusDialog').hide()"> -->
+<!-- 								<p:confirm header="Eliminar membru" -->
+<!-- 									message="Sigur doriți să ștergeți acest membru al echipei?" -->
+<!-- 									icon="fa fa-warning-sign" /> -->
+<!-- 							</p:commandButton>                    -->
                     </p:column>																		
 						<f:facet name="footer">
        				 	Total:
@@ -138,22 +146,58 @@
 	   		  </p:outputPanel>
 			 <p:commandButton  value="Finalizează modificarea" title="Finalizează modificarea" icon="fa fa-trash" styleClass="modBtn"
 							immediate="true"
-							update="searchlistTeams" id="eliminar">
-							<p:confirm header="Eliminar pregunta"
+							update="searchlistTeams" id="modifica">
+							<p:confirm header="Finalizează modificarea"
 								message="Ești sigur că dorești modificarea poziției membrului echipei? "
 								icon="ui-icon-alert" />
 			</p:commandButton>
 			</p:dialog>
-			<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"
-				closable="false" resizable="false" modal="true">
-				<p:messages for="dialogMessage" autoUpdate="true"
-					showDetail="true" showSummary="true" />
-				<p:commandButton value="Aceptar"
-					onclick="PF('dialogMessage').hide()" styleClass="right" />
-			</p:dialog>
+<!-- 			<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO" -->
+<!-- 				closable="false" resizable="false" modal="true"> -->
+<!-- 				<p:messages for="dialogMessage" autoUpdate="true" -->
+<!-- 					showDetail="true" showSummary="true" /> -->
+<!-- 				<p:commandButton value="Aceptar" -->
+<!-- 					onclick="PF('dialogMessage').hide()" styleClass="right" /> -->
+<!-- 			</p:dialog> -->
 		</h:form>
 			
+			<h:form id="formModificaUsuarios">
+			<p:dialog header="Modifică funcția membrului echipei " widgetVar="dlgModifica" dynamic="true" width="800" height="200">
+				<p:accordionPanel multiple="false" activeIndex="0">
+						<p:tab title="">		
+							<div class="ui-g">	
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="name" value="Nume:" /></b>
+								<p:inputText id="name"
+										value="#{teamBean.team.user.name}" />
+								</div>	
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="lastName" value="Prenume:" /></b>
+								<p:inputText id="lastName"
+										value="#{teamBean.team.user.lastName}" />
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="teamSelect" value="Funcția:" /></b>
+				                   <p:selectOneMenu value="#{teamBean.team.id}" id="teamSelect" required="true" requiredMessage="Alege o funcție !!">  
+				                    <f:selectItem itemLabel="Alege o funcție" itemValue="" /> 
+				                    <f:selectItems value="#{teamBean.listaFunctii}" var="team" itemLabel="#{team.name}" itemValue="#{team.id}" />				                 	 -->
+				                 </p:selectOneMenu> 
+								</div>
+								<div class="botonesFormulario">
+									<p:button outcome="/teams/teams" value="Întoarcere"
+										icon="fa fa-fw fa-undo" />
+									<p:commandButton actionListener="#{teamBean.modificaTeam(teamBean.team)}"
+										value="Modificare" update="searchlistTeams" icon="fa fa-send"
+										onstart="PF('statusDialog').show()"
+										onsuccess="PF('statusDialog').hide()" />
+								</div>
+						  </div>
+					 </p:tab>
+				</p:accordionPanel>
 			
+			</p:dialog>
+			
+		</h:form>
 			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
 				closable="false" resizable="false" showHeader="false">
 				<p:graphicImage value="/images/loading.gif" />
