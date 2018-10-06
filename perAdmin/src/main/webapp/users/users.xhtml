@@ -9,14 +9,7 @@
 
 	<ui:define name="content">
 		<p:importConstants type="ro.per.online.constantes.Constantes" var="Constantes" />
- <script type="text/javascript">
-                function showStatus() {
-                    PF('statusDialog').show();
-                }
-                function hideStatus() {
-                    PF('statusDialog').hide();
-                }
-            </script>
+
 		<h:form id="searchListUsers">
 			<div class="filtro">
 				<div class="bloqueFormulario">
@@ -27,7 +20,7 @@
 							<h:outputLabel for="idCard"  styleClass="buscador" value="CNP:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:inputText id="idCard"
+							<p:inputText id="idCard" converter="#{trimConverter}"
 								value="#{userBean.searchUsers.idCard}" />
 						</div>
 					</div>
@@ -37,18 +30,8 @@
 							<h:outputLabel for="name" styleClass="buscador" value="Nume:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:inputText id="name"
+							<p:inputText id="name" converter="#{trimConverter}"
 								value="#{userBean.searchUsers.name}" />
-						</div>
-					</div>
-					<div class="ui-g campoBusqueda">
-						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<h:outputLabel for="username" styleClass="buscador"
-								value="Utilizator:" />
-						</div>
-						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:inputText id="username"
-								value="#{userBean.searchUsers.username}" />
 						</div>
 					</div>
 					<div class="ui-g campoBusqueda">
@@ -57,7 +40,7 @@
 								value="Email:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:inputText id="email"
+							<p:inputText id="email" converter="#{trimConverter}"
 								value="#{userBean.searchUsers.email}" />
 						</div>
 					</div>
@@ -132,10 +115,16 @@
 							<h:outputLabel for="education" value="Nivel de educație:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:importEnum type="ro.per.online.persistence.entities.enums.EducationEnum" var="educations" allSuffix="ALL_ENUM_VALUES" />
-							<p:selectOneMenu value="#{userBean.searchUsers.education}" id="education" class="selectFiltro" style="min-width:initial;" >
+							<p:importEnum 
+							type="ro.per.online.persistence.entities.enums.EducationEnum" 
+							var="educations" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.searchUsers.education}" 
+								id="education" class="selectFiltro" style="min-width:initial;" >
 								<f:selectItem itemLabel="Alege unul..." itemValue="" />
-								<f:selectItems value="#{educations.ALL_ENUM_VALUES}" var="educationUser" itemLabel="#{educationUser.description}" itemValue="#{educationUser}" />
+								<f:selectItems value="#{educations.ALL_ENUM_VALUES}" 
+								var="educationUser" 
+								itemLabel="#{educationUser.description}" 
+								itemValue="#{educationUser}" />
 							</p:selectOneMenu>
 						</div>
 					</div>
@@ -144,13 +133,16 @@
 							<h:outputLabel for="provinciasSelect" styleClass="buscador" value="Organizația/Județul:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">							
-	                    <p:selectOneMenu value="#{userBean.provinciSelec}" id="provinciasSelect" class="selectFiltro" filter="true" filterMatchMode="startsWith" converter="#{trimConverter}">
-	                        <f:selectItem itemLabel="Alege una..." itemValue="" noSelectionOption="true" />
-	                        <f:selectItems value="#{userBean.provinces}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia}" />
-	                        <p:ajax event="change" update="locality" partialSubmit="true" listener="#{userBean.onChangeProvince(userBean.provinciSelec)}" />
-	
-	                    </p:selectOneMenu>
-						
+	                    <p:selectOneMenu value="#{userBean.provinciSelec}" id="provinciasSelect" 
+	                    filter="true" filterMatchMode="startsWith"  class="selectFiltro"  converter="#{selectConverter}">
+	                        <f:selectItem itemLabel="Alege una..." itemValue="" />
+	                        <f:selectItems 
+	                        value="#{userBean.provinces}" 
+	                        var="provincia" 
+	                        itemLabel="#{provincia.name}" 
+	                        itemValue="#{provincia}" />
+	                        <p:ajax event="change"  update="locality"></p:ajax>
+	                    </p:selectOneMenu>						
 						</div>
 					</div>
 					<div class="ui-g campoBusqueda">
@@ -158,9 +150,14 @@
 							<h:outputLabel for="locality" styleClass="buscador" value="Localitatea:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">							
-							<p:selectOneMenu  value="#{userBean.searchUsers.locality}" id="locality" class="selectFiltro" converter="#{trimConverter}">
+							<p:selectOneMenu  value="#{userBean.searchUsers.locality}" id="locality" class="selectFiltro"  
+							filter="true" filterMatchMode="startsWith" converter="#{selectConverter}">
 								<f:selectItem itemLabel="Alege una..." />
-								<f:selectItems value="#{userBean.localidades}" var="locality" itemLabel="#{locality.name}" itemValue="#{locality}" />								
+								 <f:selectItems 
+								    value="#{userBean.localidades}"
+                                    var="locality" 
+                                    itemLabel="#{locality.name}" 
+                                    itemValue="#{locality}" />	
 							</p:selectOneMenu>	
 						</div>						
 					</div>
@@ -182,9 +179,12 @@
 					</div>
 				</div>
 				<div class="botonesFormulario">
-					<p:commandButton action="#{userBean.cleanSearch}" class="left" value="Curățare filtre" update="searchListUsers" icon="fa fa-eraser" />
-					<p:commandButton actionListener="#{userBean.searchUsers}" value="Căutare" update="userPanel" icon="fa fa-search"
-						oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" class="right" onsuccess="PF('statusDialog').hide()" />
+					<p:commandButton actionListener="#{userBean.cleanSearch}" 
+					class="left" value="Curățare filtre" 
+					update="searchListUsers" icon="fa fa-eraser" />
+					<p:commandButton id="buscarBoton" value="Căutare"
+                        actionListener="#{userBean.searchUsers}"
+                        update="@form"  icon="fa fa-search" />
 				</div>
 			</div>
 			<div class="resultadosFiltro">
@@ -219,20 +219,20 @@
 								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="Europe/Madrid" />
 							</h:outputText>
 						</p:column>
-						<p:column headerText="Nume" sortBy="#{user.name}" style="width:29%;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
+						<p:column headerText="Nume" sortBy="#{user.name}" style="width:20%;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
 							<h:outputText value="#{user.name}" />
 						</p:column>
-						<p:column headerText="Prenume" sortBy="#{user.lastName}" style="width:29%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
+						<p:column headerText="Prenume" sortBy="#{user.lastName}" style="width:20%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
 							<h:outputText value="#{user.lastName}" />
 						</p:column>
 						<p:column headerText="Email" sortBy="#{user.username}" style="width:29%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
 							<h:outputText value="#{user.username}" />
 						</p:column>
-						<p:column headerText="CNP" sortBy="#{user.idCard}" style="width:10%;" visible="#{userBean.list[4]}" exportable="#{userBean.list[4]}">
-							<h:outputText value="#{user.idCard}" />
+						<p:column headerText="CNP" sortBy="#{user.idCard}" style="width:15%;" visible="#{userBean.list[4]}" exportable="#{userBean.list[4]}">
+							<h:outputText value="#{user.personalData.idCard}" />
 						</p:column>
-						<p:column headerText="Județul/Organizația " sortBy="#{user.province.name}" style="width:10%;" visible="#{userBean.list[5]}" exportable="#{userBean.list[5]}">
-							<h:outputText value="#{user.province.name}" />
+						<p:column headerText="Județul/Organizația " sortBy="#{user.province.name}" style="width:20%;" visible="#{userBean.list[5]}" exportable="#{userBean.list[5]}">
+							<h:outputText value="#{user.personalData.province.name}" />
 						</p:column>
 						<p:column styleClass="botonTabla text-center" exportable="false" style="width:10%;" toggleable="false">
 							<h:commandLink title="Modificare utilizator"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"

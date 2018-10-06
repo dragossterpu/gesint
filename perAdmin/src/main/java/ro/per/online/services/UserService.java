@@ -58,4 +58,11 @@ public interface UserService {
 	 * @return Usuario guardado.
 	 */
 	Users save(Users entity);
+
+	/**
+	 * Căutați un utilizator cu CNP.
+	 * @param cnp String - cnp-ul utilizatorului
+	 * @return User
+	 */
+	Users findByIdCard(String cnp);
 }

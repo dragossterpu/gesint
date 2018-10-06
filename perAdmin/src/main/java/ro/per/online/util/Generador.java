@@ -33,6 +33,16 @@ public class Generador {
 	}
 
 	/**
+	 * Obtiene un nombre final de la lista.
+	 * @return nombre al azar
+	 */
+	public static String nombreSex() {
+		final String[] nombres = { "MAN", "WOMAN", "OTHER", "UNSPECIFIED" };
+		return nombres[1 + new Random().nextInt(3)];
+
+	}
+
+	/**
 	 * Obtiene un apellido final de la lista.
 	 * @return apellido al azar
 	 */
@@ -71,31 +81,6 @@ public class Generador {
 				31L };
 		final Long provincia = provincias[1 + new Random().nextInt(59)];
 		return provincia;
-	}
-
-	/**
-	 * Obtiene un municipio de la lista final.
-	 * @return municipio al azar
-	 */
-	public static String municipiosFinal() {
-		final String[] municipios = { "Abades", "Alcalá de Henares", "Alcalá de Ebro", "Algueña", "Alhama de Almería",
-				"Barcones", "Barjas", "Belmonte", "Cabezas del Pozo", "Cabezuela", "Cabizuela", "Cabra de Mora",
-				"Cañada", "Elche", "Ferrol", "Gines", "Godall", "Gormaz", "La Galera", "La Gineta", "Barcelona",
-				"Sevilla", "Barcelona", "Sevilla", "Barcelona", "Sevilla", "Madrid", "Lugo", "Lugo", "Barcelona",
-				"Madrid" };
-		final String municipio = municipios[1 + new Random().nextInt(30)];
-		return municipio.toUpperCase();
-	}
-
-	/**
-	 * Obtiene un tipo de via final de la lista.
-	 * @return tipo de vía al azar
-	 */
-	public static String tiposViaFinal() {
-		final String[] tipos = { "ARRY", "AUTOV", "AVDA", "CL", "CL", "CM", "AVDA", "AVDA", "CL", "CL", "AVDA", "CL",
-				"CL", "CL", "CM", "ARRY", "CM", "CL", "AVDA", "CL", "AVDA", "AVDA", "CL", "CM", "CL", "CL", "CL", "CL",
-				"AVDA", "CL", "CL" };
-		return tipos[1 + new Random().nextInt(30)];
 	}
 
 	/**
@@ -296,12 +281,12 @@ public class Generador {
 	 * Obtiene una fecha aleatoria.
 	 * @return fecha
 	 */
-	public static Date ObtenerFecha() {
+	public static Date obtenerFechaNastere() {
 		Calendar fecha;
 		Random aleatorio;
 		aleatorio = new Random();
 		fecha = Calendar.getInstance();
-		fecha.set(aleatorio.nextInt(10) + 2017, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
+		fecha.set(aleatorio.nextInt(10) + 1969, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat("dd/MM/yyyy");
 		return fecha.getTime();
 	}
@@ -310,12 +295,40 @@ public class Generador {
 	 * Obtiene una hora aleatoria.
 	 * @return hora
 	 */
-	public static Date ObtenerHora() {
+	public static Date obtenerHoraNastere() {
 		Calendar hora;
 		Random aleatorio;
 		aleatorio = new Random();
 		hora = Calendar.getInstance();
-		hora.set(aleatorio.nextInt(10) + 2017, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
+		hora.set(aleatorio.nextInt(10) + 1969, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
+		new SimpleDateFormat("hh/mm");
+		return hora.getTime();
+	}
+
+	/**
+	 * Obtiene una fecha aleatoria.
+	 * @return fecha
+	 */
+	public static Date obtenerFechaRegistru() {
+		Calendar fecha;
+		Random aleatorio;
+		aleatorio = new Random();
+		fecha = Calendar.getInstance();
+		fecha.set(aleatorio.nextInt(12) + 2005, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
+		new SimpleDateFormat("dd/MM/yyyy");
+		return fecha.getTime();
+	}
+
+	/**
+	 * Obtiene una hora aleatoria.
+	 * @return hora
+	 */
+	public static Date obtenerHoraRegistru() {
+		Calendar hora;
+		Random aleatorio;
+		aleatorio = new Random();
+		hora = Calendar.getInstance();
+		hora.set(aleatorio.nextInt(12) + 2005, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat("hh/mm");
 		return hora.getTime();
 	}

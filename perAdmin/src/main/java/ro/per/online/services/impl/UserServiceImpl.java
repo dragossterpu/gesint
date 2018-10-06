@@ -138,6 +138,23 @@ public class UserServiceImpl implements UserService {
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getLastName(), criteria, "lastName");
 		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getId(), criteria,
 				"personalData.province.id");
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getIdCard(), criteria, "personalData.idCard");
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getEmail(), criteria, "email");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getRole(), criteria, "role");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getSex(), criteria, "personalData.sex");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getCivilStatus(), criteria,
+				"personalData.civilStatus");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getTypeLocality(), criteria,
+				"personalData.locality.typeLocality");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria,
+				"personalData.education");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getProvincia(), criteria,
+				"personalData.provincia");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getLocality(), criteria,
+				"personalData.locality");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria,
+				"personalData.education");
+
 	}
 
 	/**
@@ -186,5 +203,15 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = false)
 	public Users save(Users entity) {
 		return userRepository.save(entity);
+	}
+
+	/**
+	 * Căutați un utilizator cu CNP.
+	 * @param cnp String - cnp-ul utilizatorului
+	 * @return User
+	 */
+	@Override
+	public Users findByIdCard(final String cnp) {
+		return this.userRepository.findByPersonalDataIdCard(cnp);
 	}
 }

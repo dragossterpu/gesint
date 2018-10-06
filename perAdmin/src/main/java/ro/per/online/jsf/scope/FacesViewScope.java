@@ -2,60 +2,60 @@ package ro.per.online.jsf.scope;
 
 import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
+import ro.per.online.util.FacesUtilities;
+
 /**
- * 
+ *
  * Permite simular el scope View en Spring.
- * 
+ *
  * @author STAD
  *
  */
 public class FacesViewScope implements Scope {
-
 	/**
 	 * Nombre del scope.
 	 */
 	public static final String NAME = "view";
 
 	/**
-	 * 
+	 * Metodo que obtiene un Object.
+	 * @param name String
+	 * @param objectFactory ObjectFactory<?>
+	 * @return Object
 	 */
 	@Override
-	public Object get(String name, ObjectFactory<?> objectFactory) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
+	public Object get(final String name, final ObjectFactory<?> objectFactory) {
+		final Object objeto;
+
+		final FacesContext facesContext = FacesContext.getCurrentInstance();
 		if (facesContext == null) {
 			throw new IllegalStateException("FacesContext.getCurrentInstance() returned null");
 		}
 
-		Map<String, Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
+		final Map<String, Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
 
-		Object respuesta;
 		if (viewMap.containsKey(name)) {
-			respuesta = viewMap.get(name);
+			objeto = viewMap.get(name);
 		}
 		else {
-			Object object = objectFactory.getObject();
+			final Object object = objectFactory.getObject();
 			viewMap.put(name, object);
 
-			respuesta = object;
+			objeto = object;
 		}
-		return respuesta;
+
+		return objeto;
 	}
 
 	/**
-	 * 
-	 */
-	@Override
-	public Object remove(String name) {
-		return FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove(name);
-	}
-
-	/**
-	 * 
+	 * Metodo que obtiene un id.
+	 * @return String
 	 */
 	@Override
 	public String getConversationId() {
@@ -63,18 +63,32 @@ public class FacesViewScope implements Scope {
 	}
 
 	/**
-	 * 
+	 * Método que registra una destrucción callback.
+	 * @param name String
+	 * @param callback Runnable
 	 */
 	@Override
-	public void registerDestructionCallback(String name, Runnable callback) {
-		// Not supported by JSF for view scope
+	public void registerDestructionCallback(final String name, final Runnable callback) {
+		FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_WARN, "OK", "OK");
 	}
 
 	/**
-	 * 
+	 * Metodo que elimina.
+	 * @param name String
+	 * @return Object
 	 */
 	@Override
-	public Object resolveContextualObject(String key) {
+	public Object remove(final String name) {
+		return FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove(name);
+	}
+
+	/**
+	 * Metodo que resolve.
+	 * @param key String
+	 * @return Object
+	 */
+	@Override
+	public Object resolveContextualObject(final String key) {
 		return null;
 	}
 }

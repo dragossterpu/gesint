@@ -28,4 +28,12 @@ public interface LocalityService {
 	 */
 	List<PLocality> findByProvince(PProvince province);
 
+	/**
+	 * Cauta toate localitatile unei provincii
+	 * @param Long id identificator de judet
+	 * @return lista de localitati.
+	 * @see ro.mira.per.controller.AdminController.users(HttpServletRequest, Integer) (potential match)
+	 */
+	List<PLocality> buscaByProvincia(Long idProvincia);
+
 }

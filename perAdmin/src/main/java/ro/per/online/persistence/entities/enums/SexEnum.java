@@ -1,7 +1,10 @@
 package ro.per.online.persistence.entities.enums;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,5 +62,15 @@ public enum SexEnum {
 	 */
 	public String getName() {
 		return name();
+	}
+
+	private static final List<SexEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+
+	private static final int SIZE = VALUES.size();
+
+	private static final Random RANDOM = new Random();
+
+	public static SexEnum randomLetter() {
+		return VALUES.get(RANDOM.nextInt(SIZE));
 	}
 }

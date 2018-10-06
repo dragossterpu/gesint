@@ -19,4 +19,12 @@ public interface LocalityRepository extends CrudRepository<PLocality, Long> {
 	 */
 	List<PLocality> findAllByProvince(PProvince province);
 
+	/**
+	 * Busca todos las localidades de una provincia.
+	 *
+	 * @param idProvincia id de la provincia seleccionada
+	 * @return List<Localidad> Lista de localidades por provincia.
+	 */
+	List<PLocality> findByProvinceOrderByName(Long idProvincia);
+
 }

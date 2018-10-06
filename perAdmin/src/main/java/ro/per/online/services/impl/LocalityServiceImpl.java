@@ -45,4 +45,14 @@ public class LocalityServiceImpl implements LocalityService {
 	public List<PLocality> findByProvince(final PProvince province) {
 		return this.localityRepository.findAllByProvince(province);
 	}
+
+	/**
+	 * Busca las localidades pertenecientes a una provincia.
+	 * @param idProvincia Provincia que queremos consultar.
+	 * @return lista Lista de localidades por provincia.
+	 */
+	@Override
+	public List<PLocality> buscaByProvincia(final Long idProvincia) {
+		return localityRepository.findByProvinceOrderByName(idProvincia);
+	}
 }

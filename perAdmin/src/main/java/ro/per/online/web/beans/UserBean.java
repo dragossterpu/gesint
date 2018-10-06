@@ -4,19 +4,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,12 +28,15 @@ import ro.per.online.constantes.Constantes;
 import ro.per.online.lazydata.LazyDataUsers;
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
+import ro.per.online.persistence.entities.PersonalData;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.services.CountryService;
 import ro.per.online.services.LocalityService;
 import ro.per.online.services.ProvinceService;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
+import ro.per.online.util.Utilities;
+import ro.per.online.web.componentes.ListasParametros;
 
 /**
  * Controlor de operațiuni legate de gestionarea utilizatorilor. Înregistrarea utilizatorilor, modificarea
@@ -41,8 +48,7 @@ import ro.per.online.util.FacesUtilities;
 @Setter
 @Getter
 @Controller("userBean")
-// @Scope("session")
-@SessionScoped
+@Scope("session")
 public class UserBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -56,6 +62,11 @@ public class UserBean implements Serializable {
 	 * Utilizator/Membru.
 	 */
 	private Users user;
+
+	/**
+	 * Constante del parámetro de sesión usuario búsqueda.
+	 */
+	private static final String BUSQUEDA = "searchUsers";
 
 	/**
 	 * Objeto de búsqueda de usuario.
@@ -99,12 +110,6 @@ public class UserBean implements Serializable {
 	private UserService userService;
 
 	/**
-	 * Encriptador de palabras clave.
-	 */
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
 	 * 
 	 */
@@ -135,6 +140,38 @@ public class UserBean implements Serializable {
 	 * 
 	 */
 	private PProvince provinciSelec;
+
+	/**
+	 * Contexto actual.
+	 */
+	private transient ExternalContext context;
+
+	/**
+	 * Clase utilizada para obtener los valores de las listas.
+	 */
+	@Autowired
+	private transient ListasParametros listaParametros;
+
+	/**
+	 * Usuario.
+	 */
+	private Users usuario;
+
+	/**
+	 * Identificador de la provincia del usuario.
+	 */
+	private transient Long idProvincia;
+
+	/**
+	 * Encriptador de palabras clave.
+	 */
+	@Autowired
+	private transient BCryptPasswordEncoder passwordEncoder;
+
+	/**
+	 * Mensaje de error que se muestra al usuario.
+	 */
+	private transient String mensajeError;
 
 	/**
 	 * Afișează profilul utilizatorului
@@ -175,7 +212,9 @@ public class UserBean implements Serializable {
 	 * 
 	 */
 	public void cleanSearch() {
-		setSearchUsers(new UsuarioBusqueda());
+		setProvinciSelec(null);
+		this.searchUsers = new UsuarioBusqueda();
+		this.model = new LazyDataUsers(this.userService);
 		model.setRowCount(0);
 	}
 
@@ -194,18 +233,33 @@ public class UserBean implements Serializable {
 	 * @param usuario Utilizator recuperat din formularul de căutare al utilizatorului
 	 * @return URL-ul paginii de modificare a utilizatorului
 	 */
-	public String getFormModifyUser(final Users usuario) {
-		final Users usu = userService.fiindOne(usuario.getUsername());
-		String redireccion = null;
-		if (usu != null) {
-			this.user = usu;
-			redireccion = "/users/modifyUser?faces-redirect=true";
+	public String getFormModifyUser(final Users usua) {
+		this.usuario = usua;
+		this.provinces = provinceService.fiindAll();
+		// final Users usu = userService.fiindOne(usuario.getUsername());
+		return "/users/modifyUser?faces-redirect=true";
+	}
+
+	/**
+	 * Se generează o nouă parolă și se trimite prin poștă către utilizator.
+	 * @return String
+	 */
+	public String restaurarClave() {
+		try {
+			final String password = Utilities.getPassword();
+			this.usuario.setPassword(this.passwordEncoder.encode(password));
+			final String cuerpoCorreo = "Noua dvs. parolă este: " + password;
+			this.userService.save(this.usuario);
+			// this.correoService.envioCorreo(this.usuario.getUsername(), "Restauración de la contraseña",
+			// cuerpoCorreo);
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CLAVE,
+					"Un e-mail a fost trimis utilizatorului cu noua parolă");
 		}
-		else {
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, "Modificare",
-					" A apărut o eroare în căutarea utilizatorului. Utilizatorul nu există.");
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CLAVE,
+					"A apărut o eroare în regenerarea sau trimiterea parolei");
 		}
-		return redireccion;
+		return "/users/modifyUser?faces-redirect=true";
 	}
 
 	/**
@@ -221,9 +275,9 @@ public class UserBean implements Serializable {
 	 * Returnează o listă a localităților care aparțin unui judet. Acesta este folosit pentru a reîncărca lista
 	 * localităților în funcție de judetul selectat.
 	 */
-	public void onChangeProvince(PProvince provincia) {
-		if (provinciSelec != null) {
-			setLocalidades(localityService.findByProvince(provinciSelec));
+	public void onChangeProvincia(PProvince provincia) {
+		if (provincia != null) {
+			setLocalidades(localidades = localityService.findByProvince(provincia));
 		}
 		else {
 			setLocalidades(null);
@@ -231,30 +285,110 @@ public class UserBean implements Serializable {
 	}
 
 	/**
-	 * 
-	 * Limpia el menú de búsqueda si se accede a través del menú lateral.
-	 * @return ruta siguiente
-	 * 
+	 * Guardar cambios del usuario.
+	 * @param usu User
 	 */
+	public void guardarCambios(final Users usu) {
+		try {
+			this.usuario = usu;
 
-	public String getFormularioBusqueda() {
-		setProvinces(provinceService.fiindAll());
-		// provinces = provinceService.fiindAll();
-		limpiarBusqueda();
-
-		return RUTABUSCAUSERS;
+			if (validar()) {
+				final PProvince provinciaSeleccionada = this.provinces.stream()
+						.filter(provincia -> provincia.getId().equals(this.idProvincia)).collect(Collectors.toList())
+						.get(0);
+				PersonalData pd = new PersonalData();
+				pd.setAddress(usuario.getPersonalData().getAddress());
+				pd.setBirthDate(usuario.getPersonalData().getBirthDate());
+				pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
+				pd.setEducation(usuario.getPersonalData().getEducation());
+				pd.setIdCard(usuario.getPersonalData().getIdCard());
+				pd.setLocality(usuario.getPersonalData().getLocality());
+				pd.setNumberCard(usuario.getPersonalData().getNumberCard());
+				pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
+				pd.setPhone(usuario.getPersonalData().getPhone());
+				pd.setPhoto(usuario.getPersonalData().getPhoto());
+				pd.setProvince(provinciaSeleccionada);
+				pd.setSex(usuario.getPersonalData().getSex());
+				pd.setValidated(usuario.getPersonalData().getValidated());
+				pd.setWorkplace(usuario.getPersonalData().getWorkplace());
+				this.userService.save(this.usuario);
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
+						"Se ha modificado corectamente el usuario");
+			}
+			else {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
+						this.mensajeError);
+			}
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
+					"A apărut o eroare");
+		}
 	}
 
 	/**
-	 * 
-	 * Limpia los valores del objeto de búsqueda de inspecciones.
-	 * 
+	 * Método con las validaciones llevadas a cabo al guardar los datos de un usuario 1. Username no repetido 2. Nif no
+	 * repetido 3. Nif valido
+	 *
+	 * @return boolean
 	 */
+	private boolean validar() {
+		boolean validado = true;
 
-	public void limpiarBusqueda() {
-		searchUsers = new UsuarioBusqueda();
-		provinciSelec = new PProvince();
-		model.setRowCount(0);
+		if (!validarUsername()) {
+			this.mensajeError = "El usuario ya existe en el sistema";
+			validado = false;
+		}
+		if (!validarNifUnico()) {
+			this.mensajeError = "El nif ya existe en el sistema";
+			validado = false;
+		}
+		return validado;
+	}
+
+	/**
+	 * Metoda de validare a unicității numelui de utilizator.
+	 * @return boolean
+	 */
+	private boolean validarUsername() {
+		boolean resultado = true;
+		final Users use = this.userService.fiindOne(this.usuario.getUsername());
+		if (use != null && !use.getUsername().equals(this.usuario.getUsername())) {
+			resultado = false;
+		}
+		return resultado;
+	}
+
+	/**
+	 * Metodă de validare a unicității CNP.
+	 * @return boolean
+	 */
+	private boolean validarNifUnico() {
+		boolean resultado = true;
+		if (!StringUtils.isEmpty(this.usuario.getPersonalData().getIdCard())
+				&& this.usuario.getPersonalData().getIdCard() != null) {
+			try {
+				resultado = buscarUsuarioPorNif();
+			}
+			catch (final DataAccessException e) {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+						"Se ha producido un error a validar el nif del usuario, inténtelo de nuevo más tarde");
+			}
+		}
+		return resultado;
+	}
+
+	/**
+	 * Cautată un utilizator cu cnp-ul și returneaza adevărat sau fals.
+	 * @return boolean
+	 */
+	private boolean buscarUsuarioPorNif() {
+		Boolean resultado = true;
+		final Users use = this.userService.findByIdCard(this.usuario.getPersonalData().getIdCard());
+		if (use != null && !use.getPersonalData().getIdCard().equals(this.usuario.getPersonalData().getIdCard())) {
+			resultado = false;
+		}
+		return resultado;
 	}
 
 	/**
@@ -262,21 +396,17 @@ public class UserBean implements Serializable {
 	 */
 	@PostConstruct
 	public void init() {
-		// this.provinces = new ArrayList<>();
+		this.usuario = new Users();
+		this.provinces = new ArrayList<>();
+		provinces = provinceService.fiindAll();
 		this.localidades = new ArrayList<>();
-		this.provinciSelec = new PProvince();
-		// setSearchUsers(model.getSearchUser());
 		this.searchUsers = new UsuarioBusqueda();
-
-		// pentru a se încârca în mod implicit opțiunea "Selectați una ..."
-
+		cleanSearch();
 		this.list = new ArrayList<>();
 		for (int i = 0; i <= numeroColumnasListadoUsarios; i++) {
 			list.add(Boolean.TRUE);
 		}
 		this.model = new LazyDataUsers(userService);
-
-		// Utilities.cleanSession("userBean");
 	}
 
 }

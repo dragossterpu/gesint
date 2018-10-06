@@ -307,6 +307,8 @@ public class TeamBean implements Serializable {
 							"Membrul a fost înregistrat corect.");
 					limpiarCamposNewTeam();
 					listaTeams = teamService.fiindByTeam();
+					final RequestContext context = RequestContext.getCurrentInstance();
+					context.execute("PF('dlgBusqueda').hide();");
 					volver = "/teams/teams?faces-redirect=true";
 				}
 
@@ -333,6 +335,8 @@ public class TeamBean implements Serializable {
 			teamService.save(tea);
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, " Modificare corectă ",
 					"Membrul a fost modificat corect.");
+			final RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('dlgModifica').hide();");
 
 		}
 		catch (final DataAccessException e) {
@@ -415,7 +419,7 @@ public class TeamBean implements Serializable {
 	}
 
 	/**
-	 * Método para establecer los usuarios de las evaluaciones en el listado general.
+	 * Metoda de stabilire a utilizatorilor din lista generală.
 	 */
 	public void establecerUsuariosFinales() {
 		usuariosSeleccionadosFinales.add(user);
@@ -424,7 +428,7 @@ public class TeamBean implements Serializable {
 	}
 
 	/**
-	 * Método que se ejecuta al selecccionar.
+	 * Metoda care se execută la selectare.
 	 * @param event SelectEvent
 	 */
 	public void onSelect(final SelectEvent event) {
@@ -440,13 +444,13 @@ public class TeamBean implements Serializable {
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"Se ha producido un error al guardar las preguntas frecuentes, inténtelo de nuevo más tarde");
+					"A apărut o eroare la salvarea reordenării, încercați din nou mai târziu");
 		}
 	}
 
 	/**
-	 * Función que reordena las preguntas.
-	 * @throws DataAccessException excepción de acceso a datos
+	 * Funcție care reorientează pozitia
+	 * @throws DataAccessException excepție de acces la date
 	 */
 	private void reordenarMembru() {
 		try {
@@ -456,11 +460,13 @@ public class TeamBean implements Serializable {
 
 				team.setRank(i + 1L);
 				this.teamService.save(team);
+				final RequestContext context = RequestContext.getCurrentInstance();
+				context.execute("PF('dlgOrdena').hide();");
 			}
 		}
 		catch (DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"Se ha producido un error al guardar las preguntas frecuentes, inténtelo de nuevo más tarde");
+					"A apărut o eroare la salvarea modificărilor, încercați din nou mai târziu");
 		}
 	}
 
@@ -495,18 +501,18 @@ public class TeamBean implements Serializable {
 	}
 
 	public void alta() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 400; i++) {
 			Users user = new Users();
-			user.setDateCreate(Generador.ObtenerFecha());
+			user.setDateCreate(Generador.obtenerFechaRegistru());
 			user.setEmail("proba@gmail.com");
 			user.setLastName(Generador.apellidoFinal());
 			user.setName(Generador.nombreFinal());
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
 			PersonalData pd = new PersonalData();
 			pd.setAddress(Generador.nombresCalleFinal().concat("Nr :").concat(Generador.getNumeroCalle()));
-			pd.setBirthDate(Generador.ObtenerFecha());
-			pd.setCivilStatus(CivilStatusEnum.MARRIED);
-			pd.setEducation(EducationEnum.BASIC);
+			pd.setBirthDate(Generador.obtenerFechaNastere());
+			pd.setCivilStatus(CivilStatusEnum.randomLetter());
+			pd.setEducation(EducationEnum.randomLetter());
 			pd.setIdCard(Generador.getUnidadNumber());
 			PProvince pro = new PProvince();
 			pro.setId(Generador.provinciasFinal());
@@ -520,7 +526,7 @@ public class TeamBean implements Serializable {
 			pd.setNumberCard(Generador.getDni());
 			pd.setPersonalEmail(mail(user.getName(), user.getLastName()));
 			pd.setPhone(Generador.getTelefon());
-			pd.setSex(SexEnum.UNSPECIFIED);
+			pd.setSex(SexEnum.randomLetter());
 			pd.setValidated(true);
 			pd.setWorkplace("Nespecificat");
 			user.setPersonalData(pd);
