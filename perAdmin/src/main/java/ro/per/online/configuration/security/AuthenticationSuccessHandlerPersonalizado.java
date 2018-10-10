@@ -24,8 +24,8 @@ public class AuthenticationSuccessHandlerPersonalizado implements Authentication
 	 * Auditoría de inicios de sesión satisfactorios.
 	 */
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-			Authentication autentication) throws IOException, ServletException {
+	public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response,
+			final Authentication autentication) throws IOException, ServletException {
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.sendRedirect("./index.xhtml");
 	}

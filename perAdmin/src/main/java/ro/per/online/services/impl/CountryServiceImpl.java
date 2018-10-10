@@ -1,8 +1,8 @@
 package ro.per.online.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class CountryServiceImpl implements CountryService {
 	 */
 	@Override
 	public List<PCountry> fiindAll() {
-		return IterableUtils.toList(this.countryRepository.findAll());
+		return (ArrayList<PCountry>) countryRepository.findAll();
 	}
 
 }

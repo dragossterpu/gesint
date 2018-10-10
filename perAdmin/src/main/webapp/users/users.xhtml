@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:my="http://java.sun.com/jsf/composite/composites"
 	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
 
 	<ui:define name="content">
@@ -14,14 +15,13 @@
 			<div class="filtro">
 				<div class="bloqueFormulario">
 
-					<DIV class="titleFormulario">Căutare utilizatori </DIV>
+					<div class="titleFormulario">Căutare utilizatori </div>
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<h:outputLabel for="idCard"  styleClass="buscador" value="CNP:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:inputText id="idCard" converter="#{trimConverter}"
-								value="#{userBean.searchUsers.idCard}" />
+							<p:inputText id="idCard" converter="#{trimConverter}" value="#{userBean.userBusqueda.idCard}" />
 						</div>
 					</div>
 
@@ -30,8 +30,7 @@
 							<h:outputLabel for="name" styleClass="buscador" value="Nume:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:inputText id="name" converter="#{trimConverter}"
-								value="#{userBean.searchUsers.name}" />
+							<p:inputText id="name" converter="#{trimConverter}" value="#{userBean.userBusqueda.name}" />
 						</div>
 					</div>
 					<div class="ui-g campoBusqueda">
@@ -40,8 +39,7 @@
 								value="Email:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:inputText id="email" converter="#{trimConverter}"
-								value="#{userBean.searchUsers.email}" />
+							<p:inputText id="email" converter="#{trimConverter}" value="#{userBean.userBusqueda.email}" />
 						</div>
 					</div>
 					<div class="ui-g campoBusqueda">
@@ -50,7 +48,7 @@
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
                     <p:importEnum type="ro.per.online.persistence.entities.enums.RoleEnum" var="roles" allSuffix="ALL_ENUM_VALUES" />
-                    <p:selectOneMenu value="#{userBean.searchUsers.role}" id="role" class="selectFiltro">
+                    <p:selectOneMenu value="#{userBean.userBusqueda.role}" id="role" class="selectFiltro">
                         <f:selectItem itemLabel="Alege unul..." itemValue="" />
                         <f:selectItems value="#{roles.ALL_ENUM_VALUES}" var="roleUser" itemLabel="#{roleUser.description}" itemValue="#{roleUser}" />
                     </p:selectOneMenu>
@@ -64,7 +62,7 @@
 							<p:importEnum
 								type="ro.per.online.persistence.entities.enums.SexEnum"
 								var="sexs" allSuffix="ALL_ENUM_VALUES" />
-							<p:selectOneMenu value="#{userBean.searchUsers.sex}"
+							<p:selectOneMenu value="#{userBean.userBusqueda.sex}"
 								id="sex" class="selectFiltro" style="min-width:initial;" >
 								<f:selectItem itemLabel="Alege unul..." itemValue="" />
 								<f:selectItems value="#{sexs.ALL_ENUM_VALUES}"
@@ -82,7 +80,7 @@
 							<p:importEnum
 								type="ro.per.online.persistence.entities.enums.CivilStatusEnum"
 								var="civilStats" allSuffix="ALL_ENUM_VALUES" />
-							<p:selectOneMenu value="#{userBean.searchUsers.civilStatus}"
+							<p:selectOneMenu value="#{userBean.userBusqueda.civilStatus}"
 								id="civilStatus" class="selectFiltro" style="min-width:initial;" >
 								<f:selectItem itemLabel="Alege unul..." itemValue="" />
 								<f:selectItems value="#{civilStats.ALL_ENUM_VALUES}"
@@ -100,7 +98,7 @@
 							<p:importEnum
 								type="ro.per.online.persistence.entities.enums.TypeLocalityEnum"
 								var="typeLocalitys" allSuffix="ALL_ENUM_VALUES" />
-							<p:selectOneMenu value="#{userBean.searchUsers.typeLocality}"
+							<p:selectOneMenu value="#{userBean.userBusqueda.typeLocality}"
 								id="typeLocality" class="selectFiltro" style="min-width:initial;" >
 								<f:selectItem itemLabel="Alege unul..." itemValue="" />
 								<f:selectItems value="#{typeLocalitys.ALL_ENUM_VALUES}"
@@ -118,7 +116,7 @@
 							<p:importEnum 
 							type="ro.per.online.persistence.entities.enums.EducationEnum" 
 							var="educations" allSuffix="ALL_ENUM_VALUES" />
-							<p:selectOneMenu value="#{userBean.searchUsers.education}" 
+							<p:selectOneMenu value="#{userBean.userBusqueda.education}" 
 								id="education" class="selectFiltro" style="min-width:initial;" >
 								<f:selectItem itemLabel="Alege unul..." itemValue="" />
 								<f:selectItems value="#{educations.ALL_ENUM_VALUES}" 
@@ -133,15 +131,11 @@
 							<h:outputLabel for="provinciasSelect" styleClass="buscador" value="Organizația/Județul:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">							
-	                    <p:selectOneMenu value="#{userBean.provinciSelec}" id="provinciasSelect" 
-	                    filter="true" filterMatchMode="startsWith"  class="selectFiltro"  converter="#{selectConverter}">
+	                    <p:selectOneMenu id="provinciasSelect" value="#{userBean.grupoLocalidadesSelected}"  
+	                      converter="#{selectConverter}" class="selectFiltro" >
 	                        <f:selectItem itemLabel="Alege una..." itemValue="" />
-	                        <f:selectItems 
-	                        value="#{userBean.provinces}" 
-	                        var="provincia" 
-	                        itemLabel="#{provincia.name}" 
-	                        itemValue="#{provincia}" />
-	                        <p:ajax event="change"  update="locality"></p:ajax>
+	                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia}" />
+	                          <p:ajax event="change" listener="#{userBean.getLocalidades}"  update="locality"/>	                        
 	                    </p:selectOneMenu>						
 						</div>
 					</div>
@@ -150,14 +144,9 @@
 							<h:outputLabel for="locality" styleClass="buscador" value="Localitatea:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">							
-							<p:selectOneMenu  value="#{userBean.searchUsers.locality}" id="locality" class="selectFiltro"  
-							filter="true" filterMatchMode="startsWith" converter="#{selectConverter}">
+							<p:selectOneMenu id="locality" value="#{userBean.userBusqueda.locality}"  class="selectFiltro"   converter="#{selectConverter}">
 								<f:selectItem itemLabel="Alege una..." />
-								 <f:selectItems 
-								    value="#{userBean.localidades}"
-                                    var="locality" 
-                                    itemLabel="#{locality.name}" 
-                                    itemValue="#{locality}" />	
+								 <f:selectItems  value="#{userBean.localidades}" var="locality"  itemLabel="#{locality.name}" itemValue="#{locality}" />	
 							</p:selectOneMenu>	
 						</div>						
 					</div>
@@ -166,7 +155,7 @@
 							<h:outputLabel for="dateFrom" value="Data înregistrării începând:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:calendar id="dateFrom" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{userBean.searchUsers.dateFrom}" />
+							<p:calendar id="dateFrom" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{userBean.userBusqueda.dateFrom}" />
 						</div>
 					</div>
 					<div class="ui-g campoBusqueda">
@@ -174,17 +163,21 @@
 							<h:outputLabel for="dateUntil" value="Data înregistrării până :" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:calendar id="dateUntil" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{userBean.searchUsers.dateUntil}" />
+							<p:calendar id="dateUntil" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{userBean.userBusqueda.dateUntil}" />
 						</div>
 					</div>
 				</div>
 				<div class="botonesFormulario">
-					<p:commandButton actionListener="#{userBean.cleanSearch}" 
+					<p:commandButton action="#{userBean.limpiarBusqueda}" 
 					class="left" value="Curățare filtre" 
 					update="searchListUsers" icon="fa fa-eraser" />
 					<p:commandButton id="buscarBoton" value="Căutare"
-                        actionListener="#{userBean.searchUsers}"
-                        update="@form"  icon="fa fa-search" />
+                        actionListener="#{userBean.buscarUsuario}"
+                        update="userPanel" icon="fa fa-search"
+						oncomplete="$('.mensajeSinResultados').css('opacity', 1)"
+						onstart="PF('statusDialog').show()" class="right"
+						onsuccess="PF('statusDialog').hide()"/>
+						<p:commandButton value="Nou membru" action="#{userBean.getFormAltaUsuario}"  icon="fa fa-user-plus"/>
 				</div>
 			</div>
 			<div class="resultadosFiltro">
@@ -236,7 +229,7 @@
 						</p:column>
 						<p:column styleClass="botonTabla text-center" exportable="false" style="width:10%;" toggleable="false">
 							<h:commandLink title="Modificare utilizator"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
-								action="#{userBean.getFormModifyUser(user)}" update="userTable" />
+								action="#{userBean.getFormModificarUsuario(user)}" update="userTable" />
 							<p:commandButton title="Eliminare" icon="fa fa-trash" styleClass="modBtn"  actionListener="#{userBean.removeUser(user)}" 
 							update="searchListUsers" oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">
 								<p:confirm header="Ștergere utilizator" message="Sunteți sigur că doriți să ștergeți acest utilizator?" icon="fa fa-warning-sign" />

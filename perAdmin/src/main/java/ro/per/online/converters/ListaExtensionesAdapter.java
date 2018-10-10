@@ -24,7 +24,7 @@ public class ListaExtensionesAdapter implements AttributeConverter<Object, Strin
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public String convertToDatabaseColumn(Object listaextensiones) {
+	public String convertToDatabaseColumn(final Object listaextensiones) {
 		return String.join(SEPARADOR, (List<String>) listaextensiones);
 	}
 
@@ -32,7 +32,7 @@ public class ListaExtensionesAdapter implements AttributeConverter<Object, Strin
 	 * Convert a String to a object.
 	 */
 	@Override
-	public List<String> convertToEntityAttribute(String extensiones) {
+	public List<String> convertToEntityAttribute(final String extensiones) {
 		return new ArrayList<>(Arrays.asList(extensiones.split(SEPARADOR)));
 	}
 

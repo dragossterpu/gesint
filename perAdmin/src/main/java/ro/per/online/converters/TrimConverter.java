@@ -18,7 +18,7 @@ public class TrimConverter implements Converter {
 	 * Elimina espacios antes y despues de un texto.
 	 */
 	@Override
-	public Object getAsObject(FacesContext context, UIComponent component, String submittedValue) {
+	public Object getAsObject(final FacesContext context, final UIComponent component, final String submittedValue) {
 		String trimmed = null;
 		if (submittedValue != null) {
 			trimmed = submittedValue.trim();
@@ -33,7 +33,7 @@ public class TrimConverter implements Converter {
 	 * Recupera el texto.
 	 */
 	@Override
-	public String getAsString(FacesContext context, UIComponent component, Object modelValue) {
+	public String getAsString(final FacesContext context, final UIComponent component, final Object modelValue) {
 		String cadena = null;
 		if (modelValue != null)
 			cadena = modelValue.toString();

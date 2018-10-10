@@ -36,11 +36,11 @@ public class ListasParametros {
 	 */
 	public List<PLocality> getListaLocalidades(final Long idProvincia) {
 		List<PLocality> listaLocalidades;
-		if (idProvincia != null) {
-			listaLocalidades = listasCamposForm.obtenerListaLocalidades(idProvincia);
+		if (idProvincia == null) {
+			listaLocalidades = null;
 		}
 		else {
-			listaLocalidades = null;
+			listaLocalidades = listasCamposForm.obtenerListaLocalidades(idProvincia);
 		}
 		return listaLocalidades;
 	}

@@ -11,18 +11,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
  *
  */
 public class UsernameSecurityAuditorAwareImpl implements AuditorAware<String> {
-    
-    /**
-     * Devuelve el nombre del usuario que ha iniciado sesión con éxito.
-     */
-    @Override
-    public String getCurrentAuditor() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        
-        String nombre = null;
-        if (authentication != null && authentication.isAuthenticated()) {
-            nombre = authentication.getName();
-        }
-        return nombre;
-    }
+
+	/**
+	 * Devuelve el nombre del usuario que ha iniciado sesión con éxito.
+	 */
+	@Override
+	public String getCurrentAuditor() {
+		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		String nombre = null;
+		if (authentication != null && authentication.isAuthenticated()) {
+			nombre = authentication.getName();
+		}
+		return nombre;
+	}
 }

@@ -24,10 +24,11 @@ public class AuthenticationFailureHandlerPersonalizado extends SimpleUrlAuthenti
 	 * 
 	 */
 	@Override
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException exception) throws IOException, ServletException {
+	public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response,
+			final AuthenticationException exception) throws IOException, ServletException {
 
-		StringBuilder textoReg = new StringBuilder("Se ha producido un intento de login fallido en el sistema\n\n");
+		final StringBuilder textoReg = new StringBuilder(
+				"Se ha producido un intento de login fallido en el sistema\n\n");
 		textoReg.append("Error detectado: ");
 		if (exception.getMessage().contains("locked")) {
 			textoReg.append("Cuenta bloqueada");

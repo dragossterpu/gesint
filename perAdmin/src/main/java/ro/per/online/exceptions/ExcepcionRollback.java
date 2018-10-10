@@ -18,7 +18,7 @@ public class ExcepcionRollback extends Exception {
 	 * 
 	 * @param e Excepción
 	 */
-	public ExcepcionRollback(Exception e) {
+	public ExcepcionRollback(final Exception e) {
 		super(e);
 	}
 
@@ -35,7 +35,7 @@ public class ExcepcionRollback extends Exception {
 	 * 
 	 * @param mensaje Mensaje que se mostrará al lanzar la excepción.
 	 */
-	public ExcepcionRollback(String mensaje) {
+	public ExcepcionRollback(final String mensaje) {
 		super(mensaje);
 	}
 

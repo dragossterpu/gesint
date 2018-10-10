@@ -19,7 +19,7 @@
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="dateCreate"
 											value="Data înscrierii:" /></b>
-									<p:calendar id="fechaCreacion" pattern="dd/MM/yyyy" locale="es"
+									<p:calendar id="dateCreate" pattern="dd/MM/yyyy" locale="es"
 										navigator="true" maxdate="#{currentDate}"
 										value="#{userBean.usuario.dateCreate}"
 										disabled="true" />
@@ -68,7 +68,7 @@
 							<div class="ui-g">
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="provinciaSelect" value="Provincia:" /></b>
-									<p:selectOneMenu value="#{userBean.idProvincia}"
+									<p:selectOneMenu value="#{userBean.usuario.personalData.province}"
 										id="provinciaSelect" styleClass="form-control form-select">
 										<f:selectItem itemLabel="Selectioneaza una" itemValue="" />
 										<f:selectItems value="#{userBean.provinces}"

@@ -33,7 +33,7 @@ public class LoginController {
 	 * @throws IOException en caso de fallo en servlet
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/login")
-	public String login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public String login(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
 		String respuesta = null;
 		if ("partial/ajax".equals(request.getHeader("Faces-Request"))) {
 			// JSF ajax request. Return special XML response which instructs JavaScript that it should in turn perform a

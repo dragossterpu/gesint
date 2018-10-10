@@ -23,7 +23,7 @@ public class PerException extends Exception {
 	 * 
 	 * @param e Excepción
 	 */
-	public PerException(Exception e) {
+	public PerException(final Exception e) {
 		super(e);
 		mensaje = e.getMessage();
 	}

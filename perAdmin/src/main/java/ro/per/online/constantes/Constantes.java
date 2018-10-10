@@ -48,6 +48,11 @@ public final class Constantes {
 	public static final String SESSION = "session";
 
 	/**
+	 * Constantes para la variable view
+	 */
+	public static final String VIEW = "view";
+
+	/**
 	 * Para buscar en bbdd sin tener en cuenta las tildes.
 	 */
 	public static final String COMPARADORSINACENTOS = "upper(convert(replace(%1$s, \' \', \'\'), \'US7ASCII\')) LIKE upper(convert(\'%%\' || replace(\'%2$s\', \' \', \'\') || \'%%\', \'US7ASCII\'))";

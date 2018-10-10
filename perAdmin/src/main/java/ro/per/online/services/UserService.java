@@ -65,4 +65,10 @@ public interface UserService {
 	 * @return User
 	 */
 	Users findByIdCard(String cnp);
+
+	/**
+	 * Eliminación de un usuario.
+	 * @param usuario a eliminar
+	 */
+	void delete(Users usuario);
 }

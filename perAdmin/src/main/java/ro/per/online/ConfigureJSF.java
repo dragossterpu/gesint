@@ -22,6 +22,7 @@ import com.sun.faces.config.FacesInitializer;
 public class ConfigureJSF {
 
 	/**
+	 * Metodo para facesServletRegistration.
 	 * @return JsfServletRegistrationBean
 	 */
 	@Bean
@@ -32,9 +33,7 @@ public class ConfigureJSF {
 	/**
 	 * Clase que hereda de org.springframework.boot.web.servlet.ServletRegistrationBean para poder sobreescribir el
 	 * método onStartup y definir el FacesInitializer de JSF.
-	 * 
 	 * @author ATOS
-	 *
 	 */
 	public class JsfServletRegistrationBean extends ServletRegistrationBean {
 
@@ -47,13 +46,15 @@ public class ConfigureJSF {
 
 		/**
 		 * Configuración al arrancar el Servlet.
+		 * @param servletContext contexto de servlet
+		 * @throws ServletException excepción de servlet
 		 */
 		@Override
-		public void onStartup(ServletContext servletContext) throws ServletException {
+		public void onStartup(final ServletContext servletContext) throws ServletException {
 
-			FacesInitializer facesInitializer = new FacesInitializer();
+			final FacesInitializer facesInitializer = new FacesInitializer();
 
-			Set<Class<?>> clazz = new HashSet<>();
+			final Set<Class<?>> clazz = new HashSet<>();
 			clazz.add(ConfigureJSF.class);
 			facesInitializer.onStartup(clazz, servletContext);
 		}

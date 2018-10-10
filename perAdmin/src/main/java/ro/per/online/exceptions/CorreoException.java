@@ -30,7 +30,7 @@ public class CorreoException extends RuntimeException {
 	 * 
 	 * @param ex Objeto que contiene los datos de la excepción
 	 */
-	public CorreoException(Throwable ex) {
+	public CorreoException(final Throwable ex) {
 		this.e = ex;
 	}
 

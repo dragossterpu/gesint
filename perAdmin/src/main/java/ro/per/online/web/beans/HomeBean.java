@@ -69,7 +69,7 @@ public class HomeBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		model = new DefaultDashboardModel();
-		DashboardColumn column1 = new DefaultDashboardColumn();
+		final DashboardColumn column1 = new DefaultDashboardColumn();
 		column1.addWidget("estadisticas");
 		column1.addWidget("actividad");
 		model.addColumn(column1);
@@ -80,9 +80,9 @@ public class HomeBean implements Serializable {
 	 */
 	private void calculoFechasFiltro() {
 		// Inicio descomentar al poner en producción
-		Calendar today = Calendar.getInstance();
+		final Calendar today = Calendar.getInstance();
 		today.add(Calendar.DATE, 1);
-		Calendar inicio = Calendar.getInstance();
+		final Calendar inicio = Calendar.getInstance();
 		fechaDesde = inicio.getTime();
 		fechaHasta = today.getTime();
 

@@ -93,6 +93,7 @@ public class UserServiceImpl implements UserService {
 	 *
 	 *
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Users> buscarUsuarioCriteria(final int first, final int pageSize, final String sortField,
 			final SortOrder sortOrder, final UsuarioBusqueda usuarioBusqueda) {
@@ -213,5 +214,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Users findByIdCard(final String cnp) {
 		return this.userRepository.findByPersonalDataIdCard(cnp);
+	}
+
+	/**
+	 * Borrado de usuario por username.
+	 * @param username Users
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public void delete(final Users username) {
+		this.userRepository.delete(username);
 	}
 }

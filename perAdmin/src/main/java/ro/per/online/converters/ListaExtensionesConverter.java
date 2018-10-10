@@ -25,10 +25,11 @@ public class ListaExtensionesConverter implements Converter {
 	 * Transforma una cadena de texto en lista de elementos.
 	 */
 	@Override
-	public Object getAsObject(FacesContext context, UIComponent component, String submittedValue) {
+	public Object getAsObject(final FacesContext context, final UIComponent component, final String submittedValue) {
 		Object respuesta = null;
-		if (submittedValue != null)
+		if (submittedValue != null) {
 			respuesta = new ArrayList<>(Arrays.asList(submittedValue.split(SEPARADOR)));
+		}
 		return respuesta;
 	}
 
@@ -37,10 +38,11 @@ public class ListaExtensionesConverter implements Converter {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public String getAsString(FacesContext context, UIComponent component, Object modelValue) {
+	public String getAsString(final FacesContext context, final UIComponent component, final Object modelValue) {
 		String respuesta = null;
-		if (modelValue != null)
+		if (modelValue != null) {
 			respuesta = String.join(SEPARADOR, (List<String>) modelValue);
+		}
 		return respuesta;
 	}
 

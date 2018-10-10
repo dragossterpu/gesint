@@ -1,8 +1,8 @@
 package ro.per.online.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class LocalityServiceImpl implements LocalityService {
 	 */
 	@Override
 	public List<PLocality> fiindAll() {
-		return IterableUtils.toList(this.localityRepository.findAll());
+		return (ArrayList<PLocality>) localityRepository.findAll();
 	}
 
 	/**

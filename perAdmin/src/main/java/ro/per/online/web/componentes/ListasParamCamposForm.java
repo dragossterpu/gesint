@@ -30,11 +30,6 @@ public class ListasParamCamposForm {
 	private LocalityService localidadService;
 
 	/**
-	 * listaLocalidades.
-	 */
-	private List<PLocality> listaLocalidades;
-
-	/**
 	 * Lista de provincias.
 	 * @return lista de provincias
 	 */

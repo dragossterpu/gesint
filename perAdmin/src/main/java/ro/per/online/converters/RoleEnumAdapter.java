@@ -20,7 +20,7 @@ public class RoleEnumAdapter implements AttributeConverter<RoleEnum, String> {
 	 * Método que recibe un valor RoleEnum y devuelve su nombre.
 	 */
 	@Override
-	public String convertToDatabaseColumn(RoleEnum role) {
+	public String convertToDatabaseColumn(final RoleEnum role) {
 		String nombre = null;
 		if (role != null) {
 			nombre = role.name();
@@ -32,7 +32,7 @@ public class RoleEnumAdapter implements AttributeConverter<RoleEnum, String> {
 	 * Método que recibe un nombre y devuelve su correspondiente RoleEnum.
 	 */
 	@Override
-	public RoleEnum convertToEntityAttribute(String dbData) {
+	public RoleEnum convertToEntityAttribute(final String dbData) {
 		return RoleEnum.valueOf(dbData);
 	}
 

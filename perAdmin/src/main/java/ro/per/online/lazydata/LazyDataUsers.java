@@ -35,7 +35,7 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 	/**
 	 * Obiect care conține parametrii de căutare.
 	 */
-	private transient UsuarioBusqueda searchUser;
+	private transient UsuarioBusqueda userBusqueda;
 
 	/**
 	 * Listă care servește modelul ca sursă de date.
@@ -77,10 +77,10 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 		if (getDatasource() != null) {
 			setUsers.addAll(getDatasource());
 		}
-		Iterator<Users> iteratorUsuarios = setUsers.iterator();
+		final Iterator<Users> iteratorUsuarios = setUsers.iterator();
 		boolean encontrado = false;
 		while (iteratorUsuarios.hasNext() && !encontrado) {
-			Users usuario = iteratorUsuarios.next();
+			final Users usuario = iteratorUsuarios.next();
 			if (rowKey.equals(usuario.getUsername())) {
 				us = usuario;
 				encontrado = true;
@@ -119,13 +119,13 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 	public List<Users> load(final int first, final int pageSize, final String sortField, final SortOrder sortOrder,
 			final Map<String, Object> filters) {
 		List<Users> listado = null;
-		if (searchUser == null) {
+		if (userBusqueda == null) {
 			this.setRowCount(0);
 		}
 		else {
 
-			this.setRowCount(userService.getCounCriteria(searchUser));
-			listado = userService.buscarUsuarioCriteria(first, pageSize, sortField, sortOrder, searchUser);
+			this.setRowCount(userService.getCounCriteria(userBusqueda));
+			listado = userService.buscarUsuarioCriteria(first, pageSize, sortField, sortOrder, userBusqueda);
 		}
 		return listado;
 

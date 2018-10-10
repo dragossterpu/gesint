@@ -1,8 +1,8 @@
 package ro.per.online.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class ProvinceServiceImpl implements ProvinceService {
 	 */
 	@Override
 	public List<PProvince> fiindAll() {
-		return IterableUtils.toList(this.provinceRepository.findAll());
+		return (ArrayList<PProvince>) provinceRepository.findAll();
 	}
 
 	@Override

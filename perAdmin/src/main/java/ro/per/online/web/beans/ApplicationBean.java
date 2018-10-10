@@ -37,6 +37,7 @@ public class ApplicationBean implements Serializable {
 	 */
 	@PostConstruct
 	public void init() {
+		// ceva comentariu
 
 	}
 

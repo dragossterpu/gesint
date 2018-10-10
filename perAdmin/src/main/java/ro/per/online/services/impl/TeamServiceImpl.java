@@ -1,8 +1,8 @@
 package ro.per.online.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class TeamServiceImpl implements TeamService {
 	 */
 	@Override
 	public List<Team> fiindByTeam() {
-		return IterableUtils.toList(this.teamRepository.findAllByOrderByRankAsc());
+		return (ArrayList<Team>) teamRepository.findAllByOrderByRankAsc();
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class TeamServiceImpl implements TeamService {
 	 * @return Team actualizat
 	 */
 	@Override
-	public Team save(Team team) {
+	public Team save(final Team team) {
 		Team teamActualizado = teamRepository.save(team);
 		return teamActualizado;
 
@@ -60,7 +60,7 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public List<Team> findAllByOrderByRankDesc() {
-		return IterableUtils.toList(this.teamRepository.findAllByOrderByRankDesc());
+		return (ArrayList<Team>) teamRepository.findAllByOrderByRankDesc();
 	}
 
 	/**

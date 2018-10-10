@@ -2,14 +2,10 @@ package ro.per.online.web.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.SortOrder;
@@ -30,13 +26,11 @@ import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.PersonalData;
 import ro.per.online.persistence.entities.Users;
-import ro.per.online.services.CountryService;
 import ro.per.online.services.LocalityService;
 import ro.per.online.services.ProvinceService;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
 import ro.per.online.util.Utilities;
-import ro.per.online.web.componentes.ListasParametros;
 
 /**
  * Controlor de operațiuni legate de gestionarea utilizatorilor. Înregistrarea utilizatorilor, modificarea
@@ -48,15 +42,13 @@ import ro.per.online.web.componentes.ListasParametros;
 @Setter
 @Getter
 @Controller("userBean")
-@Scope("session")
+@Scope(Constantes.SESSION)
+
 public class UserBean implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
 	/**
-	 * Ruta buscador de isnpecciones.
+	 * 
 	 */
-	private static final String RUTABUSCAUSERS = "/users/users?faces-redirect=true";
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Utilizator/Membru.
@@ -64,14 +56,9 @@ public class UserBean implements Serializable {
 	private Users user;
 
 	/**
-	 * Constante del parámetro de sesión usuario búsqueda.
-	 */
-	private static final String BUSQUEDA = "searchUsers";
-
-	/**
 	 * Objeto de búsqueda de usuario.
 	 */
-	private UsuarioBusqueda searchUsers;
+	private UsuarioBusqueda userBusqueda;
 
 	/**
 	 * Lista de judete.
@@ -79,9 +66,9 @@ public class UserBean implements Serializable {
 	private List<PProvince> provinces;
 
 	/**
-	 * Judetul
+	 * Judet.
 	 */
-	private PProvince province;
+	private PProvince provincia;
 
 	/**
 	 * Lista de booleanos para el control de la visualización de columnas en la vista.
@@ -92,11 +79,6 @@ public class UserBean implements Serializable {
 	 * Número máximo de columnas visibles en la vista.
 	 */
 	private int numeroColumnasListadoUsarios = 9;
-
-	/**
-	 * Array que contiene los niveles seleccionables.
-	 */
-	private int[] nivelesSelect = IntStream.rangeClosed(12, 30).toArray();
 
 	/**
 	 * LazyModel para la paginación desde servidor de los datos de la búsqueda de usuarios.
@@ -117,13 +99,6 @@ public class UserBean implements Serializable {
 	private ProvinceService provinceService;
 
 	/**
-	 * Variabila utilizata pentru a injecta serviciul tarii.
-	 * 
-	 */
-	@Autowired
-	private CountryService countryService;
-
-	/**
 	 * Variabila utilizata pentru a injecta serviciul localitatilor.
 	 * 
 	 */
@@ -136,31 +111,9 @@ public class UserBean implements Serializable {
 	private List<PLocality> localidades;
 
 	/**
-	 * Variabilă folosită pentru a stoca valoarea provinciei selectate.
-	 * 
-	 */
-	private PProvince provinciSelec;
-
-	/**
-	 * Contexto actual.
-	 */
-	private transient ExternalContext context;
-
-	/**
-	 * Clase utilizada para obtener los valores de las listas.
-	 */
-	@Autowired
-	private transient ListasParametros listaParametros;
-
-	/**
 	 * Usuario.
 	 */
 	private Users usuario;
-
-	/**
-	 * Identificador de la provincia del usuario.
-	 */
-	private transient Long idProvincia;
 
 	/**
 	 * Encriptador de palabras clave.
@@ -172,6 +125,12 @@ public class UserBean implements Serializable {
 	 * Mensaje de error que se muestra al usuario.
 	 */
 	private transient String mensajeError;
+
+	/**
+	 * Variable utilizada para almacenar el contexto actual.
+	 * 
+	 */
+	private PProvince grupoLocalidadesSelected;
 
 	/**
 	 * Afișează profilul utilizatorului
@@ -190,9 +149,8 @@ public class UserBean implements Serializable {
 	 * 
 	 * @return url-ul páginii de inregistrare utilizator
 	 */
-	public String newUser() {
+	public String getFormAltaUsuario() {
 		user = new Users();
-		user.setDateCreate(new Date());
 		return "/users/registerUser?faces-redirect=true";
 	}
 
@@ -203,7 +161,7 @@ public class UserBean implements Serializable {
 	 * @return pagina de căutare a utilizatorilor
 	 */
 	public String getSearchFormUsers() {
-		cleanSearch();
+		limpiarBusqueda();
 		return "/users/users.xhtml?faces-redirect=true";
 	}
 
@@ -211,9 +169,8 @@ public class UserBean implements Serializable {
 	 * Șterge rezultatele căutărilor anterioare.
 	 * 
 	 */
-	public void cleanSearch() {
-		setProvinciSelec(null);
-		this.searchUsers = new UsuarioBusqueda();
+	public void limpiarBusqueda() {
+		userBusqueda = new UsuarioBusqueda();
 		this.model = new LazyDataUsers(this.userService);
 		model.setRowCount(0);
 	}
@@ -221,8 +178,8 @@ public class UserBean implements Serializable {
 	/**
 	 * Caută utilizatori în funcție de filtrele introduse în formularul de căutare.
 	 */
-	public void searchUsers() {
-		model.setSearchUser(searchUsers);
+	public void buscarUsuario() {
+		model.setUserBusqueda(userBusqueda);
 		model.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
 	}
 
@@ -233,10 +190,9 @@ public class UserBean implements Serializable {
 	 * @param usuario Utilizator recuperat din formularul de căutare al utilizatorului
 	 * @return URL-ul paginii de modificare a utilizatorului
 	 */
-	public String getFormModifyUser(final Users usua) {
+	public String getFormModificarUsuario(final Users usua) {
 		this.usuario = usua;
 		this.provinces = provinceService.fiindAll();
-		// final Users usu = userService.fiindOne(usuario.getUsername());
 		return "/users/modifyUser?faces-redirect=true";
 	}
 
@@ -248,7 +204,7 @@ public class UserBean implements Serializable {
 		try {
 			final String password = Utilities.getPassword();
 			this.usuario.setPassword(this.passwordEncoder.encode(password));
-			final String cuerpoCorreo = "Noua dvs. parolă este: " + password;
+			// final String cuerpoCorreo = "Noua dvs. parolă este: " + password;
 			this.userService.save(this.usuario);
 			// this.correoService.envioCorreo(this.usuario.getUsername(), "Restauración de la contraseña",
 			// cuerpoCorreo);
@@ -267,36 +223,38 @@ public class UserBean implements Serializable {
 	 * 
 	 * @param e checkbox al coloanei selectate
 	 */
-	public void onToggle(ToggleEvent e) {
+	public void onToggle(final ToggleEvent e) {
 		list.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
 	}
 
 	/**
 	 * Returnează o listă a localităților care aparțin unui judet. Acesta este folosit pentru a reîncărca lista
 	 * localităților în funcție de judetul selectat.
+	 * @param List<PLocality> lista de localitati
 	 */
-	public void onChangeProvincia(PProvince provincia) {
-		if (provincia != null) {
-			setLocalidades(localidades = localityService.findByProvince(provincia));
+	public List<PLocality> getLocalidades() {
+		this.localidades = new ArrayList<>();
+		if (this.grupoLocalidadesSelected != null) {
+			try {
+				this.localidades = localityService.findByProvince(grupoLocalidadesSelected);
+			}
+			catch (final DataAccessException e) {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, "Error", "Error");
+			}
 		}
-		else {
-			setLocalidades(null);
-		}
+		return localidades;
 	}
 
 	/**
 	 * Guardar cambios del usuario.
 	 * @param usu User
 	 */
-	public void guardarCambios(final Users usu) {
+	public void modificarUsuario(final Users usu) {
 		try {
 			this.usuario = usu;
 
 			if (validar()) {
-				final PProvince provinciaSeleccionada = this.provinces.stream()
-						.filter(provincia -> provincia.getId().equals(this.idProvincia)).collect(Collectors.toList())
-						.get(0);
-				PersonalData pd = new PersonalData();
+				final PersonalData pd = new PersonalData();
 				pd.setAddress(usuario.getPersonalData().getAddress());
 				pd.setBirthDate(usuario.getPersonalData().getBirthDate());
 				pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
@@ -307,11 +265,11 @@ public class UserBean implements Serializable {
 				pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
 				pd.setPhone(usuario.getPersonalData().getPhone());
 				pd.setPhoto(usuario.getPersonalData().getPhoto());
-				pd.setProvince(provinciaSeleccionada);
+				pd.setProvince(usuario.getPersonalData().getProvince());
 				pd.setSex(usuario.getPersonalData().getSex());
 				pd.setValidated(usuario.getPersonalData().getValidated());
 				pd.setWorkplace(usuario.getPersonalData().getWorkplace());
-				this.userService.save(this.usuario);
+				userService.save(usuario);
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
 						"Se ha modificado corectamente el usuario");
 			}
@@ -392,21 +350,42 @@ public class UserBean implements Serializable {
 	}
 
 	/**
+	 * Eliminación de un usuario.
+	 * @param usuario a eliminar
+	 * @see webapp.administracion.usuario.usuarioBusqueda.xhtml (2 matches)
+	 * @see webapp.administracion.usuario.usuarios.xhtml (2 matches)
+	 */
+	public void eliminarUsuario(final Users usuario) {
+		try {
+			userService.delete(usuario);
+		}
+		catch (DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					Constantes.ERRORMENSAJE);
+		}
+	}
+
+	/**
 	 * Inicializeaza bean-ul.
 	 */
 	@PostConstruct
 	public void init() {
-		this.usuario = new Users();
-		this.provinces = new ArrayList<>();
-		provinces = provinceService.fiindAll();
-		this.localidades = new ArrayList<>();
-		this.searchUsers = new UsuarioBusqueda();
-		cleanSearch();
-		this.list = new ArrayList<>();
+		usuario = new Users();
+		provinces = new ArrayList<>();
+		this.provinces = provinceService.fiindAll();
+		localidades = new ArrayList<>();
+		provincia = new PProvince();
+		userBusqueda = new UsuarioBusqueda();
+		limpiarBusqueda();
+		list = new ArrayList<>();
 		for (int i = 0; i <= numeroColumnasListadoUsarios; i++) {
 			list.add(Boolean.TRUE);
 		}
 		this.model = new LazyDataUsers(userService);
+		if (this.userBusqueda.getProvinciaSelected() != null) {
+			this.localidades = localityService.findByProvince(grupoLocalidadesSelected);
+		}
+
 	}
 
 }

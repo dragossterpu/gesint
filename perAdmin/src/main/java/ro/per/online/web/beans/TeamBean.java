@@ -278,12 +278,12 @@ public class TeamBean implements Serializable {
 
 		try {
 			if (usuariosSeleccionadosFinales.isEmpty()) {
-				Users usuario = usuarioService.fiindOne(nombreUsuario);
+				final Users usuario = usuarioService.fiindOne(nombreUsuario);
 				if (usuario != null) {
 					usuariosSeleccionadosFinales.add(usuario);
 				}
 			}
-			for (Users user : usuariosSeleccionadosFinales) {
+			for (final Users user : usuariosSeleccionadosFinales) {
 				final boolean existeUsuario = teamService.existsByUser(user);
 				if (existeUsuario) {
 					FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR,
@@ -361,7 +361,7 @@ public class TeamBean implements Serializable {
 	 * @return
 	 */
 	public List<Users> buscaUsuarios() {
-		modelUser.setSearchUser(usuarioBusqueda);
+		modelUser.setUserBusqueda(usuarioBusqueda);
 		return modelUser.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 	}
 
@@ -369,7 +369,7 @@ public class TeamBean implements Serializable {
 	 * Căută utilizatori pe baza unui filtru.
 	 */
 	public void buscarUsuarios() {
-		modelUser.setSearchUser(usuarioBusqueda);
+		modelUser.setUserBusqueda(usuarioBusqueda);
 		modelUser.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
 	}
 

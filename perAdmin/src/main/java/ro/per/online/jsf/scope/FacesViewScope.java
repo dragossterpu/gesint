@@ -2,13 +2,12 @@ package ro.per.online.jsf.scope;
 
 import java.util.Map;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 
-import ro.per.online.util.FacesUtilities;
+import ro.per.online.constantes.Constantes;
 
 /**
  *
@@ -18,21 +17,20 @@ import ro.per.online.util.FacesUtilities;
  *
  */
 public class FacesViewScope implements Scope {
+
 	/**
 	 * Nombre del scope.
 	 */
-	public static final String NAME = "view";
+	public static final String NAME = Constantes.VIEW;
 
 	/**
-	 * Metodo que obtiene un Object.
-	 * @param name String
-	 * @param objectFactory ObjectFactory<?>
-	 * @return Object
+	 * Obtiene el objeto de sesión.
+	 * @param name nombre
+	 * @param objectFactory objeto de factoría
+	 * @return objeto
 	 */
 	@Override
 	public Object get(final String name, final ObjectFactory<?> objectFactory) {
-		final Object objeto;
-
 		final FacesContext facesContext = FacesContext.getCurrentInstance();
 		if (facesContext == null) {
 			throw new IllegalStateException("FacesContext.getCurrentInstance() returned null");
@@ -40,42 +38,23 @@ public class FacesViewScope implements Scope {
 
 		final Map<String, Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
 
+		Object respuesta;
 		if (viewMap.containsKey(name)) {
-			objeto = viewMap.get(name);
+			respuesta = viewMap.get(name);
 		}
 		else {
 			final Object object = objectFactory.getObject();
 			viewMap.put(name, object);
 
-			objeto = object;
+			respuesta = object;
 		}
-
-		return objeto;
+		return respuesta;
 	}
 
 	/**
-	 * Metodo que obtiene un id.
-	 * @return String
-	 */
-	@Override
-	public String getConversationId() {
-		return null;
-	}
-
-	/**
-	 * Método que registra una destrucción callback.
-	 * @param name String
-	 * @param callback Runnable
-	 */
-	@Override
-	public void registerDestructionCallback(final String name, final Runnable callback) {
-		FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_WARN, "OK", "OK");
-	}
-
-	/**
-	 * Metodo que elimina.
-	 * @param name String
-	 * @return Object
+	 * Borra el objeto de sesión.
+	 * @param name nombre
+	 * @return objeto borrado
 	 */
 	@Override
 	public Object remove(final String name) {
@@ -83,9 +62,28 @@ public class FacesViewScope implements Scope {
 	}
 
 	/**
-	 * Metodo que resolve.
-	 * @param key String
-	 * @return Object
+	 * Obtiene el id de conersación.
+	 * @return id de conversación
+	 */
+	@Override
+	public String getConversationId() {
+		return null;
+	}
+
+	/**
+	 * Registra llamadas de destrucción.
+	 * @param name nombre
+	 * @param callback callback
+	 */
+	@Override
+	public void registerDestructionCallback(final String name, final Runnable callback) {
+		// Not supported by JSF for view scope
+	}
+
+	/**
+	 * Resuelve el objeto contextual.
+	 * @param key clave
+	 * @return objeto
 	 */
 	@Override
 	public Object resolveContextualObject(final String key) {

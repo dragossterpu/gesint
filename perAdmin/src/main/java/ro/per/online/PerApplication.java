@@ -2,10 +2,13 @@ package ro.per.online;
 
 import java.util.Collections;
 
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.hibernate.SessionFactory;
 import org.primefaces.util.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,10 +21,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import ro.per.online.constantes.Constantes;
 import ro.per.online.jsf.scope.FacesViewScope;
 
 /**
@@ -36,24 +38,25 @@ import ro.per.online.jsf.scope.FacesViewScope;
 public class PerApplication {
 
 	/**
-	 * Litera "true".
+	 * Variable utilizada para inyectar la sesión.
 	 */
-	private static final String TRUE = "true";
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
 
 	/**
 	 * Punto de entrada de la aplicación para Spring Boot.
 	 * @param args parámetros de entrada del método main
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		SpringApplication.run(PerApplication.class, args);
 	}
 
 	/**
-	 * @return HibernateJpaSessionFactoryBean
+	 * @return HibernateJpaSessionFactoryBean.
 	 */
 	@Bean
-	public HibernateJpaSessionFactoryBean sessionFactory() {
-		return new HibernateJpaSessionFactoryBean();
+	public SessionFactory sessionFactory() {
+		return entityManagerFactory.unwrap(SessionFactory.class);
 	}
 
 	/**
@@ -61,7 +64,7 @@ public class PerApplication {
 	 */
 	@Bean
 	public static CustomScopeConfigurer customScopeConfigurer() {
-		CustomScopeConfigurer configurer = new CustomScopeConfigurer();
+		final CustomScopeConfigurer configurer = new CustomScopeConfigurer();
 		configurer.setScopes(Collections.<String, Object> singletonMap(FacesViewScope.NAME, new FacesViewScope()));
 		return configurer;
 	}
@@ -76,33 +79,48 @@ public class PerApplication {
 		return new RegistroPaginasError();
 	}
 
+	/**
+	 * RegistroPaginasError.
+	 */
 	static class RegistroPaginasError implements ErrorPageRegistrar {
 
+		/**
+		 * registerErrorPages.
+		 */
 		@Override
-		public void registerErrorPages(ErrorPageRegistry registry) {
+		public void registerErrorPages(final ErrorPageRegistry registry) {
 			registry.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/error/403.xhtml"),
 					new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.xhtml"),
 					new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/5xx.xhtml"),
 					new ErrorPage(HttpStatus.BAD_GATEWAY, "/error/5xx.xhtml"));
 		}
-
 	}
 
+	/**
+	 * Implementación que se va a usar para las páginas de error.
+	 * 
+	 * @return ErrorPageRegistrar
+	 */
 	@Configuration
 	@Profile("dev")
 	static class ConfigureJSFContextParameters implements ServletContextInitializer {
 
+		/**
+		 * Implementación que se va a usar para las páginas de error.
+		 * 
+		 * @return ErrorPageRegistrar
+		 */
 		@Override
-		public void onStartup(ServletContext servletContext) throws ServletException {
+		public void onStartup(final ServletContext servletContext) throws ServletException {
 			servletContext.setInitParameter("javax.faces.DEFAULT_SUFFIX", ".xhtml");
-			servletContext.setInitParameter("javax.faces.PARTIAL_STATE_SAVING_METHOD", TRUE);
+			servletContext.setInitParameter("javax.faces.PARTIAL_STATE_SAVING_METHOD", Constantes.TRUE);
 			servletContext.setInitParameter("javax.faces.PROJECT_STAGE", "Development");
-			servletContext.setInitParameter("facelets.DEVELOPMENT", TRUE);
+			servletContext.setInitParameter("facelets.DEVELOPMENT", Constantes.TRUE);
 			servletContext.setInitParameter("javax.faces.FACELETS_REFRESH_PERIOD", "1");
-			servletContext.setInitParameter("javax.faces.FACELETS_SKIP_COMMENTS", TRUE);
+			servletContext.setInitParameter("javax.faces.FACELETS_SKIP_COMMENTS", Constantes.TRUE);
 			servletContext.setInitParameter("primefaces.THEME", "blitzer");
 			servletContext.setInitParameter("encoding", "UTF-8");
-			servletContext.setInitParameter(Constants.ContextParams.FONT_AWESOME, TRUE);
+			servletContext.setInitParameter(Constants.ContextParams.FONT_AWESOME, Constantes.TRUE);
 		}
 	}
 
@@ -114,25 +132,15 @@ public class PerApplication {
 		public void onStartup(ServletContext servletContext) throws ServletException {
 
 			servletContext.setInitParameter("javax.faces.DEFAULT_SUFFIX", ".xhtml");
-			servletContext.setInitParameter("javax.faces.PARTIAL_STATE_SAVING_METHOD", TRUE);
+			servletContext.setInitParameter("javax.faces.PARTIAL_STATE_SAVING_METHOD", Constantes.TRUE);
 			servletContext.setInitParameter("javax.faces.PROJECT_STAGE", "Production");
 			servletContext.setInitParameter("facelets.DEVELOPMENT", "false");
 			servletContext.setInitParameter("javax.faces.FACELETS_REFRESH_PERIOD", "-1");
-			servletContext.setInitParameter("javax.faces.FACELETS_SKIP_COMMENTS", TRUE);
+			servletContext.setInitParameter("javax.faces.FACELETS_SKIP_COMMENTS", Constantes.TRUE);
 			servletContext.setInitParameter("primefaces.THEME", "blitzer");
 			servletContext.setInitParameter("encoding", "UTF-8");
-			servletContext.setInitParameter(Constants.ContextParams.FONT_AWESOME, TRUE);
+			servletContext.setInitParameter(Constants.ContextParams.FONT_AWESOME, Constantes.TRUE);
 		}
 	}
 
-	/**
-	 * Realiza la conexión con el servidor de correo.
-	 *
-	 * @return Objeto sender para realizar operaciones con la conexión
-	 */
-	@Bean
-	public JavaMailSenderImpl javaMailSender() {
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		return mailSender;
-	}
 }
