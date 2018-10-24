@@ -1,14 +1,23 @@
 package ro.per.online.web.beans;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 
+import org.apache.poi.util.IOUtils;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.ToggleEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -26,6 +35,7 @@ import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.PersonalData;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.enums.TypeLocalityEnum;
 import ro.per.online.services.LocalityService;
 import ro.per.online.services.ProvinceService;
 import ro.per.online.services.UserService;
@@ -64,6 +74,11 @@ public class UserBean implements Serializable {
 	 * Lista de judete.
 	 */
 	private List<PProvince> provinces;
+
+	/**
+	 * Judet.
+	 */
+	private PProvince provinciaSelect;
 
 	/**
 	 * Judet.
@@ -111,6 +126,11 @@ public class UserBean implements Serializable {
 	private List<PLocality> localidades;
 
 	/**
+	 * Lista de localitati.
+	 */
+	private List<PLocality> localidadesSelected;
+
+	/**
 	 * Usuario.
 	 */
 	private Users usuario;
@@ -131,6 +151,30 @@ public class UserBean implements Serializable {
 	 * 
 	 */
 	private PProvince grupoLocalidadesSelected;
+
+	/**
+	 * Variable utilizada para almacenar el contexto actual.
+	 * 
+	 */
+	private TypeLocalityEnum tipLocalidadSelected;
+
+	/**
+	 * Nombre del documento.
+	 */
+	private String nombreDoc;
+
+	/**
+	 * Fotoografia utilizator.
+	 */
+	private byte[] photoSelected;
+
+	/**
+	 * Método que obtiene la imágen para previsualizar en caso de que el documento sea de tipo imágen.
+	 * @return StreamedContent
+	 */
+	public StreamedContent getImageUserSelected() {
+		return new DefaultStreamedContent(new ByteArrayInputStream(this.photoSelected));
+	}
 
 	/**
 	 * Afișează profilul utilizatorului
@@ -192,6 +236,11 @@ public class UserBean implements Serializable {
 	 */
 	public String getFormModificarUsuario(final Users usua) {
 		this.usuario = usua;
+		this.photoSelected = null;
+		this.provinciaSelect = new PProvince();
+		provinciaSelect = usua.getPersonalData().getProvince();
+		this.localidades = new ArrayList();
+		localidadesSelected = localityService.findByProvince(provinciaSelect);
 		this.provinces = provinceService.fiindAll();
 		return "/users/modifyUser?faces-redirect=true";
 	}
@@ -260,7 +309,7 @@ public class UserBean implements Serializable {
 				pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
 				pd.setEducation(usuario.getPersonalData().getEducation());
 				pd.setIdCard(usuario.getPersonalData().getIdCard());
-				pd.setLocality(usuario.getPersonalData().getLocality());
+				pd.setLocality(localidadesSelected.get(0));
 				pd.setNumberCard(usuario.getPersonalData().getNumberCard());
 				pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
 				pd.setPhone(usuario.getPersonalData().getPhone());
@@ -366,10 +415,96 @@ public class UserBean implements Serializable {
 	}
 
 	/**
+	 * Muestra el diálogo de nueva imágen.
+	 * @param relacion ActividadPuesto
+	 * @param tipoImg int
+	 */
+	public void mostrarDialogoNuevaImagen(final Users usuario) {
+		final RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlg').show();");
+	}
+
+	/**
+	 * Guarda un nuevo municipio.
+	 * 
+	 * @param nombre del municipio nuevo
+	 * @param provincia a la que se asocia el nuevo municipio
+	 */
+	public void nuevoMunicipio(final String nombre, final PProvince provincia, final TypeLocalityEnum tipLoclalitate,
+			final Users usuario) {
+		boolean existeLocalidad = localityService.existeByNameIgnoreCaseAndProvincia(nombre.trim(), provincia);
+		this.tipLocalidadSelected = null;
+		tipLocalidadSelected = tipLoclalitate;
+		if (existeLocalidad) {
+			FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
+					"Acțiunea nu este permisă. Există deja o localitate care aparține aceluiași judeș cu același nume.",
+					null, "inputNombre");
+		}
+		else {
+			PLocality nuevaLocalidad;
+			try {
+				nuevaLocalidad = localityService.crearLocalidad(nombre, provincia, tipLocalidadSelected);
+				localidadesSelected.add(nuevaLocalidad);
+				Collections.sort(localidadesSelected, (o1, o2) -> Long.compare(o1.getId(), o2.getId()));
+				// Incarcam si salvam noua localitate in datele utilizatorului
+				cargarDatosPersonaleUser(provincia, nuevaLocalidad, usuario);
+				userService.save(usuario);
+			}
+			catch (DataAccessException e) {
+				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
+						"Eroare în salvarea localității. Încercați din nou mai târziu.", null, "inputNombre");
+			}
+		}
+	}
+
+	/**
+	 * Incarcam datele personale ale utilizatorului
+	 * @param provincia
+	 * @param nuevaLocalidad
+	 * @param usuario
+	 * @return usuario
+	 */
+	private void cargarDatosPersonaleUser(final PProvince provincia, final PLocality nuevaLocalidad,
+			final Users usuario) {
+		final PersonalData pd = new PersonalData();
+		pd.setAddress(usuario.getPersonalData().getAddress());
+		pd.setBirthDate(usuario.getPersonalData().getBirthDate());
+		pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
+		pd.setEducation(usuario.getPersonalData().getEducation());
+		pd.setIdCard(usuario.getPersonalData().getIdCard());
+		pd.setLocality(nuevaLocalidad);
+		pd.setNumberCard(usuario.getPersonalData().getNumberCard());
+		pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
+		pd.setPhone(usuario.getPersonalData().getPhone());
+		pd.setPhoto(usuario.getPersonalData().getPhoto());
+		pd.setProvince(provincia);
+		pd.setSex(usuario.getPersonalData().getSex());
+		pd.setValidated(usuario.getPersonalData().getValidated());
+		pd.setWorkplace(usuario.getPersonalData().getWorkplace());
+		usuario.setPersonalData(pd);
+	}
+
+	/**
+	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
+	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
+	 * corresponde a la realidad.
+	 * 
+	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
+	 * @throws IOException
+	 */
+	public void cargaImagen(FileUploadEvent event) throws IOException {
+
+		UploadedFile uFile = event.getFile();
+		this.usuario = userService.cargaImagenSinGuardar(IOUtils.toByteArray(uFile.getInputstream()), usuario);
+		nombreDoc = uFile.getFileName();
+	}
+
+	/**
 	 * Inicializeaza bean-ul.
 	 */
 	@PostConstruct
 	public void init() {
+		this.tipLocalidadSelected = null;
 		usuario = new Users();
 		provinces = new ArrayList<>();
 		this.provinces = provinceService.fiindAll();

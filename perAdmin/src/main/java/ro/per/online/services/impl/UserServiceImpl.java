@@ -1,6 +1,6 @@
 package ro.per.online.services.impl;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ro.per.online.constantes.Constantes;
+import ro.per.online.persistence.entities.PersonalData;
 import ro.per.online.persistence.entities.Users;
-import ro.per.online.persistence.repositories.ProvinceRepository;
 import ro.per.online.persistence.repositories.UserRepository;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
@@ -41,12 +41,6 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Autowired
 	private UserRepository userRepository;
-
-	/**
-	 * Repositoriu de PProvince.
-	 */
-	@Autowired
-	private ProvinceRepository provinceRepository;
 
 	/**
 	 * SessionFactory.
@@ -130,7 +124,6 @@ public class UserServiceImpl implements UserService {
 	 * @param criteria
 	 */
 	private void creaCriteria(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
-		List<Users> usuariosList = new ArrayList<>();
 		UtilitiesCriteria.setCondicionCriteriaFechaMayor(usuarioBusqueda.getDateFrom(), criteria,
 				Constantes.FECHACREACION);
 		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(usuarioBusqueda.getDateUntil(), criteria,
@@ -145,8 +138,13 @@ public class UserServiceImpl implements UserService {
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getSex(), criteria, "personalData.sex");
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getCivilStatus(), criteria,
 				"personalData.civilStatus");
-		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getTypeLocality(), criteria,
-				"personalData.locality.typeLocality");
+		if (usuarioBusqueda.getTypeLocality() != null) {
+			criteria.createAlias("personalData.locality", "locality");
+
+			UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getTypeLocality(), criteria,
+					"locality.typelocality");
+		}
+
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria,
 				"personalData.education");
 		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getProvincia(), criteria,
@@ -225,4 +223,62 @@ public class UserServiceImpl implements UserService {
 	public void delete(final Users username) {
 		this.userRepository.delete(username);
 	}
+
+	/**
+	 * Recibe un archivo UploadedFile y los datos necesarios para general un Documento pero no lo almacena en base de
+	 * datos. Sólo deja el objeto preparado para guardarlo.
+	 * 
+	 * @param file fichero a cargar en BDD
+	 * @param tipo tipo de documentp
+	 * @param inspeccion inspección asociada al documento
+	 * @return documento cargado en base de datos
+	 * @throws IOException
+	 * @throws ProgesinException excepción lanzada
+	 */
+	@Override
+	public Users cargaImagenSinGuardar(byte[] file, Users user) throws IOException {
+		return crearImagen(file, user);
+	}
+
+	/**
+	 * Crea el documento.
+	 * 
+	 * @param file Fichero subido por el usuario.
+	 * @param user a la que se asocia.
+	 * @return user generado
+	 * @throws DataAccessException Excepción SQL
+	 * @throws IOException Excepción entrada/salida
+	 */
+	private Users crearImagen(byte[] file, Users user) throws IOException {
+		cargarDatosPersonaleUser(file, user);
+		userRepository.save(user);
+		return user;
+	}
+
+	/**
+	 * Incarcam datele personale ale utilizatorului
+	 * @param provincia
+	 * @param nuevaLocalidad
+	 * @param usuario
+	 * @return usuario
+	 */
+	private void cargarDatosPersonaleUser(byte[] fileBlob, final Users usuario) {
+		final PersonalData pd = new PersonalData();
+		pd.setAddress(usuario.getPersonalData().getAddress());
+		pd.setBirthDate(usuario.getPersonalData().getBirthDate());
+		pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
+		pd.setEducation(usuario.getPersonalData().getEducation());
+		pd.setIdCard(usuario.getPersonalData().getIdCard());
+		pd.setLocality(usuario.getPersonalData().getLocality());
+		pd.setNumberCard(usuario.getPersonalData().getNumberCard());
+		pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
+		pd.setPhone(usuario.getPersonalData().getPhone());
+		pd.setPhoto(fileBlob);
+		pd.setProvince(usuario.getPersonalData().getProvince());
+		pd.setSex(usuario.getPersonalData().getSex());
+		pd.setValidated(usuario.getPersonalData().getValidated());
+		pd.setWorkplace(usuario.getPersonalData().getWorkplace());
+		usuario.setPersonalData(pd);
+	}
+
 }

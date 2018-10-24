@@ -1,5 +1,6 @@
 package ro.per.online.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.primefaces.model.SortOrder;
@@ -71,4 +72,12 @@ public interface UserService {
 	 * @param usuario a eliminar
 	 */
 	void delete(Users usuario);
+
+	/**
+	 * Incarcam fotografia unui utilizator.
+	 * @param usuario a eliminar
+	 * @throws IOException
+	 */
+
+	Users cargaImagenSinGuardar(byte[] bs, Users user) throws IOException;
 }

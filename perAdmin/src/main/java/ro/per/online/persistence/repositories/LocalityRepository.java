@@ -27,4 +27,12 @@ public interface LocalityRepository extends CrudRepository<PLocality, Long> {
 	 */
 	List<PLocality> findByProvinceOrderByName(Long idProvincia);
 
+	/**
+	 * Comprueba si existe un municipio sabiendo su nombre y la provincia a la que pertenece.
+	 * 
+	 * @param name nombre del municipio.
+	 * @param provincia del municipio
+	 * @return existe?
+	 */
+	boolean existsByNameIgnoreCaseAndProvince(String name, PProvince provincia);
 }

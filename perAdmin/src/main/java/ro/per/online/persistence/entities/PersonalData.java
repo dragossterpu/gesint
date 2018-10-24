@@ -1,5 +1,6 @@
 package ro.per.online.persistence.entities;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,6 +11,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -107,10 +111,18 @@ public class PersonalData implements Serializable {
 	/**
 	 * Fotoografia utilizator.
 	 */
-	private Byte photo;
+	private byte[] photo;
 
 	/**
 	 * Utilizator validat.
 	 */
 	private Boolean validated;
+
+	/**
+	 * Método que obtiene la imágen para previsualizar en caso de que el documento sea de tipo imágen.
+	 * @return StreamedContent
+	 */
+	public StreamedContent getImageUser() {
+		return new DefaultStreamedContent(new ByteArrayInputStream(this.photo));
+	}
 }

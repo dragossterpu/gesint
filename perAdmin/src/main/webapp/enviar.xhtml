@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<f:view>
+	<h:head>
+		<title><ui:insert name="title">	Ecologiştii</ui:insert></title>
+		<script src="#{request.contextPath}/js/primefaceslocale.js" />
+		<link rel="stylesheet" href="#{request.contextPath}/css/styles.css" />
+		<link rel="shortcut icon" type="image/png" href="#{request.contextPath}/2261e.ico"/>
+			
+	</h:head>
+	<h:body>
+			<div class="container">
+				<div class="card">
+					<h1 class="title">Enviar</h1>
+						<h:form action="http://127.0.0.1:8080/elypse" id="enviar" method="get">
+						<div class="input-container">
+							<p:inputText  id="filecode" name="filecode" /> <h:outputLabel for="filecode" value="filecode :" />
+							<div class="bar"></div>
+						</div>
+						<div class="input-container">
+							<p:inputText id="idparty" name="idparty" /> <h:outputLabel for="idparty" value="idparty :" />
+							<div class="bar"></div>
+						</div>
+						<div class="input-container">
+							<p:inputText  id="functionalrolespec" name="functionalrolespec" /> <h:outputLabel for="functionalrolespec" value="functionalrolespec :" />
+							<div class="bar"></div>
+						</div>
+						<div class="input-container">
+							<p:inputText  id="mcts" name="mcts" /> <h:outputLabel for="mcts" value="mcts :" />
+							<div class="bar"></div>
+						</div>
+						<div class="input-container">
+							<p:inputText type="text" id="mac" name="mac" /> <h:outputLabel for="mac" value="mac :" />
+							<div class="bar"></div>
+						</div>
+						<div class="button-container">
+							<button>
+								<span onclick="submit">Entrar</span>
+							</button>
+						</div>
+					</h:form>
+				</div>
+			</div>
+
+	</h:body>
+</f:view>
+</html>

@@ -57,7 +57,7 @@ public class PLocality implements Serializable {
 	/**
 	 * Numele localitatii.
 	 */
-	@Column(name = "NAME", length = 100)
+	@Column(name = "NAME", length = 100, nullable = false)
 	private String name;
 
 	/**

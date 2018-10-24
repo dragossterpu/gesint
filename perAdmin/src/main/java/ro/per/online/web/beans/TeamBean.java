@@ -509,7 +509,7 @@ public class TeamBean implements Serializable {
 			user.setName(Generador.nombreFinal());
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
 			PersonalData pd = new PersonalData();
-			pd.setAddress(Generador.nombresCalleFinal().concat("Nr :").concat(Generador.getNumeroCalle()));
+			pd.setAddress(Generador.nombresCalleFinal().concat("  Nr:").concat(Generador.getNumeroCalle()));
 			pd.setBirthDate(Generador.obtenerFechaNastere());
 			pd.setCivilStatus(CivilStatusEnum.randomLetter());
 			pd.setEducation(EducationEnum.randomLetter());

@@ -65,4 +65,11 @@ public enum TypeLocalityEnum {
 		return typeLocalitys;
 	}
 
+	/**
+	 * Devuelve numele.
+	 * @return String
+	 */
+	public String getNombre() {
+		return this.name();
+	}
 }

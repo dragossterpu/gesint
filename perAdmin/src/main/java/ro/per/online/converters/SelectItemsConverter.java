@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * 
  * @author EZENTIS
  */
-@Component("genericSelectConverter")
+@Component("selectConverter")
 public class SelectItemsConverter implements Converter {
 
 	/**
