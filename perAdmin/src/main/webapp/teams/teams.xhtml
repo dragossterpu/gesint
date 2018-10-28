@@ -48,7 +48,7 @@
 							    </p:menuButton>
 							</p:outputPanel>
 						</f:facet>						
-						<p:column headerText="Nume" style="width:15%;" sortBy="#{team.name}"
+						<p:column headerText="Nume" style="width:10%;" sortBy="#{team.name}"
 							exportable="#{teamBean.list[0]}">
 							<h:outputText value="#{team.user.name}" />
 						</p:column>
@@ -70,20 +70,20 @@
 							 <h:outputText value="#{team.user.email}" />
 						</p:column>
 		
-					 <p:column styleClass="botonTabla" headerText="Modificar" style="width:5%;">
-                       <h:commandLink title="Modificar functie membru" 
-								styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
+					 <p:column styleClass="botonTabla" headerText="Administrare" style="width:15%;">
+                       			<h:commandLink title="Modificar functie membru" 
+								styleClass="fa fa-fw fa-align-left  ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
 								actionListener="#{teamBean.abrirDialogoModificaMembru(team)}"  update="searchlistTeams"  />
-                    </p:column>
-                    <p:column  headerText="Eliminar" styleClass="botonTabla text-center"  style="width:5%;" exportable="false"  toggleable="false">
-                    		<p:commandButton title="Eliminar" icon="fa fa-trash" styleClass="modBtn"
+								<h:commandLink title="Modificare date personale"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
+								action="#{teamBean.getFormModificarUsuario(team)}" update="searchlistTeams" />
+								<p:commandButton title="Eliminare" icon="fa fa-trash" styleClass="modBtn"
 								actionListener="#{teamBean.eliminarMembru(team.user)}"
 								update=":searchlistTeams:panelTeams">
 								<p:confirm header="Eliminar membru"
-									message="Sigur doriți să ștergeți acest membru al echipei?"
+									message="Sigur doriți să ștergeți acest membru al echipei de conducere?"
 									icon="fa fa-warning-sign" />
-							</p:commandButton>  
-                    </p:column>																		
+								</p:commandButton>
+						</p:column>  																
 						<f:facet name="footer">
        				 	Total:
 						<h:outputText value="#{fn:length(teamBean.listaTeams)}">

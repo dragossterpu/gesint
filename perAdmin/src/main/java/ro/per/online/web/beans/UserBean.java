@@ -131,6 +131,11 @@ public class UserBean implements Serializable {
 	private List<PLocality> localidadesSelected;
 
 	/**
+	 * Localitate aleasa.
+	 */
+	private PLocality localidadSelected;
+
+	/**
 	 * Usuario.
 	 */
 	private Users usuario;
@@ -238,6 +243,7 @@ public class UserBean implements Serializable {
 		this.usuario = usua;
 		this.photoSelected = null;
 		this.provinciaSelect = new PProvince();
+		this.localidadSelected = new PLocality();
 		provinciaSelect = usua.getPersonalData().getProvince();
 		this.localidades = new ArrayList();
 		localidadesSelected = localityService.findByProvince(provinciaSelect);
@@ -510,6 +516,7 @@ public class UserBean implements Serializable {
 		this.provinces = provinceService.fiindAll();
 		localidades = new ArrayList<>();
 		provincia = new PProvince();
+		this.provinciaSelect = new PProvince();
 		userBusqueda = new UsuarioBusqueda();
 		limpiarBusqueda();
 		list = new ArrayList<>();

@@ -35,6 +35,14 @@
 					</div>
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="lastName" styleClass="buscador" value="Prenume:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="lastName" converter="#{trimConverter}" value="#{userBean.userBusqueda.lastName}" />
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<h:outputLabel for="email" styleClass="buscador"
 								value="Email:" />
 						</div>
@@ -131,7 +139,7 @@
 							<h:outputLabel for="provinciasSelect" styleClass="buscador" value="Organizația/Județul:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">							
-	                    <p:selectOneMenu id="provinciasSelect" value="#{userBean.grupoLocalidadesSelected}"  
+	                    <p:selectOneMenu  value="#{userBean.userBusqueda.provincia}"  id="provinciasSelect"
 	                      converter="#{selectConverter}" class="selectFiltro" >
 	                        <f:selectItem itemLabel="Alege una..." itemValue="" />
 	                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia}" />
@@ -207,25 +215,29 @@
 							</p:outputPanel>
 						</f:facet>
 						
-						<p:column headerText="Data inregistrării" sortBy="#{user.dateCreate}" style="width:12%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
+						<p:column headerText="Data inregistrării" sortBy="#{user.dateCreate}" style="width:16%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
 							<h:outputText value="#{user.dateCreate}">
 								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="Europe/Madrid" />
 							</h:outputText>
 						</p:column>
-						<p:column headerText="Nume" sortBy="#{user.name}" style="width:20%;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
+						<p:column headerText="Nume" sortBy="#{user.name}" style="width:16%;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
 							<h:outputText value="#{user.name}" />
 						</p:column>
-						<p:column headerText="Prenume" sortBy="#{user.lastName}" style="width:20%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
+						<p:column headerText="Prenume" sortBy="#{user.lastName}" style="width:16%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
 							<h:outputText value="#{user.lastName}" />
 						</p:column>
-						<p:column headerText="Email" sortBy="#{user.username}" style="width:29%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
+						<p:column headerText="Email" sortBy="#{user.username}" style="width:20%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
 							<h:outputText value="#{user.username}" />
 						</p:column>
-						<p:column headerText="CNP" sortBy="#{user.idCard}" style="width:15%;" visible="#{userBean.list[4]}" exportable="#{userBean.list[4]}">
-							<h:outputText value="#{user.personalData.idCard}" />
-						</p:column>
-						<p:column headerText="Județul/Organizația " sortBy="#{user.province.name}" style="width:20%;" visible="#{userBean.list[5]}" exportable="#{userBean.list[5]}">
+						<p:column headerText="Județul/Organizația " sortBy="#{user.province.name}" style="width:16%;" visible="#{userBean.list[5]}" exportable="#{userBean.list[5]}">
 							<h:outputText value="#{user.personalData.province.name}" />
+						</p:column>
+						<p:column headerText="Activ/Inactiv" sortBy="#{user.personalData.validated}"
+							visible="#{userBean.list[6]}" exportable="#{userBean.list[6]}" style="width:10%;text-align:center;">
+							<h:outputText styleClass="fa fa-check-circle"
+									rendered="#{user.personalData.validated}" />
+							<h:outputText styleClass="fa fa-times-circle"
+									rendered="#{not user.personalData.validated}" />
 						</p:column>
 						<p:column styleClass="botonTabla text-center" exportable="false" style="width:10%;" toggleable="false">
 							<h:commandLink title="Modificare utilizator"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"

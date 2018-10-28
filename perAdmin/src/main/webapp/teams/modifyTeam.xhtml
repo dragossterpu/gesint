@@ -12,25 +12,25 @@
 		<div class="container-fluid">
 			<h:form id="form" class="tabsInvert">
 				<p:growl id="msgs" showDetail="true" />
-				<p:accordionPanel multiple="true" activeIndex="0,1,2,3">
+				<p:accordionPanel multiple="true" activeIndex="0,1,2,3" id="tabUser">
 					<p:tab title="Informații personale / comunicare">
 						<div class="tabAccordion">
 							<div class="ui-g">
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="nombre" value="Nume:" /></b>
 									<p:inputText id="nombre"
-										value="#{userBean.usuario.name}" required="true"
+										value="#{teamBean.user.name}" required="true"
 										requiredMessage="Introduce numele" />
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="prenume" value="Prenume:" /></b>
 									<p:inputText id="prenume" required="true"
-										value="#{userBean.usuario.lastName}"
+										value="#{teamBean.user.lastName}"
 										requiredMessage="Introduce numele de familie" />
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="nif" value="CNP:" /></b>
-									<p:inputText id="nif" value="#{userBean.usuario.personalData.idCard}" />
+									<p:inputText id="nif" value="#{teamBean.user.personalData.idCard}" />
 								</div>	
 							</div>
 							<div class="ui-g">
@@ -39,108 +39,115 @@
 											value="Data înscrierii:" /></b>
 									<p:calendar id="dateCreate" pattern="dd/MM/yyyy" locale="es"
 										navigator="true" maxdate="#{currentDate}"
-										value="#{userBean.usuario.dateCreate}"
+										value="#{teamBean.user.dateCreate}"
 										disabled="true" />
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="username" value="Utilizator:" /></b>
 									<p:inputText id="username"
-										value="#{userBean.usuario.username}" />
+										value="#{teamBean.user.username}" />
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="rolSelect" value="Rol:" /></b>
 									<p:importEnum
 										type="ro.per.online.persistence.entities.enums.RoleEnum"
 										var="rol" allSuffix="ALL_ENUM_VALUES" />
-									<p:selectOneMenu value="#{userBean.usuario.role}"
+									<p:selectOneMenu value="#{teamBean.user.role}"
 										id="rolSelect"
 										required="true" requiredMessage="Selectați un rol" styleClass="form-control form-select">
 										<f:selectItem itemLabel="Alege un rol" itemValue="" />
 										<f:selectItems value="#{rol.ALL_ENUM_VALUES}" var="rol"
 											itemLabel="#{rol.description}" itemValue="#{rol}" />
-									</p:selectOneMenu>							
+									</p:selectOneMenu>
+								
 								</div>
 							</div>
 							<div class="ui-g">
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="mobilePhone" value="Telefon :" /></b>
 									<p:inputText id="mobilePhone"
-										value="#{userBean.usuario.personalData.phone}" />
+										value="#{teamBean.user.personalData.phone}" />
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="email" value="Email:" /></b>
-									<p:inputText id="email" value="#{userBean.usuario.email}" />
+									<p:inputText id="email" value="#{teamBean.user.email}" />
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="address" value="Adresa:" /></b>
-									<p:inputText id="address" value="#{userBean.usuario.personalData.address}" />
+									<p:inputText id="address" value="#{teamBean.user.personalData.address}" />
 								</div>
 							</div>
-							<div class="ui-g">												
+							<div class="ui-g">								
+								
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="numberCard" value="Numărul documentului de identitate:" /></b>
-									<p:inputText id="numberCard" value="#{userBean.usuario.personalData.numberCard}" />
+									<p:inputText id="numberCard" value="#{teamBean.user.personalData.numberCard}" />
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<p:calendar id="birthDate" pattern="dd/MM/yyyy" locale="ro" navigator="true" 
-									maxdate="#{currentDate}" value="#{userBean.usuario.personalData.birthDate}" />
+									maxdate="#{currentDate}" value="#{teamBean.user.personalData.birthDate}" />
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="educationSelect" value="Nivel de educație:" /></b>
 									<p:importEnum
 										type="ro.per.online.persistence.entities.enums.EducationEnum"
 										var="education" allSuffix="ALL_ENUM_VALUES" />
-									<p:selectOneMenu value="#{userBean.usuario.personalData.education}"
+									<p:selectOneMenu value="#{teamBean.user.personalData.education}"
 										id="educationSelect"
 										required="true" requiredMessage="Selectați un nivel de educație" styleClass="form-control form-select">
 										<f:selectItem itemLabel="Alege un nivel de educație" itemValue="" />
 										<f:selectItems value="#{education.ALL_ENUM_VALUES}" var="education"
 											itemLabel="#{education.description}" itemValue="#{education}" />
-									</p:selectOneMenu>									
+									</p:selectOneMenu>
+									
 								</div>
 							</div>
 							<div class="ui-g">
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="workplace" value="Locul de muncă:" /></b>
-									<p:inputText id="workplace" value="#{userBean.usuario.personalData.workplace}" />
+									<p:inputText id="workplace" value="#{teamBean.user.personalData.workplace}" />
 								</div>	
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="sexSelect" value="Sexul:" /></b>
 									<p:importEnum
 										type="ro.per.online.persistence.entities.enums.SexEnum"
 										var="sex" allSuffix="ALL_ENUM_VALUES" />
-									<p:selectOneMenu value="#{userBean.usuario.personalData.sex}"
+									<p:selectOneMenu value="#{teamBean.user.personalData.sex}"
 										id="sexSelect"
 										required="true" requiredMessage="Selectați tipul sexului" styleClass="form-control form-select">
 										<f:selectItem itemLabel="Alegeți tipul sexului" itemValue="" />
 										<f:selectItems value="#{sex.ALL_ENUM_VALUES}" var="sex"
 											itemLabel="#{sex.description}" itemValue="#{sex}" />
-									</p:selectOneMenu>								
+									</p:selectOneMenu>
+									
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="civilStatusSelect" value="Starea civilă:" /></b>
 									<p:importEnum
 										type="ro.per.online.persistence.entities.enums.CivilStatusEnum"
 										var="civilStatus" allSuffix="ALL_ENUM_VALUES" />
-									<p:selectOneMenu value="#{userBean.usuario.personalData.civilStatus}"
+									<p:selectOneMenu value="#{teamBean.user.personalData.civilStatus}"
 										id="civilStatusSelect"
 										required="true" requiredMessage="Selectați starea civilă" styleClass="form-control form-select">
 										<f:selectItem itemLabel="Alegeți starea civila" itemValue="" />
 										<f:selectItems value="#{civilStatus.ALL_ENUM_VALUES}" var="civilStatus"
 											itemLabel="#{civilStatus.description}" itemValue="#{civilStatus}" />
-									</p:selectOneMenu>							
+									</p:selectOneMenu>
+								
 								</div>							
-							</div>						
+							</div>
+							
 							<div class="ui-g">							
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="provinciaSelect" value="Județul/Organizația:" /></b>
-									<p:selectOneMenu value="#{userBean.provinciaSelect}" converter="#{selectConverter}"
+									<p:selectOneMenu value="#{teamBean.provinciaSelect}" converter="#{selectConverter}"
 										id="provinciaSelect" filter="true" filterMatchMode="startsWith"
 										required="true" requiredMessage="Selectați un judet" styleClass="form-control form-select">
-										<f:selectItem itemLabel="#{userBean.provinciaSelect.name}" />
-										<f:selectItems value="#{userBean.provinces}"  var="provincia"
+										<f:selectItem itemLabel="#{teamBean.provinciaSelect.name}" />
+										<f:selectItems value="#{teamBean.provinces}"  var="provincia"
 											itemLabel="#{provincia.name}" itemValue="#{provincia}" />
-									</p:selectOneMenu>	
+									</p:selectOneMenu>
+								
 								</div>
 							</div>
 							<p:separator />
@@ -149,11 +156,12 @@
 								<b><h:outputLabel for="municipiosSelect"  value="Alegeți o altă localitate :" /></b>
 									<p:separator />									
 									<p:selectOneMenu required="true" requiredMessage="Alegeți o localitate"	styleClass="form-control form-select"
-										value="#{userBean.usuario.personalData.locality}" id="municipiosSelect" converter="#{selectConverter}">																	
-										<f:selectItem itemLabel="#{userBean.usuario.personalData.locality.name}" itemValue="#{userBean.usuario.personalData.locality}" />
-										<f:selectItems value="#{userBean.localidadesSelected}"
+										value="#{teamBean.user.personalData.locality}" id="municipiosSelect" converter="#{selectConverter}">																	
+										<f:selectItem itemLabel="#{teamBean.user.personalData.locality.name}" itemValue="#{teamBean.user.personalData.locality}" />
+										<f:selectItems value="#{teamBean.localidadesSelected}"
 											var="locality"  itemLabel="#{locality.name}" itemValue="#{locality}"/>
-									</p:selectOneMenu>								
+									</p:selectOneMenu>
+									
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 								<b><h:outputLabel for="municipio"  value="Înregistrați o nouă localitate:" /></b>
@@ -167,69 +175,67 @@
 								<div class="ui-g-12 ui-md-6 ui-lg-4">								
 									<b><h:outputLabel for="imagen" value="Fotografia :" /></b>
 									<p:separator />
-									<p:graphicImage rendered="#{not empty userBean.usuario.personalData.photo}" id="imagenG" value="#{userBean.usuario.personalData.imageUser}" cache="false" stream="false">
-									<f:param name="id" value="#{userBean.usuario.id}" />
+									<p:graphicImage rendered="#{not empty teamBean.user.personalData.photo}" id="imagenG" value="#{teamBean.user.personalData.imageUser}" cache="false" stream="false">
+									<f:param name="id" value="#{teamBean.usuario.id}" />
 									 </p:graphicImage>
 									</div>	
 									<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="imagenNueva" value=" Încarcă noua fotografie :" /></b>
 									<p:separator />
-									<p:fileUpload fileUploadListener="#{userBean.cargaImagen}" mode="advanced" dragDropSupport="false"
+									<p:fileUpload fileUploadListener="#{teamBean.cargaImagen}" mode="advanced" dragDropSupport="false"
 									   sizeLimit="204800" invalidSizeMessage=" Dimensiunea maximă permisă este de 20MB" required="true" 
 									   fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
-									   uploadLabel=" Salvează noua fotografie" cancelLabel=" Renunțare" label="Încarcă/Caută fotografia" update="imagenG" /> 
+									      uploadLabel=" Salvează noua fotografie" cancelLabel="Renunțare" label="Încarcă/Caută fotografia" update="imagenG" /> 
+			
 								</div>									
 							</div>
 							<div class="botonesFormulario">
-								<p:commandButton actionListener="#{userBean.restaurarClave}"
+								<p:commandButton actionListener="#{teamBean.restaurarClave}"
 									value="Resetați parola" />
-								<p:commandButton
-									action="#{userBean.modificarUsuario(userBean.usuario)}"
-									value="Salvare" />
+								<p:commandButton update="tabUser" immediate="true" action="#{teamBean.modificarUsuario(teamBean.user)}"
+									value="Salvați modificările făcute " />
 							</div>
 						</div>
 					</p:tab>
-					</p:accordionPanel>
+				</p:accordionPanel>
+				<p:messages autoUpdate="true" closable="true" />
 				<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"
 					closable="true">
 					<p:messages for="dialogMessage" autoUpdate="true" showDetail="true"
 						showSummary="true" />
-						 <div class="centrarBotonesDialog">
-                   <p:button value="Cerrar" outcome="/users/users" />
-               </div>
+					<div class="centrarBotonesDialog">
+	                   <p:button value="Cerrar" outcome="/teams/teams" />
+	               </div>
 				</p:dialog>
 			
-		<p:dialog id="crearMunicipio" widgetVar="dialogMunicipio" header="Înregistrare oraș/localitate nouă" position="center" resizable="false" onShow="$('[id*=inputNombre]').val('');" modal="true" width="40%" >
-			<h:outputLabel for="inputNombre" value=" Numele noii localități (*):" />
-			<p:inputText id="inputNombre" binding="#{nombreMunicipio}"
-				required="#{param['form:guardar']!=null}" requiredMessage="Numele orașului nu poate fi gol" converter="#{trimConverter}" />
-			
-			<h:outputLabel for="inputTipLocalitate" value="Alegeți tipul localității (*):" />
-			<p:importEnum type="ro.per.online.persistence.entities.enums.TypeLocalityEnum"
-				var="typeLocalitys" allSuffix="ALL_ENUM_VALUES" />
-				<p:selectOneMenu value="#{userBean.tipLocalidadSelected}" id="typeLocality" class="selectFiltro" style="min-width:initial;" 
-				effect="fold" required="#{param['form:guardar']!=null}"  requiredMessage="Este obligatoriu să alegeți un tip de localitate">
-					<f:selectItem itemLabel="Alege unul..." itemValue="" />
-					<f:selectItems value="#{typeLocalitys.ALL_ENUM_VALUES}"
-					var="tipLocalidadSelected"
-					itemLabel="#{tipLocalidadSelected.description}"
-					itemValue="#{tipLocalidadSelected}" />
-				</p:selectOneMenu>
-				
-			
-			<div class="centrarBotonesDialog">
-				<p:commandButton id="guardar" value="Inregistrare" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, userBean.provinciaSelect,userBean.tipLocalidadSelected, userBean.usuario)}" 
-				update ="@form"  oncomplete="PF('dialogMunicipio').hide()"/>
-				<p:commandButton value="Cerrar" onclick="PF('dialogMunicipio').hide()"/>
-			</div>
-		</p:dialog>				
+				<p:dialog id="crearMunicipio" widgetVar="dialogMunicipio" header="Înregistrare localitate nouă" position="center" resizable="false" onShow="$('[id*=inputNombre]').val('');" modal="true" width="40%" >
+					<h:outputLabel for="inputNombre" value=" Numele noii localități (*):" />
+					<p:inputText id="inputNombre" binding="#{nombreMunicipio}"
+						required="#{param['form:guardar']!=null}" requiredMessage="Numele orașului nu poate fi gol" converter="#{trimConverter}" />
+					
+					<h:outputLabel for="inputTipLocalitate" value="Alegeți tipul localității (*):" />
+					<p:importEnum type="ro.per.online.persistence.entities.enums.TypeLocalityEnum"
+						var="typeLocalitys" allSuffix="ALL_ENUM_VALUES" />
+						<p:selectOneMenu value="#{teamBean.tipLocalidadSelected}" id="typeLocality" class="selectFiltro" style="min-width:initial;" 
+						effect="fold" required="#{param['form:guardar']!=null}"  requiredMessage="Este obligatoriu să alegeți un tip de localitate">
+							<f:selectItem itemLabel="Alege unul..." itemValue="" />
+							<f:selectItems value="#{typeLocalitys.ALL_ENUM_VALUES}"
+							var="tipLocalidadSelected"
+							itemLabel="#{tipLocalidadSelected.description}"
+							itemValue="#{tipLocalidadSelected}" />
+						</p:selectOneMenu>
+					<div class="centrarBotonesDialog">
+						<p:commandButton id="guardar" value="Înregistrare" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, teamBean.provinciaSelect,teamBean.tipLocalidadSelected, teamBean.usuario)}" 
+						update ="@form"  oncomplete="PF('dialogMunicipio').hide()"/>
+						<p:commandButton value="Cerrar" onclick="PF('dialogMunicipio').hide()"/>
+					</div>
+				</p:dialog>				
 		</h:form>
 
 		</div>
-		<div class="botonesFormulario">
-					<p:button outcome="/users/users" value="Volver"
-						icon="fa fa-fw fa-undo" />
-				</div>
+			<div class="botonesFormulario">
+				<p:button outcome="/teams/teams" value="Înapoi" icon="fa fa-fw fa-undo" />
+			</div>
 		</div>
 	</ui:define>
 </ui:composition>

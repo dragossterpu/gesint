@@ -1,5 +1,6 @@
 package ro.per.online.web.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -11,16 +12,20 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.poi.util.IOUtils;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.event.ToggleSelectEvent;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.UploadedFile;
 import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +42,7 @@ import ro.per.online.persistence.entities.enums.CivilStatusEnum;
 import ro.per.online.persistence.entities.enums.EducationEnum;
 import ro.per.online.persistence.entities.enums.RoleEnum;
 import ro.per.online.persistence.entities.enums.SexEnum;
+import ro.per.online.persistence.entities.enums.TypeLocalityEnum;
 import ro.per.online.services.LocalityService;
 import ro.per.online.services.PTeamService;
 import ro.per.online.services.ProvinceService;
@@ -176,6 +182,42 @@ public class TeamBean implements Serializable {
 	 * 
 	 */
 	private Users user;
+
+	/**
+	 * Fotoografia utilizator.
+	 */
+	private byte[] photoSelected;
+
+	/**
+	 * Lista de localitati.
+	 */
+	private List<PLocality> localidades;
+
+	/**
+	 * Lista de localitati.
+	 */
+	private List<PLocality> localidadesSelected;
+
+	/**
+	 * Lista de judete.
+	 */
+	private List<PProvince> provinces;
+
+	/**
+	 * Variable utilizada para almacenar el contexto actual.
+	 * 
+	 */
+	private TypeLocalityEnum tipLocalidadSelected;
+
+	/**
+	 * Nombre del documento.
+	 */
+	private String nombreDoc;
+
+	/**
+	 * Mensaje de error que se muestra al usuario.
+	 */
+	private transient String mensajeError;
 
 	/**
 	 * Acces pentru a inregistra un nou membru.
@@ -480,6 +522,144 @@ public class TeamBean implements Serializable {
 
 	public void onToggle(final ToggleEvent eve) {
 		this.list.set((Integer) eve.getData(), eve.getVisibility() == Visibility.VISIBLE);
+	}
+
+	/**
+	 * Transmite datele utilizatorului pe care dorim să le modificăm în formular, astfel încât acestea să schimbe
+	 * valorile pe care le doresc.
+	 * 
+	 * @param usuario Utilizator recuperat din formularul de căutare al utilizatorului
+	 * @return URL-ul paginii de modificare a utilizatorului
+	 */
+	public String getFormModificarUsuario(final Team tm) {
+		this.team = tm;
+		this.user = tm.getUser();
+		this.photoSelected = null;
+		this.provinciaSelect = new PProvince();
+		provinciaSelect = user.getPersonalData().getProvince();
+		this.localidades = new ArrayList();
+		localidadesSelected = localityService.findByProvince(provinciaSelect);
+		this.provinces = provinceService.fiindAll();
+		return "/teams/modifyTeam?faces-redirect=true";
+	}
+
+	/**
+	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
+	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
+	 * corresponde a la realidad.
+	 * 
+	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
+	 * @throws IOException
+	 */
+	public void cargaImagen(FileUploadEvent event) throws IOException {
+		this.nombreDoc = "";
+		UploadedFile uFile = event.getFile();
+		user = userService.cargaImagenSinGuardar(IOUtils.toByteArray(uFile.getInputstream()), user);
+		nombreDoc = uFile.getFileName();
+	}
+
+	/**
+	 * Guardar cambios del usuario.
+	 * @param usu User
+	 */
+	public void modificarUsuario(final Users usu) {
+		try {
+			this.user = usu;
+
+			if (validar()) {
+				final PersonalData pd = new PersonalData();
+				pd.setAddress(user.getPersonalData().getAddress());
+				pd.setBirthDate(user.getPersonalData().getBirthDate());
+				pd.setCivilStatus(user.getPersonalData().getCivilStatus());
+				pd.setEducation(user.getPersonalData().getEducation());
+				pd.setIdCard(user.getPersonalData().getIdCard());
+				pd.setLocality(localidadesSelected.get(0));
+				pd.setNumberCard(user.getPersonalData().getNumberCard());
+				pd.setPersonalEmail(user.getPersonalData().getPersonalEmail());
+				pd.setPhone(user.getPersonalData().getPhone());
+				pd.setPhoto(user.getPersonalData().getPhoto());
+				pd.setProvince(user.getPersonalData().getProvince());
+				pd.setSex(user.getPersonalData().getSex());
+				pd.setValidated(user.getPersonalData().getValidated());
+				pd.setWorkplace(user.getPersonalData().getWorkplace());
+				userService.save(user);
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
+						"Utilizatorul a fost modificat corect");
+			}
+			else {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
+						"A apărut o eroare");
+			}
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
+					"A apărut o eroare");
+		}
+	}
+
+	/**
+	 * Método con las validaciones llevadas a cabo al guardar los datos de un usuario 1. Username no repetido 2. Nif no
+	 * repetido 3. Nif valido
+	 *
+	 * @return boolean
+	 */
+	private boolean validar() {
+		boolean validado = true;
+
+		if (!validarUsername()) {
+			this.mensajeError = "El usuario ya existe en el sistema";
+			validado = false;
+		}
+		if (!validarNifUnico()) {
+			this.mensajeError = "El nif ya existe en el sistema";
+			validado = false;
+		}
+		return validado;
+	}
+
+	/**
+	 * Metoda de validare a unicității numelui de utilizator.
+	 * @return boolean
+	 */
+	private boolean validarUsername() {
+		boolean resultado = true;
+		final Users use = this.userService.fiindOne(this.user.getUsername());
+		if (use != null && !use.getUsername().equals(this.user.getUsername())) {
+			resultado = false;
+		}
+		return resultado;
+	}
+
+	/**
+	 * Metodă de validare a unicității CNP.
+	 * @return boolean
+	 */
+	private boolean validarNifUnico() {
+		boolean resultado = true;
+		if (!StringUtils.isEmpty(this.user.getPersonalData().getIdCard())
+				&& this.user.getPersonalData().getIdCard() != null) {
+			try {
+				resultado = buscarUsuarioPorNif();
+			}
+			catch (final DataAccessException e) {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+						"Se ha producido un error a validar el nif del usuario, inténtelo de nuevo más tarde");
+			}
+		}
+		return resultado;
+	}
+
+	/**
+	 * Cautată un utilizator cu cnp-ul și returneaza adevărat sau fals.
+	 * @return boolean
+	 */
+	private boolean buscarUsuarioPorNif() {
+		Boolean resultado = true;
+		final Users use = this.userService.findByIdCard(this.user.getPersonalData().getIdCard());
+		if (use != null && !use.getPersonalData().getIdCard().equals(this.user.getPersonalData().getIdCard())) {
+			resultado = false;
+		}
+		return resultado;
 	}
 
 	/**
