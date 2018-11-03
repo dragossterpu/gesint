@@ -23,8 +23,10 @@
 		<jsf-mojarra.version>2.2.11</jsf-mojarra.version>
 		<primefaces.version>6.1</primefaces.version>
 		<mockito.version>2.9.0</mockito.version>
-        <powermock.version>1.7.3</powermock.version>  
-         <maven.test.skip>true</maven.test.skip>              
+        <powermock.version>1.7.3</powermock.version>
+         <pebble.version>2.4.0</pebble.version>
+         <jsoup.version>1.10.2</jsoup.version>  
+        <maven.test.skip>true</maven.test.skip>              
 	</properties>
 
 	<dependencies>
@@ -94,8 +96,18 @@
 			<artifactId>javax.servlet.jsp.jstl-api</artifactId>
 			<version>1.2.1</version>
 		</dependency>
-
-
+		<!-- para analizar Mime -->
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.14</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-parsers -->
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-parsers</artifactId>
+			<version>1.14</version>
+		</dependency>
 		<!-- ========== Mail ========== -->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
 		<dependency>
@@ -181,6 +193,18 @@
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
 			<version>2.11.0</version>
+		</dependency>
+		<!-- Generación de texto con plantillas (envío de correo) -->
+		<dependency>
+			<groupId>com.mitchellbosecke</groupId>
+			<artifactId>pebble</artifactId>
+			<version>${pebble.version}</version>
+		</dependency>
+		<!-- Para que limpie el html incluyendo etiquetas de cierre si faltan (al generar los informes con el texteditor) -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>${jsoup.version}</version>
 		</dependency>
 	</dependencies>
 	<repositories>

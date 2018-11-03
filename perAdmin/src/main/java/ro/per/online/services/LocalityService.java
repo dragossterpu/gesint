@@ -54,4 +54,11 @@ public interface LocalityService {
 	 */
 	PLocality crearLocalidad(String nombre, PProvince provincia, TypeLocalityEnum tipLoclalitate);
 
+	/**
+	 * Cauta o localitate
+	 * @param Long localitiId
+	 * @return PLocality localitatea
+	 */
+	PLocality findById(Long localitiId);
+
 }

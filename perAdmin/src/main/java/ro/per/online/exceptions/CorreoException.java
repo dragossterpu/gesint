@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /**
  * 
- * Se crea una nueva excepción personalizada para los errores de la clase CorreoElectronico.
+ * Se crea una nueva excepción personalizada para los errores de la clase CorreoElectronicoImpl.
  * 
  * @author STAD
  *

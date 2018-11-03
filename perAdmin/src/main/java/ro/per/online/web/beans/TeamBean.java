@@ -1,10 +1,13 @@
 package ro.per.online.web.beans;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.PostConstruct;
@@ -48,6 +51,7 @@ import ro.per.online.services.PTeamService;
 import ro.per.online.services.ProvinceService;
 import ro.per.online.services.TeamService;
 import ro.per.online.services.UserService;
+import ro.per.online.util.CorreoElectronico;
 import ro.per.online.util.FacesUtilities;
 import ro.per.online.util.Generador;
 
@@ -218,6 +222,12 @@ public class TeamBean implements Serializable {
 	 * Mensaje de error que se muestra al usuario.
 	 */
 	private transient String mensajeError;
+
+	/**
+	 * Envío de correos electrónicos.
+	 */
+	@Autowired
+	private transient CorreoElectronico correo;
 
 	/**
 	 * Acces pentru a inregistra un nou membru.
@@ -731,4 +741,31 @@ public class TeamBean implements Serializable {
 		return limpioName.concat(".").concat(limpioPrenume.concat(Generador.nombresMail()));
 	}
 
+	/**
+	 * OJOOOO !!! A eliminar.. Proba envio correo simple.
+	 *
+	 */
+	public void enviarCorreo() {
+		correo.envioCorreo("dragossterpu@gmail.com", "Proba asunto", "Proba correo simple cuerpo, elypse.");
+	}
+
+	/**
+	 * OJOOOO !!! A eliminar..Proba envio correo con adjuntos.
+	 */
+	public void enviarCorreoAdjuntos() {
+		Map<String, String> paramPlantilla = new HashMap<>();
+		List<File> paramAdjunto = new ArrayList<File>();
+		File param = new File("C:\\Users\\Casa\\Desktop\\consultadenuncia.sql");
+		paramAdjunto.add(param);
+		paramPlantilla.put("cuerpo", "Cuerpo proba");
+		paramPlantilla.put("ApoyoCorreo", "ApoyoCorreo proba");
+		paramPlantilla.put("ApoyoTelefono", "ApoyoTelefono proba");
+		paramPlantilla.put("ApoyoSecretaria", "ApoyoSecretaria proba");
+		paramPlantilla.put("ApoyoPuesto", "ApoyoPuesto proba");
+		paramPlantilla.put("ApoyoDireccion", "ApoyoDireccion proba");
+		paramPlantilla.put("ApoyoTelefono", "ApoyoTelefono proba");
+		paramPlantilla.put("ApoyoFax", "ApoyoFax proba");
+		correo.envioCorreo("dragossterpu@gmail.com", paramPlantilla, "Proba correo con adjuntos, per Admin.",
+				"Cuerpo del mensaje", paramAdjunto);
+	}
 }

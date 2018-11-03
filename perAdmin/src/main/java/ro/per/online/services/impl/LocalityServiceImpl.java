@@ -90,4 +90,9 @@ public class LocalityServiceImpl implements LocalityService {
 		return nuevaLocalidad;
 
 	}
+
+	@Override
+	public PLocality findById(Long localidadId) {
+		return localityRepository.findOne(localidadId);
+	}
 }

@@ -53,6 +53,16 @@ public final class Constantes {
 	public static final String VIEW = "view";
 
 	/**
+	 * Constante ruta recurso plantilla (html) base con etiquetas pebble para generar correos electrónicos con imágenes.
+	 */
+	public static final String TEMPLATECORREOBASE = "./static/templates/templateCorreoBase.html";
+
+	/**
+	 * Constante ruta recurso imagen firma de comunicaciones del sistema.
+	 */
+	public static final String IMGSISTEM = "./static/images/escudo_ipss.png";
+
+	/**
 	 * Para buscar en bbdd sin tener en cuenta las tildes.
 	 */
 	public static final String COMPARADORSINACENTOS = "upper(convert(replace(%1$s, \' \', \'\'), \'US7ASCII\')) LIKE upper(convert(\'%%\' || replace(\'%2$s\', \' \', \'\') || \'%%\', \'US7ASCII\'))";

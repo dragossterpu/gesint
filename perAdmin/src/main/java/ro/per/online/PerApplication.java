@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import ro.per.online.constantes.Constantes;
@@ -143,4 +144,14 @@ public class PerApplication {
 		}
 	}
 
+	/**
+	 * Realiza la conexión con el servidor de correo.
+	 *
+	 * @return Objeto sender para realizar operaciones con la conexión
+	 */
+	@Bean
+	public JavaMailSenderImpl javaMailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		return mailSender;
+	}
 }

@@ -139,11 +139,12 @@
 							<h:outputLabel for="provinciasSelect" styleClass="buscador" value="Organizația/Județul:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">							
-	                    <p:selectOneMenu  value="#{userBean.userBusqueda.provincia}"  id="provinciasSelect"
-	                      converter="#{selectConverter}" class="selectFiltro" >
+	                    <p:selectOneMenu  value="#{userBean.userBusqueda.idProvincia}"  id="provinciasSelect"
+	                       class="selectFiltro" >
 	                        <f:selectItem itemLabel="Alege una..." itemValue="" />
-	                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia}" />
-	                          <p:ajax event="change" listener="#{userBean.getLocalidades}"  update="locality"/>	                        
+	                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.id}" />
+	                          <p:ajax event="change" update="locality"
+									listener="#{userBean.actualizarLocalidades(userBean.userBusqueda.idProvincia)}" />                        
 	                    </p:selectOneMenu>						
 						</div>
 					</div>
@@ -152,9 +153,9 @@
 							<h:outputLabel for="locality" styleClass="buscador" value="Localitatea:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">							
-							<p:selectOneMenu id="locality" value="#{userBean.userBusqueda.locality}"  class="selectFiltro"   converter="#{selectConverter}">
+							<p:selectOneMenu id="locality" value="#{userBean.userBusqueda.idLocalidad}"  class="selectFiltro" >
 								<f:selectItem itemLabel="Alege una..." />
-								 <f:selectItems  value="#{userBean.localidades}" var="locality"  itemLabel="#{locality.name}" itemValue="#{locality}" />	
+								 <f:selectItems  value="#{userBean.localidades}" var="locality"  itemLabel="#{locality.name}" itemValue="#{locality.id}" />	
 							</p:selectOneMenu>	
 						</div>						
 					</div>
@@ -244,6 +245,7 @@
 								action="#{userBean.getFormModificarUsuario(user)}" update="userTable" />
 							<p:commandButton title="Eliminare" icon="fa fa-trash" styleClass="modBtn"  actionListener="#{userBean.removeUser(user)}" 
 							update="searchListUsers" oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">
+								
 								<p:confirm header="Ștergere utilizator" message="Sunteți sigur că doriți să ștergeți acest utilizator?" icon="fa fa-warning-sign" />
 							</p:commandButton>
 						</p:column>

@@ -107,6 +107,8 @@
 						 <p:commandButton actionListener="#{teamBean.alta}" id="crear" 
 						 value="Alta masiva" icon="fa fa-fw fa-save" onstart="PF('statusDialog').show()" 
 						 onsuccess="PF('statusDialog').hide()" />
+						 <p:commandButton actionListener="#{teamBean.enviarCorreo}" value="Proba enviar correo con plantilla"  icon="fa fa send" />
+                		<p:commandButton actionListener="#{teamBean.enviarCorreoAdjuntos}" value="Proba enviar correo con adjuntos"  icon="fa fa send" />
                 
 						<p:commandButton action="#{teamBean.buscarUsuarios()}"
 							value="Căutare" icon="fa fa-search"

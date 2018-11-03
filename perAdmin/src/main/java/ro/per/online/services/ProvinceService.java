@@ -26,4 +26,11 @@ public interface ProvinceService {
 	 */
 	PProvince fiindOne(PProvince province);
 
+	/**
+	 * Cauta un judet
+	 * @param province Judetul
+	 * @return PProvince province
+	 */
+	PProvince findById(Long province);
+
 }

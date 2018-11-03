@@ -1,6 +1,9 @@
 
 package ro.per.online.util;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -13,6 +16,10 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.faces.context.FacesContext;
+
+import com.mitchellbosecke.pebble.PebbleEngine;
+import com.mitchellbosecke.pebble.error.PebbleException;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 /**
  * Métodos de utilidades.
@@ -200,5 +207,28 @@ public class Utilities {
 				mapaSesion.remove(cabecera);
 			}
 		}
+	}
+
+	/**
+	 * Carga la plantilla y genera el texto final con los parámetros proporcionados.
+	 * 
+	 * @param template plantilla (txt,html,etc.)
+	 * @param parametros info a añadir a la plantilla
+	 * @return texto compilado
+	 * @throws PebbleException error al compilar
+	 * @throws IOException error al cargar la plantilla
+	 */
+	public static String generarTextoConPlantilla(String template, Map<String, Object> parametros)
+			throws PebbleException, IOException {
+
+		PebbleEngine engine = new PebbleEngine.Builder().autoEscaping(false).build();
+		PebbleTemplate compiledTemplate = engine.getTemplate(template);
+
+		Writer writer = new StringWriter();
+		compiledTemplate.evaluate(writer, parametros);
+
+		String textoCompilado = writer.toString();
+
+		return textoCompilado;
 	}
 }

@@ -287,11 +287,13 @@ public class UserBean implements Serializable {
 	 * localităților în funcție de judetul selectat.
 	 * @param List<PLocality> lista de localitati
 	 */
-	public List<PLocality> getLocalidades() {
+	public List<PLocality> actualizarLocalidades(final Long prov) {
 		this.localidades = new ArrayList<>();
-		if (this.grupoLocalidadesSelected != null) {
+
+		this.provincia = provinceService.findById(prov);
+		if (this.provincia != null) {
 			try {
-				this.localidades = localityService.findByProvince(grupoLocalidadesSelected);
+				this.localidades = localityService.findByProvince(provincia);
 			}
 			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, "Error", "Error");

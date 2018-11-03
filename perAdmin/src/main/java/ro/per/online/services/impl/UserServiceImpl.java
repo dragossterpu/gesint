@@ -10,6 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -20,6 +21,8 @@ import ro.per.online.constantes.Constantes;
 import ro.per.online.persistence.entities.PersonalData;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.persistence.repositories.UserRepository;
+import ro.per.online.services.LocalityService;
+import ro.per.online.services.ProvinceService;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
 import ro.per.online.util.UtilitiesCriteria;
@@ -53,6 +56,20 @@ public class UserServiceImpl implements UserService {
 	 */
 
 	private Session session;
+
+	/**
+	 * Variabila utilizata pentru a injecta serviciul provinciei.
+	 * 
+	 */
+	@Autowired
+	private ProvinceService provinceService;
+
+	/**
+	 * Variabila utilizata pentru a injecta serviciul localitatilor.
+	 * 
+	 */
+	@Autowired
+	private LocalityService localityService;
 
 	/**
 	 * Devuelve toti utilizatorii inregistrati in baza de date.
@@ -147,13 +164,20 @@ public class UserServiceImpl implements UserService {
 
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria,
 				"personalData.education");
-		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getProvincia(), criteria,
-				"personalData.provincia");
-		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getLocality(), criteria,
-				"personalData.locality");
+		if (usuarioBusqueda.getIdProvincia() != null) {
+			criteria.add(Restrictions.eq("personalData.province",
+					provinceService.findById(usuarioBusqueda.getIdProvincia())));
+			// UtilitiesCriteria.setCondicionCriteriaIgualdadLong(
+			// provinceService.findById(usuarioBusqueda.getIdProvincia()), criteria, "personalData.province");
+		}
+		if (usuarioBusqueda.getIdLocalidad() != null) {
+			criteria.add(Restrictions.eq("personalData.locality",
+					localityService.findById(usuarioBusqueda.getIdLocalidad())));
+			// UtilitiesCriteria.setCondicionCriteriaIgualdadLong(
+			// localityService.findById(usuarioBusqueda.getIdLocalidad()), criteria, "personalData.locality");
+		}
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria,
 				"personalData.education");
-
 	}
 
 	/**

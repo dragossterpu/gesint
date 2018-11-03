@@ -93,6 +93,11 @@ public class UsuarioBusqueda implements Serializable {
 	private Long idProvincia;
 
 	/**
+	 * Filtru localitate utilizator.
+	 */
+	private Long idLocalidad;
+
+	/**
 	 * Filtru stare civila utilizator.
 	 */
 	private CivilStatusEnum civilStatus;

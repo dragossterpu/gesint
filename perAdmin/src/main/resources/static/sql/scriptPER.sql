@@ -651,6 +651,17 @@ INSERT INTO public.team(id, rank, team_id, user_username)VALUES (16, 16, 5, 'dan
 INSERT INTO public.team(id, rank, team_id, user_username)VALUES (17, 17, 5, 'eugen.vizitiu@per.ro');
 INSERT INTO public.team(id, rank, team_id, user_username)VALUES (13, 7, 11, 'tineret@per.ro');
 COMMIT;	
+
+--Date de conexiune al servidor de mail
+INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('1','MAIL','mail.smtp.host','smtp.gmail.com');
+INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('2','MAIL','mail.smtp.port','587');
+INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('3','MAIL','mail.smtp.ssl.trust','smtp.gmail.com');
+INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('4','MAIL','mail.smtp.starttls.enable','true');
+INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('5','MAIL','mail.smtp.user','elypseinfo@gmail.com');
+INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('6','MAIL','mail.smtp.auth','true');
+INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('7','MAIL','mail.smtp.password','elypse18');
+
+COMMIT;	
 	
 	
 	
