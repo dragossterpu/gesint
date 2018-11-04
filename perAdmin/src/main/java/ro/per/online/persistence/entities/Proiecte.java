@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -58,16 +59,30 @@ public class Proiecte implements Serializable {
 	private String titlu;
 
 	/**
-	 * Nombre.
+	 * Continutul textului.
 	 */
-	@Column(name = "TEXT", length = 4000)
+	@Lob
+	@Column(name = "TEXT")
 	private String text;
+
+	/**
+	 * Continutul textului.
+	 */
+	@Lob
+	@Column(name = "RANK")
+	private Long rank;
 
 	/**
 	 * Validat
 	 */
 	@Column(name = "VALIDATED")
 	private Boolean validated;
+
+	/**
+	 * String materie indexata.
+	 */
+	@Column(name = "MATERIA_INDEXATA")
+	private String materiaIndexata;
 
 	/**
 	 * Utilizatorul care publica proiectul

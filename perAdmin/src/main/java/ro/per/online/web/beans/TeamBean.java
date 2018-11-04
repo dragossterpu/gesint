@@ -696,10 +696,16 @@ public class TeamBean implements Serializable {
 			user.setDateCreate(Generador.obtenerFechaRegistru());
 			user.setEmail("proba@gmail.com");
 			user.setLastName(Generador.apellidoFinal());
-			user.setName(Generador.nombreFinal());
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
 			PersonalData pd = new PersonalData();
-			pd.setAddress(Generador.nombresCalleFinal().concat("  Nr:").concat(Generador.getNumeroCalle()));
+			pd.setSex(SexEnum.randomLetter());
+			if (pd.getSex().equals("MAN")) {
+				user.setName(Generador.nombreFinalHombre());
+			}
+			else {
+				user.setName(Generador.nombreFinal());
+			}
+			pd.setAddress(Generador.nombresCalleFinal().concat("  Nr: ").concat(Generador.getNumeroCalle()));
 			pd.setBirthDate(Generador.obtenerFechaNastere());
 			pd.setCivilStatus(CivilStatusEnum.randomLetter());
 			pd.setEducation(EducationEnum.randomLetter());
@@ -716,7 +722,7 @@ public class TeamBean implements Serializable {
 			pd.setNumberCard(Generador.getDni());
 			pd.setPersonalEmail(mail(user.getName(), user.getLastName()));
 			pd.setPhone(Generador.getTelefon());
-			pd.setSex(SexEnum.randomLetter());
+
 			pd.setValidated(true);
 			pd.setWorkplace("Nespecificat");
 			user.setPersonalData(pd);

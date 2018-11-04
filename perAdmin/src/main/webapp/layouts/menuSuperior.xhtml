@@ -6,14 +6,14 @@
 	<h:form>
 		<p:menubar styleClass="navPrimary">			
 			<p:menuitem value=" Acasă" icon="fa fa-fw fa-home" outcome="/index" styleClass="itemInicio" />			
-			<p:submenu label="Utilizatori" icon="fa fa-fw fa-group" styleClass="itemUsuarios">
-				<p:menuitem value="Utilizatori" outcome="/users/users"/>
+			<p:submenu label="Utilizatori/Membrii" icon="fa fa-fw fa-group" styleClass="itemUsuarios">
+				<p:menuitem value="Utilizatori/Membrii" outcome="/users/users"/>
 				<p:menuitem value="Equipa de conducere" outcome="/teams/teams" />
 <!-- 				<p:menuitem value="Statistică membrii" outcome="/enConstruccion" /> -->
 				<p:separator />	
 				<p:menuitem value="Alerte/Avize"  />
 			</p:submenu>
-			<p:submenu label="Administración" icon="fa fa-fw fa-cogs" styleClass="itemAdministracion" >								
+			<p:submenu label="Administrație generală" icon="fa fa-fw fa-cogs" styleClass="itemAdministracion" >								
 				<p:menuitem value="Actividades" outcome="/enConstruccion" />
 				<p:menuitem value="Puestos de trabajo" outcome="/enConstruccion" />
 				<p:menuitem value="Tareas"  outcome="/enConstruccion"/>
@@ -21,14 +21,15 @@
 				<p:menuitem value="Riesgos" outcome="/enConstruccion" />
 				<p:menuitem value="Medidas"  outcome="/enConstruccion"/>																
 			</p:submenu>
-			<p:submenu label="Estadísticas" icon="fa fa-fw fa-bar-chart" styleClass="itemEstadisticas" >
-				<p:menuitem value="Valora-m"  outcome="/enConstruccion"/>
-				<p:menuitem value="Prevencion10.es" outcome="/enConstruccion" />															
+			
+			<p:submenu label="Publicații/Proiecte/Comunicate" icon="fa fa-fw fa-graduation-cap" styleClass="itemFormacion" >
+				<p:menuitem value="Publicații" outcome="/enConstruccion" />				
+				<p:menuitem value="Proiecte" outcome="/proiecte/proiecte"/>
+				<p:menuitem value="Comunicate" outcome="/enConstruccion" />																											
 			</p:submenu>
-			<p:submenu label="Formación" icon="fa fa-fw fa-graduation-cap" styleClass="itemFormacion" >
-				<p:menuitem value="Generación de exámenes" outcome="/enConstruccion" />				
-				<p:menuitem value="Calificaciones" outcome="/enConstruccion"/>
-				<p:menuitem value="Solicitudes de exámenes" outcome="/enConstruccion" />																											
+			<p:submenu label="Statistică" icon="fa fa-fw fa-bar-chart" styleClass="itemEstadisticas" >
+				<p:menuitem value="MicroStrategy"  outcome="/enConstruccion"/>
+				<p:menuitem value="Organizații" outcome="/enConstruccion" />															
 			</p:submenu>
 			<p:submenu label="Portal" icon="fa fa-fw fa-globe" styleClass="itemGestorDocumental">
 				<p:submenu label="Gestor Documental" outcome="/enConstruccion">

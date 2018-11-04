@@ -22,12 +22,26 @@ public class Generador {
 	 * @return nombre al azar
 	 */
 	public static String nombreFinal() {
+		final String[] nombres = { "Andreea", "Elena", "Alexandra", "Denisa", "Ioana", "Gabriela", "Stefania", "Daria",
+				"Mihaela", "Gabriela", "Eugenia", "Cristina", "Bianca", "Georgiana", "Nicleta", "Teodora", "Diana",
+				"Alexia", "Ionela", "Maria", "Cristina", "Viorica", "Iulia", "Ileana", "Tudora", "Ana", "Florentina",
+				"Larisa", "Sara", "Miruna", "Olga", "Olga Maria", "Adela", "Maria Adela", "Roxana", "Rebeca", "Raluca",
+				"Gina", "Georgeta", "Sofia", "Natalia", "Irina", "Antonia", "Daciana", "Manuela", "Adelina",
+				"Dana Maria", "Andra", "Alina", "Delia", "Maria Isabel" };
+		return nombres[1 + new Random().nextInt(50)];
+
+	}
+
+	/**
+	 * Obtiene un nombre final de la lista.
+	 * @return nombre al azar
+	 */
+	public static String nombreFinalHombre() {
 		final String[] nombres = { "Mihai", "Ion", "Vasile", "Marius Andrei", "Grigore", "Adrian", "Iulian", "Marian",
 				"Nicolae", "Gabriel", "Eugen", "Cristi", "Cristian", "Tudor", "Bogdan", "Ionel", "Claudiu", "Ovidiu",
-				"Dan", "Maria", "Cristina", "Viorica", "Iulia", "Ileana", "Tudora", "Ana", "Cornel", "Marius",
-				"Dan Andrei", "Tudor Cristial", "Olga", "Olga Maria", "Adela", "Maria Adela", "Luis", "David",
-				"Ioan David", "Gina", "Georgeta", "Gheorghe", "Constantin", "Doru", "Dacian", "Daciana", "Manuel",
-				"Benjamin", "Dana Maria", "Anghel", "Nicusor", "Tudor Adrian", "Maria Isabel" };
+				"Dan", "Marin", "Cristian", "Viorel", "Iulian", "David", "Tudorel", "Darius", "Cornel", "Marius",
+				"Dan Andrei", "Tudor Cristial", "Denis", "Robert", "Sebastian", "Luca", "Luis", "David", "Ioan David",
+				"Rares", "Anghel", "Nicusor", "Tudor Adrian", "Cosmin" };
 		return nombres[1 + new Random().nextInt(50)];
 
 	}
