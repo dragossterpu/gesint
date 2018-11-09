@@ -37,10 +37,11 @@ public enum TipoPhotoEnum {
 	 */
 	JPG("jpg");
 
-	/**
-	 * Descrierea enum.
-	 */
-	private String description;
+	private static final List<TipoPhotoEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+
+	private static final int SIZE = VALUES.size();
+
+	private static final Random RANDOM = new Random();
 
 	/**
 	 * @return Returnează o listă cu descrierile enum.
@@ -54,20 +55,19 @@ public enum TipoPhotoEnum {
 		return tipsPhotos;
 	}
 
+	public static TipoPhotoEnum randomLetter() {
+		return VALUES.get(RANDOM.nextInt(SIZE));
+	}
+
+	/**
+	 * Descrierea enum.
+	 */
+	private String description;
+
 	/**
 	 * @return Numele enum-ului "
 	 */
 	public String getName() {
 		return name();
-	}
-
-	private static final List<TipoPhotoEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
-
-	private static final int SIZE = VALUES.size();
-
-	private static final Random RANDOM = new Random();
-
-	public static TipoPhotoEnum randomLetter() {
-		return VALUES.get(RANDOM.nextInt(SIZE));
 	}
 }

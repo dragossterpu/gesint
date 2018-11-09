@@ -174,22 +174,102 @@ public class UserBean implements Serializable {
 	private byte[] photoSelected;
 
 	/**
-	 * Método que obtiene la imágen para previsualizar en caso de que el documento sea de tipo imágen.
-	 * @return StreamedContent
+	 * Returnează o listă a localităților care aparțin unui judet. Acesta este folosit pentru a reîncărca lista
+	 * localităților în funcție de judetul selectat.
+	 * @param List<PLocality> lista de localitati
 	 */
-	public StreamedContent getImageUserSelected() {
-		return new DefaultStreamedContent(new ByteArrayInputStream(this.photoSelected));
+	public List<PLocality> actualizarLocalidades(final Long prov) {
+		this.localidades = new ArrayList<>();
+
+		this.provincia = provinceService.findById(prov);
+		if (this.provincia != null) {
+			try {
+				this.localidades = localityService.findByProvince(provincia);
+			}
+			catch (final DataAccessException e) {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, "Error", "Error");
+			}
+		}
+		return localidades;
 	}
 
 	/**
-	 * Afișează profilul utilizatorului
-	 * 
-	 * @return URL-ul paginii unde se vede profilul utilizatorului.
+	 * Caută utilizatori în funcție de filtrele introduse în formularul de căutare.
 	 */
-	public String getUserPerfil() {
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		user = userService.fiindOne(username);
-		return "/principal/miPerfil?faces-redirect=true";
+	public void buscarUsuario() {
+		model.setUserBusqueda(userBusqueda);
+		model.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
+	}
+
+	/**
+	 * Cautată un utilizator cu cnp-ul și returneaza adevărat sau fals.
+	 * @return boolean
+	 */
+	private boolean buscarUsuarioPorNif() {
+		Boolean resultado = true;
+		final Users use = this.userService.findByIdCard(this.usuario.getPersonalData().getIdCard());
+		if (use != null && !use.getPersonalData().getIdCard().equals(this.usuario.getPersonalData().getIdCard())) {
+			resultado = false;
+		}
+		return resultado;
+	}
+
+	/**
+	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
+	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
+	 * corresponde a la realidad.
+	 * 
+	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
+	 * @throws IOException
+	 */
+	public void cargaImagen(FileUploadEvent event) throws IOException {
+
+		UploadedFile uFile = event.getFile();
+		this.usuario = userService.cargaImagenSinGuardar(IOUtils.toByteArray(uFile.getInputstream()), usuario);
+		nombreDoc = uFile.getFileName();
+	}
+
+	/**
+	 * Incarcam datele personale ale utilizatorului
+	 * @param provincia
+	 * @param nuevaLocalidad
+	 * @param usuario
+	 * @return usuario
+	 */
+	private void cargarDatosPersonaleUser(final PProvince provincia, final PLocality nuevaLocalidad,
+			final Users usuario) {
+		final PersonalData pd = new PersonalData();
+		pd.setAddress(usuario.getPersonalData().getAddress());
+		pd.setBirthDate(usuario.getPersonalData().getBirthDate());
+		pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
+		pd.setEducation(usuario.getPersonalData().getEducation());
+		pd.setIdCard(usuario.getPersonalData().getIdCard());
+		pd.setLocality(nuevaLocalidad);
+		pd.setNumberCard(usuario.getPersonalData().getNumberCard());
+		pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
+		pd.setPhone(usuario.getPersonalData().getPhone());
+		pd.setPhoto(usuario.getPersonalData().getPhoto());
+		pd.setProvince(provincia);
+		pd.setSex(usuario.getPersonalData().getSex());
+		pd.setValidated(usuario.getPersonalData().getValidated());
+		pd.setWorkplace(usuario.getPersonalData().getWorkplace());
+		usuario.setPersonalData(pd);
+	}
+
+	/**
+	 * Eliminación de un usuario.
+	 * @param usuario a eliminar
+	 * @see webapp.administracion.usuario.usuarioBusqueda.xhtml (2 matches)
+	 * @see webapp.administracion.usuario.usuarios.xhtml (2 matches)
+	 */
+	public void eliminarUsuario(final Users usuario) {
+		try {
+			userService.delete(usuario);
+		}
+		catch (DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					Constantes.ERRORMENSAJE);
+		}
 	}
 
 	/**
@@ -201,35 +281,6 @@ public class UserBean implements Serializable {
 	public String getFormAltaUsuario() {
 		user = new Users();
 		return "/users/registerUser?faces-redirect=true";
-	}
-
-	/**
-	 * Returnează formularul de căutare utilizator în starea sa inițială și șterge rezultatele căutărilor anterioare
-	 * dacă este navigat din meniu sau dintr-o altă secțiune.
-	 *
-	 * @return pagina de căutare a utilizatorilor
-	 */
-	public String getSearchFormUsers() {
-		limpiarBusqueda();
-		return "/users/users.xhtml?faces-redirect=true";
-	}
-
-	/**
-	 * Șterge rezultatele căutărilor anterioare.
-	 * 
-	 */
-	public void limpiarBusqueda() {
-		userBusqueda = new UsuarioBusqueda();
-		this.model = new LazyDataUsers(this.userService);
-		model.setRowCount(0);
-	}
-
-	/**
-	 * Caută utilizatori în funcție de filtrele introduse în formularul de căutare.
-	 */
-	public void buscarUsuario() {
-		model.setUserBusqueda(userBusqueda);
-		model.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
 	}
 
 	/**
@@ -252,54 +303,68 @@ public class UserBean implements Serializable {
 	}
 
 	/**
-	 * Se generează o nouă parolă și se trimite prin poștă către utilizator.
-	 * @return String
+	 * Método que obtiene la imágen para previsualizar en caso de que el documento sea de tipo imágen.
+	 * @return StreamedContent
 	 */
-	public String restaurarClave() {
-		try {
-			final String password = Utilities.getPassword();
-			this.usuario.setPassword(this.passwordEncoder.encode(password));
-			// final String cuerpoCorreo = "Noua dvs. parolă este: " + password;
-			this.userService.save(this.usuario);
-			// this.correoService.envioCorreo(this.usuario.getUsername(), "Restauración de la contraseña",
-			// cuerpoCorreo);
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CLAVE,
-					"Un e-mail a fost trimis utilizatorului cu noua parolă");
-		}
-		catch (final DataAccessException e) {
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CLAVE,
-					"A apărut o eroare în regenerarea sau trimiterea parolei");
-		}
-		return "/users/modifyUser?faces-redirect=true";
+	public StreamedContent getImageUserSelected() {
+		return new DefaultStreamedContent(new ByteArrayInputStream(this.photoSelected));
 	}
 
 	/**
-	 * Activați / dezactivați vizibilitatea coloanelor din tabelul cu rezultate.
+	 * Returnează formularul de căutare utilizator în starea sa inițială și șterge rezultatele căutărilor anterioare
+	 * dacă este navigat din meniu sau dintr-o altă secțiune.
+	 *
+	 * @return pagina de căutare a utilizatorilor
+	 */
+	public String getSearchFormUsers() {
+		limpiarBusqueda();
+		return "/users/users.xhtml?faces-redirect=true";
+	}
+
+	/**
+	 * Afișează profilul utilizatorului
 	 * 
-	 * @param e checkbox al coloanei selectate
+	 * @return URL-ul paginii unde se vede profilul utilizatorului.
 	 */
-	public void onToggle(final ToggleEvent e) {
-		list.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
+	public String getUserPerfil() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		user = userService.fiindOne(username);
+		return "/principal/miPerfil?faces-redirect=true";
 	}
 
 	/**
-	 * Returnează o listă a localităților care aparțin unui judet. Acesta este folosit pentru a reîncărca lista
-	 * localităților în funcție de judetul selectat.
-	 * @param List<PLocality> lista de localitati
+	 * Inicializeaza bean-ul.
 	 */
-	public List<PLocality> actualizarLocalidades(final Long prov) {
-		this.localidades = new ArrayList<>();
-
-		this.provincia = provinceService.findById(prov);
-		if (this.provincia != null) {
-			try {
-				this.localidades = localityService.findByProvince(provincia);
-			}
-			catch (final DataAccessException e) {
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, "Error", "Error");
-			}
+	@PostConstruct
+	public void init() {
+		this.tipLocalidadSelected = null;
+		usuario = new Users();
+		provinces = new ArrayList<>();
+		this.provinces = provinceService.fiindAll();
+		localidades = new ArrayList<>();
+		provincia = new PProvince();
+		this.provinciaSelect = new PProvince();
+		userBusqueda = new UsuarioBusqueda();
+		limpiarBusqueda();
+		list = new ArrayList<>();
+		for (int i = 0; i <= numeroColumnasListadoUsarios; i++) {
+			list.add(Boolean.TRUE);
 		}
-		return localidades;
+		this.model = new LazyDataUsers(userService);
+		if (this.userBusqueda.getProvinciaSelected() != null) {
+			this.localidades = localityService.findByProvince(grupoLocalidadesSelected);
+		}
+		Utilities.limpiarSesion("userBean");
+	}
+
+	/**
+	 * Șterge rezultatele căutărilor anterioare.
+	 * 
+	 */
+	public void limpiarBusqueda() {
+		userBusqueda = new UsuarioBusqueda();
+		this.model = new LazyDataUsers(this.userService);
+		model.setRowCount(0);
 	}
 
 	/**
@@ -338,87 +403,6 @@ public class UserBean implements Serializable {
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
 					"A apărut o eroare");
-		}
-	}
-
-	/**
-	 * Método con las validaciones llevadas a cabo al guardar los datos de un usuario 1. Username no repetido 2. Nif no
-	 * repetido 3. Nif valido
-	 *
-	 * @return boolean
-	 */
-	private boolean validar() {
-		boolean validado = true;
-
-		if (!validarUsername()) {
-			this.mensajeError = "El usuario ya existe en el sistema";
-			validado = false;
-		}
-		if (!validarNifUnico()) {
-			this.mensajeError = "El nif ya existe en el sistema";
-			validado = false;
-		}
-		return validado;
-	}
-
-	/**
-	 * Metoda de validare a unicității numelui de utilizator.
-	 * @return boolean
-	 */
-	private boolean validarUsername() {
-		boolean resultado = true;
-		final Users use = this.userService.fiindOne(this.usuario.getUsername());
-		if (use != null && !use.getUsername().equals(this.usuario.getUsername())) {
-			resultado = false;
-		}
-		return resultado;
-	}
-
-	/**
-	 * Metodă de validare a unicității CNP.
-	 * @return boolean
-	 */
-	private boolean validarNifUnico() {
-		boolean resultado = true;
-		if (!StringUtils.isEmpty(this.usuario.getPersonalData().getIdCard())
-				&& this.usuario.getPersonalData().getIdCard() != null) {
-			try {
-				resultado = buscarUsuarioPorNif();
-			}
-			catch (final DataAccessException e) {
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-						"Se ha producido un error a validar el nif del usuario, inténtelo de nuevo más tarde");
-			}
-		}
-		return resultado;
-	}
-
-	/**
-	 * Cautată un utilizator cu cnp-ul și returneaza adevărat sau fals.
-	 * @return boolean
-	 */
-	private boolean buscarUsuarioPorNif() {
-		Boolean resultado = true;
-		final Users use = this.userService.findByIdCard(this.usuario.getPersonalData().getIdCard());
-		if (use != null && !use.getPersonalData().getIdCard().equals(this.usuario.getPersonalData().getIdCard())) {
-			resultado = false;
-		}
-		return resultado;
-	}
-
-	/**
-	 * Eliminación de un usuario.
-	 * @param usuario a eliminar
-	 * @see webapp.administracion.usuario.usuarioBusqueda.xhtml (2 matches)
-	 * @see webapp.administracion.usuario.usuarios.xhtml (2 matches)
-	 */
-	public void eliminarUsuario(final Users usuario) {
-		try {
-			userService.delete(usuario);
-		}
-		catch (DataAccessException e) {
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					Constantes.ERRORMENSAJE);
 		}
 	}
 
@@ -466,70 +450,86 @@ public class UserBean implements Serializable {
 	}
 
 	/**
-	 * Incarcam datele personale ale utilizatorului
-	 * @param provincia
-	 * @param nuevaLocalidad
-	 * @param usuario
-	 * @return usuario
-	 */
-	private void cargarDatosPersonaleUser(final PProvince provincia, final PLocality nuevaLocalidad,
-			final Users usuario) {
-		final PersonalData pd = new PersonalData();
-		pd.setAddress(usuario.getPersonalData().getAddress());
-		pd.setBirthDate(usuario.getPersonalData().getBirthDate());
-		pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
-		pd.setEducation(usuario.getPersonalData().getEducation());
-		pd.setIdCard(usuario.getPersonalData().getIdCard());
-		pd.setLocality(nuevaLocalidad);
-		pd.setNumberCard(usuario.getPersonalData().getNumberCard());
-		pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
-		pd.setPhone(usuario.getPersonalData().getPhone());
-		pd.setPhoto(usuario.getPersonalData().getPhoto());
-		pd.setProvince(provincia);
-		pd.setSex(usuario.getPersonalData().getSex());
-		pd.setValidated(usuario.getPersonalData().getValidated());
-		pd.setWorkplace(usuario.getPersonalData().getWorkplace());
-		usuario.setPersonalData(pd);
-	}
-
-	/**
-	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
-	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
-	 * corresponde a la realidad.
+	 * Activați / dezactivați vizibilitatea coloanelor din tabelul cu rezultate.
 	 * 
-	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
-	 * @throws IOException
+	 * @param e checkbox al coloanei selectate
 	 */
-	public void cargaImagen(FileUploadEvent event) throws IOException {
-
-		UploadedFile uFile = event.getFile();
-		this.usuario = userService.cargaImagenSinGuardar(IOUtils.toByteArray(uFile.getInputstream()), usuario);
-		nombreDoc = uFile.getFileName();
+	public void onToggle(final ToggleEvent e) {
+		list.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
 	}
 
 	/**
-	 * Inicializeaza bean-ul.
+	 * Se generează o nouă parolă și se trimite prin poștă către utilizator.
+	 * @return String
 	 */
-	@PostConstruct
-	public void init() {
-		this.tipLocalidadSelected = null;
-		usuario = new Users();
-		provinces = new ArrayList<>();
-		this.provinces = provinceService.fiindAll();
-		localidades = new ArrayList<>();
-		provincia = new PProvince();
-		this.provinciaSelect = new PProvince();
-		userBusqueda = new UsuarioBusqueda();
-		limpiarBusqueda();
-		list = new ArrayList<>();
-		for (int i = 0; i <= numeroColumnasListadoUsarios; i++) {
-			list.add(Boolean.TRUE);
+	public String restaurarClave() {
+		try {
+			final String password = Utilities.getPassword();
+			this.usuario.setPassword(this.passwordEncoder.encode(password));
+			// final String cuerpoCorreo = "Noua dvs. parolă este: " + password;
+			this.userService.save(this.usuario);
+			// this.correoService.envioCorreo(this.usuario.getUsername(), "Restauración de la contraseña",
+			// cuerpoCorreo);
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CLAVE,
+					"Un e-mail a fost trimis utilizatorului cu noua parolă");
 		}
-		this.model = new LazyDataUsers(userService);
-		if (this.userBusqueda.getProvinciaSelected() != null) {
-			this.localidades = localityService.findByProvince(grupoLocalidadesSelected);
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CLAVE,
+					"A apărut o eroare în regenerarea sau trimiterea parolei");
 		}
+		return "/users/modifyUser?faces-redirect=true";
+	}
 
+	/**
+	 * Método con las validaciones llevadas a cabo al guardar los datos de un usuario 1. Username no repetido 2. Nif no
+	 * repetido 3. Nif valido
+	 *
+	 * @return boolean
+	 */
+	private boolean validar() {
+		boolean validado = true;
+
+		if (!validarUsername()) {
+			this.mensajeError = "El usuario ya existe en el sistema";
+			validado = false;
+		}
+		if (!validarNifUnico()) {
+			this.mensajeError = "El nif ya existe en el sistema";
+			validado = false;
+		}
+		return validado;
+	}
+
+	/**
+	 * Metodă de validare a unicității CNP.
+	 * @return boolean
+	 */
+	private boolean validarNifUnico() {
+		boolean resultado = true;
+		if (!StringUtils.isEmpty(this.usuario.getPersonalData().getIdCard())
+				&& this.usuario.getPersonalData().getIdCard() != null) {
+			try {
+				resultado = buscarUsuarioPorNif();
+			}
+			catch (final DataAccessException e) {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+						"Se ha producido un error a validar el nif del usuario, inténtelo de nuevo más tarde");
+			}
+		}
+		return resultado;
+	}
+
+	/**
+	 * Metoda de validare a unicității numelui de utilizator.
+	 * @return boolean
+	 */
+	private boolean validarUsername() {
+		boolean resultado = true;
+		final Users use = this.userService.fiindOne(this.usuario.getUsername());
+		if (use != null && !use.getUsername().equals(this.usuario.getUsername())) {
+			resultado = false;
+		}
+		return resultado;
 	}
 
 }

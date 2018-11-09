@@ -21,4 +21,12 @@ public interface PropriedadRepository extends CrudRepository<Propriedades, Long>
 	 * @see servicios.impl.PropriedadesServiceImpl.findByFilename(String)
 	 */
 	List<Propriedades> findByFilename(String filename);
+
+	/**
+	 * Encuentra un parámetro por el nombre.
+	 * @param nombreParametro String
+	 * @return Parametro
+	 */
+	Propriedades findOneByName(String nombreParametro);
+
 }

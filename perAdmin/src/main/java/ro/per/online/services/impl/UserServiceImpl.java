@@ -72,27 +72,6 @@ public class UserServiceImpl implements UserService {
 	private LocalityService localityService;
 
 	/**
-	 * Devuelve toti utilizatorii inregistrati in baza de date.
-	 * @return lista de unidades
-	 */
-	@Override
-	public List<Users> fiindAll() {
-		final Iterable<Users> users = userRepository.findAll();
-		return (List<Users>) users;
-	}
-
-	/**
-	 * Devuelve utilizatorul inregistrat in baza de date.
-	 * @return Users user
-	 * @see
-	 */
-	@Override
-	public Users fiindOne(String id) {
-		final Users user = userRepository.findOne(id);
-		return user;
-	}
-
-	/**
 	 * Busca usuarios con los parametros de búsqueda.
 	 * @param usuarioBusqueda UsuarioBusqueda
 	 * @param sortOrder SortOrder
@@ -133,6 +112,83 @@ public class UserServiceImpl implements UserService {
 		}
 		finally {
 			closeSession();
+		}
+	}
+
+	/**
+	 * Busca usuarios utilizando criteria.
+	 * 
+	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @return List<User>
+	 */
+	@Override
+	public List<Users> buscarUsuarioCriteria(final UsuarioBusqueda usuarioBusqueda) {
+		try {
+			this.session = this.sessionFactory.openSession();
+			final Criteria criteria = this.session.createCriteria(Users.class);
+			@SuppressWarnings(Constantes.UNCHECKED)
+			final List<Users> usuariosList = gestionarCriteriaUsuarios(usuarioBusqueda, criteria);
+			return usuariosList;
+		}
+		finally {
+			closeSession();
+		}
+	}
+
+	/**
+	 * Recibe un archivo UploadedFile y los datos necesarios para general un Documento pero no lo almacena en base de
+	 * datos. Sólo deja el objeto preparado para guardarlo.
+	 * 
+	 * @param file fichero a cargar en BDD
+	 * @param tipo tipo de documentp
+	 * @param inspeccion inspección asociada al documento
+	 * @return documento cargado en base de datos
+	 * @throws IOException
+	 * @throws ProgesinException excepción lanzada
+	 */
+	@Override
+	public Users cargaImagenSinGuardar(byte[] file, Users user) throws IOException {
+		return crearImagen(file, user);
+	}
+
+	/**
+	 * Incarcam datele personale ale utilizatorului
+	 * @param provincia
+	 * @param nuevaLocalidad
+	 * @param usuario
+	 * @return usuario
+	 */
+	private void cargarDatosPersonaleUser(byte[] fileBlob, final Users usuario) {
+		final PersonalData pd = new PersonalData();
+		pd.setAddress(usuario.getPersonalData().getAddress());
+		pd.setBirthDate(usuario.getPersonalData().getBirthDate());
+		pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
+		pd.setEducation(usuario.getPersonalData().getEducation());
+		pd.setIdCard(usuario.getPersonalData().getIdCard());
+		pd.setLocality(usuario.getPersonalData().getLocality());
+		pd.setNumberCard(usuario.getPersonalData().getNumberCard());
+		pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
+		pd.setPhone(usuario.getPersonalData().getPhone());
+		pd.setPhoto(fileBlob);
+		pd.setProvince(usuario.getPersonalData().getProvince());
+		pd.setSex(usuario.getPersonalData().getSex());
+		pd.setValidated(usuario.getPersonalData().getValidated());
+		pd.setWorkplace(usuario.getPersonalData().getWorkplace());
+		usuario.setPersonalData(pd);
+	}
+
+	/**
+	 * Manejo y cierre de la sesión.
+	 */
+	private void closeSession() {
+		if (this.session != null && this.session.isOpen()) {
+			try {
+				this.session.close();
+			}
+			catch (final DataAccessException e) {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+						"Error mesaj");
+			}
 		}
 	}
 
@@ -181,18 +237,73 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Manejo y cierre de la sesión.
+	 * Crea el documento.
+	 * 
+	 * @param file Fichero subido por el usuario.
+	 * @param user a la que se asocia.
+	 * @return user generado
+	 * @throws DataAccessException Excepción SQL
+	 * @throws IOException Excepción entrada/salida
 	 */
-	private void closeSession() {
-		if (this.session != null && this.session.isOpen()) {
-			try {
-				this.session.close();
-			}
-			catch (final DataAccessException e) {
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-						"Error mesaj");
-			}
-		}
+	private Users crearImagen(byte[] file, Users user) throws IOException {
+		cargarDatosPersonaleUser(file, user);
+		userRepository.save(user);
+		return user;
+	}
+
+	/**
+	 * Borrado de usuario por username.
+	 * @param username Users
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public void delete(final Users username) {
+		this.userRepository.delete(username);
+	}
+
+	/**
+	 * Devuelve toti utilizatorii inregistrati in baza de date.
+	 * @return lista de unidades
+	 */
+	@Override
+	public List<Users> fiindAll() {
+		final Iterable<Users> users = userRepository.findAll();
+		return (List<Users>) users;
+	}
+
+	/**
+	 * Devuelve utilizatorul inregistrat in baza de date.
+	 * @return Users user
+	 * @see
+	 */
+	@Override
+	public Users fiindOne(String id) {
+		final Users user = userRepository.findOne(id);
+		return user;
+	}
+
+	/**
+	 * Căutați un utilizator cu CNP.
+	 * @param cnp String - cnp-ul utilizatorului
+	 * @return User
+	 */
+	@Override
+	public Users findByIdCard(final String cnp) {
+		return this.userRepository.findByPersonalDataIdCard(cnp);
+	}
+
+	/**
+	 * Obitne el listado de usuario en base a las condiciones de Criteria.
+	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @param criteria Criteria
+	 * @return List<User>
+	 */
+	private List<Users> gestionarCriteriaUsuarios(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
+		creaCriteria(usuarioBusqueda, criteria);
+		@SuppressWarnings(Constantes.UNCHECKED)
+		final List<Users> usuariosList = criteria.list();
+		this.session.close();
+		return usuariosList;
 	}
 
 	/**
@@ -227,82 +338,4 @@ public class UserServiceImpl implements UserService {
 	public Users save(Users entity) {
 		return userRepository.save(entity);
 	}
-
-	/**
-	 * Căutați un utilizator cu CNP.
-	 * @param cnp String - cnp-ul utilizatorului
-	 * @return User
-	 */
-	@Override
-	public Users findByIdCard(final String cnp) {
-		return this.userRepository.findByPersonalDataIdCard(cnp);
-	}
-
-	/**
-	 * Borrado de usuario por username.
-	 * @param username Users
-	 */
-	@Override
-	@Transactional(readOnly = false)
-	public void delete(final Users username) {
-		this.userRepository.delete(username);
-	}
-
-	/**
-	 * Recibe un archivo UploadedFile y los datos necesarios para general un Documento pero no lo almacena en base de
-	 * datos. Sólo deja el objeto preparado para guardarlo.
-	 * 
-	 * @param file fichero a cargar en BDD
-	 * @param tipo tipo de documentp
-	 * @param inspeccion inspección asociada al documento
-	 * @return documento cargado en base de datos
-	 * @throws IOException
-	 * @throws ProgesinException excepción lanzada
-	 */
-	@Override
-	public Users cargaImagenSinGuardar(byte[] file, Users user) throws IOException {
-		return crearImagen(file, user);
-	}
-
-	/**
-	 * Crea el documento.
-	 * 
-	 * @param file Fichero subido por el usuario.
-	 * @param user a la que se asocia.
-	 * @return user generado
-	 * @throws DataAccessException Excepción SQL
-	 * @throws IOException Excepción entrada/salida
-	 */
-	private Users crearImagen(byte[] file, Users user) throws IOException {
-		cargarDatosPersonaleUser(file, user);
-		userRepository.save(user);
-		return user;
-	}
-
-	/**
-	 * Incarcam datele personale ale utilizatorului
-	 * @param provincia
-	 * @param nuevaLocalidad
-	 * @param usuario
-	 * @return usuario
-	 */
-	private void cargarDatosPersonaleUser(byte[] fileBlob, final Users usuario) {
-		final PersonalData pd = new PersonalData();
-		pd.setAddress(usuario.getPersonalData().getAddress());
-		pd.setBirthDate(usuario.getPersonalData().getBirthDate());
-		pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
-		pd.setEducation(usuario.getPersonalData().getEducation());
-		pd.setIdCard(usuario.getPersonalData().getIdCard());
-		pd.setLocality(usuario.getPersonalData().getLocality());
-		pd.setNumberCard(usuario.getPersonalData().getNumberCard());
-		pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
-		pd.setPhone(usuario.getPersonalData().getPhone());
-		pd.setPhoto(fileBlob);
-		pd.setProvince(usuario.getPersonalData().getProvince());
-		pd.setSex(usuario.getPersonalData().getSex());
-		pd.setValidated(usuario.getPersonalData().getValidated());
-		pd.setWorkplace(usuario.getPersonalData().getWorkplace());
-		usuario.setPersonalData(pd);
-	}
-
 }

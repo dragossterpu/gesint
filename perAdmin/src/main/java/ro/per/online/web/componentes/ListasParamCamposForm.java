@@ -12,7 +12,7 @@ import ro.per.online.services.ProvinceService;
 
 /**
  * Listas que se usarán como parámetros en combos.
- * @author Ezentis
+ * @author STAD
  */
 @Component
 public class ListasParamCamposForm {
@@ -30,20 +30,20 @@ public class ListasParamCamposForm {
 	private LocalityService localidadService;
 
 	/**
-	 * Lista de provincias.
-	 * @return lista de provincias
-	 */
-	public List<PProvince> obtenerListaProvincias() {
-		return provinciaService.fiindAll();
-	}
-
-	/**
 	 * Lista de localidades para una provincia.
 	 * @param idProvincia Long provincia
 	 * @return lista de localidades
 	 */
 	public List<PLocality> obtenerListaLocalidades(final Long idProvincia) {
 		return localidadService.buscaByProvincia(idProvincia);
+	}
+
+	/**
+	 * Lista de provincias.
+	 * @return lista de provincias
+	 */
+	public List<PProvince> obtenerListaProvincias() {
+		return provinciaService.fiindAll();
 	}
 
 }

@@ -41,6 +41,7 @@ import ro.per.online.persistence.entities.PTeam;
 import ro.per.online.persistence.entities.PersonalData;
 import ro.per.online.persistence.entities.Team;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.enums.AlertChannelEnum;
 import ro.per.online.persistence.entities.enums.CivilStatusEnum;
 import ro.per.online.persistence.entities.enums.EducationEnum;
 import ro.per.online.persistence.entities.enums.RoleEnum;
@@ -69,6 +70,20 @@ import ro.per.online.util.Generador;
 public class TeamBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Obtener DNI.
+	 * @param prenume
+	 * @param nume
+	 * @return dni + letra
+	 */
+	public static String mail(String nume, String prenume) {
+		String limpioName = Normalizer.normalize(nume.toLowerCase(), Normalizer.Form.NFD);
+		limpioName.replace(" ", ".");
+		String limpioPrenume = Normalizer.normalize(prenume.toLowerCase(), Normalizer.Form.NFD);
+		limpioPrenume.replace(" ", ".");
+		return limpioName.concat(".").concat(limpioPrenume.concat(Generador.nombresMail()));
+	}
 
 	/**
 	 * Lista de elemente vizibile.
@@ -230,16 +245,126 @@ public class TeamBean implements Serializable {
 	private transient CorreoElectronico correo;
 
 	/**
-	 * Acces pentru a inregistra un nou membru.
-	 * @return String
+	 * Deschide dialogul de căutare pentru utilizatori.
 	 */
-	public String nuevoMembru() {
-		team = new Team();
+	public void abrirDialogoBusquedaUsuarios() {
 		functia = new PTeam();
-		usuariosSeleccionados = new ArrayList<>();
-		usuariosSeleccionadosFinales = new ArrayList<>();
+		listaProvincias = provinceService.fiindAll();
+		listaTeams = teamService.fiindByTeam();
+		listaFunctii = pteamService.fiindAll();
 		modelUser = new LazyDataUsers(usuarioService);
-		return "/teams/newTeam?faces-redirect=true";
+		final RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlgBusqueda').show();");
+	}
+
+	/**
+	 * Deschide dialogul pentru pozitionarea membrilor.
+	 */
+	public void abrirDialogoModificaMembru(final Team tea) {
+		this.team = new Team();
+		this.team = tea;
+		this.listaFunctii = new ArrayList<>();
+		listaFunctii = pteamService.fiindAll();
+		final RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlgModifica').show();");
+	}
+
+	/**
+	 * Deschide dialogul pentru pozitionarea membrilor.
+	 */
+	public void abrirDialogoOrdenaMembru() {
+		listaTeams = teamService.fiindByTeam();
+		final RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('dlgOrdena').show();");
+	}
+
+	@SuppressWarnings("unlikely-arg-type")
+	public void alta() {
+		for (int i = 0; i < 800; i++) {
+			Users user = new Users();
+			user.setDateCreate(Generador.obtenerFechaRegistru());
+			user.setEmail("proba@gmail.com");
+			user.setLastName(Generador.apellidoFinal());
+			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
+			PersonalData pd = new PersonalData();
+			pd.setSex(SexEnum.randomLetter());
+			if (pd.getSex().equals("MAN")) {
+				user.setName(Generador.nombreFinalHombre());
+			}
+			else {
+				user.setName(Generador.nombreFinal());
+			}
+			pd.setAddress(Generador.nombresCalleFinal().concat("  Nr: ").concat(Generador.getNumeroCalle()));
+			pd.setBirthDate(Generador.obtenerFechaNastere());
+			pd.setCivilStatus(CivilStatusEnum.randomLetter());
+			pd.setEducation(EducationEnum.randomLetter());
+			pd.setIdCard(Generador.getUnidadNumber());
+			PProvince pro = new PProvince();
+			pro.setId(Generador.provinciasFinal());
+			pd.setProvince(pro);
+			List<PLocality> loc = new ArrayList<>();
+			loc = localityService.findByProvince(pro);
+			PLocality locality = new PLocality();
+			Random rand = new Random();
+			locality = loc.get(rand.nextInt(loc.size()));
+			pd.setLocality(locality);
+			pd.setNumberCard(Generador.getDni());
+			pd.setPersonalEmail(mail(user.getName(), user.getLastName()));
+			pd.setPhone(Generador.getTelefon());
+			pd.setAlertChannel(AlertChannelEnum.EMAIL);
+			pd.setValidated(true);
+			pd.setWorkplace(Generador.meserii());
+			user.setPersonalData(pd);
+			user.setUsername(pd.getPersonalEmail());
+			user.setRole(RoleEnum.ROLE_MEMBER);
+			user.setUserCreate("system");
+			userService.save(user);
+		}
+	}
+
+	/**
+	 * Cautată un utilizator cu cnp-ul și returneaza adevărat sau fals.
+	 * @return boolean
+	 */
+	private boolean buscarUsuarioPorNif() {
+		Boolean resultado = true;
+		final Users use = this.userService.findByIdCard(this.user.getPersonalData().getIdCard());
+		if (use != null && !use.getPersonalData().getIdCard().equals(this.user.getPersonalData().getIdCard())) {
+			resultado = false;
+		}
+		return resultado;
+	}
+
+	/**
+	 * Căută utilizatori pe baza unui filtru.
+	 */
+	public void buscarUsuarios() {
+		modelUser.setUserBusqueda(usuarioBusqueda);
+		modelUser.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
+	}
+
+	/**
+	 * Căută utilizatori pe baza unui filtru.
+	 * @return
+	 */
+	public List<Users> buscaUsuarios() {
+		modelUser.setUserBusqueda(usuarioBusqueda);
+		return modelUser.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
+	}
+
+	/**
+	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
+	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
+	 * corresponde a la realidad.
+	 * 
+	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
+	 * @throws IOException
+	 */
+	public void cargaImagen(FileUploadEvent event) throws IOException {
+		this.nombreDoc = "";
+		UploadedFile uFile = event.getFile();
+		user = userService.cargaImagenSinGuardar(IOUtils.toByteArray(uFile.getInputstream()), user);
+		nombreDoc = uFile.getFileName();
 	}
 
 	/**
@@ -263,45 +388,195 @@ public class TeamBean implements Serializable {
 	}
 
 	/**
-	 * Elimina un utilizator din lista utilizatorilor selectați pentru a fi in echipa de conducere.
-	 * @param usuario Users
+	 * OJOOOO !!! A eliminar.. Proba envio correo simple.
+	 *
 	 */
-	public void quitarUsuario(final Users usuario) {
-		usuariosSeleccionadosFinales.remove(usuario);
+	public void enviarCorreo() {
+		correo.envioCorreo("dragossterpu@gmail.com", "Proba asunto", "Proba correo simple cuerpo, elypse.");
 	}
 
 	/**
-	 * Deschide dialogul de căutare pentru utilizatori.
+	 * OJOOOO !!! A eliminar..Proba envio correo con adjuntos.
 	 */
-	public void abrirDialogoBusquedaUsuarios() {
-		functia = new PTeam();
-		listaProvincias = provinceService.fiindAll();
-		listaTeams = teamService.fiindByTeam();
-		listaFunctii = pteamService.fiindAll();
+	public void enviarCorreoAdjuntos() {
+		Map<String, String> paramPlantilla = new HashMap<>();
+		List<File> paramAdjunto = new ArrayList<File>();
+		File param = new File("C:\\Users\\Casa\\Desktop\\consultadenuncia.sql");
+		paramAdjunto.add(param);
+		paramPlantilla.put("cuerpo", "Cuerpo proba");
+		paramPlantilla.put("ApoyoCorreo", "ApoyoCorreo proba");
+		paramPlantilla.put("ApoyoTelefono", "ApoyoTelefono proba");
+		paramPlantilla.put("ApoyoSecretaria", "ApoyoSecretaria proba");
+		paramPlantilla.put("ApoyoPuesto", "ApoyoPuesto proba");
+		paramPlantilla.put("ApoyoDireccion", "ApoyoDireccion proba");
+		paramPlantilla.put("ApoyoTelefono", "ApoyoTelefono proba");
+		paramPlantilla.put("ApoyoFax", "ApoyoFax proba");
+		correo.envioCorreo("dragossterpu@gmail.com", paramPlantilla, "Proba correo con adjuntos, per Admin.",
+				"Cuerpo del mensaje", paramAdjunto);
+	}
+
+	/**
+	 * Metoda de stabilire a utilizatorilor din lista generală.
+	 */
+	public void establecerUsuariosFinales() {
+		usuariosSeleccionadosFinales.add(user);
+		modelUser.setDatasource(usuariosSeleccionadosFinales);
+		this.usuariosSeleccionadosFinales = usuariosSeleccionados;
+	}
+
+	/**
+	 * Transmite datele utilizatorului pe care dorim să le modificăm în formular, astfel încât acestea să schimbe
+	 * valorile pe care le doresc.
+	 * 
+	 * @param usuario Utilizator recuperat din formularul de căutare al utilizatorului
+	 * @return URL-ul paginii de modificare a utilizatorului
+	 */
+	public String getFormModificarUsuario(final Team tm) {
+		this.team = tm;
+		this.user = tm.getUser();
+		this.photoSelected = null;
+		this.provinciaSelect = new PProvince();
+		provinciaSelect = user.getPersonalData().getProvince();
+		this.localidades = new ArrayList();
+		localidadesSelected = localityService.findByProvince(provinciaSelect);
+		this.provinces = provinceService.fiindAll();
+		return "/teams/modifyTeam?faces-redirect=true";
+	}
+
+	/**
+	 * Inițializarea datelor.
+	 */
+	@PostConstruct
+	public void init() {
+		this.usuarioBusqueda = new UsuarioBusqueda();
+		this.user = new Users();
+		this.listaTeams = new ArrayList<>();
+		this.listaTeams = teamService.fiindByTeam();
+		this.functia = new PTeam();
+		this.list = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			this.list.add(Boolean.TRUE);
+		}
+
+		limpiarBuscadores();
+		// Utilities.limpiarSesion("teamBean");
+	}
+
+	/**
+	 * Curăță căutarea utilizatorilor
+	 */
+	public void limpiarBuscadores() {
+		usuarioBusqueda = new UsuarioBusqueda();
+		user = new Users();
+		usuariosSeleccionados = new ArrayList<>();
+		modelUser = new LazyDataUsers(usuarioService);
+	}
+
+	/**
+	 * Curăță câmpurile utilizatorilor selectați și lista de utilizatori.
+	 */
+	public void limpiarCamposNewTeam() {
+		usuariosSeleccionadosFinales = new ArrayList<>();
 		modelUser = new LazyDataUsers(usuarioService);
 		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dlgBusqueda').show();");
+		context.execute("PF('dialogMessage').hide()");
 	}
 
 	/**
-	 * Deschide dialogul pentru pozitionarea membrilor.
+	 * Guardar cambios del usuario.
+	 * @param usu User
 	 */
-	public void abrirDialogoOrdenaMembru() {
-		listaTeams = teamService.fiindByTeam();
-		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dlgOrdena').show();");
+	public void modificarUsuario(final Users usu) {
+		try {
+			this.user = usu;
+
+			if (validar()) {
+				final PersonalData pd = new PersonalData();
+				pd.setAddress(user.getPersonalData().getAddress());
+				pd.setBirthDate(user.getPersonalData().getBirthDate());
+				pd.setCivilStatus(user.getPersonalData().getCivilStatus());
+				pd.setEducation(user.getPersonalData().getEducation());
+				pd.setIdCard(user.getPersonalData().getIdCard());
+				pd.setLocality(localidadesSelected.get(0));
+				pd.setNumberCard(user.getPersonalData().getNumberCard());
+				pd.setPersonalEmail(user.getPersonalData().getPersonalEmail());
+				pd.setPhone(user.getPersonalData().getPhone());
+				pd.setPhoto(user.getPersonalData().getPhoto());
+				pd.setProvince(user.getPersonalData().getProvince());
+				pd.setSex(user.getPersonalData().getSex());
+				pd.setValidated(user.getPersonalData().getValidated());
+				pd.setWorkplace(user.getPersonalData().getWorkplace());
+				userService.save(user);
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
+						"Utilizatorul a fost modificat corect");
+			}
+			else {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
+						"A apărut o eroare");
+			}
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
+					"A apărut o eroare");
+		}
 	}
 
 	/**
-	 * Deschide dialogul pentru pozitionarea membrilor.
+	 * Înregistrează utilizatorul indicat.
 	 */
-	public void abrirDialogoModificaMembru(final Team tea) {
+	public void modificaTeam(final Team tea) {
 		this.team = new Team();
-		this.team = tea;
-		this.listaFunctii = new ArrayList<>();
-		listaFunctii = pteamService.fiindAll();
-		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dlgModifica').show();");
+		try {
+			this.team = tea;
+			;
+			teamService.save(tea);
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, " Modificare corectă ",
+					"Membrul a fost modificat corect.");
+			final RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('dlgModifica').hide();");
+
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"A apărut o eroare la modificarea utilizatorului, încercați din nou mai târziu.");
+		}
+
+	}
+
+	/**
+	 * Acces pentru a inregistra un nou membru.
+	 * @return String
+	 */
+	public String nuevoMembru() {
+		team = new Team();
+		functia = new PTeam();
+		usuariosSeleccionados = new ArrayList<>();
+		usuariosSeleccionadosFinales = new ArrayList<>();
+		modelUser = new LazyDataUsers(usuarioService);
+		return "/teams/newTeam?faces-redirect=true";
+	}
+
+	/**
+	 * Metoda de a adăuga noi utilizatori la lista de utilizatori selectați.
+	 */
+	public void onChangePageUsuarios() {
+		if (usuariosSeleccionados != null && !usuariosSeleccionados.isEmpty()) {
+			usuariosSeleccionadosFinales.addAll(usuariosSeleccionados);
+			usuariosSeleccionados = new ArrayList<>(usuariosSeleccionadosFinales);
+		}
+	}
+
+	public void onReorder() {
+		try {
+			reordenarMembru();
+
+			final FacesContext facesContext = FacesContext.getCurrentInstance();
+			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"A apărut o eroare la salvarea reordenării, încercați din nou mai târziu");
+		}
 	}
 
 	/**
@@ -319,6 +594,81 @@ public class TeamBean implements Serializable {
 		catch (DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 					"A apărut o eroare în încercarea de a modifica membrul echipei de conducere, încercați din nou mai târziu");
+		}
+	}
+
+	/**
+	 * Metodă care asociază o inspecție când selectați caseta de selectare.
+	 *
+	 * @param event eveniment lansat care conține utilizatorul
+	 */
+
+	public void onRowSelectedUser(final SelectEvent event) {
+		this.user = (Users) event.getObject();
+		usuariosSeleccionadosFinales.add(user);
+		modelUser.setDatasource(usuariosSeleccionadosFinales);
+	}
+
+	/**
+	 * Metoda care se execută la selectare.
+	 * @param event SelectEvent
+	 */
+	public void onSelect(final SelectEvent event) {
+		this.team = (Team) event.getObject();
+	}
+
+	/**
+	 *
+	 * Controlează coloanele vizibile în lista rezultatelor motorului de căutare.
+	 *
+	 * @param eve ToggleEvent
+	 *
+	 */
+
+	public void onToggle(final ToggleEvent eve) {
+		this.list.set((Integer) eve.getData(), eve.getVisibility() == Visibility.VISIBLE);
+	}
+
+	/**
+	 * Metodă care captează evenimentul "Selectați toate" sau "Deselectați toate" în vizualizarea Team.
+	 * 
+	 * @param toogleEvent ToggleSelectEvent
+	 */
+	public void onToggleSelectUsers(final ToggleSelectEvent toogleEvent) {
+		if (toogleEvent.isSelected()) {
+			usuariosSeleccionadosFinales = buscaUsuarios();
+			modelUser.setDatasource(usuariosSeleccionadosFinales);
+			usuariosSeleccionados = new ArrayList<>(usuariosSeleccionadosFinales);
+		}
+	}
+
+	/**
+	 * Elimina un utilizator din lista utilizatorilor selectați pentru a fi in echipa de conducere.
+	 * @param usuario Users
+	 */
+	public void quitarUsuario(final Users usuario) {
+		usuariosSeleccionadosFinales.remove(usuario);
+	}
+
+	/**
+	 * Funcție care reorientează pozitia
+	 * @throws DataAccessException excepție de acces la date
+	 */
+	private void reordenarMembru() {
+		try {
+			Team team;
+			for (int i = 0; i < this.listaTeams.size(); i++) {
+				team = this.listaTeams.get(i);
+
+				team.setRank(i + 1L);
+				this.teamService.save(team);
+				final RequestContext context = RequestContext.getCurrentInstance();
+				context.execute("PF('dlgOrdena').hide();");
+			}
+		}
+		catch (DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"A apărut o eroare la salvarea modificărilor, încercați din nou mai târziu");
 		}
 	}
 
@@ -377,237 +727,6 @@ public class TeamBean implements Serializable {
 	}
 
 	/**
-	 * Înregistrează utilizatorul indicat.
-	 */
-	public void modificaTeam(final Team tea) {
-		this.team = new Team();
-		try {
-			this.team = tea;
-			;
-			teamService.save(tea);
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, " Modificare corectă ",
-					"Membrul a fost modificat corect.");
-			final RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("PF('dlgModifica').hide();");
-
-		}
-		catch (final DataAccessException e) {
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la modificarea utilizatorului, încercați din nou mai târziu.");
-		}
-
-	}
-
-	/**
-	 * Curăță câmpurile utilizatorilor selectați și lista de utilizatori.
-	 */
-	public void limpiarCamposNewTeam() {
-		usuariosSeleccionadosFinales = new ArrayList<>();
-		modelUser = new LazyDataUsers(usuarioService);
-		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dialogMessage').hide()");
-	}
-
-	/**
-	 * Căută utilizatori pe baza unui filtru.
-	 * @return
-	 */
-	public List<Users> buscaUsuarios() {
-		modelUser.setUserBusqueda(usuarioBusqueda);
-		return modelUser.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
-	}
-
-	/**
-	 * Căută utilizatori pe baza unui filtru.
-	 */
-	public void buscarUsuarios() {
-		modelUser.setUserBusqueda(usuarioBusqueda);
-		modelUser.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
-	}
-
-	/**
-	 * Metodă care captează evenimentul "Selectați toate" sau "Deselectați toate" în vizualizarea Team.
-	 * 
-	 * @param toogleEvent ToggleSelectEvent
-	 */
-	public void onToggleSelectUsers(final ToggleSelectEvent toogleEvent) {
-		if (toogleEvent.isSelected()) {
-			usuariosSeleccionadosFinales = buscaUsuarios();
-			modelUser.setDatasource(usuariosSeleccionadosFinales);
-			usuariosSeleccionados = new ArrayList<>(usuariosSeleccionadosFinales);
-		}
-	}
-
-	/**
-	 * Metoda de a adăuga noi utilizatori la lista de utilizatori selectați.
-	 */
-	public void onChangePageUsuarios() {
-		if (usuariosSeleccionados != null && !usuariosSeleccionados.isEmpty()) {
-			usuariosSeleccionadosFinales.addAll(usuariosSeleccionados);
-			usuariosSeleccionados = new ArrayList<>(usuariosSeleccionadosFinales);
-		}
-	}
-
-	/**
-	 * Metodă care asociază o inspecție când selectați caseta de selectare.
-	 *
-	 * @param event eveniment lansat care conține utilizatorul
-	 */
-
-	public void onRowSelectedUser(final SelectEvent event) {
-		this.user = (Users) event.getObject();
-		usuariosSeleccionadosFinales.add(user);
-		modelUser.setDatasource(usuariosSeleccionadosFinales);
-	}
-
-	/**
-	 * Curăță căutarea utilizatorilor
-	 */
-	public void limpiarBuscadores() {
-		usuarioBusqueda = new UsuarioBusqueda();
-		user = new Users();
-		usuariosSeleccionados = new ArrayList<>();
-		modelUser = new LazyDataUsers(usuarioService);
-	}
-
-	/**
-	 * Metoda de stabilire a utilizatorilor din lista generală.
-	 */
-	public void establecerUsuariosFinales() {
-		usuariosSeleccionadosFinales.add(user);
-		modelUser.setDatasource(usuariosSeleccionadosFinales);
-		this.usuariosSeleccionadosFinales = usuariosSeleccionados;
-	}
-
-	/**
-	 * Metoda care se execută la selectare.
-	 * @param event SelectEvent
-	 */
-	public void onSelect(final SelectEvent event) {
-		this.team = (Team) event.getObject();
-	}
-
-	public void onReorder() {
-		try {
-			reordenarMembru();
-
-			final FacesContext facesContext = FacesContext.getCurrentInstance();
-			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
-		}
-		catch (final DataAccessException e) {
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la salvarea reordenării, încercați din nou mai târziu");
-		}
-	}
-
-	/**
-	 * Funcție care reorientează pozitia
-	 * @throws DataAccessException excepție de acces la date
-	 */
-	private void reordenarMembru() {
-		try {
-			Team team;
-			for (int i = 0; i < this.listaTeams.size(); i++) {
-				team = this.listaTeams.get(i);
-
-				team.setRank(i + 1L);
-				this.teamService.save(team);
-				final RequestContext context = RequestContext.getCurrentInstance();
-				context.execute("PF('dlgOrdena').hide();");
-			}
-		}
-		catch (DataAccessException e) {
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la salvarea modificărilor, încercați din nou mai târziu");
-		}
-	}
-
-	/**
-	 *
-	 * Controlează coloanele vizibile în lista rezultatelor motorului de căutare.
-	 *
-	 * @param eve ToggleEvent
-	 *
-	 */
-
-	public void onToggle(final ToggleEvent eve) {
-		this.list.set((Integer) eve.getData(), eve.getVisibility() == Visibility.VISIBLE);
-	}
-
-	/**
-	 * Transmite datele utilizatorului pe care dorim să le modificăm în formular, astfel încât acestea să schimbe
-	 * valorile pe care le doresc.
-	 * 
-	 * @param usuario Utilizator recuperat din formularul de căutare al utilizatorului
-	 * @return URL-ul paginii de modificare a utilizatorului
-	 */
-	public String getFormModificarUsuario(final Team tm) {
-		this.team = tm;
-		this.user = tm.getUser();
-		this.photoSelected = null;
-		this.provinciaSelect = new PProvince();
-		provinciaSelect = user.getPersonalData().getProvince();
-		this.localidades = new ArrayList();
-		localidadesSelected = localityService.findByProvince(provinciaSelect);
-		this.provinces = provinceService.fiindAll();
-		return "/teams/modifyTeam?faces-redirect=true";
-	}
-
-	/**
-	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
-	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
-	 * corresponde a la realidad.
-	 * 
-	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
-	 * @throws IOException
-	 */
-	public void cargaImagen(FileUploadEvent event) throws IOException {
-		this.nombreDoc = "";
-		UploadedFile uFile = event.getFile();
-		user = userService.cargaImagenSinGuardar(IOUtils.toByteArray(uFile.getInputstream()), user);
-		nombreDoc = uFile.getFileName();
-	}
-
-	/**
-	 * Guardar cambios del usuario.
-	 * @param usu User
-	 */
-	public void modificarUsuario(final Users usu) {
-		try {
-			this.user = usu;
-
-			if (validar()) {
-				final PersonalData pd = new PersonalData();
-				pd.setAddress(user.getPersonalData().getAddress());
-				pd.setBirthDate(user.getPersonalData().getBirthDate());
-				pd.setCivilStatus(user.getPersonalData().getCivilStatus());
-				pd.setEducation(user.getPersonalData().getEducation());
-				pd.setIdCard(user.getPersonalData().getIdCard());
-				pd.setLocality(localidadesSelected.get(0));
-				pd.setNumberCard(user.getPersonalData().getNumberCard());
-				pd.setPersonalEmail(user.getPersonalData().getPersonalEmail());
-				pd.setPhone(user.getPersonalData().getPhone());
-				pd.setPhoto(user.getPersonalData().getPhoto());
-				pd.setProvince(user.getPersonalData().getProvince());
-				pd.setSex(user.getPersonalData().getSex());
-				pd.setValidated(user.getPersonalData().getValidated());
-				pd.setWorkplace(user.getPersonalData().getWorkplace());
-				userService.save(user);
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
-						"Utilizatorul a fost modificat corect");
-			}
-			else {
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
-						"A apărut o eroare");
-			}
-		}
-		catch (final DataAccessException e) {
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
-					"A apărut o eroare");
-		}
-	}
-
-	/**
 	 * Método con las validaciones llevadas a cabo al guardar los datos de un usuario 1. Username no repetido 2. Nif no
 	 * repetido 3. Nif valido
 	 *
@@ -625,19 +744,6 @@ public class TeamBean implements Serializable {
 			validado = false;
 		}
 		return validado;
-	}
-
-	/**
-	 * Metoda de validare a unicității numelui de utilizator.
-	 * @return boolean
-	 */
-	private boolean validarUsername() {
-		boolean resultado = true;
-		final Users use = this.userService.fiindOne(this.user.getUsername());
-		if (use != null && !use.getUsername().equals(this.user.getUsername())) {
-			resultado = false;
-		}
-		return resultado;
 	}
 
 	/**
@@ -660,118 +766,15 @@ public class TeamBean implements Serializable {
 	}
 
 	/**
-	 * Cautată un utilizator cu cnp-ul și returneaza adevărat sau fals.
+	 * Metoda de validare a unicității numelui de utilizator.
 	 * @return boolean
 	 */
-	private boolean buscarUsuarioPorNif() {
-		Boolean resultado = true;
-		final Users use = this.userService.findByIdCard(this.user.getPersonalData().getIdCard());
-		if (use != null && !use.getPersonalData().getIdCard().equals(this.user.getPersonalData().getIdCard())) {
+	private boolean validarUsername() {
+		boolean resultado = true;
+		final Users use = this.userService.fiindOne(this.user.getUsername());
+		if (use != null && !use.getUsername().equals(this.user.getUsername())) {
 			resultado = false;
 		}
 		return resultado;
-	}
-
-	/**
-	 * Inițializarea datelor.
-	 */
-	@PostConstruct
-	public void init() {
-		this.usuarioBusqueda = new UsuarioBusqueda();
-		this.user = new Users();
-		this.listaTeams = new ArrayList<>();
-		this.listaTeams = teamService.fiindByTeam();
-		this.functia = new PTeam();
-		this.list = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
-			this.list.add(Boolean.TRUE);
-		}
-
-		limpiarBuscadores();
-	}
-
-	public void alta() {
-		for (int i = 0; i < 400; i++) {
-			Users user = new Users();
-			user.setDateCreate(Generador.obtenerFechaRegistru());
-			user.setEmail("proba@gmail.com");
-			user.setLastName(Generador.apellidoFinal());
-			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
-			PersonalData pd = new PersonalData();
-			pd.setSex(SexEnum.randomLetter());
-			if (pd.getSex().equals("MAN")) {
-				user.setName(Generador.nombreFinalHombre());
-			}
-			else {
-				user.setName(Generador.nombreFinal());
-			}
-			pd.setAddress(Generador.nombresCalleFinal().concat("  Nr: ").concat(Generador.getNumeroCalle()));
-			pd.setBirthDate(Generador.obtenerFechaNastere());
-			pd.setCivilStatus(CivilStatusEnum.randomLetter());
-			pd.setEducation(EducationEnum.randomLetter());
-			pd.setIdCard(Generador.getUnidadNumber());
-			PProvince pro = new PProvince();
-			pro.setId(Generador.provinciasFinal());
-			pd.setProvince(pro);
-			List<PLocality> loc = new ArrayList<>();
-			loc = localityService.findByProvince(pro);
-			PLocality locality = new PLocality();
-			Random rand = new Random();
-			locality = loc.get(rand.nextInt(loc.size()));
-			pd.setLocality(locality);
-			pd.setNumberCard(Generador.getDni());
-			pd.setPersonalEmail(mail(user.getName(), user.getLastName()));
-			pd.setPhone(Generador.getTelefon());
-
-			pd.setValidated(true);
-			pd.setWorkplace("Nespecificat");
-			user.setPersonalData(pd);
-			user.setUsername(pd.getPersonalEmail());
-			user.setRole(RoleEnum.ROLE_MEMBER);
-			user.setUserCreate("system");
-			userService.save(user);
-		}
-	}
-
-	/**
-	 * Obtener DNI.
-	 * @param prenume
-	 * @param nume
-	 * @return dni + letra
-	 */
-	public static String mail(String nume, String prenume) {
-		String limpioName = Normalizer.normalize(nume.toLowerCase(), Normalizer.Form.NFD);
-		limpioName.replace(" ", ".");
-		String limpioPrenume = Normalizer.normalize(prenume.toLowerCase(), Normalizer.Form.NFD);
-		limpioPrenume.replace(" ", ".");
-		return limpioName.concat(".").concat(limpioPrenume.concat(Generador.nombresMail()));
-	}
-
-	/**
-	 * OJOOOO !!! A eliminar.. Proba envio correo simple.
-	 *
-	 */
-	public void enviarCorreo() {
-		correo.envioCorreo("dragossterpu@gmail.com", "Proba asunto", "Proba correo simple cuerpo, elypse.");
-	}
-
-	/**
-	 * OJOOOO !!! A eliminar..Proba envio correo con adjuntos.
-	 */
-	public void enviarCorreoAdjuntos() {
-		Map<String, String> paramPlantilla = new HashMap<>();
-		List<File> paramAdjunto = new ArrayList<File>();
-		File param = new File("C:\\Users\\Casa\\Desktop\\consultadenuncia.sql");
-		paramAdjunto.add(param);
-		paramPlantilla.put("cuerpo", "Cuerpo proba");
-		paramPlantilla.put("ApoyoCorreo", "ApoyoCorreo proba");
-		paramPlantilla.put("ApoyoTelefono", "ApoyoTelefono proba");
-		paramPlantilla.put("ApoyoSecretaria", "ApoyoSecretaria proba");
-		paramPlantilla.put("ApoyoPuesto", "ApoyoPuesto proba");
-		paramPlantilla.put("ApoyoDireccion", "ApoyoDireccion proba");
-		paramPlantilla.put("ApoyoTelefono", "ApoyoTelefono proba");
-		paramPlantilla.put("ApoyoFax", "ApoyoFax proba");
-		correo.envioCorreo("dragossterpu@gmail.com", paramPlantilla, "Proba correo con adjuntos, per Admin.",
-				"Cuerpo del mensaje", paramAdjunto);
 	}
 }

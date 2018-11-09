@@ -39,65 +39,6 @@ import ro.per.online.jsf.scope.FacesViewScope;
 public class PerApplication {
 
 	/**
-	 * Variable utilizada para inyectar la sesión.
-	 */
-	@Autowired
-	private EntityManagerFactory entityManagerFactory;
-
-	/**
-	 * Punto de entrada de la aplicación para Spring Boot.
-	 * @param args parámetros de entrada del método main
-	 */
-	public static void main(final String[] args) {
-		SpringApplication.run(PerApplication.class, args);
-	}
-
-	/**
-	 * @return HibernateJpaSessionFactoryBean.
-	 */
-	@Bean
-	public SessionFactory sessionFactory() {
-		return entityManagerFactory.unwrap(SessionFactory.class);
-	}
-
-	/**
-	 * @return scope que simula el scope view de jsf
-	 */
-	@Bean
-	public static CustomScopeConfigurer customScopeConfigurer() {
-		final CustomScopeConfigurer configurer = new CustomScopeConfigurer();
-		configurer.setScopes(Collections.<String, Object> singletonMap(FacesViewScope.NAME, new FacesViewScope()));
-		return configurer;
-	}
-
-	/**
-	 * Implementación que se va a usar para las páginas de error.
-	 * 
-	 * @return ErrorPageRegistrar
-	 */
-	@Bean
-	public ErrorPageRegistrar errorPageRegistrar() {
-		return new RegistroPaginasError();
-	}
-
-	/**
-	 * RegistroPaginasError.
-	 */
-	static class RegistroPaginasError implements ErrorPageRegistrar {
-
-		/**
-		 * registerErrorPages.
-		 */
-		@Override
-		public void registerErrorPages(final ErrorPageRegistry registry) {
-			registry.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/error/403.xhtml"),
-					new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.xhtml"),
-					new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/5xx.xhtml"),
-					new ErrorPage(HttpStatus.BAD_GATEWAY, "/error/5xx.xhtml"));
-		}
-	}
-
-	/**
 	 * Implementación que se va a usar para las páginas de error.
 	 * 
 	 * @return ErrorPageRegistrar
@@ -145,6 +86,57 @@ public class PerApplication {
 	}
 
 	/**
+	 * RegistroPaginasError.
+	 */
+	static class RegistroPaginasError implements ErrorPageRegistrar {
+
+		/**
+		 * registerErrorPages.
+		 */
+		@Override
+		public void registerErrorPages(final ErrorPageRegistry registry) {
+			registry.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/error/403.xhtml"),
+					new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.xhtml"),
+					new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/5xx.xhtml"),
+					new ErrorPage(HttpStatus.BAD_GATEWAY, "/error/5xx.xhtml"));
+		}
+	}
+
+	/**
+	 * @return scope que simula el scope view de jsf
+	 */
+	@Bean
+	public static CustomScopeConfigurer customScopeConfigurer() {
+		final CustomScopeConfigurer configurer = new CustomScopeConfigurer();
+		configurer.setScopes(Collections.<String, Object> singletonMap(FacesViewScope.NAME, new FacesViewScope()));
+		return configurer;
+	}
+
+	/**
+	 * Punto de entrada de la aplicación para Spring Boot.
+	 * @param args parámetros de entrada del método main
+	 */
+	public static void main(final String[] args) {
+		SpringApplication.run(PerApplication.class, args);
+	}
+
+	/**
+	 * Variable utilizada para inyectar la sesión.
+	 */
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
+
+	/**
+	 * Implementación que se va a usar para las páginas de error.
+	 * 
+	 * @return ErrorPageRegistrar
+	 */
+	@Bean
+	public ErrorPageRegistrar errorPageRegistrar() {
+		return new RegistroPaginasError();
+	}
+
+	/**
 	 * Realiza la conexión con el servidor de correo.
 	 *
 	 * @return Objeto sender para realizar operaciones con la conexión
@@ -153,5 +145,13 @@ public class PerApplication {
 	public JavaMailSenderImpl javaMailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		return mailSender;
+	}
+
+	/**
+	 * @return HibernateJpaSessionFactoryBean.
+	 */
+	@Bean
+	public SessionFactory sessionFactory() {
+		return entityManagerFactory.unwrap(SessionFactory.class);
 	}
 }

@@ -25,33 +25,6 @@ import ro.per.online.persistence.entities.enums.RoleEnum;
 public class LoginService implements UserDetailsService, Serializable {
 
 	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Service de usuario.
-	 */
-	@Autowired
-	private transient UserService userService;
-
-	/**
-	 * Carga los detalles por nombre de usuario.
-	 * @param username String
-	 * @return UserDetails
-	 * @throws UsernameNotFoundException nombre de usuario no encontrado.
-	 */
-	@Override
-	public UserDetails loadUserByUsername(final String username) {
-		final Users user = this.userService.fiindOne(username);
-		if (null == user) {
-			throw new UsernameNotFoundException("El usuario no existe.");
-		}
-
-		return new UserRepositoryUserDetails(user);
-	}
-
-	/**
 	 * Clase UserRepositoryUserDetails.
 	 */
 	private static final class UserRepositoryUserDetails extends Users implements UserDetails {
@@ -116,6 +89,33 @@ public class LoginService implements UserDetailsService, Serializable {
 			return true;
 		}
 
+	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Service de usuario.
+	 */
+	@Autowired
+	private transient UserService userService;
+
+	/**
+	 * Carga los detalles por nombre de usuario.
+	 * @param username String
+	 * @return UserDetails
+	 * @throws UsernameNotFoundException nombre de usuario no encontrado.
+	 */
+	@Override
+	public UserDetails loadUserByUsername(final String username) {
+		final Users user = this.userService.fiindOne(username);
+		if (null == user) {
+			throw new UsernameNotFoundException("El usuario no existe.");
+		}
+
+		return new UserRepositoryUserDetails(user);
 	}
 
 }

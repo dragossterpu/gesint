@@ -660,11 +660,44 @@ INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('4','MAIL','mail.
 INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('5','MAIL','mail.smtp.user','elypseinfo@gmail.com');
 INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('6','MAIL','mail.smtp.auth','true');
 INSERT INTO public.PROPERTIES (ID,FILENAME,NAME,VALUE) VALUES ('7','MAIL','mail.smtp.password','elypse18');
-
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('8','extensiones','DOC','application/msword');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('9','extensiones','DOCX','application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('10','extensiones','ODT','application/vnd.oasis.opendocument.text');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('11','extensiones','PPT','application/vnd.ms-powerpoint');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('12','extensiones','PPTX','application/vnd.openxmlformats-officedocument.presentationml.presentation');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('13','extensiones','ODP','application/vnd.oasis.opendocument.presentation');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('14','extensiones','XLS','application/vnd.ms-excel');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('15','extensiones','XLSX','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('16','extensiones','ODS','application/vnd.oasis.opendocument.spreadsheet');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('17','extensiones','JPEG','image/jpeg');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('18','extensiones','PNG','image/png');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('19','extensiones','BMP','image/bmp');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('20','extensiones','PUB','application/x-mspublisher');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('21','extensiones','PDF','application/pdf');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('22','extensiones','ZIP','application/x-zip-compressed');
+INSERT into public.PROPERTIES (ID,FILENAME,NAME,VALUE) values ('23','HOME','TIMP_ISTORIC_STATISTIC','30');
 COMMIT;	
 	
-	
-	
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (1,'ANEXE LA RAPORT');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (2,'COMUNICARE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (3,'ALERTĂ ADMINISTRATIVĂ ');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (4,'AUDIO');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (5,'CONTROL DE ACTIVITATE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (6,'RAPORT');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (7,'DATE STATISTICE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (8,'DOCUMENTE DE INTRARE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (9,'DOCUMENTE DE IEȘIRE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (10,'FIȘIER DE MONITORIZARE ȘI CONTROL');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (11,'RAPOARTE ISTORICE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (12,'IMAGINE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (13,'NORMĂ INTERNĂ');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (14,'ALTELE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (15,'RECLAMAȚII');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (16,'RESURSE UMANE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (17,'RESURSE MATERIALE');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (18,'VIDEO');
+INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (19,'TEMPLATE');
+COMMIT;		
 	
 	
 	

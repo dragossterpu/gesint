@@ -18,7 +18,7 @@ import ro.per.online.web.beans.gd.DocumentoBusqueda;
  * 
  * Modelo para paginación desde servidor extendiendo el modelo LazyDataModel de Primefaces.
  * 
- * @author EZENTIS
+ * @author STAD
  *
  */
 @Component

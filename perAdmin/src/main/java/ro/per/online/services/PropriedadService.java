@@ -19,4 +19,11 @@ public interface PropriedadService {
 	 * @return List<Propriedades>
 	 */
 	List<Propriedades> findByFilename(String filename);
+
+	/**
+	 * Devuelve el parametro que tenga el nombre proporcionado.
+	 * @param nombreParametro String
+	 * @return String
+	 */
+	String findOneByName(String nombreParametro);
 }

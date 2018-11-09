@@ -35,22 +35,26 @@ import ro.per.online.persistence.repositories.ITipoDocumentoRepository;
 import ro.per.online.services.UserService;
 import ro.per.online.services.impl.DocumentoServiceImpl;
 import ro.per.online.util.FacesUtilities;
-import ro.per.online.util.VerificadorExtensiones;
 
 /**
  * Bean pentru managerul de documente.
- * 
+ *
  * @author STAD
- * 
+ *
  */
 
 @Setter
 @Getter
 @Controller("gestorDocumentalBean")
-@Scope("session")
+@Scope(Constantes.SESSION)
 public class GestorDocumentalBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Constante para evitar literales repetidos.
+	 */
+	private static final String CARGAFICHEROS = "Carga de ficheros";
 
 	/**
 	 * Obiectul de tip Document pentru înregistrarea de noi documente.
@@ -93,12 +97,6 @@ public class GestorDocumentalBean implements Serializable {
 	private List<Boolean> list;
 
 	/**
-	 * Verificadrea extensiilor.
-	 */
-	@Autowired
-	private transient VerificadorExtensiones verificadorExtensiones;
-
-	/**
 	 * Servicio de documentos.
 	 */
 	@Autowired
@@ -122,74 +120,83 @@ public class GestorDocumentalBean implements Serializable {
 	private LazyModelDocumentos model;
 
 	/**
-	 * Constante para evitar literales repetidos.
+	 * Elimina un documento definitivamente.
+	 * @param doc Documento a eliminar
 	 */
-	private static final String CARGAFICHEROS = "Carga de ficheros";
-
-	/**
-	 * Inicializa el objeto.
-	 */
-	@PostConstruct
-	public void init() {
-		documentoBusqueda = new DocumentoBusqueda();
-		list = new ArrayList<>();
-		for (int i = 0; i <= 5; i++) {
-			list.add(Boolean.TRUE);
+	public void borrarDocumento(final Documento doc) {
+		try {
+			doc.setUsuario(null);
+			this.documentoService.delete(doc);
+			this.buscaDocumento();
 		}
-		model = new LazyModelDocumentos(documentoService);
-		mapaEdicion = new HashMap<>();
+		catch (final DataAccessException e) {
+		}
 	}
 
 	/**
-	 * Resetea el objeto de búsqueda, limpia la lista de resultados y establece el booleano de eliminado a false para
-	 * indicar que sólo se van a buscar documentos no eliminados.
-	 * @return ruta siguiente
+	 * Lanza la búsqueda de documentos en la base de datos que correspondan con los parámetros contenidos en el objeto
+	 * de búsqueda. SE realiza paginación desde el servidor.
+	 *
 	 */
-	public String resetBusqueda() {
-		documentoBusqueda = new DocumentoBusqueda();
-		model.setRowCount(0);
-		nombreDoc = "";
-		documentoBusqueda.setEliminado(false);
-		return "/gestorDocumental/buscarDocumento?faces-redirect=true";
+	public void buscaDocumento() {
+		this.model.setBusqueda(this.documentoBusqueda);
+		this.model.load(0, Constantes.TAMPAGINA, "fechaAlta", SortOrder.DESCENDING, null);
+		this.nombreDoc = "";
 	}
 
 	/**
-	 * Resetea el objeto de búsqueda, limpia la lista de resultados y establece el booleano de eliminado a false para
-	 * indicar que sólo se van a buscar documentos eliminados.
-	 * @return ruta
+	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
+	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
+	 * corresponde a la realidad.
+	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
 	 */
-	public String resetBusquedaEliminados() {
-		nombreDoc = "";
-		documentoBusqueda.setEliminado(true);
-		buscaDocumento();
-		return "/administracion/papelera/papelera?faces-redirect=true";
-
+	public void cargaFichero(final FileUploadEvent event) {
+		try {
+			final TipoDocumento tipo = this.tipoDocumentoRepository.findByNombre("OTROS");
+			final UploadedFile uFile = event.getFile();
+			this.documento = this.documentoService.cargaDocumentoSinGuardar(uFile, tipo, null);
+			this.nombreDoc = uFile.getFileName();
+		}
+		catch (final PerException ex) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, CARGAFICHEROS,
+					"Se ha producido un error en la cargad el fichero");
+		}
 	}
 
 	/**
-	 * Muestra/oculta las columnas de la tabla de resultados de la búsqueda.
-	 * 
-	 * @param e La columna a mostrar/ocultar
+	 * Graba un nuevo documento en la base de datos.
+	 *
+	 * @param nombreDocumento Nombre del documento
+	 * @param tipoDocumento Tipo al que pertenece el documento
+	 * @param descripcion Breve descripción del documento
+	 * @param materiaIndexada Palabras clave por las que se podrá buscar el documento
 	 */
-	public void onToggle(final ToggleEvent e) {
-		list.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
-	}
-
-	/**
-	 * Recarga la lista de resultados no eliminados.
-	 */
-	public void recargaLista() {
-		documentoBusqueda.setEliminado(false);
-		buscaDocumento();
-
-	}
-
-	/**
-	 * Recarga la lista de resultados eliminados.
-	 */
-	public void recargaListaEliminados() {
-		documentoBusqueda.setEliminado(true);
-		buscaDocumento();
+	public void creaDocumento(final String nombreDocumento, final TipoDocumento tipoDocumento, final String descripcion,
+			final String materiaIndexada) {
+		if (!this.nombreDoc.isEmpty() && !nombreDocumento.isEmpty() && (tipoDocumento != null)) {
+			try {
+				this.documento.setNombre(nombreDocumento);
+				this.documento.setTipoDocumento(tipoDocumento);
+				this.documento.setDescripcion(descripcion);
+				final Users usuario = this.usuarioService
+						.fiindOne(SecurityContextHolder.getContext().getAuthentication().getName());
+				this.documento.setUsuario(usuario);
+				this.documento.setMateriaIndexada(materiaIndexada);
+				this.documento.setDateDeleted(null);
+				this.documentoService.save(this.documento);
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, "ALTA",
+						"Se ha guardado su documento con éxito");
+				this.recargaLista();
+				RequestContext.getCurrentInstance().reset("formAlta:asociado");
+				this.nombreDoc = "";
+			}
+			catch (final DataAccessException e) {
+			}
+		}
+		else {
+			FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, "Alta de documentos",
+					"Complete los campos obligatorios antes de continuar.", null);
+		}
 	}
 
 	/**
@@ -197,13 +204,13 @@ public class GestorDocumentalBean implements Serializable {
 	 * @param document Documento a descargar
 	 */
 	public void descargarFichero(final Documento document) {
-		final Documento docAux = documentoService.findOne(document.getId());
-		setFile(null);
+		final Documento docAux = this.documentoService.findOne(document.getId());
+		this.setFile(null);
 		if (docAux != null) {
 			try {
-				setFile(documentoService.descargaDocumento(docAux));
+				this.setFile(this.documentoService.descargaDocumento(docAux));
 			}
-			catch (PerException e) {
+			catch (final PerException e) {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 						e.getMessage());
 			}
@@ -215,124 +222,18 @@ public class GestorDocumentalBean implements Serializable {
 	}
 
 	/**
-	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
-	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
-	 * corresponde a la realidad.
-	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
-	 */
-	public void cargaFichero(final FileUploadEvent event) {
-		try {
-			final TipoDocumento tipo = tipoDocumentoRepository.findByNombre("OTROS");
-			final UploadedFile uFile = event.getFile();
-			if (verificadorExtensiones.extensionCorrecta(uFile)) {
-				documento = documentoService.cargaDocumentoSinGuardar(uFile, tipo, null);
-				nombreDoc = uFile.getFileName();
-			}
-			else {
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, CARGAFICHEROS,
-						"Extensia fișierului '" + event.getFile().getFileName() + "' nu corespunde tipului său real");
-			}
-		}
-		catch (PerException ex) {
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, CARGAFICHEROS,
-					"Se ha producido un error en la cargad el fichero");
-		}
-	}
-
-	/**
-	 * Realiza la baja lógica del documento que podrá ser recuperado desde la papelera.
-	 * 
-	 * @param document Documento al que se dará de baja lógica
-	 */
-	public void eliminarDocumento(final Documento document) {
-		try {
-			document.setDateDeleted(new Date());
-			document.setUserDeleted(SecurityContextHolder.getContext().getAuthentication().getName());
-			documentoService.save(document);
-			buscaDocumento();
-		}
-		catch (DataAccessException e) {
-		}
-	}
-
-	/**
-	 * Reseteo del objeto de búsqueda y limpieza de la lista de resultados.
-	 */
-	public void limpiarBusqueda() {
-		documentoBusqueda = new DocumentoBusqueda();
-		model.setRowCount(0);
-	}
-
-	/**
-	 * Lanza la búsqueda de documentos en la base de datos que correspondan con los parámetros contenidos en el objeto
-	 * de búsqueda. SE realiza paginación desde el servidor.
-	 * 
-	 */
-	public void buscaDocumento() {
-		model.setBusqueda(documentoBusqueda);
-		model.load(0, Constantes.TAMPAGINA, "fechaAlta", SortOrder.DESCENDING, null);
-		nombreDoc = "";
-	}
-
-	/**
-	 * Inicia la creación de un nuevo documento.
-	 * @return ruta de la vista
-	 */
-	public String nuevoDocumento() {
-		documento = new Documento();
-		nombreDoc = "";
-		return "/gestorDocumental/nuevoDocumento?faces-redirect=true";
-	}
-
-	/**
-	 * Graba un nuevo documento en la base de datos.
-	 * 
-	 * @param nombreDocumento Nombre del documento
-	 * @param tipoDocumento Tipo al que pertenece el documento
-	 * @param descripcion Breve descripción del documento
-	 * @param materiaIndexada Palabras clave por las que se podrá buscar el documento
-	 */
-	public void creaDocumento(final String nombreDocumento, final TipoDocumento tipoDocumento, final String descripcion,
-			final String materiaIndexada) {
-		if (!nombreDoc.isEmpty() && !nombreDocumento.isEmpty() && tipoDocumento != null) {
-			try {
-				documento.setNombre(nombreDocumento);
-				documento.setTipoDocumento(tipoDocumento);
-				documento.setDescripcion(descripcion);
-				Users usuario = usuarioService
-						.fiindOne(SecurityContextHolder.getContext().getAuthentication().getName());
-				documento.setUsuario(usuario);
-				documento.setMateriaIndexada(materiaIndexada);
-				documento.setDateDeleted(null);
-				documentoService.save(documento);
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, "ALTA",
-						"Se ha guardado su documento con éxito");
-				recargaLista();
-				RequestContext.getCurrentInstance().reset("formAlta:asociado");
-				nombreDoc = "";
-			}
-			catch (DataAccessException e) {
-			}
-		}
-		else {
-			FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, "Alta de documentos",
-					"Complete los campos obligatorios antes de continuar.", null);
-		}
-	}
-
-	/**
 	 * Recupera el documento a modificar e inicia el proceso de modificación.
-	 * 
+	 *
 	 * @param doc Documento a modificar
 	 * @return URL de la vista de edición
 	 */
-	public String editarDocumento(Documento doc) {
-		Documento docAux = documentoService.findOne(doc.getId());
+	public String editarDocumento(final Documento doc) {
+		final Documento docAux = this.documentoService.findOne(doc.getId());
 		String redireccion = null;
 
 		if (docAux != null) {
-			documento = docAux;
-			nombreDoc = documentoService.obtieneNombreFichero(documento);
+			this.documento = docAux;
+			this.nombreDoc = this.documentoService.obtieneNombreFichero(this.documento);
 			redireccion = "/gestorDocumental/editarDocumento?faces-redirect=true";
 		}
 		else {
@@ -343,19 +244,93 @@ public class GestorDocumentalBean implements Serializable {
 	}
 
 	/**
+	 * Realiza la baja lógica del documento que podrá ser recuperado desde la papelera.
+	 *
+	 * @param document Documento al que se dará de baja lógica
+	 */
+	public void eliminarDocumento(final Documento document) {
+		try {
+			document.setDateDeleted(new Date());
+			document.setUserDeleted(SecurityContextHolder.getContext().getAuthentication().getName());
+			this.documentoService.save(document);
+			this.buscaDocumento();
+		}
+		catch (final DataAccessException e) {
+		}
+	}
+
+	/**
+	 * Inicializa el objeto.
+	 */
+	@PostConstruct
+	public void init() {
+		this.documentoBusqueda = new DocumentoBusqueda();
+		this.list = new ArrayList<>();
+		for (int i = 0; i <= 5; i++) {
+			this.list.add(Boolean.TRUE);
+		}
+		this.model = new LazyModelDocumentos(this.documentoService);
+		this.mapaEdicion = new HashMap<>();
+	}
+
+	/**
+	 * Reseteo del objeto de búsqueda y limpieza de la lista de resultados.
+	 */
+	public void limpiarBusqueda() {
+		this.documentoBusqueda = new DocumentoBusqueda();
+		this.model.setRowCount(0);
+	}
+
+	/**
 	 * Graba el documento modificado.
 	 */
 	public void modificaDocumento() {
 		try {
-			documentoService.save(documento);
+			this.documentoService.save(this.documento);
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, "MODIFCARE",
 					"Documentul a fost modificat");
-			recargaLista();
+			this.recargaLista();
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, "MODIFCARE",
 					"A apărut o eroare la modificarea documentului");
 		}
+	}
+
+	/**
+	 * Inicia la creación de un nuevo documento.
+	 * @return ruta de la vista
+	 */
+	public String nuevoDocumento() {
+		this.documento = new Documento();
+		this.nombreDoc = "";
+		return "/gestorDocumental/nuevoDocumento?faces-redirect=true";
+	}
+
+	/**
+	 * Muestra/oculta las columnas de la tabla de resultados de la búsqueda.
+	 *
+	 * @param e La columna a mostrar/ocultar
+	 */
+	public void onToggle(final ToggleEvent e) {
+		this.list.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
+	}
+
+	/**
+	 * Recarga la lista de resultados no eliminados.
+	 */
+	public void recargaLista() {
+		this.documentoBusqueda.setEliminado(false);
+		this.buscaDocumento();
+
+	}
+
+	/**
+	 * Recarga la lista de resultados eliminados.
+	 */
+	public void recargaListaEliminados() {
+		this.documentoBusqueda.setEliminado(true);
+		this.buscaDocumento();
 	}
 
 	/**
@@ -364,26 +339,38 @@ public class GestorDocumentalBean implements Serializable {
 	 */
 	public void recuperarDocumento(final Documento doc) {
 		try {
-			documentoService.recuperarDocumento(doc);
-			buscaDocumento();
+			this.documentoService.recuperarDocumento(doc);
+			this.buscaDocumento();
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 		}
 
 	}
 
 	/**
-	 * Elimina un documento definitivamente.
-	 * @param doc Documento a eliminar
+	 * Resetea el objeto de búsqueda, limpia la lista de resultados y establece el booleano de eliminado a false para
+	 * indicar que sólo se van a buscar documentos no eliminados.
+	 * @return ruta siguiente
 	 */
-	public void borrarDocumento(final Documento doc) {
-		try {
-			doc.setUsuario(null);
-			documentoService.delete(doc);
-			buscaDocumento();
-		}
-		catch (DataAccessException e) {
-		}
+	public String resetBusqueda() {
+		this.documentoBusqueda = new DocumentoBusqueda();
+		this.model.setRowCount(0);
+		this.nombreDoc = "";
+		this.documentoBusqueda.setEliminado(false);
+		return "/gestorDocumental/buscarDocumento?faces-redirect=true";
+	}
+
+	/**
+	 * Resetea el objeto de búsqueda, limpia la lista de resultados y establece el booleano de eliminado a false para
+	 * indicar que sólo se van a buscar documentos eliminados.
+	 * @return ruta
+	 */
+	public String resetBusquedaEliminados() {
+		this.nombreDoc = "";
+		this.documentoBusqueda.setEliminado(true);
+		this.buscaDocumento();
+		return "/administracion/papelera/papelera?faces-redirect=true";
+
 	}
 
 	/**
@@ -391,29 +378,15 @@ public class GestorDocumentalBean implements Serializable {
 	 */
 	public void vaciarPapelera() {
 		try {
-			final List<Documento> documentosEliminados = documentoService.vaciarPapelera();
+			final List<Documento> documentosEliminados = this.documentoService.vaciarPapelera();
 			final StringBuffer nombreFicherosEliminados = new StringBuffer().append("\n\n");
 			for (final Documento docu : documentosEliminados) {
 				nombreFicherosEliminados.append('-').append(docu.getNombre()).append("\n");
 			}
-			buscaDocumento();
+			this.buscaDocumento();
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 		}
-	}
-
-	/**
-	 * Verifica si el documento pasado como parámetro puede o no editarse. En función de ello indica que debe
-	 * deshabilitarse la posibilidad de edición.
-	 * @param doc Documento del que se desea verificar si es editable.
-	 * @return Indicación de la necesidad de deshabilitar la edición del documento.
-	 */
-	private boolean deshabilitaEdicion(Documento doc) {
-		Users usuario = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		boolean perteneceACuestionario = doc.getTipoDocumento().getId().equals(6L);
-		boolean perteneceASolicitud = doc.getTipoDocumento().getId().equals(8L);
-		return perteneceACuestionario || perteneceASolicitud;
-
 	}
 
 }

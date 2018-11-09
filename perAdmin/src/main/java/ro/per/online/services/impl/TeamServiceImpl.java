@@ -27,40 +27,13 @@ public class TeamServiceImpl implements TeamService {
 	private TeamRepository teamRepository;
 
 	/**
-	 * Devuelve todas las unidades de base de datos.
-	 * @return lista de unidades
-	 */
-	@Override
-	public List<Team> fiindByTeam() {
-		return (ArrayList<Team>) teamRepository.findAllByOrderByRankAsc();
-	}
-
-	/**
 	 * Elimina un membru al echipei de conducere
 	 * 
 	 * @param team membru al echipei de conducere
 	 */
 	@Override
-	public void delete(Team team) {
-		this.teamRepository.delete(team);
-	}
-
-	/**
-	 * Salvați sau actualizați un team.
-	 * 
-	 * @param team
-	 * @return Team actualizat
-	 */
-	@Override
-	public Team save(final Team team) {
-		Team teamActualizado = teamRepository.save(team);
-		return teamActualizado;
-
-	}
-
-	@Override
-	public List<Team> findAllByOrderByRankDesc() {
-		return (ArrayList<Team>) teamRepository.findAllByOrderByRankDesc();
+	public void delete(final Team team) {
+		teamRepository.delete(team);
 	}
 
 	/**
@@ -74,12 +47,39 @@ public class TeamServiceImpl implements TeamService {
 	}
 
 	/**
+	 * Devuelve todas las unidades de base de datos.
+	 * @return lista de unidades
+	 */
+	@Override
+	public List<Team> fiindByTeam() {
+		return (ArrayList<Team>) teamRepository.findAllByOrderByRankAsc();
+	}
+
+	@Override
+	public List<Team> findAllByOrderByRankDesc() {
+		return (ArrayList<Team>) teamRepository.findAllByOrderByRankDesc();
+	}
+
+	/**
 	 * Cauta un registru in baza de date primind ca parametru membrul echipei
 	 * @param team
 	 * @return
 	 */
 	@Override
-	public Team findByUser(Users team) {
+	public Team findByUser(final Users team) {
 		return teamRepository.findByUser(team);
+	}
+
+	/**
+	 * Salvați sau actualizați un team.
+	 * 
+	 * @param team
+	 * @return Team actualizat
+	 */
+	@Override
+	public Team save(final Team team) {
+		final Team teamActualizado = teamRepository.save(team);
+		return teamActualizado;
+
 	}
 }

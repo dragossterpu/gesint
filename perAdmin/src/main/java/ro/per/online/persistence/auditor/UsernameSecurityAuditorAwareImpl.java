@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 /**
  * Implementación de la interfaz AuditorAware de Spring para poder realizar la auditoria de login.
  * 
- * @author EZENTIS
+ * @author STAD
  *
  */
 public class UsernameSecurityAuditorAwareImpl implements AuditorAware<String> {

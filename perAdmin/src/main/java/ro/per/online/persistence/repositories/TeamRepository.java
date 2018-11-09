@@ -11,6 +11,21 @@ import ro.per.online.persistence.entities.Users;
  */
 public interface TeamRepository extends CrudRepository<Team, Long> {
 	/**
+	 * Elimina un membru al echipei primit ca parametru.
+	 * @param user
+	 * @return resultatul eliminarii
+	 */
+	@Override
+	void delete(Team team);
+
+	/**
+	 * Verificați existența utilizatorilor care au atribuit o echipa primit ca parametru.
+	 * @param user
+	 * @return resultatul comprobarii
+	 */
+	boolean existsByUser(Users user);
+
+	/**
 	 * Devuelve todas las unidades de base de datos.
 	 * @return lista de unidades
 	 */
@@ -21,21 +36,6 @@ public interface TeamRepository extends CrudRepository<Team, Long> {
 	 * @return lista de unidades
 	 */
 	Iterable<Team> findAllByOrderByRankDesc();
-
-	/**
-	 * Verificați existența utilizatorilor care au atribuit o echipa primit ca parametru.
-	 * @param user
-	 * @return resultatul comprobarii
-	 */
-	boolean existsByUser(Users user);
-
-	/**
-	 * Elimina un membru al echipei primit ca parametru.
-	 * @param user
-	 * @return resultatul eliminarii
-	 */
-	@Override
-	void delete(Team team);
 
 	/**
 	 * Cauta un registru in baza de date primind ca parametru membrul echipei

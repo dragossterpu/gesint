@@ -1,17 +1,62 @@
 package ro.per.online.util;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import ro.per.online.persistence.entities.Alerta;
+import ro.per.online.persistence.entities.Users;
 
 /**
  * 
  * Clase para el envío de correos electrónicos.
  * 
- * @author Ezentis
+ * @author STAD
  * 
  */
 public interface CorreoElectronico {
+
+	/**
+	 * 
+	 * Envío de correos electrónico. Destinatarios, asunto, cuerpo del mensaje y los documentos adjuntos se reciben como
+	 * parámetros
+	 * 
+	 * @param paramDestino Destinatarios separados por ','
+	 * @param paramAsunto Asunto del correo
+	 * @param paramCuerpo Cuerpo del correo
+	 * @param paramAdjunto Lista de ficheros adjuntos
+	 * @return
+	 * 
+	 */
+	Date envioCorreo(String paramDestino, Map<String, String> paramPlantilla, String paramAsunto, String paramCuerpo,
+			List<File> paramAdjunto);
+
+	/**
+	 * 
+	 * Envío de correos electrónico sin adjuntos. Destinatarios, asunto y cuerpo del mensaje se reciben como parámetros
+	 * 
+	 * @param paramDestino Destinatarios separados por ','
+	 * @param paramAsunto del correo
+	 * @param paramCuerpo Cuerpo del correo
+	 * @return
+	 * 
+	 */
+	Date envioCorreo(String paramDestino, String paramAsunto, String paramCuerpo);
+
+	/**
+	 * 
+	 * Envío de correos electrónico sin adjuntos con plantilla personalizada. Destinatarios, asunto, datos del cuerpo
+	 * del mensaje y ruta de la plantilla se reciben como parámetros
+	 * 
+	 * @param paramDestino Destinatarios separados por ','
+	 * @param paramAsunto del correo
+	 * @param plantilla ruta del archivo de la plantilla pebble
+	 * @param paramPlantilla parametros del cuerpo del correo que se usan en la plantilla
+	 * @return
+	 * 
+	 */
+	Date envioCorreo(String paramDestino, String paramAsunto, String plantilla, Map<String, String> paramPlantilla);
 
 	/**
 	 * 
@@ -23,46 +68,17 @@ public interface CorreoElectronico {
 	 * @param paramAsunto Asunto del correo
 	 * @param paramCuerpo Cuerpo del correo
 	 * @param paramAdjunto Lista de ficheros adjuntos
+	 * @return
 	 * 
 	 */
-	public void envioCorreo(String paramDestino, String paramCC, String paramAsunto, String paramCuerpo,
+	public Date envioCorreo(String paramDestino, String paramCC, String paramAsunto, String paramCuerpo,
 			List<File> paramAdjunto);
 
 	/**
-	 * 
-	 * Envío de correos electrónico. Destinatarios, asunto, cuerpo del mensaje y los documentos adjuntos se reciben como
-	 * parámetros
-	 * 
-	 * @param paramDestino Destinatarios separados por ','
-	 * @param paramAsunto Asunto del correo
-	 * @param paramCuerpo Cuerpo del correo
-	 * @param paramAdjunto Lista de ficheros adjuntos
-	 * 
+	 * Envío de alerta.
+	 * @param alerta Alerta
+	 * @param usuario Users
+	 * @return Date
 	 */
-	void envioCorreo(String paramDestino, Map<String, String> paramPlantilla, String paramAsunto, String paramCuerpo,
-			List<File> paramAdjunto);
-
-	/**
-	 * 
-	 * Envío de correos electrónico sin adjuntos. Destinatarios, asunto y cuerpo del mensaje se reciben como parámetros
-	 * 
-	 * @param paramDestino Destinatarios separados por ','
-	 * @param paramAsunto del correo
-	 * @param paramCuerpo Cuerpo del correo
-	 * 
-	 */
-	void envioCorreo(String paramDestino, String paramAsunto, String paramCuerpo);
-
-	/**
-	 * 
-	 * Envío de correos electrónico sin adjuntos con plantilla personalizada. Destinatarios, asunto, datos del cuerpo
-	 * del mensaje y ruta de la plantilla se reciben como parámetros
-	 * 
-	 * @param paramDestino Destinatarios separados por ','
-	 * @param paramAsunto del correo
-	 * @param plantilla ruta del archivo de la plantilla pebble
-	 * @param paramPlantilla parametros del cuerpo del correo que se usan en la plantilla
-	 * 
-	 */
-	void envioCorreo(String paramDestino, String paramAsunto, String plantilla, Map<String, String> paramPlantilla);
+	Date send(final Alerta alerta, Users usuario);
 }

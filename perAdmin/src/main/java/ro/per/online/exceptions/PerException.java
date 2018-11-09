@@ -19,6 +19,14 @@ public class PerException extends Exception {
 	String mensaje;
 
 	/**
+	 * Excepción general sin parámetros.
+	 */
+
+	public PerException() {
+		super();
+	}
+
+	/**
 	 * Excepción general.
 	 * 
 	 * @param e Excepción
@@ -26,14 +34,6 @@ public class PerException extends Exception {
 	public PerException(final Exception e) {
 		super(e);
 		mensaje = e.getMessage();
-	}
-
-	/**
-	 * Excepción general sin parámetros.
-	 */
-
-	public PerException() {
-		super();
 	}
 
 	/**

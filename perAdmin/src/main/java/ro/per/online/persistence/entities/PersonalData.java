@@ -17,6 +17,7 @@ import org.primefaces.model.StreamedContent;
 
 import lombok.Getter;
 import lombok.Setter;
+import ro.per.online.persistence.entities.enums.AlertChannelEnum;
 import ro.per.online.persistence.entities.enums.CivilStatusEnum;
 import ro.per.online.persistence.entities.enums.EducationEnum;
 import ro.per.online.persistence.entities.enums.SexEnum;
@@ -88,6 +89,13 @@ public class PersonalData implements Serializable {
 	@Column(name = "education")
 	@Enumerated(EnumType.STRING)
 	private EducationEnum education;
+
+	/**
+	 * Canal de alertas del usuario.
+	 */
+	@Column(name = "alert_channel", length = 10)
+	@Enumerated(EnumType.STRING)
+	private AlertChannelEnum alertChannel;
 
 	/**
 	 * Loc de munca utilizator.

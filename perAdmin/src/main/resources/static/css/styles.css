@@ -20,7 +20,25 @@ label:before {
 	font: normal normal normal 14px/1 FontAwesome;
 }
 
+.aclaraciones {
+    padding: 10px;
+    font-style: italic;
+}
 
+.bloqueVista {
+    width: 100%;
+    height: auto;
+    display: table;
+    font: 14px Arial, Helvetica, Helvetica Neue, Georgia;
+}
+
+.bloqueVistaTitulo {
+    width: 100%;
+    height: auto;
+    display: table;
+    font: 14px Arial, Helvetica, Helvetica Neue, Georgia;
+    padding: 20px 20px 20px 0px;
+}
 
 .fa:before {
 	color: #056033

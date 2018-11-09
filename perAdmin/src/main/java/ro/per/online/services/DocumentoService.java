@@ -22,49 +22,32 @@ import ro.per.online.web.beans.gd.DocumentoBusqueda;
 public interface DocumentoService {
 
 	/**
-	 * Eliminare de documente din baza de date. Documentul care trebuie eliminat este primit ca parametru.
-	 * @param entity Documento pentru eliminare
+	 * Returnează documentele care corespund tipului de document.
+	 * @param tipoDocumento Numele tipului de document
+	 * @return Lista documentelor
+	 */
+	List<Documento> buscaNombreTipoDocumento(String tipoDocumento);
+
+	/**
+	 * Consulta en base de datos en base a los parámetros recibidos. La consulta se hace paginada. Cautare în baza de
+	 * date pe baza parametrilor primiți. Rezultatul este paginat.
+	 * @param first Primul element din căutare
+	 * @param pageSize Numărul maxim de rezultate de afișat
+	 * @param sortField Câmpul prin care se ordonează căutarea
+	 * @param sortOrder ordine de sortare
+	 * @param busqueda Obiect care conține criteriile de căutare
+	 * @return Lista documentelor care corespund criteriilor primite
 	 * 
 	 */
-
-	void delete(Documento entity);
-
-	/**
-	 * Salvează documente în baza de date. Ca parametru, primește documentele care trebuie salvate și returnează
-	 * documentele salvate.
-	 * @param entities Documente de salvat
-	 * @return Lista documentelor salvate
-	 * 
-	 */
-
-	Iterable<Documento> save(Iterable<Documento> entities);
+	List<Documento> buscarDocumentoPorCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
+			DocumentoBusqueda busqueda);
 
 	/**
-	 * Salvați un document în baza de date. Ca parametru, primește documentul care trebuie salvat și returnează
-	 * documentul salvat.
-	 * @param entity Documento Document pentru salvare
-	 * @return Documento Document salvat
+	 * Recupereaza un tip de document după numele său.
+	 * @param nombre numele tipului
+	 * @return tipul documentului
 	 */
-
-	Documento save(Documento entity);
-
-	/**
-	 * Primiți un document ca parametru și returnați un stream(flux) pentru a efectua descărcarea.
-	 * @param entity Document pentru descărcare
-	 * @return DefaultStreamed Content Descărcați fluxul
-	 * @throws PerException Excepție posibilă
-	 */
-
-	DefaultStreamedContent descargaDocumento(Documento entity) throws PerException;
-
-	/**
-	 * Primește id-ul unui document ca parametru și returnează un flux pentru efectuarea descărcării.
-	 * @param id Id document pentru descărcare
-	 * @return DefaultStreamedContent Descărcați fluxul
-	 * @throws PerException Excepție posibilă
-	 */
-
-	DefaultStreamedContent descargaDocumento(Long id) throws PerException;
+	TipoDocumento buscaTipoDocumentoPorNombre(String nombre);
 
 	/**
 	 * Primește un fișier UploadedFile din care preia datele pentru a genera un document care va fi stocat în baza de
@@ -91,11 +74,30 @@ public interface DocumentoService {
 	Documento cargaDocumentoSinGuardar(UploadedFile file, TipoDocumento tipo, Users usuario) throws PerException;
 
 	/**
-	 * Căutați toate documentele care nu au fost eliminate logic.
-	 * @return Lista documentelor selectate
+	 * Eliminare de documente din baza de date. Documentul care trebuie eliminat este primit ca parametru.
+	 * @param entity Documento pentru eliminare
+	 * 
 	 */
 
-	List<Documento> findByFechaBajaIsNull();
+	void delete(Documento entity);
+
+	/**
+	 * Primiți un document ca parametru și returnați un stream(flux) pentru a efectua descărcarea.
+	 * @param entity Document pentru descărcare
+	 * @return DefaultStreamed Content Descărcați fluxul
+	 * @throws PerException Excepție posibilă
+	 */
+
+	DefaultStreamedContent descargaDocumento(Documento entity) throws PerException;
+
+	/**
+	 * Primește id-ul unui document ca parametru și returnează un flux pentru efectuarea descărcării.
+	 * @param id Id document pentru descărcare
+	 * @return DefaultStreamedContent Descărcați fluxul
+	 * @throws PerException Excepție posibilă
+	 */
+
+	DefaultStreamedContent descargaDocumento(Long id) throws PerException;
 
 	/**
 	 * Căutați toate documentele care au fost eliminate logic.
@@ -105,57 +107,11 @@ public interface DocumentoService {
 	List<Documento> findByFechaBajaIsNotNull();
 
 	/**
-	 * Consulta en base de datos en base a los parámetros recibidos. La consulta se hace paginada. Cautare în baza de
-	 * date pe baza parametrilor primiți. Rezultatul este paginat.
-	 * @param first Primul element din căutare
-	 * @param pageSize Numărul maxim de rezultate de afișat
-	 * @param sortField Câmpul prin care se ordonează căutarea
-	 * @param sortOrder ordine de sortare
-	 * @param busqueda Obiect care conține criteriile de căutare
-	 * @return Lista documentelor care corespund criteriilor primite
-	 * 
+	 * Căutați toate documentele care nu au fost eliminate logic.
+	 * @return Lista documentelor selectate
 	 */
-	List<Documento> buscarDocumentoPorCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
-			DocumentoBusqueda busqueda);
 
-	/**
-	 * Verificați numărul de înregistrări din baza de date care corespund criteriilor de căutare.
-	 * @param busqueda Obiect care conține criteriile de căutare
-	 * @return numărul de înregistrări corespunzătoare căutării
-	 */
-	int getCounCriteria(DocumentoBusqueda busqueda);
-
-	/**
-	 * Returnează numele fișierului conținut în obiectul Document.
-	 * @param documentul din care doriți să extrageți numele fișierului conținut
-	 * @return nume de fișier
-	 */
-	String obtieneNombreFichero(Documento documento);
-
-	/**
-	 * Returnează lista tipurilor de documente.
-	 * @return lista tipurilor de documente.
-	 */
-	List<TipoDocumento> listaTiposDocumento();
-
-	/**
-	 * Preluați un document din coșul de gunoi
-	 * @param documento Documentul care trebuie recuperat din coșul de gunoi
-	 */
-	void recuperarDocumento(Documento documento);
-
-	/**
-	 * Ștergeți toate documentele stocate în coșul de gunoi.
-	 * @return Lista documentelor eliminate
-	 */
-	List<Documento> vaciarPapelera();
-
-	/**
-	 * Recupereaza un tip de document după numele său.
-	 * @param nombre numele tipului
-	 * @return tipul documentului
-	 */
-	TipoDocumento buscaTipoDocumentoPorNombre(String nombre);
+	List<Documento> findByFechaBajaIsNull();
 
 	/**
 	 * Returnează un document localizat după id-ul său.
@@ -165,11 +121,24 @@ public interface DocumentoService {
 	Documento findOne(Long id);
 
 	/**
-	 * Returnează documentele care corespund tipului de document.
-	 * @param tipoDocumento Numele tipului de document
-	 * @return Lista documentelor
+	 * Verificați numărul de înregistrări din baza de date care corespund criteriilor de căutare.
+	 * @param busqueda Obiect care conține criteriile de căutare
+	 * @return numărul de înregistrări corespunzătoare căutării
 	 */
-	List<Documento> buscaNombreTipoDocumento(String tipoDocumento);
+	int getCounCriteria(DocumentoBusqueda busqueda);
+
+	/**
+	 * Returnează lista tipurilor de documente.
+	 * @return lista tipurilor de documente.
+	 */
+	List<TipoDocumento> listaTiposDocumento();
+
+	/**
+	 * Returnează numele fișierului conținut în obiectul Document.
+	 * @param documentul din care doriți să extrageți numele fișierului conținut
+	 * @return nume de fișier
+	 */
+	String obtieneNombreFichero(Documento documento);
 
 	/**
 	 * 
@@ -182,5 +151,36 @@ public interface DocumentoService {
 	 */
 	void prepararPaginacionOrdenCriteria(Criteria criteria, int first, int pageSize, String sortField,
 			SortOrder sortOrder, String defaultField);
+
+	/**
+	 * Preluați un document din coșul de gunoi
+	 * @param documento Documentul care trebuie recuperat din coșul de gunoi
+	 */
+	void recuperarDocumento(Documento documento);
+
+	/**
+	 * Salvați un document în baza de date. Ca parametru, primește documentul care trebuie salvat și returnează
+	 * documentul salvat.
+	 * @param entity Documento Document pentru salvare
+	 * @return Documento Document salvat
+	 */
+
+	Documento save(Documento entity);
+
+	/**
+	 * Salvează documente în baza de date. Ca parametru, primește documentele care trebuie salvate și returnează
+	 * documentele salvate.
+	 * @param entities Documente de salvat
+	 * @return Lista documentelor salvate
+	 * 
+	 */
+
+	Iterable<Documento> save(Iterable<Documento> entities);
+
+	/**
+	 * Ștergeți toate documentele stocate în coșul de gunoi.
+	 * @return Lista documentelor eliminate
+	 */
+	List<Documento> vaciarPapelera();
 
 }

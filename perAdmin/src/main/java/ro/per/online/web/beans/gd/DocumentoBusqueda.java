@@ -11,7 +11,7 @@ import ro.per.online.persistence.entities.Users;
 
 /**
  * POJO pentru a stoca parametrii de căutare pentru documente.
- * 
+ *
  * @author STAD
  *
  */
@@ -20,6 +20,9 @@ import ro.per.online.persistence.entities.Users;
 @NoArgsConstructor
 public class DocumentoBusqueda implements Serializable {
 
+	/**
+	 *
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**

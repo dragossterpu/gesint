@@ -17,48 +17,49 @@ import ro.per.online.web.beans.UsuarioBusqueda;
 public interface UserService {
 
 	/**
-	 * Cauta totii utilizatorii
-	 *
-	 * @return lista de utilizatori.
-	 */
-	List<Users> fiindAll();
-
-	/**
-	 * Cautaun utilizator dupa id.
-	 *
-	 * @return Users userlista de utilizatori.
-	 */
-	Users fiindOne(String id);
-
-	/**
-	 * Obtiene el conteo de criteria.
-	 * @param searchUser UsuarioBusqueda
-	 * @return int
-	 */
-	int getCounCriteria(UsuarioBusqueda searchUser);
-
-	/**
 	 * Busca usuarios con los parametros de búsqueda.
 	 * @param searchUser UsuarioBusqueda
 	 * @param sortOrder SortOrder
 	 * @param sortField String
 	 * @param pageSize int
 	 * @param first int
-	 *
 	 * @return List<User>
-	 *
-	 *
 	 */
 	List<Users> buscarUsuarioCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
 			UsuarioBusqueda searchUser);
 
 	/**
-	 * Guarda en base de datos el usuario.
-	 * 
-	 * @param entity Usuario a guardar
-	 * @return Usuario guardado.
+	 * Busca usuarios utilizando criteria.
+	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @return List<User>
 	 */
-	Users save(Users entity);
+	List<Users> buscarUsuarioCriteria(UsuarioBusqueda usuarioBusqueda);
+
+	/**
+	 * Incarcam fotografia unui utilizator.
+	 * @param usuario a eliminar
+	 * @throws IOException
+	 */
+
+	Users cargaImagenSinGuardar(byte[] bs, Users user) throws IOException;
+
+	/**
+	 * Eliminación de un usuario.
+	 * @param usuario a eliminar
+	 */
+	void delete(Users usuario);
+
+	/**
+	 * Cauta totii utilizatorii
+	 * @return lista de utilizatori.
+	 */
+	List<Users> fiindAll();
+
+	/**
+	 * Cautaun utilizator dupa id.
+	 * @return Users userlista de utilizatori.
+	 */
+	Users fiindOne(String id);
 
 	/**
 	 * Căutați un utilizator cu CNP.
@@ -68,16 +69,16 @@ public interface UserService {
 	Users findByIdCard(String cnp);
 
 	/**
-	 * Eliminación de un usuario.
-	 * @param usuario a eliminar
+	 * Obtiene el conteo de criteria.
+	 * @param searchUser UsuarioBusqueda
+	 * @return int
 	 */
-	void delete(Users usuario);
+	int getCounCriteria(UsuarioBusqueda searchUser);
 
 	/**
-	 * Incarcam fotografia unui utilizator.
-	 * @param usuario a eliminar
-	 * @throws IOException
+	 * Guarda en base de datos el usuario.
+	 * @param entity Usuario a guardar.
+	 * @return Usuario guardado.
 	 */
-
-	Users cargaImagenSinGuardar(byte[] bs, Users user) throws IOException;
+	Users save(Users entity);
 }

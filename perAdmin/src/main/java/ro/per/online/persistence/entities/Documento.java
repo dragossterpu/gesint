@@ -114,4 +114,11 @@ public class Documento extends AbstractEntity implements Serializable {
 			@JoinColumn(name = "id_proiect") })
 	private List<Proiecte> proiect;
 
+	/**
+	 * Alerta la care este atribuit documentul.
+	 */
+	@ManyToOne
+	@JoinColumn(name = "alerta")
+	private Alerta alerta;
+
 }

@@ -29,26 +29,6 @@ public class LocalityServiceImpl implements LocalityService {
 	private LocalityRepository localityRepository;
 
 	/**
-	 * Devuelve toate judetele inregistrate in baza de date.
-	 * @return lista de judete
-	 */
-	@Override
-	public List<PLocality> fiindAll() {
-		return (ArrayList<PLocality>) localityRepository.findAll();
-	}
-
-	/**
-	 * Cauta toate localitatile unei provincii
-	 * @param Long id identificator de judet
-	 * @return lista de localitati.
-	 * @see ro.mira.per.controller.AdminController.users(HttpServletRequest, Integer) (potential match)
-	 */
-	@Override
-	public List<PLocality> findByProvince(final PProvince province) {
-		return this.localityRepository.findAllByProvince(province);
-	}
-
-	/**
 	 * Busca las localidades pertenecientes a una provincia.
 	 * @param idProvincia Provincia que queremos consultar.
 	 * @return lista Lista de localidades por provincia.
@@ -56,18 +36,6 @@ public class LocalityServiceImpl implements LocalityService {
 	@Override
 	public List<PLocality> buscaByProvincia(final Long idProvincia) {
 		return localityRepository.findByProvinceOrderByName(idProvincia);
-	}
-
-	/**
-	 * Comprueba si existe un municipio conociendo su nombre.
-	 * 
-	 * @param name nombre del municipio
-	 * @param provincia a la que pertenece el municipio
-	 * @return valor booleano
-	 */
-	@Override
-	public boolean existeByNameIgnoreCaseAndProvincia(String name, PProvince provincia) {
-		return localityRepository.existsByNameIgnoreCaseAndProvince(name, provincia);
 	}
 
 	/**
@@ -91,8 +59,40 @@ public class LocalityServiceImpl implements LocalityService {
 
 	}
 
+	/**
+	 * Comprueba si existe un municipio conociendo su nombre.
+	 * 
+	 * @param name nombre del municipio
+	 * @param provincia a la que pertenece el municipio
+	 * @return valor booleano
+	 */
 	@Override
-	public PLocality findById(Long localidadId) {
+	public boolean existeByNameIgnoreCaseAndProvincia(final String name, final PProvince provincia) {
+		return localityRepository.existsByNameIgnoreCaseAndProvince(name, provincia);
+	}
+
+	/**
+	 * Devuelve toate judetele inregistrate in baza de date.
+	 * @return lista de judete
+	 */
+	@Override
+	public List<PLocality> fiindAll() {
+		return (ArrayList<PLocality>) localityRepository.findAll();
+	}
+
+	@Override
+	public PLocality findById(final Long localidadId) {
 		return localityRepository.findOne(localidadId);
+	}
+
+	/**
+	 * Cauta toate localitatile unei provincii
+	 * @param Long id identificator de judet
+	 * @return lista de localitati.
+	 * @see ro.mira.per.controller.AdminController.users(HttpServletRequest, Integer) (potential match)
+	 */
+	@Override
+	public List<PLocality> findByProvince(final PProvince province) {
+		return localityRepository.findAllByProvince(province);
 	}
 }

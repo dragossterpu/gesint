@@ -15,14 +15,14 @@ public class CorreoException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Objeto de clase Throwable.
-	 */
-	private final Throwable e;
-
-	/**
 	 * Mensaje a mostrar cuando se produce una excepción.
 	 */
 	private static final String MENSAJE = "Se ha producido un error en el envío de correo electrónico ";
+
+	/**
+	 * Objeto de clase Throwable.
+	 */
+	private final Throwable e;
 
 	/**
 	 * Se genera una nueva excepción de tipo CorreoException y se almacena el error detectado por el sistema y que es

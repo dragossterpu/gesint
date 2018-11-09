@@ -49,11 +49,6 @@ public enum TypeLocalityEnum {
 	UNSPECIFIED("Nespecificat");
 
 	/**
-	 * Descrierea enum.
-	 */
-	private String description;
-
-	/**
 	 * @return Returnează o listă cu descrierile enum.
 	 *
 	 */
@@ -64,6 +59,11 @@ public enum TypeLocalityEnum {
 		}
 		return typeLocalitys;
 	}
+
+	/**
+	 * Descrierea enum.
+	 */
+	private String description;
 
 	/**
 	 * Devuelve numele.

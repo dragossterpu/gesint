@@ -5,66 +5,82 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:pe="http://primefaces.org/ui/extensions" 
 	xmlns:p="http://primefaces.org/ui">
 <f:view>
 	<ui:composition template="layouts/layoutInterior.xhtml">
 		<ui:define name="title">Ecologistii</ui:define>
 		<ui:define name="content">	
 			<h:form id="formHome">
-				<p:growl id="msgs" showDetail="true" />
- PROBAAAAA
-        <p:dashboard id="board" >  
-  PROBAAAAA
-            <p:panel id="estadisticas" header="Estadisticas desde">
-            	<p:panelGrid columns="2" >
- PROBAAAAA
-            		<p:panel id = "datosResumen">            		
-						<h:outputText value="Evaluaciones por día: " styleClass="dialogLabel" />
-						<h:outputText value="#" />
-						<p:separator/>
-						<p:panelGrid columns="2" styleClass="ui-noborder">
-							<p:panel>
-								<h:outputText value="Formularios más utilizados " styleClass="dialogLabel" />
-					 PROBAAAAA		
-							</p:panel>
-							<p:panel>
-								<h:outputText value="Categorías más utilizadas " styleClass="dialogLabel" />
-								
-								<span class="logo-directiva"> <span class="negro"
-									id="tipoEvaluacion">evalua</span><span
-									class="gris-logo letrat">-</span><span class="color-t letrat">t</span><span
-									class="color-t img"></span>
-								</span>
-								<p:graphicImage class="img" id="img2"
-									value="../images/registered.png" />					
-							</p:panel>
-						</p:panelGrid>
-						<p:separator/>
-						<h:outputText value="Solicitudes usuarios: " styleClass="dialogLabel" />
-						<h:outputText value="text" />
-						<p:separator/>												 
-            			<p:dataTable id="tablaUsuarios" var="modelo" value="modeloDatosUsuariosMes" >
-							<p:column headerText="Rol">
-								<h:outputText value="descripcion" />
-							</p:column>
-							<p:column headerText="Cantidad">
-								<h:outputText value="modelo.cantidad" />
-							</p:column>
-						</p:dataTable>
-            		</p:panel>
-             PROBAAAAA		
-            		<script type="text/javascript">
-						function format() {									
-					        this.cfg.axes.xaxis.tickOptions.showGridline = false;
-						}
-					</script>
-            	</p:panelGrid>
-            </p:panel>
-             
-        </p:dashboard>
- 
-        <div style="clear:both" />			
-			</h:form>
+				<h3>STATISTICĂ</h3>
+		    
+		  
+		    
+		    <p:tabView>
+		        <p:tab title="Membrii noi">
+		           
+		 
+		            <h:panelGrid columns="2" cellpadding="10" >
+ 					<p:chart type="pie" id="grafica" model="#{homeBean.graficaUserUltimMembru}" style="width:400px;height:300px" />
+		             <p:chart type="bar" model="#{homeBean.horizontalBarModel}" style="width:600px;height:300px"/> 
+		               <div class="filtro">
+						<div class="bloqueFormulario">
+						  
+						  
+
+		                	<div class="ui-g campoBusqueda">
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<h:outputLabel for="userUltimaLuna"  styleClass="buscador" value="Înregistrați în ultima lună:" />
+									<p:inputText id="userUltimaLuna"  value="#{homeBean.userUltimaLuna}" />
+								</div>
+							</div>
+		                	<div class="ui-g campoBusqueda">
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<h:outputLabel for="userUltimaTres"  styleClass="buscador" value="Înregistrați în ultimele trei luni:" />
+									<p:inputText id="userUltimaTres"  value="#{homeBean.userUltimaTres}" />
+								</div>
+							</div>
+		                	<div class="ui-g campoBusqueda">
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<h:outputLabel for="userUltimaSeis"  styleClass="buscador" value="Înregistrați în ultimele sase luni:" />
+									<p:inputText id="userUltimaSeis"  value="#{homeBean.userUltimaSeis}" />
+								</div>
+							</div>
+							<div class="ui-g campoBusqueda">
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+									<h:outputLabel for="userUltimaDoce"  styleClass="buscador" value="Înregistrați în ultimul an:" />
+									<p:inputText id="userUltimaDoce"  value="#{homeBean.userUltimaDoce}" />
+								</div>
+							</div>
+		                </div>
+					</div>
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Godfather Part II">
+		            <f:facet name="actions">
+		                <p:button value="Process" />
+		            </f:facet>
+		 
+		            <h:panelGrid columns="2" cellpadding="10">
+		                <p:graphicImage name="demo/images/godfather/godfather2.jpg" />
+		                <h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream. 
+		                In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy, 
+		                killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows." />
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Godfather Part III">
+		            <h:panelGrid columns="2" cellpadding="10">
+<!-- 		                <p:graphicImage name="demo/images/godfather/godfather3.jpg" /> -->
+		                <h:outputText value="After a break of more than 15 years, director Francis Ford Coppola and writer Mario Puzo returned to the well for this third and final story of the fictional Corleone crime family. 
+		                    Two decades have passed, and crime kingpin Michael Corleone, now divorced from his wife Kay has nearly succeeded in keeping his promise that his family would one day be completely legitimate." />
+		            </h:panelGrid>
+		        </p:tab>
+		    </p:tabView>
+		</h:form>
+				
+				
+				
+				
 			
 					
 		</ui:define>

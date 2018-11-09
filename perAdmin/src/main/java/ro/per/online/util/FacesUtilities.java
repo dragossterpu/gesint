@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Clase para herramientas de FacesUtilities.
- * @author Ezentis
+ * @author STAD
  */
 @Component("facesUtilities")
 public class FacesUtilities {

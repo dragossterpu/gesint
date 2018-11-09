@@ -17,13 +17,6 @@ import org.springframework.stereotype.Component;
 public final class UtilitiesCriteria {
 
 	/**
-	 * Constructor privado.
-	 */
-	private UtilitiesCriteria() {
-
-	}
-
-	/**
 	 * Método para establecer un criterio de búsqueda sobre un criteria con el operador like.
 	 *
 	 * @param value Object
@@ -98,20 +91,6 @@ public final class UtilitiesCriteria {
 	}
 
 	/**
-	 * Método para establecer un criterio de búsqueda sobre un criteria con el operador igual y valor long.
-	 *
-	 * @param value Object
-	 * @param criteria Criteria
-	 * @param nombreCampo String
-	 */
-	public static void setCondicionCriteriaIgualdadLong(final Object value, final Criteria criteria,
-			final String nombreCampo) {
-		if (value != null && !"".equals(value.toString().trim())) {
-			criteria.add(Restrictions.eq(nombreCampo, Long.parseLong(value.toString().trim())));
-		}
-	}
-
-	/**
 	 * Método para establecer un criterio de búsqueda sobre un criteria con el operador igual y valor int.
 	 *
 	 * @param value Object
@@ -126,6 +105,20 @@ public final class UtilitiesCriteria {
 	}
 
 	/**
+	 * Método para establecer un criterio de búsqueda sobre un criteria con el operador igual y valor long.
+	 *
+	 * @param value Object
+	 * @param criteria Criteria
+	 * @param nombreCampo String
+	 */
+	public static void setCondicionCriteriaIgualdadLong(final Object value, final Criteria criteria,
+			final String nombreCampo) {
+		if (value != null && !"".equals(value.toString().trim())) {
+			criteria.add(Restrictions.eq(nombreCampo, Long.parseLong(value.toString().trim())));
+		}
+	}
+
+	/**
 	 * Método para establecer un criterio de búsqueda sobre un criteria con el valor null sobre un campo.
 	 *
 	 * @param criteria Criteria
@@ -133,5 +126,12 @@ public final class UtilitiesCriteria {
 	 */
 	public static void setCondicionNull(final Criteria criteria, final String nombreCampo) {
 		criteria.add(Restrictions.isNull(nombreCampo));
+	}
+
+	/**
+	 * Constructor privado.
+	 */
+	private UtilitiesCriteria() {
+
 	}
 }

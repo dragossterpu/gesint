@@ -52,16 +52,6 @@ public class FacesViewScope implements Scope {
 	}
 
 	/**
-	 * Borra el objeto de sesión.
-	 * @param name nombre
-	 * @return objeto borrado
-	 */
-	@Override
-	public Object remove(final String name) {
-		return FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove(name);
-	}
-
-	/**
 	 * Obtiene el id de conersación.
 	 * @return id de conversación
 	 */
@@ -78,6 +68,16 @@ public class FacesViewScope implements Scope {
 	@Override
 	public void registerDestructionCallback(final String name, final Runnable callback) {
 		// Not supported by JSF for view scope
+	}
+
+	/**
+	 * Borra el objeto de sesión.
+	 * @param name nombre
+	 * @return objeto borrado
+	 */
+	@Override
+	public Object remove(final String name) {
+		return FacesContext.getCurrentInstance().getViewRoot().getViewMap().remove(name);
 	}
 
 	/**

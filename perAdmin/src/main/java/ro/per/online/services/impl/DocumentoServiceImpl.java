@@ -27,6 +27,7 @@ import org.springframework.util.StreamUtils;
 
 import ro.per.online.constantes.Constantes;
 import ro.per.online.exceptions.PerException;
+import ro.per.online.persistence.entities.Alerta;
 import ro.per.online.persistence.entities.Documento;
 import ro.per.online.persistence.entities.DocumentoBlob;
 import ro.per.online.persistence.entities.TipoDocumento;
@@ -66,6 +67,201 @@ public class DocumentoServiceImpl implements DocumentoService {
 	private ITipoDocumentoRepository tipoDocumentoRepository;
 
 	/**
+	 * Devuelve los documentos que corresponden a un tipo de documento.
+	 * @param tipoDocumento Nombre del tipo de documento
+	 * @return Listado de documentos
+	 */
+	@Override
+	public List<Documento> buscaNombreTipoDocumento(final String tipoDocumento) {
+		return documentoRepository.buscaNombreTipoDocumento(tipoDocumento);
+	}
+
+	/**
+	 * Consulta en base de datos en base a los parámetros recibidos. La consulta se hace paginada.
+	 * 
+	 * @param first Primer elemento a devolver de la búsqueda
+	 * @param pageSize Número máximo de registros a mostrar
+	 * @param sortField Campo por el cual se ordena la búsqueda
+	 * @param sortOrder Sentido de la ordenación
+	 * @param busquedaDocumento Objeto que contiene los criterios de búsqueda
+	 * @return Lista de los documentos que corresponden a los criterios recibidos
+	 * 
+	 */
+	@Override
+	public List<Documento> buscarDocumentoPorCriteria(final int first, final int pageSize, final String sortField,
+			final SortOrder sortOrder, final DocumentoBusqueda busquedaDocumento) {
+		final Session session = sessionFactory.openSession();
+		final Criteria criteriaDocumento = session.createCriteria(Documento.class, "documento");
+		creaCriteria(busquedaDocumento, criteriaDocumento);
+		SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (busquedaDocumento.getUsuario() != null) {
+			criteriaDocumento.createAlias("inspeccion", "inspecciones");
+			criteriaDocumento.add(Restrictions.eq("inspecciones.id", busquedaDocumento.getUsuario().getUsername()));
+		}
+		prepararPaginacionOrdenCriteria(criteriaDocumento, first, pageSize, sortField, sortOrder, "id");
+		@SuppressWarnings("unchecked")
+		final List<Documento> listado = criteriaDocumento.list();
+		session.close();
+		return listado;
+	}
+
+	/**
+	 * Recupera un tipo de documento a partir de su nombre.
+	 * @param nombre nombre del tipo
+	 * @return tipo de documento
+	 */
+	@Override
+	public TipoDocumento buscaTipoDocumentoPorNombre(final String nombre) {
+		return tipoDocumentoRepository.findByNombre(nombre);
+	}
+
+	/**
+	 * Recibe un archivo UploadedFile del que recupera los datos para generar un Documento que se almacenará en base de
+	 * datos. Devuelve el documento almacenado.
+	 * @param file fichero a cargar en BDD
+	 * @param tipo tipo de documentp
+	 * @param inspeccion inspección asociada al documento
+	 * @return Documento documento cargado en base de datos
+	 * @throws PerException Excepție posibilă
+	 * 
+	 */
+	@Override
+	public Documento cargaDocumento(final UploadedFile file, final TipoDocumento tipo, final Users usuario)
+			throws PerException {
+		try {
+			final Documento documento = documentoRepository.save(crearDocumento(file, tipo, usuario));
+			documento.getNombre();
+			usuario.getUsername();
+			return documento;
+		}
+		catch (DataAccessException | IOException ex) {
+			throw new PerException(ex);
+		}
+	}
+
+	/**
+	 * Recibe un archivo UploadedFile y los datos necesarios para general un Documento pero no lo almacena en base de
+	 * datos. Sólo deja el objeto preparado para guardarlo.
+	 * 
+	 * @param file fichero a cargar en BDD
+	 * @param tipo tipo de documentp
+	 * @param inspeccion inspección asociada al documento
+	 * @return documento cargado en base de datos
+	 * @throws ProgesinException excepción lanzada
+	 */
+	@Override
+	public Documento cargaDocumentoSinGuardar(final UploadedFile file, final TipoDocumento tipo, final Users usuario)
+			throws PerException {
+		try {
+			return crearDocumento(file, tipo, usuario);
+		}
+		catch (final IOException ex) {
+			throw new PerException(ex);
+		}
+	}
+
+	/**
+	 * Añade al criteria los parámetros de búsqueda.
+	 * @param busquedaDocumento Objeto que contiene los parámetros de búsqueda
+	 * @param criteria Criteria al que se añadirán los parámetros.
+	 */
+	private void creaCriteria(final DocumentoBusqueda busquedaDocumento, final Criteria criteria) {
+
+		if (busquedaDocumento.getFechaDesde() != null) {
+			criteria.add(Restrictions.ge(Constantes.FECHAALTA, busquedaDocumento.getFechaDesde()));
+		}
+		if (busquedaDocumento.getFechaHasta() != null) {
+			final Date fechaHasta = new Date(busquedaDocumento.getFechaHasta().getTime() + TimeUnit.DAYS.toMillis(1));
+			criteria.add(Restrictions.le(Constantes.FECHAALTA, fechaHasta));
+		}
+		if (busquedaDocumento.getNombre() != null) {
+			criteria.add(Restrictions.ilike("nombre", busquedaDocumento.getNombre(), MatchMode.ANYWHERE));
+		}
+		if (busquedaDocumento.getTipoDocumento() != null) {
+			criteria.add(Restrictions.eq("tipoDocumento", busquedaDocumento.getTipoDocumento()));
+		}
+		if (busquedaDocumento.isEliminado()) {
+			criteria.add(Restrictions.isNotNull("fechaBaja"));
+		}
+		else {
+			criteria.add(Restrictions.isNull("fechaBaja"));
+		}
+		if (busquedaDocumento.getDescripcion() != null) {
+			criteria.add(Restrictions.ilike("descripcion", busquedaDocumento.getDescripcion(), MatchMode.ANYWHERE));
+		}
+		criteriaMateriaIndexada(criteria, busquedaDocumento.getMateriaIndexada());
+	}
+
+	/**
+	 * Crea el documento.
+	 * @param file Fichero subido por el usuario.
+	 * @param tipo Tipo de documento.
+	 * @param inspeccion Inspección a la que se asocia.
+	 * @return Documento generado
+	 * @throws DataAccessException Excepción SQL
+	 * @throws IOException Excepción entrada/salida
+	 */
+	private Documento crearDocumento(final UploadedFile file, final TipoDocumento tipo, final Alerta alerta)
+			throws IOException {
+		final Documento docu = new Documento();
+		docu.setNombre(file.getFileName());
+		docu.setTipoDocumento(tipo);
+		if (alerta != null) {
+			docu.setAlerta(alerta);
+		}
+		final byte[] fileBlob = StreamUtils.copyToByteArray(file.getInputstream());
+		final DocumentoBlob blob = new DocumentoBlob();
+		blob.setFichero(fileBlob);
+		blob.setNombreFichero(file.getFileName());
+		docu.setFichero(blob);
+		docu.setTipoContenido(file.getContentType());
+		return docu;
+	}
+
+	/**
+	 * Crea el documento.
+	 * @param file Fichero subido por el usuario.
+	 * @param tipo Tipo de documento.
+	 * @param inspeccion Inspección a la que se asocia.
+	 * @return Documento generado
+	 * @throws DataAccessException Excepción SQL
+	 * @throws IOException Excepción entrada/salida
+	 */
+	private Documento crearDocumento(final UploadedFile file, final TipoDocumento tipo, final Users usuario)
+			throws IOException {
+		final Documento docu = new Documento();
+		docu.setNombre(file.getFileName());
+		docu.setTipoDocumento(tipo);
+		docu.setDateCreate(new Date());
+		if (usuario != null) {
+			docu.setUsuario(usuario);
+		}
+		final byte[] fileBlob = StreamUtils.copyToByteArray(file.getInputstream());
+		final DocumentoBlob blob = new DocumentoBlob();
+		blob.setFichero(fileBlob);
+		blob.setNombreFichero(file.getFileName());
+		docu.setFichero(blob);
+		docu.setTipoContenido(file.getContentType());
+		return docu;
+	}
+
+	/**
+	 * Añade al criteria el filtro de la materia indexada introducida en el formulario.
+	 * @param criteria Criteria al que se añadirán los parámetros.
+	 * @param materiaIndexada materia indexada introducida en el filtro (separada por comas)
+	 */
+	private void criteriaMateriaIndexada(final Criteria criteria, final String materiaIndexada) {
+		if (materiaIndexada != null) {
+			final String[] claves = materiaIndexada.split(",");
+			final Criterion[] clavesOr = new Criterion[claves.length];
+			for (int i = 0; i < claves.length; i++) {
+				clavesOr[i] = Restrictions.ilike("materiaIndexada", claves[i].trim(), MatchMode.ANYWHERE);
+			}
+			criteria.add(Restrictions.or(clavesOr));
+		}
+	}
+
+	/**
 	 * Ștergeți o serie de documente din baza de date. Documentul care trebuie șters este trecut ca parametru.
 	 * @param entity Documentul care trebuie șters
 	 * 
@@ -73,58 +269,6 @@ public class DocumentoServiceImpl implements DocumentoService {
 	@Override
 	public void delete(final Documento entity) {
 		documentoRepository.delete(entity);
-	}
-
-	/**
-	 * Căutați toate documentele care nu au eliminare logică.
-	 * @return Lista documentelor selectate
-	 */
-	@Override
-	public List<Documento> findByFechaBajaIsNull() {
-		return documentoRepository.findByDateDeletedIsNull();
-	}
-
-	/**
-	 * Căutați toate documentele care au fost eliminate logic.
-	 * @return Lista documentelor selectate
-	 */
-	@Override
-	public List<Documento> findByFechaBajaIsNotNull() {
-		return documentoRepository.findByDateDeletedIsNotNull();
-	}
-
-	/**
-	 * Returnează un document localizat după id-ul său.
-	 * @param id Identificatorul documentului
-	 * @return Documento
-	 */
-	@Override
-	public Documento findOne(final Long id) {
-		return documentoRepository.findOne(id);
-	}
-
-	/**
-	 * Salvați o serie de documente în baza de date. Ca parametru, primește documentele care trebuie salvate și
-	 * returnează documentele salvate.
-	 * @param entities Documente de salvat
-	 * @return lista documentelor salvate
-	 * 
-	 */
-	@Override
-	public Iterable<Documento> save(final Iterable<Documento> entities) {
-		return documentoRepository.save(entities);
-	}
-
-	/**
-	 * Salvați un document în baza de date. Ca parametru, primește documentul care trebuie salvat și returnează
-	 * documentul salvat.
-	 * @param entity Documento Document pentru salvare
-	 * @return documento documentul salvat
-	 */
-	@Override
-	@Transactional(readOnly = false)
-	public Documento save(final Documento entity) {
-		return documentoRepository.save(entity);
 	}
 
 	/**
@@ -172,74 +316,31 @@ public class DocumentoServiceImpl implements DocumentoService {
 	}
 
 	/**
-	 * Recibe un archivo UploadedFile del que recupera los datos para generar un Documento que se almacenará en base de
-	 * datos. Devuelve el documento almacenado.
-	 * @param file fichero a cargar en BDD
-	 * @param tipo tipo de documentp
-	 * @param inspeccion inspección asociada al documento
-	 * @return Documento documento cargado en base de datos
-	 * @throws PerException Excepție posibilă
-	 * 
+	 * Căutați toate documentele care au fost eliminate logic.
+	 * @return Lista documentelor selectate
 	 */
 	@Override
-	public Documento cargaDocumento(final UploadedFile file, final TipoDocumento tipo, final Users usuario)
-			throws PerException {
-		try {
-			final Documento documento = documentoRepository.save(crearDocumento(file, tipo, usuario));
-			final String mensaje = "Documentul a fost încărcat " + documento.getNombre() + " de utilizatorul"
-					+ usuario.getUsername();
-			return documento;
-		}
-		catch (DataAccessException | IOException ex) {
-			throw new PerException(ex);
-		}
+	public List<Documento> findByFechaBajaIsNotNull() {
+		return documentoRepository.findByDateDeletedIsNotNull();
 	}
 
 	/**
-	 * Recibe un archivo UploadedFile y los datos necesarios para general un Documento pero no lo almacena en base de
-	 * datos. Sólo deja el objeto preparado para guardarlo.
-	 * 
-	 * @param file fichero a cargar en BDD
-	 * @param tipo tipo de documentp
-	 * @param inspeccion inspección asociada al documento
-	 * @return documento cargado en base de datos
-	 * @throws ProgesinException excepción lanzada
+	 * Căutați toate documentele care nu au eliminare logică.
+	 * @return Lista documentelor selectate
 	 */
 	@Override
-	public Documento cargaDocumentoSinGuardar(final UploadedFile file, final TipoDocumento tipo, final Users usuario)
-			throws PerException {
-		try {
-			return crearDocumento(file, tipo, usuario);
-		}
-		catch (IOException ex) {
-			throw new PerException(ex);
-		}
+	public List<Documento> findByFechaBajaIsNull() {
+		return documentoRepository.findByDateDeletedIsNull();
 	}
 
 	/**
-	 * Crea el documento.
-	 * @param file Fichero subido por el usuario.
-	 * @param tipo Tipo de documento.
-	 * @param inspeccion Inspección a la que se asocia.
-	 * @return Documento generado
-	 * @throws DataAccessException Excepción SQL
-	 * @throws IOException Excepción entrada/salida
+	 * Returnează un document localizat după id-ul său.
+	 * @param id Identificatorul documentului
+	 * @return Documento
 	 */
-	private Documento crearDocumento(final UploadedFile file, final TipoDocumento tipo, final Users usuario)
-			throws IOException {
-		final Documento docu = new Documento();
-		docu.setNombre(file.getFileName());
-		docu.setTipoDocumento(tipo);
-		if (usuario != null) {
-			docu.setUsuario(usuario);
-		}
-		byte[] fileBlob = StreamUtils.copyToByteArray(file.getInputstream());
-		final DocumentoBlob blob = new DocumentoBlob();
-		blob.setFichero(fileBlob);
-		blob.setNombreFichero(file.getFileName());
-		docu.setFichero(blob);
-		docu.setTipoContenido(file.getContentType());
-		return docu;
+	@Override
+	public Documento findOne(final Long id) {
+		return documentoRepository.findOne(id);
 	}
 
 	/**
@@ -259,80 +360,12 @@ public class DocumentoServiceImpl implements DocumentoService {
 	}
 
 	/**
-	 * Consulta en base de datos en base a los parámetros recibidos. La consulta se hace paginada.
-	 * 
-	 * @param first Primer elemento a devolver de la búsqueda
-	 * @param pageSize Número máximo de registros a mostrar
-	 * @param sortField Campo por el cual se ordena la búsqueda
-	 * @param sortOrder Sentido de la ordenación
-	 * @param busquedaDocumento Objeto que contiene los criterios de búsqueda
-	 * @return Lista de los documentos que corresponden a los criterios recibidos
-	 * 
+	 * Devuelve la lista de tipos de documentos.
+	 * @return lista de tipos de documentos
 	 */
 	@Override
-	public List<Documento> buscarDocumentoPorCriteria(final int first, final int pageSize, final String sortField,
-			final SortOrder sortOrder, final DocumentoBusqueda busquedaDocumento) {
-		final Session session = sessionFactory.openSession();
-		final Criteria criteriaDocumento = session.createCriteria(Documento.class, "documento");
-		creaCriteria(busquedaDocumento, criteriaDocumento);
-		Users usuario = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (busquedaDocumento.getUsuario() != null) {
-			criteriaDocumento.createAlias("inspeccion", "inspecciones");
-			criteriaDocumento.add(Restrictions.eq("inspecciones.id", busquedaDocumento.getUsuario().getUsername()));
-		}
-		prepararPaginacionOrdenCriteria(criteriaDocumento, first, pageSize, sortField, sortOrder, "id");
-		@SuppressWarnings("unchecked")
-		final List<Documento> listado = criteriaDocumento.list();
-		session.close();
-		return listado;
-	}
-
-	/**
-	 * Añade al criteria los parámetros de búsqueda.
-	 * @param busquedaDocumento Objeto que contiene los parámetros de búsqueda
-	 * @param criteria Criteria al que se añadirán los parámetros.
-	 */
-	private void creaCriteria(final DocumentoBusqueda busquedaDocumento, final Criteria criteria) {
-
-		if (busquedaDocumento.getFechaDesde() != null) {
-			criteria.add(Restrictions.ge(Constantes.FECHAALTA, busquedaDocumento.getFechaDesde()));
-		}
-		if (busquedaDocumento.getFechaHasta() != null) {
-			Date fechaHasta = new Date(busquedaDocumento.getFechaHasta().getTime() + TimeUnit.DAYS.toMillis(1));
-			criteria.add(Restrictions.le(Constantes.FECHAALTA, fechaHasta));
-		}
-		if (busquedaDocumento.getNombre() != null) {
-			criteria.add(Restrictions.ilike("nombre", busquedaDocumento.getNombre(), MatchMode.ANYWHERE));
-		}
-		if (busquedaDocumento.getTipoDocumento() != null) {
-			criteria.add(Restrictions.eq("tipoDocumento", busquedaDocumento.getTipoDocumento()));
-		}
-		if (busquedaDocumento.isEliminado()) {
-			criteria.add(Restrictions.isNotNull("fechaBaja"));
-		}
-		else {
-			criteria.add(Restrictions.isNull("fechaBaja"));
-		}
-		if (busquedaDocumento.getDescripcion() != null) {
-			criteria.add(Restrictions.ilike("descripcion", busquedaDocumento.getDescripcion(), MatchMode.ANYWHERE));
-		}
-		criteriaMateriaIndexada(criteria, busquedaDocumento.getMateriaIndexada());
-	}
-
-	/**
-	 * Añade al criteria el filtro de la materia indexada introducida en el formulario.
-	 * @param criteria Criteria al que se añadirán los parámetros.
-	 * @param materiaIndexada materia indexada introducida en el filtro (separada por comas)
-	 */
-	private void criteriaMateriaIndexada(final Criteria criteria, final String materiaIndexada) {
-		if (materiaIndexada != null) {
-			final String[] claves = materiaIndexada.split(",");
-			final Criterion[] clavesOr = new Criterion[claves.length];
-			for (int i = 0; i < claves.length; i++) {
-				clavesOr[i] = Restrictions.ilike("materiaIndexada", claves[i].trim(), MatchMode.ANYWHERE);
-			}
-			criteria.add(Restrictions.or(clavesOr));
-		}
+	public List<TipoDocumento> listaTiposDocumento() {
+		return (List<TipoDocumento>) tipoDocumentoRepository.findAll();
 	}
 
 	/**
@@ -345,56 +378,6 @@ public class DocumentoServiceImpl implements DocumentoService {
 		final Documento docu = documentoRepository.findById(documento.getId());
 		final DocumentoBlob doc = docu.getFichero();
 		return doc.getNombreFichero();
-	}
-
-	/**
-	 * Devuelve la lista de tipos de documentos.
-	 * @return lista de tipos de documentos
-	 */
-	@Override
-	public List<TipoDocumento> listaTiposDocumento() {
-		return (List<TipoDocumento>) tipoDocumentoRepository.findAll();
-	}
-
-	/**
-	 * Recupera un documento de la papelera.
-	 * @param documento Es el documento a recuperar de la papelera
-	 */
-	@Override
-	public void recuperarDocumento(final Documento documento) {
-		documento.setDateDeleted(null);
-		documento.setUserDeleted(null);
-		save(documento);
-	}
-
-	/**
-	 * Elimina todos los documentos almacenados en la papelera.
-	 */
-	@Override
-	public List<Documento> vaciarPapelera() {
-		final List<Documento> listaEliminar = documentoRepository.findByDateDeletedIsNotNull();
-		documentoRepository.delete(listaEliminar);
-		return listaEliminar;
-	}
-
-	/**
-	 * Recupera un tipo de documento a partir de su nombre.
-	 * @param nombre nombre del tipo
-	 * @return tipo de documento
-	 */
-	@Override
-	public TipoDocumento buscaTipoDocumentoPorNombre(final String nombre) {
-		return tipoDocumentoRepository.findByNombre(nombre);
-	}
-
-	/**
-	 * Devuelve los documentos que corresponden a un tipo de documento.
-	 * @param tipoDocumento Nombre del tipo de documento
-	 * @return Listado de documentos
-	 */
-	@Override
-	public List<Documento> buscaNombreTipoDocumento(final String tipoDocumento) {
-		return documentoRepository.buscaNombreTipoDocumento(tipoDocumento);
 	}
 
 	/**
@@ -412,14 +395,59 @@ public class DocumentoServiceImpl implements DocumentoService {
 		criteria.setFirstResult(first);
 		criteria.setMaxResults(pageSize);
 
-		if (sortField != null && sortOrder.equals(SortOrder.ASCENDING)) {
+		if ((sortField != null) && sortOrder.equals(SortOrder.ASCENDING)) {
 			criteria.addOrder(Order.asc(sortField));
 		}
-		else if (sortField != null && sortOrder.equals(SortOrder.DESCENDING)) {
+		else if ((sortField != null) && sortOrder.equals(SortOrder.DESCENDING)) {
 			criteria.addOrder(Order.desc(sortField));
 		}
 		else if (sortField == null) {
 			criteria.addOrder(Order.asc(defaultField));
 		}
+	}
+
+	/**
+	 * Recupera un documento de la papelera.
+	 * @param documento Es el documento a recuperar de la papelera
+	 */
+	@Override
+	public void recuperarDocumento(final Documento documento) {
+		documento.setDateDeleted(null);
+		documento.setUserDeleted(null);
+		save(documento);
+	}
+
+	/**
+	 * Salvați un document în baza de date. Ca parametru, primește documentul care trebuie salvat și returnează
+	 * documentul salvat.
+	 * @param entity Documento Document pentru salvare
+	 * @return documento documentul salvat
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public Documento save(final Documento entity) {
+		return documentoRepository.save(entity);
+	}
+
+	/**
+	 * Salvați o serie de documente în baza de date. Ca parametru, primește documentele care trebuie salvate și
+	 * returnează documentele salvate.
+	 * @param entities Documente de salvat
+	 * @return lista documentelor salvate
+	 * 
+	 */
+	@Override
+	public Iterable<Documento> save(final Iterable<Documento> entities) {
+		return documentoRepository.save(entities);
+	}
+
+	/**
+	 * Elimina todos los documentos almacenados en la papelera.
+	 */
+	@Override
+	public List<Documento> vaciarPapelera() {
+		final List<Documento> listaEliminar = documentoRepository.findByDateDeletedIsNotNull();
+		documentoRepository.delete(listaEliminar);
+		return listaEliminar;
 	}
 }

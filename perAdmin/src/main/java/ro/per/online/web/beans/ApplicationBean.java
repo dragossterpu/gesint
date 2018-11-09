@@ -34,6 +34,16 @@ public class ApplicationBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Constante para cargar la lista de datos para envio mail
+	 */
+	private static String MAIL = "MAIL";
+
+	/**
+	 * Constante para cargar la lista de extensiones
+	 */
+	private static String EXT = "extensiones";
+
+	/**
 	 * Entity Manager para gestión de la persistencia.
 	 */
 	@PersistenceContext
@@ -45,14 +55,19 @@ public class ApplicationBean implements Serializable {
 	private Map<String, String> mapaParametrosMail;
 
 	/**
-	 * Constante para cargar la lista de datos para envio mail
+	 * Mapa que contendrá los parámetros de la aplicación.
 	 */
-	private static String MAIL = "MAIL";
+	private Map<String, String> mapaExtensiones;
 
 	/**
 	 * Listado de accesos remotos a Elypse.
 	 */
 	private List<Propriedades> listaConfMail;
+
+	/**
+	 * Listado de extensiones de un document.
+	 */
+	private List<Propriedades> listaExtensiones;
 
 	/**
 	 * Servicio de propriedades.
@@ -64,12 +79,12 @@ public class ApplicationBean implements Serializable {
 	/**
 	 * 
 	 */
-	private void paramMail() {
+	private void extensiones() {
 		Map<String, String> mapaParametros = new HashMap<>();
-		for (Propriedades param : listaConfMail) {
+		for (Propriedades param : listaExtensiones) {
 			mapaParametros.put(param.getName(), param.getValue());
 		}
-		setMapaParametrosMail(mapaParametros);
+		setMapaExtensiones(mapaParametros);
 	}
 
 	/**
@@ -79,7 +94,20 @@ public class ApplicationBean implements Serializable {
 	public void init() {
 		this.listaConfMail = new ArrayList();
 		listaConfMail = propriedadService.findByFilename(MAIL);
+		listaExtensiones = propriedadService.findByFilename(EXT);
 		paramMail();
+		extensiones();
+	}
+
+	/**
+	 * 
+	 */
+	private void paramMail() {
+		Map<String, String> mapaParametros = new HashMap<>();
+		for (Propriedades param : listaConfMail) {
+			mapaParametros.put(param.getName(), param.getValue());
+		}
+		setMapaParametrosMail(mapaParametros);
 	}
 
 }

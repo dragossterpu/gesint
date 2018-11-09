@@ -10,7 +10,7 @@ import ro.per.online.persistence.entities.PProvince;
 
 /**
  * Listas que se usarán como parámetros en combos.
- * @author Ezentis
+ * @author STAD
  */
 @Component
 public class ListasParametros {
@@ -20,14 +20,6 @@ public class ListasParametros {
 	 */
 	@Autowired
 	private ListasParamCamposForm listasCamposForm;
-
-	/**
-	 * Lista de provincias.
-	 * @return lista de provincias
-	 */
-	public List<PProvince> getListaProvincias() {
-		return listasCamposForm.obtenerListaProvincias();
-	}
 
 	/**
 	 * Lista de localidades para una provincia.
@@ -43,6 +35,14 @@ public class ListasParametros {
 			listaLocalidades = listasCamposForm.obtenerListaLocalidades(idProvincia);
 		}
 		return listaLocalidades;
+	}
+
+	/**
+	 * Lista de provincias.
+	 * @return lista de provincias
+	 */
+	public List<PProvince> getListaProvincias() {
+		return listasCamposForm.obtenerListaProvincias();
 	}
 
 	// /**

@@ -18,24 +18,12 @@ import ro.per.online.persistence.entities.Documento;
 public interface IDocumentoRepository extends CrudRepository<Documento, Long> {
 
 	/**
-	 * Căutați toate documentele care au fost eliminate logic.
-	 * @return Lista documentelor selectate
+	 * Returnează documentele care corespund tipului de document.
+	 * @param tipo Numele tipului de document
+	 * @return Lista documentelor
 	 */
-	List<Documento> findByDateDeletedIsNull();
-
-	/**
-	 * Căutați toate documentele care nu au fost eliminate logic.
-	 * @return Lista documentelor selectate
-	 */
-	List<Documento> findByDateDeletedIsNotNull();
-
-	/**
-	 * Returnează un document localizat după id-ul său.
-	 * @param id Long Identificatorul documentului
-	 * @return Documentul Documento
-	 */
-	@EntityGraph(value = "Documento.fichero", type = EntityGraph.EntityGraphType.LOAD)
-	Documento findById(Long id);
+	@Query("select a from Documento a, TipoDocumento b where a.tipoDocumento=b.id and b.nombre=?1")
+	List<Documento> buscaNombreTipoDocumento(String tipo);
 
 	/**
 	 * Eliminați toate înregistrările a căror dată de eliminare nu este nulă.
@@ -44,11 +32,23 @@ public interface IDocumentoRepository extends CrudRepository<Documento, Long> {
 	void deleteByDateDeletedIsNotNull();
 
 	/**
-	 * Returnează documentele care corespund tipului de document.
-	 * @param tipo Numele tipului de document
-	 * @return Lista documentelor
+	 * Căutați toate documentele care nu au fost eliminate logic.
+	 * @return Lista documentelor selectate
 	 */
-	@Query("select a from Documento a, TipoDocumento b where a.tipoDocumento=b.id and b.nombre=?1")
-	List<Documento> buscaNombreTipoDocumento(String tipo);
+	List<Documento> findByDateDeletedIsNotNull();
+
+	/**
+	 * Căutați toate documentele care au fost eliminate logic.
+	 * @return Lista documentelor selectate
+	 */
+	List<Documento> findByDateDeletedIsNull();
+
+	/**
+	 * Returnează un document localizat după id-ul său.
+	 * @param id Long Identificatorul documentului
+	 * @return Documentul Documento
+	 */
+	@EntityGraph(value = "Documento.fichero", type = EntityGraph.EntityGraphType.LOAD)
+	Documento findById(Long id);
 
 }

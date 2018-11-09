@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ro.per.online.constantes.Constantes;
 import ro.per.online.persistence.entities.Propriedades;
 import ro.per.online.persistence.repositories.PropriedadRepository;
 import ro.per.online.services.PropriedadService;
@@ -31,7 +32,21 @@ public class PropriedadServiceImpl implements PropriedadService {
 	 */
 	@Override
 	public List<Propriedades> findByFilename(final String filename) {
-		return this.propriedadesRepository.findByFilename(filename);
+		return propriedadesRepository.findByFilename(filename);
 	}
 
+	/**
+	 * Devuelve el parametro que tenga el nombre proporcionado.
+	 * @param nombreParametro String
+	 * @return String
+	 */
+	@Override
+	public String findOneByName(final String nombreParametro) {
+		String valor = Constantes.ESPACIO;
+		if (propriedadesRepository.findOneByName(nombreParametro) != null) {
+			valor = propriedadesRepository.findOneByName(nombreParametro).getValue();
+		}
+
+		return valor;
+	}
 }

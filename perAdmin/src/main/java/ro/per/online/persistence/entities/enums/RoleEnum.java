@@ -42,11 +42,6 @@ public enum RoleEnum {
 	ROLE_ADMIN_SUBSIDISRY("Președinte filială");
 
 	/**
-	 * Descrierea enum.
-	 */
-	private String description;
-
-	/**
 	 * @return Returnează o listă cu descrierile enum.
 	 *
 	 */
@@ -57,6 +52,11 @@ public enum RoleEnum {
 		}
 		return roles;
 	}
+
+	/**
+	 * Descrierea enum.
+	 */
+	private String description;
 
 	/**
 	 * @return Nombre del enum sin el prefijo "ROLE_"

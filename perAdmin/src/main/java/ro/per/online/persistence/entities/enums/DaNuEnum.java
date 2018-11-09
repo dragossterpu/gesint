@@ -29,11 +29,6 @@ public enum DaNuEnum {
 	YES(1);
 
 	/**
-	 * Descrierea enumului.
-	 */
-	private Integer descripcion;
-
-	/**
 	 * @return Returnează o listă cu descrierile enumelor.
 	 *
 	 */
@@ -44,6 +39,11 @@ public enum DaNuEnum {
 		}
 		return validari;
 	}
+
+	/**
+	 * Descrierea enumului.
+	 */
+	private Integer descripcion;
 
 	/**
 	 * @return Nombre del enum.

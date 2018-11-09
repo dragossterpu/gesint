@@ -2,7 +2,7 @@ package ro.per.online.constantes;
 
 /**
  * Clase de constantes.
- * @author Ezentis
+ * @author STAD
  *
  */
 public final class Constantes {

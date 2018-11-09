@@ -39,10 +39,11 @@ public enum SexEnum {
 	 */
 	UNSPECIFIED("Nespecificat");
 
-	/**
-	 * Descrierea enum.
-	 */
-	private String description;
+	private static final List<SexEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+
+	private static final int SIZE = VALUES.size();
+
+	private static final Random RANDOM = new Random();
 
 	/**
 	 * Recupera la lista de sex in aplicatie.
@@ -57,20 +58,19 @@ public enum SexEnum {
 		return sexs;
 	}
 
+	public static SexEnum randomLetter() {
+		return VALUES.get(RANDOM.nextInt(SIZE));
+	}
+
+	/**
+	 * Descrierea enum.
+	 */
+	private String description;
+
 	/**
 	 * @return Numele enum-ului "
 	 */
 	public String getName() {
 		return name();
-	}
-
-	private static final List<SexEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
-
-	private static final int SIZE = VALUES.size();
-
-	private static final Random RANDOM = new Random();
-
-	public static SexEnum randomLetter() {
-		return VALUES.get(RANDOM.nextInt(SIZE));
 	}
 }

@@ -15,6 +15,9 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
+	
+	
+	
 	/**
 	 * Activa el servlet por defecto.
 	 */
@@ -39,7 +42,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	 */
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
-		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+		final InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 		resolver.setPrefix("/acceso/");
 		resolver.setSuffix(".xhtml");
 		resolver.setOrder(1);

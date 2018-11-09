@@ -22,15 +22,6 @@ import com.sun.faces.config.FacesInitializer;
 public class ConfigureJSF {
 
 	/**
-	 * Metodo para facesServletRegistration.
-	 * @return JsfServletRegistrationBean
-	 */
-	@Bean
-	public ServletRegistrationBean facesServletRegistration() {
-		return new JsfServletRegistrationBean();
-	}
-
-	/**
 	 * Clase que hereda de org.springframework.boot.web.servlet.ServletRegistrationBean para poder sobreescribir el
 	 * método onStartup y definir el FacesInitializer de JSF.
 	 * @author ATOS
@@ -58,5 +49,14 @@ public class ConfigureJSF {
 			clazz.add(ConfigureJSF.class);
 			facesInitializer.onStartup(clazz, servletContext);
 		}
+	}
+
+	/**
+	 * Metodo para facesServletRegistration.
+	 * @return JsfServletRegistrationBean
+	 */
+	@Bean
+	public ServletRegistrationBean facesServletRegistration() {
+		return new JsfServletRegistrationBean();
 	}
 }

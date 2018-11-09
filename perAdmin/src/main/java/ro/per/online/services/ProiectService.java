@@ -16,19 +16,6 @@ import ro.per.online.web.beans.ProiectBusqueda;
 public interface ProiectService {
 
 	/**
-	 * Returneaza o lista cu toate proiectele.
-	 * @return List<Proiecte>
-	 */
-	List<Proiecte> findAll();
-
-	/**
-	 * Obtiene el conteo de criteria.
-	 * @param proiectBusqueda ProiectBusqueda
-	 * @return int
-	 */
-	int getCounCriteria(ProiectBusqueda proiectBusqueda);
-
-	/**
 	 * Busca proiecte con los parametros de búsqueda.
 	 * @param proiectBusqueda ProiectBusqueda
 	 * @param sortOrder SortOrder
@@ -49,6 +36,19 @@ public interface ProiectService {
 	 * @param proiect Proiecte
 	 */
 	void delete(Proiecte proiect);
+
+	/**
+	 * Returneaza o lista cu toate proiectele.
+	 * @return List<Proiecte>
+	 */
+	List<Proiecte> findAll();
+
+	/**
+	 * Obtiene el conteo de criteria.
+	 * @param proiectBusqueda ProiectBusqueda
+	 * @return int
+	 */
+	int getCounCriteria(ProiectBusqueda proiectBusqueda);
 
 	/**
 	 * Salvați sau actualizați un proiect.

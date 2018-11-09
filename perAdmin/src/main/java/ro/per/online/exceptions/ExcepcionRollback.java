@@ -14,20 +14,20 @@ public class ExcepcionRollback extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Excepción general sin parámetros.
+	 */
+
+	public ExcepcionRollback() {
+		super();
+	}
+
+	/**
 	 * Excepción general.
 	 * 
 	 * @param e Excepción
 	 */
 	public ExcepcionRollback(final Exception e) {
 		super(e);
-	}
-
-	/**
-	 * Excepción general sin parámetros.
-	 */
-
-	public ExcepcionRollback() {
-		super();
 	}
 
 	/**

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 /**
  * Manejador de errores de autenticación en el login.
  * 
- * @author EZENTIS
+ * @author STAD
  *
  */
 @Component

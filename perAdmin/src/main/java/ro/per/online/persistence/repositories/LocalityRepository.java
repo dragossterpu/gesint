@@ -13,6 +13,15 @@ import ro.per.online.persistence.entities.PProvince;
  */
 public interface LocalityRepository extends CrudRepository<PLocality, Long> {
 	/**
+	 * Comprueba si existe un municipio sabiendo su nombre y la provincia a la que pertenece.
+	 * 
+	 * @param name nombre del municipio.
+	 * @param provincia del municipio
+	 * @return existe?
+	 */
+	boolean existsByNameIgnoreCaseAndProvince(String name, PProvince provincia);
+
+	/**
 	 * Cauta toate localitatile unei provincii
 	 * @param Long id identificator de judet
 	 * @return lista de localitati.
@@ -26,13 +35,4 @@ public interface LocalityRepository extends CrudRepository<PLocality, Long> {
 	 * @return List<Localidad> Lista de localidades por provincia.
 	 */
 	List<PLocality> findByProvinceOrderByName(Long idProvincia);
-
-	/**
-	 * Comprueba si existe un municipio sabiendo su nombre y la provincia a la que pertenece.
-	 * 
-	 * @param name nombre del municipio.
-	 * @param provincia del municipio
-	 * @return existe?
-	 */
-	boolean existsByNameIgnoreCaseAndProvince(String name, PProvince provincia);
 }

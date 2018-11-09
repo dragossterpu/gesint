@@ -53,38 +53,6 @@ public class ProiectServiceImpl implements ProiectService {
 	private Session session;
 
 	/**
-	 * Devuelve todos los parametros de conexión al servidor de correo.
-	 * @return List<Propriedades>
-	 * @see net.atos.mira.elypse.bean.ApplicationBean.init(String)
-	 */
-	@Override
-	public List<Proiecte> findAll() {
-		return (List<Proiecte>) this.proiectRepository.findAll();
-	}
-
-	/**
-	 * Obtiene el conteo de criteria.
-	 * @param busqueda ProiectBusqueda
-	 * @return int
-	 */
-	@Override
-	public int getCounCriteria(final ProiectBusqueda busqueda) {
-		try {
-			this.session = this.sessionFactory.openSession();
-			final Criteria teria = this.session.createCriteria(Proiecte.class, "proiecte");
-			creaCriteria(busqueda, teria);
-			teria.setProjection(Projections.rowCount());
-			final Long cnt = (Long) teria.uniqueResult();
-
-			return Math.toIntExact(cnt);
-		}
-		finally {
-			closeSession();
-		}
-
-	}
-
-	/**
 	 * Busca usuarios con los parametros de búsqueda.
 	 * @param usuarioBusqueda UsuarioBusqueda
 	 * @param sortOrder SortOrder
@@ -101,8 +69,8 @@ public class ProiectServiceImpl implements ProiectService {
 	public List<Proiecte> buscarProiecteCriteria(final int first, final int pageSize, final String sortField,
 			final SortOrder sortOrder, final ProiectBusqueda proiectBusqueda) {
 		try {
-			this.session = this.sessionFactory.openSession();
-			final Criteria criteria = this.session.createCriteria(Proiecte.class, "proiecte");
+			session = sessionFactory.openSession();
+			final Criteria criteria = session.createCriteria(Proiecte.class, "proiecte");
 			criteria.setFirstResult(first);
 			criteria.setMaxResults(pageSize);
 			if (sortField != null) {
@@ -120,11 +88,26 @@ public class ProiectServiceImpl implements ProiectService {
 			creaCriteria(proiectBusqueda, criteria);
 
 			proiecteList = criteria.list();
-			this.session.close();
+			session.close();
 			return proiecteList;
 		}
 		finally {
 			closeSession();
+		}
+	}
+
+	/**
+	 * Manejo y cierre de la sesión.
+	 */
+	private void closeSession() {
+		if ((session != null) && session.isOpen()) {
+			try {
+				session.close();
+			}
+			catch (final DataAccessException e) {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+						"Error mesaj");
+			}
 		}
 	}
 
@@ -149,29 +132,14 @@ public class ProiectServiceImpl implements ProiectService {
 	 * @param criteria Criteria al que se añadirán los parámetros.
 	 * @param materiaIndexada materia indexada introducida en el filtro (separada por comas)
 	 */
-	private void criteriaMateriaIndexada(Criteria criteria, String materiaIndexada) {
+	private void criteriaMateriaIndexada(final Criteria criteria, final String materiaIndexada) {
 		if (materiaIndexada != null) {
-			String[] claves = materiaIndexada.split(",");
-			Criterion[] clavesOr = new Criterion[claves.length];
+			final String[] claves = materiaIndexada.split(",");
+			final Criterion[] clavesOr = new Criterion[claves.length];
 			for (int i = 0; i < claves.length; i++) {
 				clavesOr[i] = Restrictions.ilike("materiaIndexada", claves[i].trim(), MatchMode.ANYWHERE);
 			}
 			criteria.add(Restrictions.or(clavesOr));
-		}
-	}
-
-	/**
-	 * Manejo y cierre de la sesión.
-	 */
-	private void closeSession() {
-		if (this.session != null && this.session.isOpen()) {
-			try {
-				this.session.close();
-			}
-			catch (final DataAccessException e) {
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-						"Error mesaj");
-			}
 		}
 	}
 
@@ -182,7 +150,39 @@ public class ProiectServiceImpl implements ProiectService {
 	 */
 	@Override
 	public void delete(final Proiecte proiect) {
-		this.proiectRepository.delete(proiect);
+		proiectRepository.delete(proiect);
+	}
+
+	/**
+	 * Devuelve todos los parametros de conexión al servidor de correo.
+	 * @return List<Propriedades>
+	 * @see net.atos.mira.elypse.bean.ApplicationBean.init(String)
+	 */
+	@Override
+	public List<Proiecte> findAll() {
+		return (List<Proiecte>) proiectRepository.findAll();
+	}
+
+	/**
+	 * Obtiene el conteo de criteria.
+	 * @param busqueda ProiectBusqueda
+	 * @return int
+	 */
+	@Override
+	public int getCounCriteria(final ProiectBusqueda busqueda) {
+		try {
+			session = sessionFactory.openSession();
+			final Criteria teria = session.createCriteria(Proiecte.class, "proiecte");
+			creaCriteria(busqueda, teria);
+			teria.setProjection(Projections.rowCount());
+			final Long cnt = (Long) teria.uniqueResult();
+
+			return Math.toIntExact(cnt);
+		}
+		finally {
+			closeSession();
+		}
+
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class ProiectServiceImpl implements ProiectService {
 	 */
 	@Override
 	public Proiecte save(final Proiecte proiect) {
-		Proiecte proiectActualizado = proiectRepository.save(proiect);
+		final Proiecte proiectActualizado = proiectRepository.save(proiect);
 		return proiectActualizado;
 
 	}

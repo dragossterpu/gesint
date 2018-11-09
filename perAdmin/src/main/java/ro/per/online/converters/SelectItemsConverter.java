@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 /**
  * Componente que permite generar desplegables en formularios html donde las opciones están asociadas a objetos.
  * 
- * @author EZENTIS
+ * @author STAD
  */
 @Component("selectConverter")
 public class SelectItemsConverter implements Converter {
@@ -26,21 +26,6 @@ public class SelectItemsConverter implements Converter {
 	 */
 	@PersistenceContext
 	private EntityManager entityManagerFactory;
-
-	/**
-	 * Dado el objeto entity, devuelve el valor de su clave primera en cadena de texto.
-	 * 
-	 */
-	@Override
-	public String getAsString(final FacesContext context, final UIComponent component, final Object entity) {
-		String value = null;
-		if (entity != null && "".equals(entity) == Boolean.FALSE) {
-			final Object id = entityManagerFactory.getEntityManagerFactory().getPersistenceUnitUtil()
-					.getIdentifier(entity);
-			value = id.toString();
-		}
-		return value;
-	}
 
 	/**
 	 * Devuelve el objeto que corresponde al id de la entity recibido como parámetro en el submitedValue del combo.
@@ -72,6 +57,21 @@ public class SelectItemsConverter implements Converter {
 			entity = item;
 		}
 		return entity;
+	}
+
+	/**
+	 * Dado el objeto entity, devuelve el valor de su clave primera en cadena de texto.
+	 * 
+	 */
+	@Override
+	public String getAsString(final FacesContext context, final UIComponent component, final Object entity) {
+		String value = null;
+		if (entity != null && "".equals(entity) == Boolean.FALSE) {
+			final Object id = entityManagerFactory.getEntityManagerFactory().getPersistenceUnitUtil()
+					.getIdentifier(entity);
+			value = id.toString();
+		}
+		return value;
 	}
 
 }

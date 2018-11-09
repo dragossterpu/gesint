@@ -35,13 +35,13 @@ public class ProvinceServiceImpl implements ProvinceService {
 	}
 
 	@Override
-	public PProvince fiindOne(PProvince province) {
-		this.provinceRepository.findOne(province.getId());
+	public PProvince fiindOne(final PProvince province) {
+		provinceRepository.findOne(province.getId());
 		return province;
 	}
 
 	@Override
-	public PProvince findById(Long province) {
+	public PProvince findById(final Long province) {
 		return provinceRepository.findOne(province);
 	}
 

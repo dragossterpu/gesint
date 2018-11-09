@@ -34,6 +34,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final int MAXCONCURRENTUSERSESSIONS = 1;
 
 	/**
+	 * Controlar la sesión de un usuario. Trigger usado cuando un usuario cancela su sesión. Es necesario tenerlo
+	 * definido para poder validar las sesiones que tiene abiertas un usuario.
+	 * @return HttpSessionEventPublisher
+	 */
+	@Bean
+	public static HttpSessionEventPublisher httpSessionEventPublisher() {
+		return new HttpSessionEventPublisher();
+	}
+
+	/**
 	 * Implementación de UserDetailsService que necesita Spring Security.
 	 */
 	@Autowired
@@ -60,15 +70,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(loginService).passwordEncoder(passwordEncoder());
-	}
-
-	/**
-	 * Configuración de la codificación de la contraseña usando BCrypt.
-	 * @return PasswordEncoder
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
 	}
 
 	/**
@@ -111,20 +112,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	/**
+	 * Configuración de la codificación de la contraseña usando BCrypt.
+	 * @return PasswordEncoder
+	 */
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	/**
 	 * Usado por spring security para saber los usuarios (Principal) que han iniciado sesión.
 	 * @return SessionRegistry
 	 */
 	public SessionRegistry sessionRegistry() {
 		return new SessionRegistryImpl();
-	}
-
-	/**
-	 * Controlar la sesión de un usuario. Trigger usado cuando un usuario cancela su sesión. Es necesario tenerlo
-	 * definido para poder validar las sesiones que tiene abiertas un usuario.
-	 * @return HttpSessionEventPublisher
-	 */
-	@Bean
-	public static HttpSessionEventPublisher httpSessionEventPublisher() {
-		return new HttpSessionEventPublisher();
 	}
 }
