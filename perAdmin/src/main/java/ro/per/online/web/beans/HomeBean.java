@@ -9,7 +9,9 @@ import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -77,6 +79,8 @@ public class HomeBean implements Serializable {
 	 */
 	private Date fechaHasta;
 
+	private Map<String, Integer> listaUsuarios;
+
 	/**
 	 * Service de solicitudes.
 	 */
@@ -131,7 +135,7 @@ public class HomeBean implements Serializable {
 	 * @return
 	 */
 	private int calcularFecha(final UsuarioBusqueda usuarioBusqueda, int numar) {
-		List<Users> userList = new ArrayList();
+		List<Users> userList = new ArrayList<>();
 		final Date desde = RestarFechaMes(numar, "MONTHS");
 		if (numar != 1) {
 			final Date hasta = RestarFechaMes(numar - 1, "MONTHS");
@@ -168,7 +172,7 @@ public class HomeBean implements Serializable {
 	private Integer cargarUserUltimo(final Integer dias, Integer user, Date desde) {
 		final UsuarioBusqueda usuarioBusqueda = new UsuarioBusqueda();
 		desde = RestarFechaMes(dias, "DAYS");
-		List<Users> userList = new ArrayList();
+		List<Users> userList = new ArrayList<>();
 		usuarioBusqueda.setDateFrom(desde);
 		userList = userService.buscarUsuarioCriteria(usuarioBusqueda);
 		user = userList.size();
@@ -182,7 +186,7 @@ public class HomeBean implements Serializable {
 		final UsuarioBusqueda usuarioBusqueda = new UsuarioBusqueda();
 		desde = RestarFechaAn(dias, "YEARS");
 		hasta = SumarFechaMes(meses, "MONTHS");
-		List<Users> userList = new ArrayList();
+		List<Users> userList = new ArrayList<>();
 		usuarioBusqueda.setDateFrom(desde);
 		usuarioBusqueda.setDateUntil(hasta);
 		userList = userService.buscarUsuarioCriteria(usuarioBusqueda);
@@ -249,12 +253,19 @@ public class HomeBean implements Serializable {
 		createPieModel2();
 	}
 
+	private void cargaLista() {
+		listaUsuarios.put("Înregistrați în ultima lună:", userUltimaLuna);
+		listaUsuarios.put("Înregistrați în ultimele trei luni:", userUltimaTres);
+		listaUsuarios.put("Înregistrați în ultimele sase luni:", userUltimaSeis);
+		listaUsuarios.put("Înregistrați în ultimul an:", userUltimaDoce);
+	}
+
 	/**
 	 * Método inicializador del bean.
 	 */
 	@PostConstruct
 	public void init() {
-
+		this.listaUsuarios = new HashMap<>();
 		model = new DefaultDashboardModel();
 		final DashboardColumn column1 = new DefaultDashboardColumn();
 		column1.addWidget("estadisticas");
@@ -262,6 +273,7 @@ public class HomeBean implements Serializable {
 		model.addColumn(column1);
 		loadDatosMembriiNoi();
 		createPieModels();
+		cargaLista();
 		createHorizontalBarModel();
 		loadDatosMembriiNoiComp();
 		calculoFechasFiltro();

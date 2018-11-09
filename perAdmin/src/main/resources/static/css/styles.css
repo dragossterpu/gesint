@@ -1689,7 +1689,10 @@ div#menuSuperior>form {
 
 .ui-widget .ui-widget {
 	font-size: 1em;
-
+}
+.stats{
+	font-size: 1.1em;
+	width: 600px;
 }
 .ui-icon {
     display: block;

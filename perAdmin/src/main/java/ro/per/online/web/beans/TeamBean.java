@@ -278,9 +278,8 @@ public class TeamBean implements Serializable {
 		context.execute("PF('dlgOrdena').show();");
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	public void alta() {
-		for (int i = 0; i < 800; i++) {
+		for (int i = 0; i < 400; i++) {
 			Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
 			user.setEmail("proba@gmail.com");
@@ -288,7 +287,7 @@ public class TeamBean implements Serializable {
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
 			PersonalData pd = new PersonalData();
 			pd.setSex(SexEnum.randomLetter());
-			if (pd.getSex().equals("MAN")) {
+			if (pd.getSex().getName().equals("MAN")) {
 				user.setName(Generador.nombreFinalHombre());
 			}
 			else {
@@ -437,7 +436,7 @@ public class TeamBean implements Serializable {
 		this.photoSelected = null;
 		this.provinciaSelect = new PProvince();
 		provinciaSelect = user.getPersonalData().getProvince();
-		this.localidades = new ArrayList();
+		this.localidades = new ArrayList<>();
 		localidadesSelected = localityService.findByProvince(provinciaSelect);
 		this.provinces = provinceService.fiindAll();
 		return "/teams/modifyTeam?faces-redirect=true";

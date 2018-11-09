@@ -234,7 +234,7 @@ public class Generador {
 				"Dan", "Marin", "Cristian", "Viorel", "Iulian", "David", "Tudorel", "Darius", "Cornel", "Marius",
 				"Dan Andrei", "Tudor Cristial", "Denis", "Robert", "Sebastian", "Luca", "Luis", "David", "Ioan David",
 				"Rares", "Anghel", "Nicusor", "Tudor Adrian", "Cosmin" };
-		return nombres[1 + new Random().nextInt(50)];
+		return nombres[1 + new Random().nextInt(42)];
 
 	}
 

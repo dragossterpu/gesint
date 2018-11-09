@@ -23,37 +23,36 @@
 		            <h:panelGrid columns="2" cellpadding="10" >
  					<p:chart type="pie" id="grafica" model="#{homeBean.graficaUserUltimMembru}" style="width:400px;height:300px" />
 		             <p:chart type="bar" model="#{homeBean.horizontalBarModel}" style="width:600px;height:300px"/> 
-		               <div class="filtro">
-						<div class="bloqueFormulario">
-						  
-						  
-
-		                	<div class="ui-g campoBusqueda">
-								<div class="ui-g-12 ui-md-6 ui-lg-6">
-									<h:outputLabel for="userUltimaLuna"  styleClass="buscador" value="Înregistrați în ultima lună:" />
-									<p:inputText id="userUltimaLuna"  value="#{homeBean.userUltimaLuna}" />
-								</div>
-							</div>
-		                	<div class="ui-g campoBusqueda">
-								<div class="ui-g-12 ui-md-6 ui-lg-6">
-									<h:outputLabel for="userUltimaTres"  styleClass="buscador" value="Înregistrați în ultimele trei luni:" />
-									<p:inputText id="userUltimaTres"  value="#{homeBean.userUltimaTres}" />
-								</div>
-							</div>
-		                	<div class="ui-g campoBusqueda">
-								<div class="ui-g-12 ui-md-6 ui-lg-6">
-									<h:outputLabel for="userUltimaSeis"  styleClass="buscador" value="Înregistrați în ultimele sase luni:" />
-									<p:inputText id="userUltimaSeis"  value="#{homeBean.userUltimaSeis}" />
-								</div>
-							</div>
-							<div class="ui-g campoBusqueda">
-								<div class="ui-g-12 ui-md-6 ui-lg-6">
-									<h:outputLabel for="userUltimaDoce"  styleClass="buscador" value="Înregistrați în ultimul an:" />
-									<p:inputText id="userUltimaDoce"  value="#{homeBean.userUltimaDoce}" />
-								</div>
-							</div>
-		                </div>
-					</div>
+		               
+		               	<p:dataTable id="tablaTiposUsuarios" class = "stats" value="#{homeBean.listaUsuarios.entrySet().toArray()}" var="entry">				
+								<f:facet name="header">
+									<p:outputPanel>	
+										<div class = "right">
+										<h:commandLink rendered="#{not empty homeBean.listaUsuarios}">
+											<p:graphicImage value="/images/xls.png" />
+											<p:dataExporter type="xls" target="tablaTiposUsuarios" fileName="datosUsuarios" />
+										</h:commandLink>
+										<h:commandLink rendered="#{not empty homeBean.listaUsuarios}">
+											<p:graphicImage value="/images/pdf.png" />
+											<p:dataExporter type="pdf" target="tablaTiposUsuarios" fileName="datosUsuarios" />
+										</h:commandLink>
+										<h:commandLink rendered="#{not empty homeBean.listaUsuarios}">
+											<p:graphicImage value="/images/csv.png" />
+											<p:dataExporter type="csv" target="tablaTiposUsuarios" fileName="datosUsuarios" />
+										</h:commandLink>
+										</div>																																						
+										<span class="subtitulo">MEMBRII NOI INREGISTRATI IN ULTIMUL AN</span>														
+								</p:outputPanel>
+								</f:facet>												
+								<p:column headerText="Specificatie">													
+									 <strong><h:outputText value="#{entry.key}"/></strong>																																																					
+								</p:column>
+								<p:column headerText="Numar">
+									<strong><h:outputText value="#{entry.value}" /></strong>
+								</p:column>
+						</p:dataTable>
+		               
+ 
 		            </h:panelGrid>
 		        </p:tab>
 		        <p:tab title="Godfather Part II">
