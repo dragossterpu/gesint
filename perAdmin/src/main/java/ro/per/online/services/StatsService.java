@@ -11,41 +11,13 @@ import ro.per.online.web.beans.StatsBusqueda;
  *
  */
 public interface StatsService {
-	/**
-	 * Obtiene el modelo de datos totales.
-	 * @param statsBusqueda StatsBusqueda
-	 * @return ModelStats
-	 */
-
-	ModelStats getModeloDatosTotales(StatsBusqueda statsBusqueda);
 
 	/**
-	 * Obtiene el modelo de distribución de datos totales.
+	 * Obtiene el modelo de datos de las distintas categorias de sectores.
 	 * @param statsBusqueda StatsBusqueda
 	 * @return List<ModelStats>
 	 */
-	List<ModelStats> getModeloDistribucionDatosTotales(StatsBusqueda statsBusqueda);
-
-	/**
-	 * Obtiene el modelo de datos de usuarios.
-	 * @param statsBusqueda StatsBusqueda
-	 * @return List<ModelStats>
-	 */
-	List<ModelStats> getModeloDatosUsuarios(StatsBusqueda statsBusqueda);
-
-	/**
-	 * Obtiene el modelo de datos de evolución.
-	 * @param statsBusqueda StatsBusqueda
-	 * @return List<ModelStats>
-	 */
-	List<ModelStats> getModeloDatosEvolucion(StatsBusqueda statsBusqueda);
-
-	/**
-	 * Obtiene el modelo de datos de sectores.
-	 * @param statsBusqueda StatsBusqueda
-	 * @return List<ModelStats>
-	 */
-	List<ModelStats> getModeloDatosSectores(StatsBusqueda statsBusqueda);
+	List<ModelStats> getModeloDatosCategoriasSectores(StatsBusqueda statsBusqueda);
 
 	/**
 	 * Obtiene el modelo de datos de estados.
@@ -55,18 +27,18 @@ public interface StatsService {
 	List<ModelStats> getModeloDatosEstados(StatsBusqueda statsBusqueda);
 
 	/**
+	 * Obtiene el modelo de datos de evolución.
+	 * @param statsBusqueda StatsBusqueda
+	 * @return List<ModelStats>
+	 */
+	List<ModelStats> getModeloDatosEvolucion(StatsBusqueda statsBusqueda);
+
+	/**
 	 * Obtiene el modelo de datos de la modalidad de prevención.
 	 * @param statsBusqueda StatsBusqueda
 	 * @return List<ModelStats>
 	 */
 	List<ModelStats> getModeloDatosModalidadPrevencion(StatsBusqueda statsBusqueda);
-
-	/**
-	 * Obtiene el modelo de datos de las inscripciones al curso instruyet.
-	 * @param statsBusqueda StatsBusqueda
-	 * @return List<ModelStats>
-	 */
-	List<ModelStats> getModeloDistribucionInscripciones(StatsBusqueda statsBusqueda);
 
 	/**
 	 * Obtiene el modelo de datos del número de trabajadores de los formularios de evaluat.
@@ -76,9 +48,38 @@ public interface StatsService {
 	List<ModelStats> getModeloDatosNumeroTrabajadores(StatsBusqueda statsBusqueda);
 
 	/**
-	 * Obtiene el modelo de datos de las distintas categorias de sectores.
+	 * Obtiene el modelo de datos de sectores.
 	 * @param statsBusqueda StatsBusqueda
 	 * @return List<ModelStats>
 	 */
-	List<ModelStats> getModeloDatosCategoriasSectores(StatsBusqueda statsBusqueda);
+	List<ModelStats> getModeloDatosSectores(StatsBusqueda statsBusqueda);
+
+	/**
+	 * Obtiene el modelo de datos de usuarios.
+	 * @param statsBusqueda StatsBusqueda
+	 * @return List<ModelStats>
+	 */
+	List<ModelStats> getModeloDatosUsuarios(StatsBusqueda statsBusqueda);
+
+	/**
+	 * Obtiene el modelo de distribución de datos totales.
+	 * @param statsBusqueda StatsBusqueda
+	 * @return List<ModelStats>
+	 */
+	List<ModelStats> getModeloDistribucionDatosTotales(StatsBusqueda statsBusqueda);
+
+	/**
+	 * Obtiene el modelo de datos de las inscripciones al curso instruyet.
+	 * @param statsBusqueda StatsBusqueda
+	 * @return List<ModelStats>
+	 */
+	List<ModelStats> getModeloDistribucionInscripciones(StatsBusqueda statsBusqueda);
+
+	/**
+	 * @return
+	 *
+	 */
+	List<ModelStats> getUserByProvince(Long id);
+
+	List<ModelStats> getUserProvince();
 }

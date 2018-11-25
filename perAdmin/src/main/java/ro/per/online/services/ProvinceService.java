@@ -33,4 +33,11 @@ public interface ProvinceService {
 	 */
 	PProvince findById(Long province);
 
+	/**
+	 * @param descripción
+	 * @return PProvince provincia
+	 *
+	 */
+	PProvince findByName(String descripcion);
+
 }

@@ -17,26 +17,34 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
 import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.PieChartModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 
 import lombok.Getter;
 import lombok.Setter;
 import ro.per.online.constantes.Constantes;
+import ro.per.online.persistence.entities.ModelStats;
+import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.services.PropriedadService;
+import ro.per.online.services.ProvinceService;
+import ro.per.online.services.StatsService;
 import ro.per.online.services.UserService;
+import ro.per.online.util.FacesUtilities;
 
 /**
  * Bean para la página de Home .
@@ -117,6 +125,8 @@ public class HomeBean implements Serializable {
 
 	private HorizontalBarChartModel horizontalBarModel;
 
+	private HorizontalBarChartModel horizontalBarModelProvince;
+
 	private String content;
 
 	private String secondContent;
@@ -124,10 +134,88 @@ public class HomeBean implements Serializable {
 	private String color = "#33fc14";
 
 	/**
+	 * Cadena que identifica el grupo de datos activo del formulario de estadísticas.
+	 */
+	private String grupoDatosActivo;
+
+	/**
+	 * Mapa que contendrá los parámetros de la aplicación.
+	 */
+	private List<ModelStats> mapaUserProvince;
+
+	/**
+	 * Mapa que contendrá los parámetros de la aplicación.
+	 */
+	private List<ModelStats> mapaUserByProvince;
+
+	/**
 	 * Servicio de usuarios.
 	 */
 	@Autowired
 	private UserService userService;
+
+	/**
+	 * Servicio de statistica.
+	 */
+	@Autowired
+	private StatsService statService;
+
+	private BarChartModel barModel;
+
+	/**
+	 * Cadena que identifica la pestaña activa del formulario de estadísticas.
+	 */
+	private String pestaniaActiva;
+
+	/**
+	 * Variabila utilizata pentru a injecta serviciul provinciei.
+	 *
+	 */
+	@Autowired
+	private ProvinceService provinceService;
+
+	/**
+	 * Hace la búsqueda de un grupo de datos en función de la pestaña activa.
+	 */
+	private void buscarDatos() {
+		if (grupoDatosActivo.equals(Constantes.TABREZULTATE)) {
+			buscarDatosRezultate();
+		}
+		else if (grupoDatosActivo.equals(Constantes.TABORGANIZATII)) {
+			buscarDatosOrganizatii();
+		}
+		else {
+			buscarDatosUsuarios();
+		}
+
+	}
+
+	/**
+	 * Busca los datos de la pestaña de usuarios.
+	 */
+	private void buscarDatosOrganizatii() {
+		paramProvince();
+	}
+
+	/**
+	 * Busca los datos de la pestaña de usuarios.
+	 */
+	private void buscarDatosRezultate() {
+
+	}
+
+	/**
+	 * Busca los datos de la pestaña de usuarios.
+	 */
+	private void buscarDatosUsuarios() {
+		loadDatosMembriiNoi(null);
+		createPieModels();
+		cargaLista();
+		createHorizontalBarModel();
+		loadDatosMembriiNoiComp();
+		calculoFechasFiltro();
+		createBarModels();
+	}
 
 	/**
 	 * @param usuarioBusqueda
@@ -167,10 +255,50 @@ public class HomeBean implements Serializable {
 	}
 
 	/**
+	 * Evento para el control de cambio de grupo de datos.
+	 * @param event TabChangeEvent
+	 */
+	public void cambioGrupoDatos(final TabChangeEvent event) {
+		pestaniaActiva = event.getTab().getId();
+		buscarDatos();
+	}
+
+	/**
+	 * Evento para el control de cambio de pestaña de grupo de datos(Membrii noi, Organizatia sau Rezultate).
+	 * @param event TabChangeEvent
+	 */
+	public void cambioTipoEvaluacion(final TabChangeEvent event) {
+		if ("membrii_noi".equals(event.getTab().getId())) {
+			grupoDatosActivo = Constantes.TABMIEMBROSNUEVOS;
+			pestaniaActiva = Constantes.TOTALEMIEMBROSNUEVOS;
+		}
+		else if ("totales_organizatii".equals(event.getTab().getId())) {
+			grupoDatosActivo = Constantes.TABORGANIZATII;
+			pestaniaActiva = Constantes.TOTALESORGANIZATII;
+		}
+		else {
+			grupoDatosActivo = Constantes.TABREZULTATE;
+			pestaniaActiva = Constantes.TABREZULTATE;
+		}
+		buscarDatos();
+	}
+
+	private void cargaLista() {
+		listaUsuarios.put("Înregistrați în ultima lună:", userUltimaLuna);
+		listaUsuarios.put("Înregistrați în ultimele trei luni:", userUltimaTres);
+		listaUsuarios.put("Înregistrați în ultimele sase luni:", userUltimaSeis);
+		listaUsuarios.put("Înregistrați în ultimul an:", userUltimaDoce);
+	}
+
+	/**
 	 * Carga los datos de la evolución de registro de usuarios.
 	 */
-	private Integer cargarUserUltimo(final Integer dias, Integer user, Date desde) {
+	private Integer cargarUserUltimo(final Integer dias, Integer user, Date desde, final PProvince judetul) {
 		final UsuarioBusqueda usuarioBusqueda = new UsuarioBusqueda();
+		if (judetul != null) {
+			usuarioBusqueda.setIdProvincia(judetul.getId());
+		}
+		final LocalDate date = unidadTemoporalFechas("DAYS");
 		desde = RestarFechaMes(dias, "DAYS");
 		List<Users> userList = new ArrayList<>();
 		usuarioBusqueda.setDateFrom(desde);
@@ -182,16 +310,38 @@ public class HomeBean implements Serializable {
 	/**
 	 * Carga los datos de la evolución de registro de usuarios.
 	 */
-	private Integer cargarUserUltimoAño(final Integer dias, Integer user, Date desde, Date hasta, final Integer meses) {
+	private Integer cargarUserUltimoAño(final Integer mesesDesde, final Integer mesesHasta) {
 		final UsuarioBusqueda usuarioBusqueda = new UsuarioBusqueda();
-		desde = RestarFechaAn(dias, "YEARS");
-		hasta = SumarFechaMes(meses, "MONTHS");
-		List<Users> userList = new ArrayList<>();
-		usuarioBusqueda.setDateFrom(desde);
-		usuarioBusqueda.setDateUntil(hasta);
+		Integer numerUser = 0;
+		List<Users> userList;
+		fechasDesdeHastaResta(mesesDesde, mesesHasta, usuarioBusqueda);
 		userList = userService.buscarUsuarioCriteria(usuarioBusqueda);
-		user = userList.size();
-		return user;
+		numerUser = userList.size();
+		return numerUser;
+	}
+
+	private void createBarModel() {
+		barModel = initBarModel();
+
+		barModel.setTitle("Comparativă Prezent/Anul trecut");
+		barModel.setLegendPosition("w");
+
+		final Axis xAxis = barModel.getAxis(AxisType.X);
+		xAxis.setLabel("Periada");
+
+		final Axis yAxis = barModel.getAxis(AxisType.Y);
+		yAxis.setLabel("Membrii");
+		yAxis.setMin(0);
+		if (userUltimaDoceComp > userUltimaDoce) {
+			yAxis.setMax(userUltimaDoceComp + 20);
+		}
+		else {
+			yAxis.setMax(userUltimaDoce + 20);
+		}
+	}
+
+	private void createBarModels() {
+		createBarModel();
 	}
 
 	private void createHorizontalBarModel() {
@@ -231,6 +381,65 @@ public class HomeBean implements Serializable {
 		yAxis.setLabel("Membrii");
 	}
 
+	private void createHorizontalBarModel(final List<ModelStats> mapaUserProvince) {
+		final UsuarioBusqueda usuarioBusqueda = new UsuarioBusqueda();
+		horizontalBarModel = new HorizontalBarChartModel();
+		final ChartSeries boys = new ChartSeries();
+		boys.setLabel("Membrii noi");
+		Integer numar = 1;
+		if (numar == 1) {
+			usuarioBusqueda.setDateUntil(null);
+			numar = calcularFecha(usuarioBusqueda, numar);
+			boys.set("Ianuarie", numar);
+		}
+		boys.set("Februarie", calcularFecha(usuarioBusqueda, 2));
+		boys.set("Martie", calcularFecha(usuarioBusqueda, 3));
+		boys.set("Aprilie", calcularFecha(usuarioBusqueda, 4));
+		boys.set("Mai", calcularFecha(usuarioBusqueda, 5));
+		boys.set("Iunie", calcularFecha(usuarioBusqueda, 6));
+		boys.set("Iulie", calcularFecha(usuarioBusqueda, 7));
+		boys.set("August", calcularFecha(usuarioBusqueda, 8));
+		boys.set("Septembrie", calcularFecha(usuarioBusqueda, 9));
+		boys.set("Octombrie", calcularFecha(usuarioBusqueda, 10));
+		boys.set("Noiembrie", calcularFecha(usuarioBusqueda, 11));
+		boys.set("Decembrie", calcularFecha(usuarioBusqueda, 12));
+
+		horizontalBarModel.addSeries(boys);
+		horizontalBarModel.setTitle("Membrii noi înregistrați lunar");
+		horizontalBarModel.setLegendPosition("e");
+		horizontalBarModel.setStacked(true);
+
+		final Axis xAxis = horizontalBarModel.getAxis(AxisType.X);
+		xAxis.setLabel("Număr");
+		xAxis.setMin(0);
+		xAxis.setMax(200);
+
+		final Axis yAxis = horizontalBarModel.getAxis(AxisType.Y);
+		yAxis.setLabel("Membrii");
+	}
+
+	private void createHorizontalBarModelProvince(final List<ModelStats> mapaUserProvince) {
+		final ChartSeries boys = new ChartSeries();
+		horizontalBarModelProvince = new HorizontalBarChartModel();
+		boys.setLabel("Membrii noi");
+		final Long numarmaxim = mapaUserProvince.get(0).getCantidad() + 20;
+		final Integer numero = numarmaxim.intValue();
+		for (final ModelStats model : mapaUserProvince) {
+			boys.set(model.getDescripcion(), model.getCantidad().intValue());
+		}
+		horizontalBarModelProvince.addSeries(boys);
+		horizontalBarModelProvince.setTitle("Membrii noi înregistrați în organizații în ultimul an");
+		horizontalBarModelProvince.setLegendPosition("e");
+		horizontalBarModelProvince.setStacked(true);
+		final Axis xAxis = horizontalBarModelProvince.getAxis(AxisType.X);
+		xAxis.setLabel("Număr");
+		xAxis.setMin(0);
+		xAxis.setMax(numero);
+
+		final Axis yAxis = horizontalBarModelProvince.getAxis(AxisType.Y);
+		yAxis.setLabel("Organizația/Județ");
+	}
+
 	private void createPieModel2() {
 		graficaUserUltimMembru = new PieChartModel();
 
@@ -253,11 +462,19 @@ public class HomeBean implements Serializable {
 		createPieModel2();
 	}
 
-	private void cargaLista() {
-		listaUsuarios.put("Înregistrați în ultima lună:", userUltimaLuna);
-		listaUsuarios.put("Înregistrați în ultimele trei luni:", userUltimaTres);
-		listaUsuarios.put("Înregistrați în ultimele sase luni:", userUltimaSeis);
-		listaUsuarios.put("Înregistrați în ultimul an:", userUltimaDoce);
+	/**
+	 * @param mesesDesde
+	 * @param mesesHasta
+	 * @param usuarioBusqueda
+	 *
+	 */
+	private void fechasDesdeHastaResta(final Integer mesesDesde, final Integer mesesHasta,
+			final UsuarioBusqueda usuarioBusqueda) {
+		final Date desde = RestarFechaMes(mesesDesde, "MONTHS");
+		final Date hasta = RestarFechaMes(mesesHasta, "MONTHS");
+		final List<Users> userList = new ArrayList<>();
+		usuarioBusqueda.setDateFrom(desde);
+		usuarioBusqueda.setDateUntil(hasta);
 	}
 
 	/**
@@ -265,48 +482,70 @@ public class HomeBean implements Serializable {
 	 */
 	@PostConstruct
 	public void init() {
-		this.listaUsuarios = new HashMap<>();
+		listaUsuarios = new HashMap<>();
 		model = new DefaultDashboardModel();
 		final DashboardColumn column1 = new DefaultDashboardColumn();
 		column1.addWidget("estadisticas");
 		column1.addWidget("actividad");
 		model.addColumn(column1);
-		loadDatosMembriiNoi();
-		createPieModels();
-		cargaLista();
-		createHorizontalBarModel();
-		loadDatosMembriiNoiComp();
-		calculoFechasFiltro();
+		buscarDatosUsuarios();
+		buscarDatosOrganizatii();
+		pestaniaActiva = Constantes.TOTALEMIEMBROSNUEVOS;
+		grupoDatosActivo = Constantes.TOTALEMIEMBROSNUEVOS;
+	}
 
+	private BarChartModel initBarModel() {
+		final BarChartModel model = new BarChartModel();
+		final UsuarioBusqueda usuarioBusqueda = new UsuarioBusqueda();
+		final ChartSeries boys = new ChartSeries();
+		boys.setLabel("Membri anul în curs");
+		boys.set("Ultima lună", userUltimaLuna);
+		boys.set("Ultimele trei luni", userUltimaTres);
+		boys.set("Ultimele șase luni", userUltimaSeis);
+		boys.set("Ultimul an", userUltimaDoce);
+		final ChartSeries girls = new ChartSeries();
+		girls.setLabel("Membri anul trecut");
+		girls.set("Luna corespondiente a anului trecut", userUltimaLunaComp);
+		girls.set("Ultimele trei luni ale anului trecut", userUltimaTresComp);
+		girls.set("Ultimele șase luni ale anului trecut", userUltimaSeisComp);
+		girls.set("Anul trecut", userUltimaDoceComp);
+		model.addSeries(boys);
+		model.addSeries(girls);
+
+		return model;
 	}
 
 	/**
 	 * Cargar datos estadísticos.
 	 */
-	private void loadDatosMembriiNoi() {
+	private void loadDatosMembriiNoi(final PProvince id) {
 		userUltimaLuna = 0;
-		userUltimaLuna = cargarUserUltimo(30, userUltimaLuna, null);
+		userUltimaLuna = cargarUserUltimo(30, userUltimaLuna, null, id);
 		userUltimaTres = 0;
-		userUltimaTres = cargarUserUltimo(91, userUltimaTres, null);
+		userUltimaTres = cargarUserUltimo(91, userUltimaTres, null, id);
 		userUltimaSeis = 0;
-		userUltimaSeis = cargarUserUltimo(182, userUltimaTres, null);
+		userUltimaSeis = cargarUserUltimo(182, userUltimaTres, null, id);
 		userUltimaDoce = 0;
-		userUltimaDoce = cargarUserUltimo(365, userUltimaTres, null);
+		userUltimaDoce = cargarUserUltimo(365, userUltimaTres, null, id);
 	}
 
 	/**
 	 * Cargar datos estadísticos.
 	 */
 	private void loadDatosMembriiNoiComp() {
-		userUltimaLunaComp = 0;
-		userUltimaLunaComp = cargarUserUltimoAño(30, userUltimaLunaComp, null, null, 1);
-		userUltimaTresComp = 0;
-		userUltimaTresComp = cargarUserUltimoAño(61, userUltimaTresComp, null, null, 3);
-		userUltimaSeisComp = 0;
-		userUltimaSeisComp = cargarUserUltimoAño(182, userUltimaSeisComp, null, null, 6);
-		userUltimaDoceComp = 0;
-		userUltimaDoceComp = cargarUserUltimoAño(365, userUltimaDoceComp, null, null, 12);
+		userUltimaLunaComp = cargarUserUltimoAño(13, 12);
+		userUltimaTresComp = cargarUserUltimoAño(15, 12);
+		userUltimaSeisComp = cargarUserUltimoAño(18, 12);
+		userUltimaDoceComp = cargarUserUltimoAño(24, 12);
 
+	}
+
+	/**
+	 * Cargar datos estadísticos.
+	 */
+	private void paramProvince() {
+		mapaUserProvince = statService.getUserProvince();
+		createHorizontalBarModelProvince(mapaUserProvince);
 	}
 
 	public Date RestarFechaAn(final int sumaresta, final String opcion) {
@@ -315,14 +554,14 @@ public class HomeBean implements Serializable {
 		return Date.from(dateResultado.atStartOfDay(ZoneId.systemDefault()).toInstant());
 	}
 
-	public Date RestarFechaMes(final int sumaresta, final String opcion) {
+	public Date RestarFechaMes(final int suma, final String opcion) {
 		final LocalDate date = unidadTemoporalFechas(opcion);
-		final LocalDate dateResultado = date.minus(sumaresta, unidadTemporal);
+		final LocalDate dateResultado = date.minus(suma, unidadTemporal);
 		return Date.from(dateResultado.atStartOfDay(ZoneId.systemDefault()).toInstant());
 	}
 
 	public void saveListener() {
-		content = content.replaceAll("\\r|\\n", "");
+		content = content.replaceAll("|", "");
 
 		final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Content",
 				content.length() > 150 ? content.substring(0, 100) : content);
@@ -331,7 +570,7 @@ public class HomeBean implements Serializable {
 	}
 
 	public void secondSaveListener() {
-		secondContent = secondContent.replaceAll("\\r|\\n", "");
+		secondContent = secondContent.replaceAll("|", "");
 
 		final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Second Content",
 				secondContent.length() > 150 ? secondContent.substring(0, 100) : secondContent);
@@ -366,5 +605,24 @@ public class HomeBean implements Serializable {
 			// Controlar error
 		}
 		return date;
+	}
+
+	/**
+	 * Método para visualizar la relación.
+	 *
+	 * @param item ActividadFuenteDanioIcono
+	 * @return String
+	 */
+	public String visualizar(final String descripcion) {
+		try {
+			final PProvince provincia = provinceService.findByName(descripcion);
+			loadDatosMembriiNoi(provincia);
+			mapaUserByProvince = statService.getUserByProvince(provincia.getId());
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"A apărut o eroare la preluarea elementului, încercați din nou mai târziu");
+		}
+		return "/actividadFuenteIcono/nuevoActividadFuenteIcono?faces-redirect=true";
 	}
 }

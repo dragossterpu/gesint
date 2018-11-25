@@ -23,7 +23,7 @@ import ro.per.online.web.beans.StatsBusqueda;
 public class StatsServiceImpl implements StatsService, Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -39,43 +39,25 @@ public class StatsServiceImpl implements StatsService, Serializable {
 	private transient DataStatsProvider proveedorDatos;
 
 	/**
-	 * Inicializa el proveedor de datos especificado.
-	 */
-	private void initProveedorDatos() {
-		proveedorDatos = new QueryDataStatsProvider(entityManager);
-	}
-
-	/**
-	 * Obtiene el modelo de datos totales.
-	 * @param statsBusqueda StatsBusqueda
-	 * @return ModelStats
-	 */
-	@Override
-	public ModelStats getModeloDatosTotales(final StatsBusqueda statsBusqueda) {
-		initProveedorDatos();
-		return proveedorDatos.getModeloDatosTotales(statsBusqueda);
-	}
-
-	/**
-	 * Obtiene el modelo de distribución de datos totales.
+	 * Obtiene el modelo de datos de las distintas categorias de sectores.
 	 * @param statsBusqueda StatsBusqueda
 	 * @return List<ModelStats>
 	 */
 	@Override
-	public List<ModelStats> getModeloDistribucionDatosTotales(final StatsBusqueda statsBusqueda) {
+	public List<ModelStats> getModeloDatosCategoriasSectores(final StatsBusqueda statsBusqueda) {
 		initProveedorDatos();
-		return proveedorDatos.getModeloDistribucionDatosTotales(statsBusqueda);
+		return proveedorDatos.getModeloDatosCategoriasSectores(statsBusqueda);
 	}
 
 	/**
-	 * Obtiene el modelo de datos de usuarios.
+	 * Obtiene el modelo de datos de estados.
 	 * @param statsBusqueda StatsBusqueda
 	 * @return List<ModelStats>
 	 */
 	@Override
-	public List<ModelStats> getModeloDatosUsuarios(final StatsBusqueda statsBusqueda) {
+	public List<ModelStats> getModeloDatosEstados(final StatsBusqueda statsBusqueda) {
 		initProveedorDatos();
-		return proveedorDatos.getModeloDatosUsuarios(statsBusqueda);
+		return proveedorDatos.getModeloDatosEstados(statsBusqueda);
 	}
 
 	/**
@@ -90,47 +72,14 @@ public class StatsServiceImpl implements StatsService, Serializable {
 	}
 
 	/**
-	 * Obtiene el modelo de datos de sectores.
-	 * @param statsBusqueda StatsBusqueda
-	 * @return List<ModelStats>
-	 */
-	@Override
-	public List<ModelStats> getModeloDatosSectores(StatsBusqueda statsBusqueda) {
-		initProveedorDatos();
-		return proveedorDatos.getModeloDatosSectores(statsBusqueda);
-	}
-
-	/**
-	 * Obtiene el modelo de datos de estados.
-	 * @param statsBusqueda StatsBusqueda
-	 * @return List<ModelStats>
-	 */
-	@Override
-	public List<ModelStats> getModeloDatosEstados(StatsBusqueda statsBusqueda) {
-		initProveedorDatos();
-		return proveedorDatos.getModeloDatosEstados(statsBusqueda);
-	}
-
-	/**
 	 * Obtiene el modelo de datos de la modalidad de prevención.
 	 * @param statsBusqueda StatsBusqueda
 	 * @return List<ModelStats>
 	 */
 	@Override
-	public List<ModelStats> getModeloDatosModalidadPrevencion(StatsBusqueda statsBusqueda) {
+	public List<ModelStats> getModeloDatosModalidadPrevencion(final StatsBusqueda statsBusqueda) {
 		initProveedorDatos();
 		return proveedorDatos.getModeloDatosModalidadPrevencion(statsBusqueda);
-	}
-
-	/**
-	 * Obtiene el modelo de datos de las inscripciones al curso instruyet.
-	 * @param statsBusqueda StatsBusqueda
-	 * @return List<ModelStats>
-	 */
-	@Override
-	public List<ModelStats> getModeloDistribucionInscripciones(StatsBusqueda statsBusqueda) {
-		initProveedorDatos();
-		return proveedorDatos.getModeloDistribucionInscripciones(statsBusqueda);
 	}
 
 	/**
@@ -139,20 +88,72 @@ public class StatsServiceImpl implements StatsService, Serializable {
 	 * @return List<ModelStats>
 	 */
 	@Override
-	public List<ModelStats> getModeloDatosNumeroTrabajadores(StatsBusqueda statsBusqueda) {
+	public List<ModelStats> getModeloDatosNumeroTrabajadores(final StatsBusqueda statsBusqueda) {
 		initProveedorDatos();
 		return proveedorDatos.getModeloDatosNumeroTrabajadores(statsBusqueda);
 	}
 
 	/**
-	 * Obtiene el modelo de datos de las distintas categorias de sectores.
+	 * Obtiene el modelo de datos de sectores.
 	 * @param statsBusqueda StatsBusqueda
 	 * @return List<ModelStats>
 	 */
 	@Override
-	public List<ModelStats> getModeloDatosCategoriasSectores(StatsBusqueda statsBusqueda) {
+	public List<ModelStats> getModeloDatosSectores(final StatsBusqueda statsBusqueda) {
 		initProveedorDatos();
-		return proveedorDatos.getModeloDatosCategoriasSectores(statsBusqueda);
+		return proveedorDatos.getModeloDatosSectores(statsBusqueda);
+	}
+
+	/**
+	 * Obtiene el modelo de datos de usuarios.
+	 * @param statsBusqueda StatsBusqueda
+	 * @return List<ModelStats>
+	 */
+	@Override
+	public List<ModelStats> getModeloDatosUsuarios(final StatsBusqueda statsBusqueda) {
+		initProveedorDatos();
+		return proveedorDatos.getModeloDatosUsuarios(statsBusqueda);
+	}
+
+	/**
+	 * Obtiene el modelo de distribución de datos totales.
+	 * @param statsBusqueda StatsBusqueda
+	 * @return List<ModelStats>
+	 */
+	@Override
+	public List<ModelStats> getModeloDistribucionDatosTotales(final StatsBusqueda statsBusqueda) {
+		initProveedorDatos();
+		return proveedorDatos.getModeloDistribucionDatosTotales(statsBusqueda);
+	}
+
+	/**
+	 * Obtiene el modelo de datos de las inscripciones al curso instruyet.
+	 * @param statsBusqueda StatsBusqueda
+	 * @return List<ModelStats>
+	 */
+	@Override
+	public List<ModelStats> getModeloDistribucionInscripciones(final StatsBusqueda statsBusqueda) {
+		initProveedorDatos();
+		return proveedorDatos.getModeloDistribucionInscripciones(statsBusqueda);
+	}
+
+	@Override
+	public List<ModelStats> getUserByProvince(final Long id) {
+		initProveedorDatos();
+		return proveedorDatos.getUserByProvince(id);
+	}
+
+	@Override
+	public List<ModelStats> getUserProvince() {
+		initProveedorDatos();
+		return proveedorDatos.getUserProvince();
+	}
+
+	/**
+	 * Inicializa el proveedor de datos especificado.
+	 */
+	private void initProveedorDatos() {
+		proveedorDatos = new QueryDataStatsProvider(entityManager);
 	}
 
 }

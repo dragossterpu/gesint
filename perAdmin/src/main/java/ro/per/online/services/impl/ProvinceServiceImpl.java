@@ -45,4 +45,14 @@ public class ProvinceServiceImpl implements ProvinceService {
 		return provinceRepository.findOne(province);
 	}
 
+	/**
+	 * @param descripción
+	 * @see ro.per.online.services.ProvinceService#findByName(java.lang.String)
+	 * @retur provincia
+	 */
+	@Override
+	public PProvince findByName(final String descripcion) {
+		return provinceRepository.findByName(descripcion);
+	}
+
 }

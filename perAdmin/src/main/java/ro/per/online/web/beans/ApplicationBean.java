@@ -92,7 +92,7 @@ public class ApplicationBean implements Serializable {
 	 */
 	@PostConstruct
 	public void init() {
-		this.listaConfMail = new ArrayList();
+		this.listaConfMail = new ArrayList<>();
 		listaConfMail = propriedadService.findByFilename(MAIL);
 		listaExtensiones = propriedadService.findByFilename(EXT);
 		paramMail();

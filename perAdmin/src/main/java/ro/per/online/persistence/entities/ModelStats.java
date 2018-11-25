@@ -14,9 +14,14 @@ import lombok.Setter;
 @Setter
 public class ModelStats implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Descripción de ocurrencias.
+	 */
+	private String descripcion;
 
 	/**
 	 * Cantidad de ocurrencias.
@@ -24,7 +29,8 @@ public class ModelStats implements Serializable {
 	private Long cantidad;
 
 	/**
-	 * Descripción de ocurrencias.
+	 * Porcentaje.
 	 */
-	private String descripcion;
+	private Long porcentage;
+
 }

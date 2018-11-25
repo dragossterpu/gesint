@@ -80,7 +80,7 @@ public final class Constantes {
 	/**
 	 * Constante para las estadisticas totales de evaluat.
 	 */
-	public static final String TOTALESEVALUAT = "totales_evaluat";
+	public static final String TOTALEMIEMBROSNUEVOS = "membrii_noi";
 
 	/**
 	 * Constante para las estadisticas de usuarios de evaluat.
@@ -115,7 +115,7 @@ public final class Constantes {
 	/**
 	 * Constante para las estadisticas totales de autoprevent.
 	 */
-	public static final String TOTALESAUTOPREVENT = "totales_autoprevent";
+	public static final String TOTALESORGANIZATII = "totales_organizatii";
 
 	/**
 	 * Constante para las estadisticas de usuarios de autoprevent.
@@ -130,7 +130,7 @@ public final class Constantes {
 	/**
 	 * Constante para las estadisticas de usuarios.
 	 */
-	public static final String TABUSUARIOS = "agrupacion_usuarios";
+	public static final String TABMIEMBROSNUEVOS = "membrii_noi";
 
 	/**
 	 * Constante para las estadísticas de sectores de autoprevent.
@@ -155,7 +155,7 @@ public final class Constantes {
 	/**
 	 * Constante para el grupo de datos autoprevent de estadísticas.
 	 */
-	public static final String TABAUTOPREVENT = "agrupacion_autoprevent";
+	public static final String TABORGANIZATII = "organizatii";
 
 	/**
 	 * Limita el número de registros de actividad del usuario en la Home.
@@ -1320,7 +1320,7 @@ public final class Constantes {
 	/**
 	 * Pestaña de Instruye-t.
 	 */
-	public static final String TABINSTRUYET = "agrupacion_instruyet";
+	public static final String TABREZULTATE = "totales_rezultate";
 
 	/**
 	 * incidencia.

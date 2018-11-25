@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<p:panelGrid columns="4">
+												<h:outputText value="Desde: " styleClass="dialogLabel" />
+												<h:outputText
+													value="#{statsEvaluacionesBean.statsBusqueda.fechaDesde}">
+													<f:convertDateTime pattern="dd/MM/yyyy"
+														timeZone="Europe/Madrid" />
+												</h:outputText>
+												<h:outputText value="Hasta: " styleClass="dialogLabel" />
+												<h:outputText
+													value="#{statsEvaluacionesBean.statsBusqueda.fechaHasta}">
+													<f:convertDateTime pattern="dd/MM/yyyy"
+														timeZone="Europe/Madrid" />
+												</h:outputText>
+											</p:panelGrid>
+											<p:scrollPanel style="width:1300px;height:1000px">
+												<p:chart type="bar" id="graficoDatosSectores"
+													rendered="#{not empty statsEvaluacionesBean.modeloDatos}"
+													model="#{statsEvaluacionesBean.graficoDatosSectores}"
+													style="width:1300px;height:1000px">
+												</p:chart>
+											</p:scrollPanel>
+
+											<p:separator />
+											
+											<p:dataTable id="tablaSectores"
+												var="modelo"
+												value="#{statsEvaluacionesBean.modeloDatos}">
+											
+												<f:facet name="header">
+													<p:outputPanel>	
+														<div class = "right">
+															<h:commandLink
+																rendered="#{not empty statsEvaluacionesBean.modeloDatos}">
+																<p:graphicImage value="/images/xls.png" />
+																<p:dataExporter type="xls"
+																	target="tablaSectores"
+																	fileName="datosSectores" />
+															</h:commandLink>
+															<h:commandLink
+																rendered="#{not empty statsEvaluacionesBean.modeloDatos}">
+																<p:graphicImage value="/images/pdf.png" />
+																<p:dataExporter type="pdf"
+																	target="tablaSectores"
+																	fileName="datosSectores" />
+															</h:commandLink>
+															<h:commandLink
+																rendered="#{not empty statsEvaluacionesBean.modeloDatos}">
+																<p:graphicImage value="/images/csv.png" />
+																<p:dataExporter type="csv"
+																	target="tablaSectores"
+																	fileName="datosSectores" />
+															</h:commandLink>
+														</div>																																						
+														<span class="subtitulo">ACTIVIDADES DE EVALUACIONES USUARIOS</span>														
+													</p:outputPanel>
+												</f:facet>
+												
+												<p:column headerText="Desc.">													
+													<h:outputText value="#{modelo.descripcion}"/>																																																					
+												</p:column>
+												<p:column headerText="Cantidad">
+													<h:outputText value="#{modelo.cantidad}" />
+												</p:column>
+											</p:dataTable>
+
+											<p:dataTable id="tablaSectoresInvitados"
+												var="modelo"
+												value="#{statsEvaluacionesBean.modeloDatosInvitados}">
+											
+												<f:facet name="header">
+													<p:outputPanel>	
+														<div class = "right">
+															<h:commandLink
+																rendered="#{not empty statsEvaluacionesBean.modeloDatosInvitados}">
+																<p:graphicImage value="/images/xls.png" />
+																<p:dataExporter type="xls"
+																	target="tablaSectoresInvitados"
+																	fileName="datosSectoresInvitados" />
+															</h:commandLink>
+															<h:commandLink
+																rendered="#{not empty statsEvaluacionesBean.modeloDatosInvitados}">
+																<p:graphicImage value="/images/pdf.png" />
+																<p:dataExporter type="pdf"
+																	target="tablaSectoresInvitados"
+																	fileName="datosSectoresInvitados" />
+															</h:commandLink>
+															<h:commandLink
+																rendered="#{not empty statsEvaluacionesBean.modeloDatosInvitados}">
+																<p:graphicImage value="/images/csv.png" />
+																<p:dataExporter type="csv"
+																	target="tablaSectoresInvitados"
+																	fileName="datosSectoresInvitados" />
+															</h:commandLink>
+														</div>																																						
+														<span class="subtitulo">ACTIVIDADES DE EVALUACIONES INVITADOS</span>														
+													</p:outputPanel>
+												</f:facet>
+												
+												<p:column headerText="Desc.">													
+													<h:outputText value="#{modelo.descripcion}"/>																																																					
+												</p:column>
+												<p:column headerText="Cantidad">
+													<h:outputText value="#{modelo.cantidad}" />
+												</p:column>
+											</p:dataTable>	
+</ui:composition>

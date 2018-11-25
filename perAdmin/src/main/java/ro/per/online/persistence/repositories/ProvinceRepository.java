@@ -10,4 +10,12 @@ import ro.per.online.persistence.entities.PProvince;
  */
 public interface ProvinceRepository extends CrudRepository<PProvince, Long> {
 
+	/**
+	 * Cauta un judet dupa numele acestuia
+	 * @param descripcion
+	 * @return provincia
+	 *
+	 */
+	PProvince findByName(String descripcion);
+
 }

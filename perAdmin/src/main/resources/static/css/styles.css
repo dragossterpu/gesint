@@ -1713,3 +1713,49 @@ div#menuSuperior>form {
 .botonUsuarios{
     border-color: none;
 }
+#menuLateral {
+    width: 30%;
+    float: left;
+}
+
+#menuLateral form {
+    margin: 0;
+}
+#contentTabla {
+    width: 70%;
+    float: left;
+    height: auto;
+    padding: 10px 0 10px 10px;
+    box-sizing: border-box;
+}
+.tabActividades {
+	width: 600px;
+	font-size: 18px !important;
+	background: #fff !important;
+	border: none !important;
+	color: #000 !important;
+	margin: 5px 0px 0px !important;
+	text-align: center;
+}
+.tabMedidas {
+	width: 400px;
+	font-size: 14px !important;
+	margin: 0px 0px 5px !important;
+	background: white !important;
+	float: left;
+	text-align: center;
+}
+.char {
+	width: 40%;
+	font-size: 14px !important;
+	margin: 0px 0px 5px !important;
+	background: white !important;
+	float: right;
+	padding-bottom: 300px;
+}
+.charTable {
+	width: 30%;
+	font-size: 14px !important;
+	margin: 0px 0px 5px !important;
+	background: white !important;
+}

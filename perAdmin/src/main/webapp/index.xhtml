@@ -12,62 +12,57 @@
 		<ui:define name="title">Ecologistii</ui:define>
 		<ui:define name="content">	
 			<h:form id="formHome">
-				<h3>STATISTICĂ</h3>
-		    
-		  
-		    
+				<h3>STATISTICĂ</h3>	  
+		    <p:outputPanel layout="block" id="panelDatos">
 		    <p:tabView>
-		        <p:tab title="Membrii noi">
+		         <p:ajax event="tabChange"
+					listener="#{homeBean.cambioTipoEvaluacion}"
+					update="formHome:panelDatos"
+					onstart="PF('statusDialog').show()"
+					onsuccess="PF('statusDialog').hide()" />
+		        		<p:tab title="MEMBRII NOI" id="membrii_noi">	           		            
+		           		 <h:panelGrid columns="2" cellpadding="10" >					
+ 						<ui:include src="/plantillas/vistaGraficoUsuarios.xhtml"/>  
+		               </h:panelGrid>
+		              
+		            
+		        </p:tab>
+		        <p:tab title="ORGANIZAȚII/JUDEȚE" id="totales_organizatii">
+		           		<p:tabView>
+									<p:ajax event="tabChange"
+										listener="#{homeBean.cambioGrupoDatos}"
+										update="formHome:panelDatos"
+										onstart="PF('statusDialog').show()"
+										onsuccess="PF('statusDialog').hide()" />
+									<p:tab title="Total" id="totales_organizatii">
+										<p:panel
+											rendered="#{homeBean.pestaniaActiva == 'totales_organizatii'}">
+											<ui:include src="/plantillas/vistaGraficoTotales.xhtml"/>																							
+										</p:panel>
+									</p:tab>
+									<p:tab title="Evoluție" id="evolucion_organizatii">
+										<p:panel
+											rendered="#{homeBean.pestaniaActiva == 'evolucion_organizatii'}">																															
+<!-- 											<ui:include src="/plantillas/vistaGraficoEvolucion.xhtml"/>																																	 -->
+										</p:panel>
+									</p:tab>
+									<p:tab title="Activități" id="sectores_organizatii">
+										<p:panel
+											rendered="#{homeBean.pestaniaActiva == 'sectores_organizatii'}">
+<!-- 											<ui:include src="/plantillas/vistaGraficoActividades.xhtml"/>																							 -->
+										</p:panel>
+									</p:tab>									
+									<p:tab title="Rapoarte/Evaluări" id="estados_evaluat">
+										<p:panel
+											rendered="#{homeBean.pestaniaActiva == 'estados_evaluat'}">												
+<!-- 											<ui:include src="/plantillas/vistaGraficoEstado.xhtml"/>										 -->
+										</p:panel>
+									</p:tab>
+								</p:tabView>
+		 
 		           
-		 
-		            <h:panelGrid columns="2" cellpadding="10" >
- 					<p:chart type="pie" id="grafica" model="#{homeBean.graficaUserUltimMembru}" style="width:400px;height:300px" />
-		             <p:chart type="bar" model="#{homeBean.horizontalBarModel}" style="width:600px;height:300px"/> 
-		               
-		               	<p:dataTable id="tablaTiposUsuarios" class = "stats" value="#{homeBean.listaUsuarios.entrySet().toArray()}" var="entry">				
-								<f:facet name="header">
-									<p:outputPanel>	
-										<div class = "right">
-										<h:commandLink rendered="#{not empty homeBean.listaUsuarios}">
-											<p:graphicImage value="/images/xls.png" />
-											<p:dataExporter type="xls" target="tablaTiposUsuarios" fileName="datosUsuarios" />
-										</h:commandLink>
-										<h:commandLink rendered="#{not empty homeBean.listaUsuarios}">
-											<p:graphicImage value="/images/pdf.png" />
-											<p:dataExporter type="pdf" target="tablaTiposUsuarios" fileName="datosUsuarios" />
-										</h:commandLink>
-										<h:commandLink rendered="#{not empty homeBean.listaUsuarios}">
-											<p:graphicImage value="/images/csv.png" />
-											<p:dataExporter type="csv" target="tablaTiposUsuarios" fileName="datosUsuarios" />
-										</h:commandLink>
-										</div>																																						
-										<span class="subtitulo">MEMBRII NOI INREGISTRATI IN ULTIMUL AN</span>														
-								</p:outputPanel>
-								</f:facet>												
-								<p:column headerText="Specificatie">													
-									 <strong><h:outputText value="#{entry.key}"/></strong>																																																					
-								</p:column>
-								<p:column headerText="Numar">
-									<strong><h:outputText value="#{entry.value}" /></strong>
-								</p:column>
-						</p:dataTable>
-		               
- 
-		            </h:panelGrid>
 		        </p:tab>
-		        <p:tab title="Godfather Part II">
-		            <f:facet name="actions">
-		                <p:button value="Process" />
-		            </f:facet>
-		 
-		            <h:panelGrid columns="2" cellpadding="10">
-		                <p:graphicImage name="demo/images/godfather/godfather2.jpg" />
-		                <h:outputText value="Francis Ford Coppola's legendary continuation and sequel to his landmark 1972 film, The_Godfather, parallels the young Vito Corleone's rise with his son Michael's spiritual fall, deepening The_Godfather's depiction of the dark side of the American dream. 
-		                In the early 1900s, the child Vito flees his Sicilian village for America after the local Mafia kills his family. Vito struggles to make a living, legally or illegally, for his wife and growing brood in Little Italy, 
-		                killing the local Black Hand Fanucci after he demands his customary cut of the tyro's business. With Fanucci gone, Vito's communal stature grows." />
-		            </h:panelGrid>
-		        </p:tab>
-		        <p:tab title="Godfather Part III">
+		        <p:tab title="REZULTATE" id="totales_rezultate">
 		            <h:panelGrid columns="2" cellpadding="10">
 <!-- 		                <p:graphicImage name="demo/images/godfather/godfather3.jpg" /> -->
 		                <h:outputText value="After a break of more than 15 years, director Francis Ford Coppola and writer Mario Puzo returned to the well for this third and final story of the fictional Corleone crime family. 
@@ -75,13 +70,19 @@
 		            </h:panelGrid>
 		        </p:tab>
 		    </p:tabView>
-		</h:form>
-				
-				
-				
-				
-			
-					
+		    	</p:outputPanel>
+				<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"
+						closable="false" resizable="false" modal="true">
+						<p:messages for="dialogMessage" autoUpdate="true"
+							showDetail="true" showSummary="true" />
+						<p:commandButton value="Aceptar"
+							onclick="PF('dialogMessage').hide()" styleClass="right" />
+				</p:dialog>
+				<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+					closable="false" resizable="false" showHeader="false">
+					<p:graphicImage value="/images/loading.gif" />
+				</p:dialog>
+		</h:form>		
 		</ui:define>
 	</ui:composition>
 </f:view>
