@@ -1,6 +1,7 @@
 package ro.per.online.services.impl;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Throwables;
 
@@ -64,6 +66,12 @@ public class RegistroActividadServiceImpl implements RegistroActividadService, S
 	private transient SessionFactory sessionFactory;
 
 	/**
+	 * Componente de utilidades.
+	 */
+	@Autowired
+	private Utilities utilities;
+
+	/**
 	 * Constructor usado para el test.
 	 *
 	 * @param sessionFact Factoría de sesiones
@@ -83,7 +91,7 @@ public class RegistroActividadServiceImpl implements RegistroActividadService, S
 			final Users usuario) {
 		try {
 			final RegistroActividad registroActividad = new RegistroActividad();
-			registroActividad.setTipoRegActividad(Enum.valueOf(RegistroEnum.class, tipoReg));
+			registroActividad.setTipoRegActividad(tipoReg);
 			establecerUsuarioRegistro(registroActividad, usuario);
 			registroActividad.setFechaAlta(new Date());
 			registroActividad.setNombreSeccion(Enum.valueOf(SeccionesEnum.class, seccion));
@@ -318,4 +326,36 @@ public class RegistroActividadServiceImpl implements RegistroActividadService, S
 		regActividadRepository.save(entity);
 	}
 
+	/**
+	 * Guarda en el registro de actividad el error que se ha producido.
+	 * @param seccion Dónde se produce el error
+	 * @param excep excepción lanzada
+	 */
+	@Override
+	public void registrarError(final SeccionesEnum seccion, final Exception excep) {
+		final StringWriter swriter = new StringWriter();
+		registrarActividad(seccion, "EROARE", swriter.toString());
+	}
+
+	/**
+	 * Guarda en base de datos una entidad RegistroActividad.
+	 * @param seccion Sección en la que se produce la actividad
+	 * @param tipo Tipo de actividad a registrar
+	 * @param descripcion Descripción de la actividad
+	 */
+	@Override
+	@Transactional
+	public void registrarActividad(final SeccionesEnum seccion, final String tipo, final String descripcion) {
+		final RegistroActividad registroActividad = new RegistroActividad();
+		registroActividad.setTipoRegActividad(tipo);
+		if (SecurityContextHolder.getContext().getAuthentication() == null) {
+			registroActividad.setUsernameRegActividad("system");
+		}
+		else {
+			registroActividad.setUsernameRegActividad(utilities.getUsuarioLogado().getUsername());
+		}
+		registroActividad.setNombreSeccion(seccion);
+		registroActividad.setDescripcion(descripcion);
+		regActividadRepository.save(registroActividad);
+	}
 }

@@ -1,0 +1,100 @@
+<!-- Formulario para la fórmula cactiloscópica: -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <h2>Fórmula dactiloscópica</h2>
+    <p:panelGrid columns="10" layout="grid" styleClass="panelGridSinBorde" id="formulaDactiloscopica">
+        <p:importEnum type="es.mira.pdyrh.modelo.enums.DactilPulgarEnum" var="valoresFormulaPulgar" allSuffix="ALL_ENUM_VALUES" />
+        <p:importEnum type="es.mira.pdyrh.modelo.enums.DactilDedoEnum" var="valoresFormulaDedo" allSuffix="ALL_ENUM_VALUES" />
+
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde formulaDactiloscopica">
+            <p:outputLabel for="selectDedo1" value="Dedo 1" />
+            <p:selectOneMenu value="#{objeto.dedo1}" id="selectDedo1">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaPulgar.ALL_ENUM_VALUES}" var="formulaDedo1" itemLabel="#{formulaDedo1.nombre}"
+                    itemValue="#{formulaDedo1.valor}" />
+            </p:selectOneMenu>
+
+        </p:panelGrid>
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde">
+            <p:outputLabel for="selectDedo2" value="Dedo 2" />
+            <p:selectOneMenu value="#{objeto.dedo2}" id="selectDedo2" styleClass="formulaDactiloscopica">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaDedo.ALL_ENUM_VALUES}" var="formulaDedo2" itemLabel="#{formulaDedo2.nombre}"
+                    itemValue="#{formulaDedo2.valor}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde">
+            <p:outputLabel for="selectDedo3" value="Dedo 3" />
+            <p:selectOneMenu value="#{objeto.dedo3}" id="selectDedo3">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaDedo.ALL_ENUM_VALUES}" var="formulaDedo3" itemLabel="#{formulaDedo3.nombre}"
+                    itemValue="#{formulaDedo3.valor}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde">
+            <p:outputLabel for="selectDedo4" value="Dedo 4" />
+            <p:selectOneMenu value="#{objeto.dedo4}" id="selectDedo4">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaDedo.ALL_ENUM_VALUES}" var="formulaDedo4" itemLabel="#{formulaDedo4.nombre}"
+                    itemValue="#{formulaDedo4.valor}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde">
+            <p:outputLabel for="selectDedo5" value="Dedo 5" />
+            <p:selectOneMenu value="#{objeto.dedo5}" id="selectDedo5">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaDedo.ALL_ENUM_VALUES}" var="formulaDedo5" itemLabel="#{formulaDedo5.nombre}"
+                    itemValue="#{formulaDedo5.valor}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde">
+            <p:outputLabel for="selectDedo6" value="Dedo 6" />
+            <p:selectOneMenu value="#{objeto.dedo6}" id="selectDedo6">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaPulgar.ALL_ENUM_VALUES}" var="formulaDedo6" itemLabel="#{formulaDedo6.nombre}"
+                    itemValue="#{formulaDedo6.valor}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde">
+            <p:outputLabel for="selectDedo7" value="Dedo 7" />
+            <p:selectOneMenu value="#{objeto.dedo7}" id="selectDedo7">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaDedo.ALL_ENUM_VALUES}" var="formulaDedo7" itemLabel="#{formulaDedo7.nombre}"
+                    itemValue="#{formulaDedo7.valor}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde">
+            <p:outputLabel for="selectDedo8" value="Dedo 8" />
+            <p:selectOneMenu value="#{objeto.dedo8}" id="selectDedo8">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaDedo.ALL_ENUM_VALUES}" var="formulaDedo8" itemLabel="#{formulaDedo8.nombre}"
+                    itemValue="#{formulaDedo8.valor}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde">
+            <p:outputLabel for="selectDedo9" value="Dedo 9" />
+            <p:selectOneMenu value="#{objeto.dedo9}" id="selectDedo9">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaDedo.ALL_ENUM_VALUES}" var="formulaDedo9" itemLabel="#{formulaDedo9.nombre}"
+                    itemValue="#{formulaDedo9.valor}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:panelGrid columns="1" layout="grid" styleClass="panelGridSinBorde">
+            <p:outputLabel for="selectDedo10" value="Dedo 10" />
+            <p:selectOneMenu value="#{objeto.dedo10}" id="selectDedo10">
+                <f:selectItem itemLabel="--" itemValue="" />
+                <f:selectItems value="#{valoresFormulaDedo.ALL_ENUM_VALUES}" var="formulaDedo10" itemLabel="#{formulaDedo10.nombre}"
+                    itemValue="#{formulaDedo10.valor}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+
+
+    </p:panelGrid>
+
+
+
+
+
+</ui:composition>

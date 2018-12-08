@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -35,6 +37,8 @@ import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.PersonalData;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.enums.AlertChannelEnum;
+import ro.per.online.persistence.entities.enums.EducationEnum;
 import ro.per.online.persistence.entities.enums.TypeLocalityEnum;
 import ro.per.online.services.LocalityService;
 import ro.per.online.services.ProvinceService;
@@ -45,7 +49,7 @@ import ro.per.online.util.Utilities;
 /**
  * Controlor de operațiuni legate de gestionarea utilizatorilor. Înregistrarea utilizatorilor, modificarea
  * utilizatorilor, ștergerea utilizatorilor, căutarea utilizatorilor, parola de căutare și restaurare.
- * 
+ *
  * @author STAD
  */
 
@@ -56,7 +60,7 @@ import ro.per.online.util.Utilities;
 
 public class UserBean implements Serializable {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -108,14 +112,14 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
-	 * 
+	 *
 	 */
 	@Autowired
 	private ProvinceService provinceService;
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul localitatilor.
-	 * 
+	 *
 	 */
 	@Autowired
 	private LocalityService localityService;
@@ -141,6 +145,11 @@ public class UserBean implements Serializable {
 	private Users usuario;
 
 	/**
+	 * Educatie
+	 */
+	private EducationEnum education;
+
+	/**
 	 * Encriptador de palabras clave.
 	 */
 	@Autowired
@@ -153,13 +162,13 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Variable utilizada para almacenar el contexto actual.
-	 * 
+	 *
 	 */
 	private PProvince grupoLocalidadesSelected;
 
 	/**
 	 * Variable utilizada para almacenar el contexto actual.
-	 * 
+	 *
 	 */
 	private TypeLocalityEnum tipLocalidadSelected;
 
@@ -172,6 +181,12 @@ public class UserBean implements Serializable {
 	 * Fotoografia utilizator.
 	 */
 	private byte[] photoSelected;
+
+	private Long idProvincia;
+
+	private Long idLocalidad;
+
+	private Date currentDate;
 
 	/**
 	 * Returnează o listă a localităților care aparțin unui judet. Acesta este folosit pentru a reîncărca lista
@@ -207,8 +222,8 @@ public class UserBean implements Serializable {
 	 */
 	private boolean buscarUsuarioPorNif() {
 		Boolean resultado = true;
-		final Users use = this.userService.findByIdCard(this.usuario.getPersonalData().getIdCard());
-		if (use != null && !use.getPersonalData().getIdCard().equals(this.usuario.getPersonalData().getIdCard())) {
+		final Users use = this.userService.findByIdCard(this.usuario.getIdCard());
+		if (use != null && !use.getIdCard().equals(this.usuario.getIdCard())) {
 			resultado = false;
 		}
 		return resultado;
@@ -218,13 +233,13 @@ public class UserBean implements Serializable {
 	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
 	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
 	 * corresponde a la realidad.
-	 * 
+	 *
 	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
 	 * @throws IOException
 	 */
-	public void cargaImagen(FileUploadEvent event) throws IOException {
+	public void cargaImagen(final FileUploadEvent event) throws IOException {
 
-		UploadedFile uFile = event.getFile();
+		final UploadedFile uFile = event.getFile();
 		this.usuario = userService.cargaImagenSinGuardar(IOUtils.toByteArray(uFile.getInputstream()), usuario);
 		nombreDoc = uFile.getFileName();
 	}
@@ -239,21 +254,21 @@ public class UserBean implements Serializable {
 	private void cargarDatosPersonaleUser(final PProvince provincia, final PLocality nuevaLocalidad,
 			final Users usuario) {
 		final PersonalData pd = new PersonalData();
-		pd.setAddress(usuario.getPersonalData().getAddress());
-		pd.setBirthDate(usuario.getPersonalData().getBirthDate());
-		pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
-		pd.setEducation(usuario.getPersonalData().getEducation());
-		pd.setIdCard(usuario.getPersonalData().getIdCard());
-		pd.setLocality(nuevaLocalidad);
-		pd.setNumberCard(usuario.getPersonalData().getNumberCard());
-		pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
-		pd.setPhone(usuario.getPersonalData().getPhone());
-		pd.setPhoto(usuario.getPersonalData().getPhoto());
-		pd.setProvince(provincia);
-		pd.setSex(usuario.getPersonalData().getSex());
-		pd.setValidated(usuario.getPersonalData().getValidated());
-		pd.setWorkplace(usuario.getPersonalData().getWorkplace());
-		usuario.setPersonalData(pd);
+		// pd.setAddress(usuario.getPersonalData().getAddress());
+		// pd.setBirthDate(usuario.getPersonalData().getBirthDate());
+		// pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
+		// pd.setEducation(usuario.getPersonalData().getEducation());
+		// pd.setIdCard(usuario.getPersonalData().getIdCard());
+		usuario.setLocality(nuevaLocalidad);
+		// pd.setNumberCard(usuario.getPersonalData().getNumberCard());
+		// pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
+		// pd.setPhone(usuario.getPersonalData().getPhone());
+		// pd.setPhoto(usuario.getPersonalData().getPhoto());
+		usuario.setProvince(provincia);
+		// pd.setSex(usuario.getPersonalData().getSex());
+		// pd.setValidated(usuario.getPersonalData().getValidated());
+		// pd.setWorkplace(usuario.getPersonalData().getWorkplace());
+		// usuario.setPersonalData(pd);
 	}
 
 	/**
@@ -266,7 +281,7 @@ public class UserBean implements Serializable {
 		try {
 			userService.delete(usuario);
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 					Constantes.ERRORMENSAJE);
 		}
@@ -274,19 +289,30 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Metodă care ne duce la formularul de înregistrare a utilizatorilor noi, inițializând tot ceea ce este necesar
-	 * pentru afișarea corectă a paginii (enums, utilizator nou,..etc). Seapeleaza din pagina căutare utilizator.
-	 * 
+	 * pentru afișarea corectă a paginii (enums, utilizator nou,..etc). Se apeleaza din pagina căutare utilizator.
+	 *
 	 * @return url-ul páginii de inregistrare utilizator
 	 */
 	public String getFormAltaUsuario() {
-		user = new Users();
-		return "/users/registerUser?faces-redirect=true";
+		this.usuario = new Users();
+		this.photoSelected = null;
+		this.provinciaSelect = new PProvince();
+		this.localidadSelected = new PLocality();
+		this.localidades = new ArrayList();
+		this.idLocalidad = null;
+		this.idProvincia = null;
+		this.provinces = provinceService.fiindAll();
+		// Minor de varsta
+		final Calendar date = Calendar.getInstance();
+		date.add(Calendar.YEAR, -18);
+		this.currentDate = date.getTime();
+		return "/users/altaUser.xhtml?faces-redirect=true";
 	}
 
 	/**
 	 * Transmite datele utilizatorului pe care dorim să le modificăm în formular, astfel încât acestea să schimbe
 	 * valorile pe care le doresc.
-	 * 
+	 *
 	 * @param usuario Utilizator recuperat din formularul de căutare al utilizatorului
 	 * @return URL-ul paginii de modificare a utilizatorului
 	 */
@@ -295,8 +321,10 @@ public class UserBean implements Serializable {
 		this.photoSelected = null;
 		this.provinciaSelect = new PProvince();
 		this.localidadSelected = new PLocality();
-		provinciaSelect = usua.getPersonalData().getProvince();
+		provinciaSelect = usua.getProvince();
 		this.localidades = new ArrayList();
+		this.idLocalidad = null;
+		this.idProvincia = null;
 		localidadesSelected = localityService.findByProvince(provinciaSelect);
 		this.provinces = provinceService.fiindAll();
 		return "/users/modifyUser?faces-redirect=true";
@@ -323,11 +351,11 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Afișează profilul utilizatorului
-	 * 
+	 *
 	 * @return URL-ul paginii unde se vede profilul utilizatorului.
 	 */
 	public String getUserPerfil() {
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		final String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		user = userService.fiindOne(username);
 		return "/principal/miPerfil?faces-redirect=true";
 	}
@@ -359,7 +387,7 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Șterge rezultatele căutărilor anterioare.
-	 * 
+	 *
 	 */
 	public void limpiarBusqueda() {
 		userBusqueda = new UsuarioBusqueda();
@@ -368,7 +396,7 @@ public class UserBean implements Serializable {
 	}
 
 	/**
-	 * Guardar cambios del usuario.
+	 * Salvați modificările utilizatorului
 	 * @param usu User
 	 */
 	public void modificarUsuario(final Users usu) {
@@ -377,23 +405,41 @@ public class UserBean implements Serializable {
 
 			if (validar()) {
 				final PersonalData pd = new PersonalData();
-				pd.setAddress(usuario.getPersonalData().getAddress());
-				pd.setBirthDate(usuario.getPersonalData().getBirthDate());
-				pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
-				pd.setEducation(usuario.getPersonalData().getEducation());
-				pd.setIdCard(usuario.getPersonalData().getIdCard());
-				pd.setLocality(localidadesSelected.get(0));
-				pd.setNumberCard(usuario.getPersonalData().getNumberCard());
-				pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
-				pd.setPhone(usuario.getPersonalData().getPhone());
-				pd.setPhoto(usuario.getPersonalData().getPhoto());
-				pd.setProvince(usuario.getPersonalData().getProvince());
-				pd.setSex(usuario.getPersonalData().getSex());
-				pd.setValidated(usuario.getPersonalData().getValidated());
-				pd.setWorkplace(usuario.getPersonalData().getWorkplace());
+				usuario.setLocality(localidadesSelected.get(0));
 				userService.save(usuario);
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
-						"Se ha modificado corectamente el usuario");
+						"Utilizatorul a fost modificat corect");
+			}
+			else {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
+						this.mensajeError);
+			}
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
+					"A apărut o eroare");
+		}
+	}
+
+	/**
+	 * Inregistratrea utilizatorului.
+	 * @param usu User
+	 */
+	public void altaUsuario(final Users usu) {
+		try {
+			this.usuario = usu;
+
+			if (validar()) {
+				final PersonalData pd = new PersonalData();
+				usuario.setLocality(localityService.findById(idLocalidad));
+				usuario.setEmail(usuario.getUsername());
+				usuario.setValidated(true);
+				usuario.setProvince(provinceService.findById(idProvincia));
+				usuario.setAlertChannel(AlertChannelEnum.EMAIL);
+				usuario.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
+				userService.save(usuario);
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
+						"Utilizatorul a fost înregistrat corect");
 			}
 			else {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
@@ -418,13 +464,13 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Guarda un nuevo municipio.
-	 * 
+	 *
 	 * @param nombre del municipio nuevo
 	 * @param provincia a la que se asocia el nuevo municipio
 	 */
 	public void nuevoMunicipio(final String nombre, final PProvince provincia, final TypeLocalityEnum tipLoclalitate,
 			final Users usuario) {
-		boolean existeLocalidad = localityService.existeByNameIgnoreCaseAndProvincia(nombre.trim(), provincia);
+		final boolean existeLocalidad = localityService.existeByNameIgnoreCaseAndProvincia(nombre.trim(), provincia);
 		this.tipLocalidadSelected = null;
 		tipLocalidadSelected = tipLoclalitate;
 		if (existeLocalidad) {
@@ -442,7 +488,7 @@ public class UserBean implements Serializable {
 				cargarDatosPersonaleUser(provincia, nuevaLocalidad, usuario);
 				userService.save(usuario);
 			}
-			catch (DataAccessException e) {
+			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
 						"Eroare în salvarea localității. Încercați din nou mai târziu.", null, "inputNombre");
 			}
@@ -451,7 +497,7 @@ public class UserBean implements Serializable {
 
 	/**
 	 * Activați / dezactivați vizibilitatea coloanelor din tabelul cu rezultate.
-	 * 
+	 *
 	 * @param e checkbox al coloanei selectate
 	 */
 	public void onToggle(final ToggleEvent e) {
@@ -506,8 +552,7 @@ public class UserBean implements Serializable {
 	 */
 	private boolean validarNifUnico() {
 		boolean resultado = true;
-		if (!StringUtils.isEmpty(this.usuario.getPersonalData().getIdCard())
-				&& this.usuario.getPersonalData().getIdCard() != null) {
+		if (!StringUtils.isEmpty(this.usuario.getIdCard()) && this.usuario.getIdCard() != null) {
 			try {
 				resultado = buscarUsuarioPorNif();
 			}

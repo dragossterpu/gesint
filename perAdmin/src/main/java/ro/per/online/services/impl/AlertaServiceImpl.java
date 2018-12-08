@@ -39,7 +39,7 @@ import ro.per.online.web.beans.AlertaBusqueda;
 public class AlertaServiceImpl implements AlertaService, Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -167,15 +167,15 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 		alertaLocal.setUsuario(usuario);
 		// ENVIAMOS MAIL SI PROCEDE
 
-		if (usuario.getPersonalData().getAlertChannel().equals(AlertChannelEnum.EMAIL)) {
+		if (usuario.getAlertChannel().equals(AlertChannelEnum.EMAIL)) {
 			alertaLocal.setDestinatario(usuario.getUsername());
 			mailAlertaSender.send(alertaLocal, usuario);
 		}
 
 		// ENVIAMOS SMS SI PROCEDE
-		if (usuario.getPersonalData().getAlertChannel().equals(AlertChannelEnum.EMAIL_SMS)
-				|| usuario.getPersonalData().getAlertChannel().equals(AlertChannelEnum.SMS)) {
-			alertaLocal.setDestinatario(usuario.getPersonalData().getPhone());
+		if (usuario.getAlertChannel().equals(AlertChannelEnum.EMAIL_SMS)
+				|| usuario.getAlertChannel().equals(AlertChannelEnum.SMS)) {
+			alertaLocal.setDestinatario(usuario.getPhone());
 		}
 
 		if (usuario.getUsername() == null) {

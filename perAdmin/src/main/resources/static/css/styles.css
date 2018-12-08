@@ -23,6 +23,7 @@ label:before {
 .aclaraciones {
     padding: 10px;
     font-style: italic;
+    color: #ff0000;
 }
 
 .bloqueVista {

@@ -1,0 +1,334 @@
+<ui:composition template="../layouts/layoutInterior.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+			<h:form id="form" enctype="multipart/form-data">
+				<div class="bloqueFormulario">
+					<p:panel header="Membru" styleClass="panelModCard">
+						<p:panelGrid>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="nombre" value="*Nume:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="nombre" value="#{userBean.user.name}"
+										required="true"
+										requiredMessage="Introduceți un nume pentru membru" />
+									<p:message for="nombre" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="lastName" value="*Nume:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="lastName" value="#{userBean.user.lastName}"
+										required="true"
+										requiredMessage="Introduceți un prenume pentru membru" />
+									<p:message for="lastName" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="nif" value="*CNP:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="nif" value="#{userBean.usuario.personalData.idCard}"
+										required="true"
+										requiredMessage="Introduceți un CNP valid" />
+									<p:message for="nif" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="username" value="*Email:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="username" value="#{userBean.usuario.username}"
+										ajax="true"
+										validatorMessage="Introduceți un email valid">
+										<f:validateRegex
+											pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+									<p:message for="username" display="tooltip" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="rolSelect" value="*Rol:" />
+								</p:column>
+								<p:column>
+									<p:importEnum
+										type="ro.per.online.persistence.entities.enums.RoleEnum"
+										var="rol" allSuffix="ALL_ENUM_VALUES" />
+									<p:selectOneMenu value="#{userBean.usuario.role}"
+										id="rolSelect"
+										required="true" requiredMessage="Selectați un rol" styleClass="form-control form-select">
+										<f:selectItem itemLabel="Alege un rol" itemValue="" />
+										<f:selectItems value="#{rol.ALL_ENUM_VALUES}" var="rol"
+											itemLabel="#{rol.description}" itemValue="#{rol}" />
+									</p:selectOneMenu>		
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="mobilePhone" value="Telefon:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="mobilePhone" value="#{userBean.usuario.personalData.phone}"
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="address" value="Adresa:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="address" value="#{userBean.usuario.personalData.address}" 
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="numberCard" value="Numărul și seria documentului de identitate:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="numberCard" value="#{userBean.usuario.personalData.numberCard}" 
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="birthDate" value="Data nașterii:" />
+								</p:column>
+								<p:column>
+									<p:calendar id="birthDate" pattern="dd/MM/yyyy" locale="ro" navigator="true" 
+									maxdate="#{currentDate}" value="#{userBean.usuario.personalData.birthDate}" /> 
+								</p:column>
+							</p:row>												
+							<p:row>
+								<p:column>
+									<h:outputLabel for="educationSelect" value="Nivel de educație:" />
+								</p:column>
+								<p:column>
+									<p:importEnum
+										type="ro.per.online.persistence.entities.enums.EducationEnum"
+										var="education" allSuffix="ALL_ENUM_VALUES" />
+									<p:selectOneMenu value="#{userBean.usuario.personalData.education}"
+										id="educationSelect" styleClass="form-control form-select">
+										<f:selectItem itemLabel="Alege un nivel de educație" itemValue="" />
+										<f:selectItems value="#{education.ALL_ENUM_VALUES}" var="education"
+											itemLabel="#{education.description}" itemValue="#{education}" />
+									</p:selectOneMenu>	
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="workplace" value="Locul de muncă:" />
+								</p:column>
+								<p:column>
+									<p:inputText id="workplace" value="#{userBean.usuario.personalData.workplace}"/>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="sexSelect" value="Sexul:" />
+								</p:column>
+								<p:column>
+										<p:importEnum
+										type="ro.per.online.persistence.entities.enums.SexEnum"
+										var="sex" allSuffix="ALL_ENUM_VALUES" />
+									<p:selectOneMenu value="#{userBean.usuario.personalData.sex}"
+										id="sexSelect" styleClass="form-control form-select">
+										<f:selectItem itemLabel="Alegeți tipul sexului" itemValue="" />
+										<f:selectItems value="#{sex.ALL_ENUM_VALUES}" var="sex"
+											itemLabel="#{sex.description}" itemValue="#{sex}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>							
+							<p:row>
+								<p:column>
+									<h:outputLabel for="civilStatusSelect" value="Starea civilă:" />
+								</p:column>
+								<p:column>
+										<p:importEnum
+										type="ro.per.online.persistence.entities.enums.CivilStatusEnum"
+										var="civilStatus" allSuffix="ALL_ENUM_VALUES" />
+									<p:selectOneMenu value="#{userBean.usuario.personalData.civilStatus}"
+										id="civilStatusSelect" styleClass="form-control form-select">
+										<f:selectItem itemLabel="Alegeți starea civila" itemValue="" />
+										<f:selectItems value="#{civilStatus.ALL_ENUM_VALUES}" var="civilStatus"
+											itemLabel="#{civilStatus.description}" itemValue="#{civilStatus}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>						
+							<p:row>
+								<p:column>
+									<h:outputLabel for="validado" value="*Activ/Inactiv:" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu id="validado" value="#{userBean.user.personalData.validated}">
+									<f:selectItem itemLabel="ACTIV" itemValue="true" />
+									<f:selectItem itemLabel="INACTIV" itemValue="false" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<h:outputLabel for="provinciasSelect" value="*Organizația/Județul:" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu  value="#{userBean.userBusqueda.idProvincia}"  id="provinciasSelect"
+				                       class="selectFiltro" >
+				                        <f:selectItem itemLabel="Alege una..." itemValue="" />
+				                        <f:selectItems  value="#{userBean.provinces}"  required="true"
+										requiredMessage=" Alege un județ"
+				                        var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.id}" />
+				                          <p:ajax event="change" update="locality"
+												listener="#{userBean.actualizarLocalidades(userBean.userBusqueda.idProvincia)}" />                        
+				                    </p:selectOneMenu>
+									<p:message for="provinciasSelect" />
+								</p:column>
+							</p:row>														
+							<p:row>
+								<p:column>
+									<h:outputLabel for="locality" value="*Localitatea:" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu id="locality" value="#{userBean.userBusqueda.idLocalidad}"  class="selectFiltro" >
+										<f:selectItem itemLabel="Alege una..." />
+										 <f:selectItems  value="#{userBean.localidades}" var="locality"  itemLabel="#{locality.name}" itemValue="#{locality.id}" />	
+									</p:selectOneMenu>	
+								</p:column>
+							</p:row>
+<!-- 							<p:row> -->
+<!-- 								<p:column> -->
+<!-- 									<p:commandButton value="Selectați imaginea" -->
+<!-- 										update="formDocumento:panelDocumento" immediate="true" -->
+<!-- 										action="#{linksBean.mostrarDialogoNuevaImagen()}" /> -->
+<!-- 								</p:column> -->
+<!-- 								<p:column> -->
+<!-- 									<p:graphicImage id="imagen" height="250" width="auto" -->
+<!-- 										value="#{linksBean.imagen.imagenMuestra}" stream="false" /> -->
+<!-- 								</p:column> -->
+<!-- 							</p:row> -->
+						</p:panelGrid>
+						<p:confirmDialog global="true">
+							<div class="centrarBotonesDialog">
+								<p:button value="Aceptar" styleClass="ui-confirmdialog-yes"
+									icon="fa fa-check" />
+								<p:button value="Cancelar" styleClass="ui-confirmdialog-no"
+									icon="fa fa-remove" />
+							</div>
+						</p:confirmDialog>
+
+						<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"
+							closable="false">
+							<p:messages for="dialogMessage" autoUpdate="true"
+								showDetail="true" showSummary="true" />
+							<div class="centrarBotonesDialog">
+								<p:button value="Cerrar" outcome="/gestorLinks/links" />
+							</div>
+						</p:dialog>
+					</p:panel>
+					<div class="botonesFormulario">
+						<p:commandButton value="Volver" icon="fa fa-fw fa-undo"
+							action="/gestorLinks/links?faces-redirect=true" immediate="true">
+						</p:commandButton>
+						<p:commandButton actionListener="#{linksBean.altaLink}"
+							value="Aceptar" icon="fa fa-fw fa-check" ajax="false" />
+					</div>
+				</div>
+				
+				<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+					closable="false" resizable="false" showHeader="false">
+					<p:graphicImage value="/images/loading.gif" />
+				</p:dialog>
+			</h:form>
+			
+			
+			<p:dialog header="Buscar documentos" widgetVar="dlg" dynamic="true"
+					width="700" height="600">
+					<h:form id="formDocumento">
+					<p:panelGrid columns="1" id="panelDocumento">
+						<p:panelGrid columns="2">
+							<h:outputLabel for="tituloDocumento" styleClass="dialogLabel"
+								value="Título:" />
+							<p:inputText id="tituloDocumento"
+								value="#{linksBean.documentoBusqueda.titulo}" />
+
+							<h:outputLabel for="nombreFichero" styleClass="dialogLabel"
+								value="Nombre de fichero:" />
+							<p:inputText id="nombreFichero"
+								value="#{linksBean.documentoBusqueda.nombreArchivo}" />
+
+							<h:outputLabel for="descripcionDocumento"
+								styleClass="dialogLabel" value="Descripción:" />
+							<p:inputText id="descripcionDocumento"
+								value="#{linksBean.documentoBusqueda.descripcion}" />
+
+							<h:outputLabel for="listaEtiquetas" styleClass="dialogLabel"
+								value="Etiquetas:" />
+							<p:selectCheckboxMenu id="listaEtiquetas"
+								panelStyleClass="hideDisabled"
+								value="#{linksBean.documentoBusqueda.etiquetasSeleccionadas}"
+								multiple="true" filter="true" filterMatchMode="startsWith"
+								label="Etiquetas" class="selectFiltro" converter="#{etiquetaConverter}">
+								
+								<f:attribute name="collectionType" value="java.util.ArrayList" />
+								
+								<f:selectItems value="#{linksBean.listaEtiquetas}"
+									var="etiqueta" itemLabel="#{etiqueta.nombre}"
+									itemValue="#{etiqueta}" />
+							</p:selectCheckboxMenu>
+							<p:commandButton actionListener="#{linksBean.buscarDocumento}"
+								value="Buscar" icon="fa fa-search" 
+								class="botonExpedienteTab left" update="formDocumento:tablaDocumentos"
+								oncomplete="$('.mensajeSinResultados').css('opacity', 1)"
+								onstart="PF('statusDialog').show()"
+								onsuccess="PF('statusDialog').hide()" />
+						</p:panelGrid>
+						<p:dataTable class="tabActividad" id="tablaDocumentos"
+							var="documento" rowIndexVar="rowIndex"
+							value="#{linksBean.modelDocumento}" editable="true"
+							rows="#{Constantes.TAMPAGINA}" rowsPerPageTemplate="5,10,15,20"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							paginator="true" rowKey="#{documento.id}" lazy="true"
+							onkeypress="if (event.keyCode == 13) {return false; }"
+							emptyMessage="No existe ningún resultado que cumpla los parámetros de su búsqueda.">
+
+							<p:column headerText="Título" width="80">
+								<h:outputText id="titulo_index" value="#{documento.titulo}" />
+								<p:tooltip id="tp_titulo_index" for="titulo_index"
+									value="#{documento.nombreFichero}" position="top" />
+							</p:column>
+
+							<p:column headerText="Nombre fichero" width="80">
+								<h:outputText id="nombre_index"
+									value="#{documento.nombreFichero}" />
+								<p:tooltip id="tp_nombre_index" for="nombre_index"
+									value="#{documento.nombreFichero}" position="top" />
+							</p:column>
+
+							<p:column headerText="Imágen" width="60">
+								<center>
+									<p:graphicImage value="#{documento.imagenMuestra}"
+										stream="false" height="60" width="60"
+										rendered="#{fn:contains(documento.nombreFichero, '.jpg') || fn:contains(documento.nombreFichero, '.png') || fn:contains(documento.nombreFichero, '.gif')}" />
+								</center>
+							</p:column>
+
+							<p:column width="25">
+								<p:commandButton value="Elegir" class="botonExpedienteTab"
+									update="formDocumento"
+									action="#{linksBean.asignarNuevaImagen(documento,true)}" />
+							</p:column>
+
+							<f:facet name="footer">
+       				 			Resultado de la búsqueda: #{linksBean.modelDocumento.rowCount} registros.
+							</f:facet>
+						</p:dataTable>
+					</p:panelGrid>
+					</h:form>
+				</p:dialog>
+	</ui:define>
+</ui:composition>

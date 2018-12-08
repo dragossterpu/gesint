@@ -22,22 +22,22 @@ public enum EducationEnum {
 	/**
 	 * Bazic .
 	 */
-	BASIC("Bazic"),
+	BAZIC("Bazic"),
 
 	/**
 	 * Liceu.
 	 */
-	HIGHSCHOOL("Liceu"),
+	LICEU("Liceu"),
 
 	/**
 	 * Studii universitare.
 	 */
-	FACULTY("Studii universitare"),
+	STUDIISUPERIOARE("Studii universitare"),
 
 	/**
 	 * Nespecificat.
 	 */
-	UNSPECIFIED("Nespecificat");
+	NESPECIFICAT("Nespecificat");
 
 	private static final List<EducationEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
 
@@ -50,8 +50,8 @@ public enum EducationEnum {
 	 *
 	 */
 	public static List<EducationEnum> getEducation() {
-		List<EducationEnum> educations = new ArrayList<>();
-		for (EducationEnum education : EducationEnum.values()) {
+		final List<EducationEnum> educations = new ArrayList<>();
+		for (final EducationEnum education : EducationEnum.values()) {
 			educations.add(education);
 		}
 		return educations;

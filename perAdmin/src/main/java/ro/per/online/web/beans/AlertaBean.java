@@ -34,7 +34,6 @@ import ro.per.online.lazydata.LazyDataUsers;
 import ro.per.online.persistence.entities.Alerta;
 import ro.per.online.persistence.entities.Documento;
 import ro.per.online.persistence.entities.PProvince;
-import ro.per.online.persistence.entities.PersonalData;
 import ro.per.online.persistence.entities.Team;
 import ro.per.online.persistence.entities.TipoDocumento;
 import ro.per.online.persistence.entities.Users;
@@ -321,9 +320,7 @@ public class AlertaBean implements Serializable {
 				Users usuario = this.usuarioService.fiindOne(this.nombreUsuario);
 				if (usuario == null) {
 					usuario = new Users();
-					final PersonalData pd = new PersonalData();
-					pd.setAlertChannel(AlertChannelEnum.EMAIL);
-					usuario.setPersonalData(pd);
+					usuario.setAlertChannel(AlertChannelEnum.EMAIL);
 					usuario.setUsername(this.nombreUsuario);
 				}
 				this.usuariosSeleccionadosFinales.add(usuario);
@@ -555,12 +552,12 @@ public class AlertaBean implements Serializable {
 		if (this.opcion == 1) {
 			final Users i = (Users) event.getObject();
 			this.usuariosSeleccionadosFinales.add(i);
-			this.modelUser.setDatasource(this.usuariosSeleccionadosFinales);
+			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
 		}
 		else {
 			final Team team = (Team) event.getObject();
 			this.usuariosSeleccionadosFinales.add(team.getUser());
-			this.modelUser.setDatasource(this.usuariosSeleccionadosFinales);
+			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
 		}
 	}
 
@@ -572,12 +569,12 @@ public class AlertaBean implements Serializable {
 		if (this.opcion == 1) {
 			final Users us = (Users) event.getObject();
 			this.usuariosSeleccionadosFinales.remove(us);
-			this.modelUser.setDatasource(this.usuariosSeleccionadosFinales);
+			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
 		}
 		else {
 			final Team team = (Team) event.getObject();
 			this.usuariosSeleccionadosFinales.remove(team.getUser());
-			this.modelUser.setDatasource(this.usuariosSeleccionadosFinales);
+			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
 		}
 	}
 
@@ -588,7 +585,7 @@ public class AlertaBean implements Serializable {
 	public void onRowUnSelectedUsu(final UnselectEvent event) {
 		final Users usu = (Users) event.getObject();
 		this.usuariosSeleccionadosFinales.remove(usu);
-		this.modelUser.setDatasource(this.usuariosSeleccionadosFinales);
+		this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
 	}
 
 	/**
@@ -614,7 +611,7 @@ public class AlertaBean implements Serializable {
 		else {
 			this.usuariosSeleccionadosFinales = new ArrayList<>();
 		}
-		this.modelUser.setDatasource(this.usuariosSeleccionadosFinales);
+		this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
 		this.usuariosSeleccionados = new ArrayList<>(this.usuariosSeleccionadosFinales);
 	}
 

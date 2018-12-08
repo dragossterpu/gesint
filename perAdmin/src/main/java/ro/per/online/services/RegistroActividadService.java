@@ -6,6 +6,7 @@ import org.primefaces.model.SortOrder;
 
 import ro.per.online.persistence.entities.RegistroActividad;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.enums.SeccionesEnum;
 import ro.per.online.web.beans.RegistroBusqueda;
 
 /**
@@ -88,5 +89,20 @@ public interface RegistroActividadService {
 	 * @param entity Registro a guardar en base de datos
 	 */
 	void save(RegistroActividad entity);
+
+	/**
+	 * Guarda en el registro de actividad el error que se ha producido.
+	 * @param seccion Dónde se produce el error
+	 * @param exception Excepción generada
+	 */
+	void registrarError(SeccionesEnum seccion, Exception exception);
+
+	/**
+	 * Guarda en base de datos un registro de actividad.
+	 * @param seccion Sección en la que se produce la actividad
+	 * @param tipo Tipo de actividad a registrar
+	 * @param descripcion Descripción de la actividad
+	 */
+	void registrarActividad(SeccionesEnum seccion, String tipo, String descripcion);
 
 }

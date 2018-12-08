@@ -17,7 +17,7 @@ import ro.per.online.services.UserService;
 import ro.per.online.web.beans.UsuarioBusqueda;
 
 /**
- * 
+ *
  * Model pentru paginarea de pe server care extinde modelul LazyDataModel al Primefaces.
  * @author STAD
  *
@@ -28,7 +28,7 @@ import ro.per.online.web.beans.UsuarioBusqueda;
 public class LazyDataUsers extends LazyDataModel<Users> implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -38,19 +38,22 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 	private transient UsuarioBusqueda userBusqueda;
 
 	/**
-	 * Listă care servește modelul ca sursă de date.
-	 */
-	private transient List<Users> datasource;
-
-	/**
 	 * Serviciu a usar.
 	 */
 	private transient UserService userService;
 
 	/**
-	 * 
+	 * Data source con el listado de usuarios.
+	 */
+	private Set<Users> dataSource;
+
+	/**
+	 * Listă care servește modelul ca sursă de date.
+	 */
+	private transient List<Users> dsource;
+
+	/**
 	 * Constructor al modelului care primește serviciul ca parametru.
-	 * 
 	 * @param servicio Servicio a emplear
 	 */
 	public LazyDataUsers(final UserService servicio) {
@@ -58,26 +61,20 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 	}
 
 	/**
-	 * Suprascrierea metodei getRowData pentru a lucra cu obiectele utilizatorului.
-	 * 
-	 * @param rowKeyCheia rândului pe care a fost vizionat vizualizarea
-	 * @return Utilizator care corespunde cheii primite de parametru
-	 * 
+	 * Sobreescritura del método getRowData para que funcione con objetos de tipo User.
+	 * @param rowKey Clave de la fila sobre la que se ha hecho click en la vista
+	 * @return User que se corresponde con la clave recibida por parámetro
 	 */
-
 	@Override
 	public Users getRowData(final String rowKey) {
 		Users us = null;
-		@SuppressWarnings("unchecked")
-		final List<Users> listaWrapped = (List<Users>) this.getWrappedData();
-		final Set<Users> setUsers = new HashSet<>();
-		if (listaWrapped != null) {
-			setUsers.addAll(listaWrapped);
+		final List<Users> listaWrapped = (List<Users>) getWrappedData();
+		final Set<Users> setUsuarios = new HashSet<>();
+		setUsuarios.addAll(listaWrapped);
+		if (getDataSource() != null) {
+			setUsuarios.addAll(getDataSource());
 		}
-		if (getDatasource() != null) {
-			setUsers.addAll(getDatasource());
-		}
-		final Iterator<Users> iteratorUsuarios = setUsers.iterator();
+		final Iterator<Users> iteratorUsuarios = setUsuarios.iterator();
 		boolean encontrado = false;
 		while (iteratorUsuarios.hasNext() && !encontrado) {
 			final Users usuario = iteratorUsuarios.next();
@@ -91,7 +88,6 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 
 	/**
 	 * Sobrescritura del método getRowKey.
-	 * 
 	 * @param user Objeto del que se desea obtener la clave
 	 * @return Clave del objeto pasado como parámetro
 	 */
@@ -104,7 +100,6 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 	/**
 	 * Suprascrieți metoda de încărcare pentru a lucra cu un criteriu și returnați numai numărul de utilizatori
 	 * solicitați.
-	 * 
 	 * @param first primul element pe care doriți să îl recuperați
 	 * @param pageSize numărul maxim de înregistrări pe care dorim să le preluăm pe pagină
 	 * @param sortField columna por la que se ordenarán los resultados. Corresponde a la propiedad 'sortBy' de la
@@ -112,7 +107,7 @@ public class LazyDataUsers extends LazyDataModel<Users> implements Serializable 
 	 * @param sortOrder orden por el que se desea ordenar los resultados
 	 * @param filters mapa de filtros. Este valor no se utiliza en esta sobreescritura.
 	 * @return lista de usuarios que corresponden a los criterios de búsqueda
-	 * 
+	 *
 	 */
 
 	@Override

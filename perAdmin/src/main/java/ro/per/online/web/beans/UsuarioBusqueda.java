@@ -2,6 +2,7 @@ package ro.per.online.web.beans;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
+import ro.per.online.persistence.entities.Users;
 import ro.per.online.persistence.entities.enums.CivilStatusEnum;
 import ro.per.online.persistence.entities.enums.EducationEnum;
 import ro.per.online.persistence.entities.enums.RoleEnum;
@@ -18,7 +20,7 @@ import ro.per.online.persistence.entities.enums.TypeLocalityEnum;
 
 /**
  * Controlador de las operaciones relacionadas con la búsqueda de usuarios. Reseteo de valores de búsqueda.
- * 
+ *
  * @author STAD
  */
 @Setter
@@ -124,8 +126,12 @@ public class UsuarioBusqueda implements Serializable {
 
 	/**
 	 * Variable utilizada para almacenar el valor de la provincia seleccionada.
-	 * 
+	 *
 	 */
 	private PProvince provinciaSelected;
 
+	/**
+	 * Lista de usuarios seleccionados.
+	 */
+	private List<Users> usuariosSeleccionados;
 }

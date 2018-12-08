@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.springframework.stereotype.Component;
 
+import ro.per.online.constantes.Constantes;
+
 /**
  * Clase para herramientas de FacesUtilities.
  * @author STAD
@@ -34,7 +36,7 @@ public class FacesUtilities {
 
 	/**
 	 * Se muestra mensaje informativo.
-	 * 
+	 *
 	 * @param severity Severity
 	 * @param summary String
 	 * @param detail String
@@ -62,5 +64,23 @@ public class FacesUtilities {
 		catch (final IOException ioe) {
 			throw new FacesException(ioe);
 		}
+	}
+
+	/**
+	 * Muestra un mensaje de error por pantalla recuperando el texto de la excepción.
+	 * @param exception Excepción recuperada
+	 * @param idMensaje identificador del componente "message/s" de PrimeFaces donde se desea mostrar
+	 */
+	public void setMensajeError(final Exception exception, final String idMensaje) {
+		setMensajeInformativo(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE, exception.getMessage(), idMensaje);
+	}
+
+	/**
+	 * Muestra un mensaje de error por pantalla recuperando el texto de la excepción.
+	 * @param mensajeError mensaje que queremos mostrar
+	 * @param idMensaje identificador del componente "message/s" de PrimeFaces donde se desea mostrar
+	 */
+	public void setMensajeError(final String mensajeError, final String idMensaje) {
+		setMensajeInformativo(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE, mensajeError, idMensaje);
 	}
 }

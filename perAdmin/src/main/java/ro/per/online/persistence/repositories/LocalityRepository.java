@@ -14,7 +14,7 @@ import ro.per.online.persistence.entities.PProvince;
 public interface LocalityRepository extends CrudRepository<PLocality, Long> {
 	/**
 	 * Comprueba si existe un municipio sabiendo su nombre y la provincia a la que pertenece.
-	 * 
+	 *
 	 * @param name nombre del municipio.
 	 * @param provincia del municipio
 	 * @return existe?
@@ -35,4 +35,12 @@ public interface LocalityRepository extends CrudRepository<PLocality, Long> {
 	 * @return List<Localidad> Lista de localidades por provincia.
 	 */
 	List<PLocality> findByProvinceOrderByName(Long idProvincia);
+
+	/**
+	 * @param name
+	 * @param provincia
+	 * @return
+	 *
+	 */
+	PLocality findByNameIgnoreCaseAndProvince(String name, PProvince provincia);
 }

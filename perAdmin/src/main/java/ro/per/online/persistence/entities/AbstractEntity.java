@@ -4,7 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractEntity implements Serializable {
 
 	/**
@@ -28,12 +36,14 @@ public abstract class AbstractEntity implements Serializable {
 	/**
 	 * Utilizator de creatie.
 	 */
+	@CreatedBy
 	@Column(name = "user_create", length = 250)
 	private String userCreate;
 
 	/**
 	 * Data de creatie.
 	 */
+	@CreatedDate
 	@Column(name = "date_create", nullable = false)
 	private Date dateCreate;
 
@@ -52,12 +62,14 @@ public abstract class AbstractEntity implements Serializable {
 	/**
 	 * Utilizator care modifica un registru
 	 */
+	@LastModifiedBy
 	@Column(name = "user_updated", length = 50)
 	private String userUpdated;
 
 	/**
 	 * Data ultimei modificari
 	 */
+	@LastModifiedDate
 	@Column(name = "date_updated")
 	private Date dateUpdated;
 

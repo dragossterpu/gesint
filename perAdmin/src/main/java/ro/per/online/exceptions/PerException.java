@@ -2,14 +2,14 @@ package ro.per.online.exceptions;
 
 /**
  * Excepción personalizada.
- * 
+ *
  * @author STAD
  *
  */
 public class PerException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +28,7 @@ public class PerException extends Exception {
 
 	/**
 	 * Excepción general.
-	 * 
+	 *
 	 * @param e Excepción
 	 */
 	public PerException(final Exception e) {
@@ -44,4 +44,12 @@ public class PerException extends Exception {
 		return mensaje;
 	}
 
+	/**
+	 * Excepción con mensaje.
+	 *
+	 * @param mensaje Mensaje que se mostrará al lanzar la excepción.
+	 */
+	public PerException(final String mensaje) {
+		super(mensaje);
+	}
 }

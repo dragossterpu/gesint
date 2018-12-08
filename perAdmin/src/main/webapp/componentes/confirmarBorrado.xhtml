@@ -1,0 +1,21 @@
+<!-- Ejemplo de uso: 
+
+<ui:decorate template="/componentes/confirmarBorrado.xhtml">
+	<ui:param name="controller" value="#{nombre_del_controller}" />
+	<ui:param name="listaEntidad" value="id_tabla_actualizar" />
+</ui:decorate>
+
+ -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <p:confirmDialog id="confirmDialog" widgetVar="confirmDelete" header="ATENCIÓN"
+        message="Está a punto de borrar el registro seleccionado. Esta acción no podrá ser deshecha. ¿Desea continuar?" severity="alert" modal="true">
+
+        <p:commandButton id="delete" value="Aceptar" actionListener="#{controller.eliminar}" update="#{listaEntidad}" immediate="true"
+            oncomplete="PF('confirmDelete').hide();" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+
+        <p:commandButton value="Cancelar" onclick="PF('confirmDelete').hide()" immediate="true" styleClass="ui-confirmdialog-no" icon="fa fa-remove" />
+    </p:confirmDialog>
+</ui:composition>

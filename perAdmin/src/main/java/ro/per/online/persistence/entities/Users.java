@@ -1,14 +1,21 @@
 package ro.per.online.persistence.entities;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +24,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ro.per.online.persistence.entities.enums.AlertChannelEnum;
+import ro.per.online.persistence.entities.enums.CivilStatusEnum;
+import ro.per.online.persistence.entities.enums.EducationEnum;
 import ro.per.online.persistence.entities.enums.RoleEnum;
+import ro.per.online.persistence.entities.enums.SexEnum;
 
 /**
  *
@@ -49,8 +60,8 @@ public class Users extends AbstractEntity implements Serializable {
 	@Column(name = "username", length = 150, nullable = false)
 	private String username;
 
-	@Embedded
-	private PersonalData personalData;
+	// @Embedded
+	// private PersonalData personalData;
 
 	/**
 	 * Parola utilizatorlui.
@@ -85,14 +96,109 @@ public class Users extends AbstractEntity implements Serializable {
 
 	/**
 	 * Devuelve el nombre completo del usuario.
-	 * 
+	 *
 	 * @return Cadena formada por la concatenación de nombre y apellidos del usuario
 	 */
 	public String getNombreCompleto() {
-		StringBuilder nombreCompleto = new StringBuilder();
+		final StringBuilder nombreCompleto = new StringBuilder();
 		nombreCompleto.append(name);
 		nombreCompleto.append(' ');
 		nombreCompleto.append(lastName);
 		return nombreCompleto.toString();
+	}
+
+	/**
+	 * Email personal.
+	 */
+	private String personalEmail;
+
+	/**
+	 * Cuerpo al que pertenece el usuario.
+	 */
+	@ManyToOne
+	@JoinColumn(name = "PROVINCE_ID", foreignKey = @ForeignKey(name = "FK_U_PROVINCE"))
+	private PProvince province;
+
+	/**
+	 * Localitatea.
+	 */
+	@ManyToOne
+	@JoinColumn(name = "LOCALITY_ID", foreignKey = @ForeignKey(name = "FK_U_LOCALITY"))
+	private PLocality locality;
+
+	/**
+	 * Telefonul.
+	 */
+	private String phone;
+
+	/**
+	 * Adresa.
+	 */
+	private String address;
+
+	/**
+	 * CNP utilizator.
+	 */
+	private String idCard;
+
+	/**
+	 * Numar buletin de identitate utilizator.
+	 */
+	private String numberCard;
+
+	/**
+	 * Data nasterii utilizator.
+	 */
+	private Date birthDate;
+
+	/**
+	 * Educatie utilizator.
+	 */
+	@Column(name = "education")
+	@Enumerated(EnumType.STRING)
+	private EducationEnum education;
+
+	/**
+	 * Canal de alertas del usuario.
+	 */
+	@Column(name = "alert_channel", length = 10)
+	@Enumerated(EnumType.STRING)
+	private AlertChannelEnum alertChannel;
+
+	/**
+	 * Loc de munca utilizator.
+	 */
+	private String workplace;
+
+	/**
+	 * Sex utilizator.
+	 */
+	@Column(name = "sex")
+	@Enumerated(EnumType.STRING)
+	private SexEnum sex;
+
+	/**
+	 * Stare civila utilizator.
+	 */
+	@Column(name = "civilStatus")
+	@Enumerated(EnumType.STRING)
+	private CivilStatusEnum civilStatus;
+
+	/**
+	 * Fotoografia utilizator.
+	 */
+	private byte[] photo;
+
+	/**
+	 * Utilizator validat.
+	 */
+	private Boolean validated;
+
+	/**
+	 * Método que obtiene la imágen para previsualizar en caso de que el documento sea de tipo imágen.
+	 * @return StreamedContent
+	 */
+	public StreamedContent getImageUser() {
+		return new DefaultStreamedContent(new ByteArrayInputStream(this.photo));
 	}
 }

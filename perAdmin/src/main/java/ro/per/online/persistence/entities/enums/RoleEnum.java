@@ -30,24 +30,33 @@ public enum RoleEnum {
 	/**
 	 * Rol pentru utilizatorii membrii cu drepturi depline.
 	 */
-	ROLE_MEMBER("Membru"),
+	ROLE_MEMBRU("Membru"),
 
 	/**
 	 * Rol pentru simpatizanti.
 	 */
-	ROLE_SYMPATHIZER("Simpatizant"),
+	ROLE_SIMPATIZANT("Simpatizant"),
 	/**
 	 * Rol pentru presedintele de filiala.
 	 */
-	ROLE_ADMIN_SUBSIDISRY("Președinte filială");
+	ROLE_PRESEDINTE_ORG("Președinte filială"),
+	/**
+	 * Rol pentru presedintele de filiala.
+	 */
+	ROLE_VICE_PRESEDINTE_ORG("VicePreședinte filială"),
+
+	/**
+	 * Rol pentru presedintele de filiala.
+	 */
+	ROLE_ALTUL("Altul");
 
 	/**
 	 * @return Returnează o listă cu descrierile enum.
 	 *
 	 */
 	public static List<RoleEnum> getRoles() {
-		List<RoleEnum> roles = new ArrayList<>();
-		for (RoleEnum rol : RoleEnum.values()) {
+		final List<RoleEnum> roles = new ArrayList<>();
+		for (final RoleEnum rol : RoleEnum.values()) {
 			roles.add(rol);
 		}
 		return roles;

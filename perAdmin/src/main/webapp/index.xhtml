@@ -23,51 +23,7 @@
 		        		<p:tab title="MEMBRII NOI" id="membrii_noi">	           		            
 		           		 <h:panelGrid columns="2" cellpadding="10" >					
  						<ui:include src="/plantillas/vistaGraficoUsuarios.xhtml"/>  
-		               </h:panelGrid>
-		              
-		            
-		        </p:tab>
-		        <p:tab title="ORGANIZAȚII/JUDEȚE" id="totales_organizatii">
-		           		<p:tabView>
-									<p:ajax event="tabChange"
-										listener="#{homeBean.cambioGrupoDatos}"
-										update="formHome:panelDatos"
-										onstart="PF('statusDialog').show()"
-										onsuccess="PF('statusDialog').hide()" />
-									<p:tab title="Total" id="totales_organizatii">
-										<p:panel
-											rendered="#{homeBean.pestaniaActiva == 'totales_organizatii'}">
-											<ui:include src="/plantillas/vistaGraficoTotales.xhtml"/>																							
-										</p:panel>
-									</p:tab>
-									<p:tab title="Evoluție" id="evolucion_organizatii">
-										<p:panel
-											rendered="#{homeBean.pestaniaActiva == 'evolucion_organizatii'}">																															
-<!-- 											<ui:include src="/plantillas/vistaGraficoEvolucion.xhtml"/>																																	 -->
-										</p:panel>
-									</p:tab>
-									<p:tab title="Activități" id="sectores_organizatii">
-										<p:panel
-											rendered="#{homeBean.pestaniaActiva == 'sectores_organizatii'}">
-<!-- 											<ui:include src="/plantillas/vistaGraficoActividades.xhtml"/>																							 -->
-										</p:panel>
-									</p:tab>									
-									<p:tab title="Rapoarte/Evaluări" id="estados_evaluat">
-										<p:panel
-											rendered="#{homeBean.pestaniaActiva == 'estados_evaluat'}">												
-<!-- 											<ui:include src="/plantillas/vistaGraficoEstado.xhtml"/>										 -->
-										</p:panel>
-									</p:tab>
-								</p:tabView>
-		 
-		           
-		        </p:tab>
-		        <p:tab title="REZULTATE" id="totales_rezultate">
-		            <h:panelGrid columns="2" cellpadding="10">
-<!-- 		                <p:graphicImage name="demo/images/godfather/godfather3.jpg" /> -->
-		                <h:outputText value="After a break of more than 15 years, director Francis Ford Coppola and writer Mario Puzo returned to the well for this third and final story of the fictional Corleone crime family. 
-		                    Two decades have passed, and crime kingpin Michael Corleone, now divorced from his wife Kay has nearly succeeded in keeping his promise that his family would one day be completely legitimate." />
-		            </h:panelGrid>
+		               </h:panelGrid>  
 		        </p:tab>
 		    </p:tabView>
 		    	</p:outputPanel>

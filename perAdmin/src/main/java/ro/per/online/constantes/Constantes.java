@@ -23,14 +23,44 @@ public final class Constantes {
 	public static final String INDEX = "/index.xhtml";
 
 	/**
+	 * Constante final texto de:.
+	 */
+	public static final String DE = " de: ";
+
+	/**
+	 * Constante final texto La operación.
+	 */
+	public static final String OPERACION = "Operația ";
+
+	/**
+	 * Constante final texto se ha realizado con éxito.
+	 */
+	public static final String SEHAREALEXITO = " a fost făcută cu succes.";
+
+	/**
+	 * Plantilla para el bloqueo y borrado masivo de usuarios.
+	 */
+	public static final String PLANTILLAOTROS = "plantilla_borrado_bloqueo_usuarios.xlsx";
+
+	/**
 	 * Palabra "login" para no repetirla n veces dentro de una clase.
 	 */
 	public static final String LOGIN = "login";
 
 	/**
+	 * Sección de administración de cuerpos.
+	 */
+	public static final String PROCESOMASIVO = "PROCES_MASIV_MEMBRI/ ";
+
+	/**
 	 * Ruta "/login" para no repetirla n veces dentro de una clase.
 	 */
 	public static final String RUTALOGIN = "/login";
+
+	/**
+	 * Sección de administración de cuerpos.
+	 */
+	public static final String USUARIOSMASIVOS = "usuarios masivos";
 
 	/**
 	 * Ruta "/logout" para no repetirla n veces dentro de una clase.
@@ -43,14 +73,29 @@ public final class Constantes {
 	public static final String ERRORMENSAJE = "Eroare";
 
 	/**
+	 * Identificador del mensaje global que se muestra en la aplicación.
+	 */
+	public static final String IDMENSAJEGLOBAL = "messages";
+
+	/**
 	 * Constantes para el texto session.
 	 */
 	public static final String SESSION = "session";
 
 	/**
+	 * Constante final false.
+	 */
+	public static final String FALSE = "false";
+
+	/**
 	 * Constantes para la variable view
 	 */
 	public static final String VIEW = "view";
+
+	/**
+	 * Plantilla para la carga masiva de usuarios.
+	 */
+	public static final String PLANTILLAALTA = "plantilla_carga_masiva_usuarios.xlsx";
 
 	/**
 	 * Constante ruta recurso plantilla (html) base con etiquetas pebble para generar correos electrónicos con imágenes.

@@ -23,7 +23,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ro.per.online.persistence.entities.enums.RegistroEnum;
 import ro.per.online.persistence.entities.enums.SeccionesEnum;
 
 /**
@@ -82,8 +81,7 @@ public class RegistroActividad implements Serializable {
 	 * Tipo del registro.
 	 */
 	@Column(name = "TIPO_REG_ACTIVIDAD", length = 10)
-	@Enumerated(EnumType.STRING)
-	private RegistroEnum tipoRegActividad;
+	private String tipoRegActividad;
 
 	/**
 	 * Id del usuario que registra la acción.

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+
+</h:head>	
+<f:view>
+	<ui:composition template="../layouts/layoutInterior.xhtml">
+		<ui:define name="title">prevencion10</ui:define>
+		<ui:define name="content">
+		
+		<h:panelGrid title="RESUMEN" columns="2" style="width:auto;margin:auto;" styleClass="estiloTextoGraficos">
+			<p:chart type="pie" model="#{statsValoramBean.modeloPreguntas[0]}" style="width:500px;height:400px">            	
+        	</p:chart>
+        	<p:chart type="pie" model="#{statsValoramBean.modeloPreguntas[1]}" style="width:500px;height:400px">            	
+        	</p:chart>
+        	<p:chart type="pie" model="#{statsValoramBean.modeloPreguntas[2]}" style="width:500px;height:400px">            	
+        	</p:chart>
+        	<p:chart type="pie" model="#{statsValoramBean.modeloPreguntas[3]}" style="width:500px;height:400px">            	
+        	</p:chart>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1" columnClasses="left,right" style="width:100%;margin-bottom:50px;">
+					<p:dataTable id="valoracionesWeb" var="valoracion"
+						rowIndexVar="rowIndex"
+						value="#{statsValoramBean.listaValoraciones}" pageLinks="4" paginatorAlwaysVisible="false" paginatorPosition="bottom"
+						editable="true" rows="10" rowsPerPageTemplate="10,25,50"
+						paginator="true" rowKey="#{valoracion.id}"
+						onkeypress="if (event.keyCode == 13) {return false; }">
+						<f:facet name="header">
+							<p:outputPanel>
+								<span class="titulo">VALORACIONES</span>
+							</p:outputPanel>
+						</f:facet>
+						<p:column headerText="Fecha" width="140" sortBy="#{valoracion.fechaCreacion}"
+							visible="true"
+							exportable="true">																																			
+							<h:outputText value="#{valoracion.fechaCreacion}" >
+    							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="Europe/Madrid" />
+							</h:outputText>							
+						</p:column>
+						
+						<p:column headerText="Usuario" width="240" sortBy="#{valoracion.usuarioAlta}"
+							visible="true"
+							exportable="true">
+							<h:outputText value="#{valoracion.usuarioAlta}" />
+						</p:column>	
+						
+						<p:column headerText="1. ¿Te ha resultado sencilla la navegación?" width="150" sortBy="#{valoracion.answer1}"
+							visible="true"
+							exportable="true">																		
+															
+							<h:panelGroup rendered="#{valoracion.answer1 == 1}">
+								SI
+							</h:panelGroup>																					    																																			    												
+							<h:panelGroup rendered="#{valoracion.answer1 == 2}">
+								=
+							</h:panelGroup>								    														
+							<h:panelGroup rendered="#{valoracion.answer1 == 3}">
+								NO
+							</h:panelGroup>															
+																					
+						</p:column>	
+						
+						<p:column headerText="2. ¿Te ha resultado sencillo completar el formulario?" width="150" sortBy="#{valoracion.answer2}"
+							visible="true"
+							exportable="true">
+							
+							<h:panelGroup rendered="#{valoracion.answer2 == 1}">
+								SI
+							</h:panelGroup>																					    																																			    												
+							<h:panelGroup rendered="#{valoracion.answer2 == 2}">
+								=
+							</h:panelGroup>								    														
+							<h:panelGroup rendered="#{valoracion.answer2 == 3}">
+								NO
+							</h:panelGroup>
+							
+						</p:column>
+						
+						<p:column headerText="3. ¿La herramienta ha cumplido tus expectativas?" width="150" sortBy="#{valoracion.answer3}"
+							visible="true"
+							exportable="true">
+							
+							<h:panelGroup rendered="#{valoracion.answer3 == 1}">
+								SI
+							</h:panelGroup>																					    																																			    												
+							<h:panelGroup rendered="#{valoracion.answer3 == 2}">
+								=
+							</h:panelGroup>								    														
+							<h:panelGroup rendered="#{valoracion.answer3 == 3}">
+								NO
+							</h:panelGroup>
+							
+						</p:column>											
+						
+						<p:column headerText="4. ¿Recomendarías esta herramienta?" width="150" sortBy="#{valoracion.answer4}"
+							visible="true"
+							exportable="true">
+							
+							<h:panelGroup rendered="#{valoracion.answer4 == 1}">
+								SI
+							</h:panelGroup>																					    																																			    												
+							<h:panelGroup rendered="#{valoracion.answer4 == 2}">
+								=
+							</h:panelGroup>								    														
+							<h:panelGroup rendered="#{valoracion.answer4 == 3}">
+								NO
+							</h:panelGroup>
+							
+						</p:column>
+						
+						<p:column headerText="Comentarios" width="200" sortBy="#{valoracion.comments}"
+							visible="true"
+							exportable="true">
+							<h:outputText value="#{valoracion.comments}" />
+						</p:column>
+
+					</p:dataTable>
+		</h:panelGrid>
+	
+		</ui:define>
+	</ui:composition>
+</f:view>
+</html>

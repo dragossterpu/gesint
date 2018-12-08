@@ -58,7 +58,7 @@ import ro.per.online.util.Generador;
 
 /**
  * Clase utilizada pentru a incarca date in pagina de echipa PER.
- * 
+ *
  * @author STAD
  *
  */
@@ -77,10 +77,10 @@ public class TeamBean implements Serializable {
 	 * @param nume
 	 * @return dni + letra
 	 */
-	public static String mail(String nume, String prenume) {
-		String limpioName = Normalizer.normalize(nume.toLowerCase(), Normalizer.Form.NFD);
+	public static String mail(final String nume, final String prenume) {
+		final String limpioName = Normalizer.normalize(nume.toLowerCase(), Normalizer.Form.NFD);
 		limpioName.replace(" ", ".");
-		String limpioPrenume = Normalizer.normalize(prenume.toLowerCase(), Normalizer.Form.NFD);
+		final String limpioPrenume = Normalizer.normalize(prenume.toLowerCase(), Normalizer.Form.NFD);
 		limpioPrenume.replace(" ", ".");
 		return limpioName.concat(".").concat(limpioPrenume.concat(Generador.nombresMail()));
 	}
@@ -92,14 +92,14 @@ public class TeamBean implements Serializable {
 
 	/**
 	 * Variala utilizata pentruinjectarea serviciului de team.
-	 * 
+	 *
 	 */
 	@Autowired
 	private transient TeamService teamService;
 
 	/**
 	 * Variala utilizata pentruinjectarea serviciului de team.
-	 * 
+	 *
 	 */
 	@Autowired
 	private transient PTeamService pteamService;
@@ -157,21 +157,21 @@ public class TeamBean implements Serializable {
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
-	 * 
+	 *
 	 */
 	@Autowired
 	private ProvinceService provinceService;
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
-	 * 
+	 *
 	 */
 	@Autowired
 	private UserService userService;
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
-	 * 
+	 *
 	 */
 	@Autowired
 	private LocalityService localityService;
@@ -198,7 +198,7 @@ public class TeamBean implements Serializable {
 
 	/**
 	 * Variabila utilizata pentru un utilizator.
-	 * 
+	 *
 	 */
 	private Users user;
 
@@ -224,7 +224,7 @@ public class TeamBean implements Serializable {
 
 	/**
 	 * Variable utilizada para almacenar el contexto actual.
-	 * 
+	 *
 	 */
 	private TypeLocalityEnum tipLocalidadSelected;
 
@@ -280,42 +280,41 @@ public class TeamBean implements Serializable {
 
 	public void alta() {
 		for (int i = 0; i < 400; i++) {
-			Users user = new Users();
+			final Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
 			user.setEmail("proba@gmail.com");
 			user.setLastName(Generador.apellidoFinal());
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
-			PersonalData pd = new PersonalData();
+			final PersonalData pd = new PersonalData();
 			pd.setSex(SexEnum.randomLetter());
-			if (pd.getSex().getName().equals("MAN")) {
+			if (user.getSex().getName().equals("MAN")) {
 				user.setName(Generador.nombreFinalHombre());
 			}
 			else {
 				user.setName(Generador.nombreFinal());
 			}
-			pd.setAddress(Generador.nombresCalleFinal().concat("  Nr: ").concat(Generador.getNumeroCalle()));
-			pd.setBirthDate(Generador.obtenerFechaNastere());
-			pd.setCivilStatus(CivilStatusEnum.randomLetter());
-			pd.setEducation(EducationEnum.randomLetter());
-			pd.setIdCard(Generador.getUnidadNumber());
-			PProvince pro = new PProvince();
+			user.setAddress(Generador.nombresCalleFinal().concat("  Nr: ").concat(Generador.getNumeroCalle()));
+			user.setBirthDate(Generador.obtenerFechaNastere());
+			user.setCivilStatus(CivilStatusEnum.randomLetter());
+			user.setEducation(EducationEnum.randomLetter());
+			user.setIdCard(Generador.getUnidadNumber());
+			final PProvince pro = new PProvince();
 			pro.setId(Generador.provinciasFinal());
-			pd.setProvince(pro);
+			user.setProvince(pro);
 			List<PLocality> loc = new ArrayList<>();
 			loc = localityService.findByProvince(pro);
 			PLocality locality = new PLocality();
-			Random rand = new Random();
+			final Random rand = new Random();
 			locality = loc.get(rand.nextInt(loc.size()));
-			pd.setLocality(locality);
-			pd.setNumberCard(Generador.getDni());
-			pd.setPersonalEmail(mail(user.getName(), user.getLastName()));
-			pd.setPhone(Generador.getTelefon());
-			pd.setAlertChannel(AlertChannelEnum.EMAIL);
-			pd.setValidated(true);
-			pd.setWorkplace(Generador.meserii());
-			user.setPersonalData(pd);
+			user.setLocality(locality);
+			user.setNumberCard(Generador.getDni());
+			user.setPersonalEmail(mail(user.getName(), user.getLastName()));
+			user.setPhone(Generador.getTelefon());
+			user.setAlertChannel(AlertChannelEnum.EMAIL);
+			user.setValidated(true);
+			user.setWorkplace(Generador.meserii());
 			user.setUsername(pd.getPersonalEmail());
-			user.setRole(RoleEnum.ROLE_MEMBER);
+			user.setRole(RoleEnum.ROLE_MEMBRU);
 			user.setUserCreate("system");
 			userService.save(user);
 		}
@@ -327,8 +326,8 @@ public class TeamBean implements Serializable {
 	 */
 	private boolean buscarUsuarioPorNif() {
 		Boolean resultado = true;
-		final Users use = this.userService.findByIdCard(this.user.getPersonalData().getIdCard());
-		if (use != null && !use.getPersonalData().getIdCard().equals(this.user.getPersonalData().getIdCard())) {
+		final Users use = this.userService.findByIdCard(this.user.getIdCard());
+		if (use != null && !use.getIdCard().equals(this.user.getIdCard())) {
 			resultado = false;
 		}
 		return resultado;
@@ -355,13 +354,13 @@ public class TeamBean implements Serializable {
 	 * Carga un documento que se recibe a través de un evento FileUploadEvent. Esta carga se realiza sobre el objeto
 	 * documento y no se guarda en base de datos. Se hace una comprobación para verificar si el tipo de documento se
 	 * corresponde a la realidad.
-	 * 
+	 *
 	 * @param event Evento que se lanza en la carga del documento y que contiene el mismo
 	 * @throws IOException
 	 */
-	public void cargaImagen(FileUploadEvent event) throws IOException {
+	public void cargaImagen(final FileUploadEvent event) throws IOException {
 		this.nombreDoc = "";
-		UploadedFile uFile = event.getFile();
+		final UploadedFile uFile = event.getFile();
 		user = userService.cargaImagenSinGuardar(IOUtils.toByteArray(uFile.getInputstream()), user);
 		nombreDoc = uFile.getFileName();
 	}
@@ -379,7 +378,7 @@ public class TeamBean implements Serializable {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO,
 					"Membru al echipei de conducere eliminat", null);
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 					"A apărut o eroare la eliminarea membrului echipei de conducere, încercați din nou mai târziu");
 		}
@@ -398,9 +397,9 @@ public class TeamBean implements Serializable {
 	 * OJOOOO !!! A eliminar..Proba envio correo con adjuntos.
 	 */
 	public void enviarCorreoAdjuntos() {
-		Map<String, String> paramPlantilla = new HashMap<>();
-		List<File> paramAdjunto = new ArrayList<File>();
-		File param = new File("C:\\Users\\Casa\\Desktop\\consultadenuncia.sql");
+		final Map<String, String> paramPlantilla = new HashMap<>();
+		final List<File> paramAdjunto = new ArrayList<>();
+		final File param = new File("C:\\Users\\Casa\\Desktop\\consultadenuncia.sql");
 		paramAdjunto.add(param);
 		paramPlantilla.put("cuerpo", "Cuerpo proba");
 		paramPlantilla.put("ApoyoCorreo", "ApoyoCorreo proba");
@@ -419,14 +418,14 @@ public class TeamBean implements Serializable {
 	 */
 	public void establecerUsuariosFinales() {
 		usuariosSeleccionadosFinales.add(user);
-		modelUser.setDatasource(usuariosSeleccionadosFinales);
+		modelUser.setDsource(usuariosSeleccionadosFinales);
 		this.usuariosSeleccionadosFinales = usuariosSeleccionados;
 	}
 
 	/**
 	 * Transmite datele utilizatorului pe care dorim să le modificăm în formular, astfel încât acestea să schimbe
 	 * valorile pe care le doresc.
-	 * 
+	 *
 	 * @param usuario Utilizator recuperat din formularul de căutare al utilizatorului
 	 * @return URL-ul paginii de modificare a utilizatorului
 	 */
@@ -435,7 +434,7 @@ public class TeamBean implements Serializable {
 		this.user = tm.getUser();
 		this.photoSelected = null;
 		this.provinciaSelect = new PProvince();
-		provinciaSelect = user.getPersonalData().getProvince();
+		provinciaSelect = user.getProvince();
 		this.localidades = new ArrayList<>();
 		localidadesSelected = localityService.findByProvince(provinciaSelect);
 		this.provinces = provinceService.fiindAll();
@@ -490,21 +489,8 @@ public class TeamBean implements Serializable {
 			this.user = usu;
 
 			if (validar()) {
-				final PersonalData pd = new PersonalData();
-				pd.setAddress(user.getPersonalData().getAddress());
-				pd.setBirthDate(user.getPersonalData().getBirthDate());
-				pd.setCivilStatus(user.getPersonalData().getCivilStatus());
-				pd.setEducation(user.getPersonalData().getEducation());
-				pd.setIdCard(user.getPersonalData().getIdCard());
-				pd.setLocality(localidadesSelected.get(0));
-				pd.setNumberCard(user.getPersonalData().getNumberCard());
-				pd.setPersonalEmail(user.getPersonalData().getPersonalEmail());
-				pd.setPhone(user.getPersonalData().getPhone());
-				pd.setPhoto(user.getPersonalData().getPhoto());
-				pd.setProvince(user.getPersonalData().getProvince());
-				pd.setSex(user.getPersonalData().getSex());
-				pd.setValidated(user.getPersonalData().getValidated());
-				pd.setWorkplace(user.getPersonalData().getWorkplace());
+				new PersonalData();
+				user.setLocality(localidadesSelected.get(0));
 				userService.save(user);
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
 						"Utilizatorul a fost modificat corect");
@@ -590,7 +576,7 @@ public class TeamBean implements Serializable {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO,
 					"Membru al echipei de conducere modificat", team.getTeam().getDescription());
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 					"A apărut o eroare în încercarea de a modifica membrul echipei de conducere, încercați din nou mai târziu");
 		}
@@ -605,7 +591,7 @@ public class TeamBean implements Serializable {
 	public void onRowSelectedUser(final SelectEvent event) {
 		this.user = (Users) event.getObject();
 		usuariosSeleccionadosFinales.add(user);
-		modelUser.setDatasource(usuariosSeleccionadosFinales);
+		modelUser.setDsource(usuariosSeleccionadosFinales);
 	}
 
 	/**
@@ -630,13 +616,13 @@ public class TeamBean implements Serializable {
 
 	/**
 	 * Metodă care captează evenimentul "Selectați toate" sau "Deselectați toate" în vizualizarea Team.
-	 * 
+	 *
 	 * @param toogleEvent ToggleSelectEvent
 	 */
 	public void onToggleSelectUsers(final ToggleSelectEvent toogleEvent) {
 		if (toogleEvent.isSelected()) {
 			usuariosSeleccionadosFinales = buscaUsuarios();
-			modelUser.setDatasource(usuariosSeleccionadosFinales);
+			modelUser.setDsource(usuariosSeleccionadosFinales);
 			usuariosSeleccionados = new ArrayList<>(usuariosSeleccionadosFinales);
 		}
 	}
@@ -665,7 +651,7 @@ public class TeamBean implements Serializable {
 				context.execute("PF('dlgOrdena').hide();");
 			}
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 					"A apărut o eroare la salvarea modificărilor, încercați din nou mai târziu");
 		}
@@ -751,8 +737,7 @@ public class TeamBean implements Serializable {
 	 */
 	private boolean validarNifUnico() {
 		boolean resultado = true;
-		if (!StringUtils.isEmpty(this.user.getPersonalData().getIdCard())
-				&& this.user.getPersonalData().getIdCard() != null) {
+		if (!StringUtils.isEmpty(this.user.getIdCard()) && this.user.getIdCard() != null) {
 			try {
 				resultado = buscarUsuarioPorNif();
 			}

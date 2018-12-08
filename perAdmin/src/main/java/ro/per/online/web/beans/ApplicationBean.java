@@ -16,12 +16,14 @@ import org.springframework.stereotype.Component;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.Propriedades;
 import ro.per.online.services.PropriedadService;
+import ro.per.online.services.ProvinceService;
 
 /**
  * Clase utilizada para cargar datos en el contexto de la aplicación al arrarancar el servidor.
- * 
+ *
  * @author STAD
  *
  */
@@ -69,6 +71,14 @@ public class ApplicationBean implements Serializable {
 	 */
 	private List<Propriedades> listaExtensiones;
 
+	@Autowired
+	private ProvinceService provinceService;
+
+	/**
+	 * Lista de judete.
+	 */
+	private List<PProvince> provinces;
+
 	/**
 	 * Servicio de propriedades.
 	 */
@@ -77,11 +87,11 @@ public class ApplicationBean implements Serializable {
 	private transient PropriedadService propriedadService;
 
 	/**
-	 * 
+	 *
 	 */
 	private void extensiones() {
-		Map<String, String> mapaParametros = new HashMap<>();
-		for (Propriedades param : listaExtensiones) {
+		final Map<String, String> mapaParametros = new HashMap<>();
+		for (final Propriedades param : listaExtensiones) {
 			mapaParametros.put(param.getName(), param.getValue());
 		}
 		setMapaExtensiones(mapaParametros);
@@ -95,16 +105,17 @@ public class ApplicationBean implements Serializable {
 		this.listaConfMail = new ArrayList<>();
 		listaConfMail = propriedadService.findByFilename(MAIL);
 		listaExtensiones = propriedadService.findByFilename(EXT);
+		this.provinces = provinceService.fiindAll();
 		paramMail();
 		extensiones();
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private void paramMail() {
-		Map<String, String> mapaParametros = new HashMap<>();
-		for (Propriedades param : listaConfMail) {
+		final Map<String, String> mapaParametros = new HashMap<>();
+		for (final Propriedades param : listaConfMail) {
 			mapaParametros.put(param.getName(), param.getValue());
 		}
 		setMapaParametrosMail(mapaParametros);

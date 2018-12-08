@@ -61,7 +61,7 @@ public class LocalityServiceImpl implements LocalityService {
 
 	/**
 	 * Comprueba si existe un municipio conociendo su nombre.
-	 * 
+	 *
 	 * @param name nombre del municipio
 	 * @param provincia a la que pertenece el municipio
 	 * @return valor booleano
@@ -69,6 +69,18 @@ public class LocalityServiceImpl implements LocalityService {
 	@Override
 	public boolean existeByNameIgnoreCaseAndProvincia(final String name, final PProvince provincia) {
 		return localityRepository.existsByNameIgnoreCaseAndProvince(name, provincia);
+	}
+
+	/**
+	 * Comprueba si existe un municipio conociendo su nombre.
+	 *
+	 * @param name nombre del municipio
+	 * @param provincia a la que pertenece el municipio
+	 * @return valor booleano
+	 */
+	@Override
+	public PLocality localidadByNameIgnoreCaseAndProvincia(final String name, final PProvince provincia) {
+		return localityRepository.findByNameIgnoreCaseAndProvince(name, provincia);
 	}
 
 	/**

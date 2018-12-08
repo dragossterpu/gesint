@@ -1,6 +1,7 @@
 package ro.per.online.services.impl;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -25,6 +26,7 @@ import ro.per.online.services.LocalityService;
 import ro.per.online.services.ProvinceService;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
+import ro.per.online.util.Utilities;
 import ro.per.online.util.UtilitiesCriteria;
 import ro.per.online.web.beans.UsuarioBusqueda;
 
@@ -59,17 +61,23 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
-	 * 
+	 *
 	 */
 	@Autowired
 	private ProvinceService provinceService;
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul localitatilor.
-	 * 
+	 *
 	 */
 	@Autowired
 	private LocalityService localityService;
+
+	/**
+	 * Utilidades.
+	 */
+	@Autowired
+	private Utilities utilities;
 
 	/**
 	 * Busca usuarios con los parametros de búsqueda.
@@ -117,7 +125,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * Busca usuarios utilizando criteria.
-	 * 
+	 *
 	 * @param usuarioBusqueda UsuarioBusqueda
 	 * @return List<User>
 	 */
@@ -138,7 +146,7 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * Recibe un archivo UploadedFile y los datos necesarios para general un Documento pero no lo almacena en base de
 	 * datos. Sólo deja el objeto preparado para guardarlo.
-	 * 
+	 *
 	 * @param file fichero a cargar en BDD
 	 * @param tipo tipo de documentp
 	 * @param inspeccion inspección asociada al documento
@@ -147,7 +155,7 @@ public class UserServiceImpl implements UserService {
 	 * @throws ProgesinException excepción lanzada
 	 */
 	@Override
-	public Users cargaImagenSinGuardar(byte[] file, Users user) throws IOException {
+	public Users cargaImagenSinGuardar(final byte[] file, final Users user) throws IOException {
 		return crearImagen(file, user);
 	}
 
@@ -158,23 +166,23 @@ public class UserServiceImpl implements UserService {
 	 * @param usuario
 	 * @return usuario
 	 */
-	private void cargarDatosPersonaleUser(byte[] fileBlob, final Users usuario) {
+	private void cargarDatosPersonaleUser(final byte[] fileBlob, final Users usuario) {
 		final PersonalData pd = new PersonalData();
-		pd.setAddress(usuario.getPersonalData().getAddress());
-		pd.setBirthDate(usuario.getPersonalData().getBirthDate());
-		pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
-		pd.setEducation(usuario.getPersonalData().getEducation());
-		pd.setIdCard(usuario.getPersonalData().getIdCard());
-		pd.setLocality(usuario.getPersonalData().getLocality());
-		pd.setNumberCard(usuario.getPersonalData().getNumberCard());
-		pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
-		pd.setPhone(usuario.getPersonalData().getPhone());
-		pd.setPhoto(fileBlob);
-		pd.setProvince(usuario.getPersonalData().getProvince());
-		pd.setSex(usuario.getPersonalData().getSex());
-		pd.setValidated(usuario.getPersonalData().getValidated());
-		pd.setWorkplace(usuario.getPersonalData().getWorkplace());
-		usuario.setPersonalData(pd);
+		// pd.setAddress(usuario.getPersonalData().getAddress());
+		// pd.setBirthDate(usuario.getPersonalData().getBirthDate());
+		// pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
+		// pd.setEducation(usuario.getPersonalData().getEducation());
+		// pd.setIdCard(usuario.getPersonalData().getIdCard());
+		// pd.setLocality(usuario.getPersonalData().getLocality());
+		// pd.setNumberCard(usuario.getPersonalData().getNumberCard());
+		// pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
+		// pd.setPhone(usuario.getPersonalData().getPhone());
+		usuario.setPhoto(fileBlob);
+		// pd.setProvince(usuario.getPersonalData().getProvince());
+		// pd.setSex(usuario.getPersonalData().getSex());
+		// pd.setValidated(usuario.getPersonalData().getValidated());
+		// pd.setWorkplace(usuario.getPersonalData().getWorkplace());
+		// usuario.setPersonalData(pd);
 	}
 
 	/**
@@ -203,49 +211,44 @@ public class UserServiceImpl implements UserService {
 				Constantes.FECHACREACION);
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getName(), criteria, "name");
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getLastName(), criteria, "lastName");
-		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getId(), criteria,
-				"personalData.province.id");
-		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getIdCard(), criteria, "personalData.idCard");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getId(), criteria, "province.id");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadBoolean(usuarioBusqueda.getValidated(), criteria, "validated");
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getIdCard(), criteria, "idCard");
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getEmail(), criteria, "email");
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getRole(), criteria, "role");
-		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getSex(), criteria, "personalData.sex");
-		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getCivilStatus(), criteria,
-				"personalData.civilStatus");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getSex(), criteria, "sex");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getCivilStatus(), criteria, "civilStatus");
 		if (usuarioBusqueda.getTypeLocality() != null) {
-			criteria.createAlias("personalData.locality", "locality");
+			criteria.createAlias("locality", "locality");
 
 			UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getTypeLocality(), criteria,
 					"locality.typelocality");
 		}
 
-		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria,
-				"personalData.education");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria, "education");
 		if (usuarioBusqueda.getIdProvincia() != null) {
-			criteria.add(Restrictions.eq("personalData.province",
-					provinceService.findById(usuarioBusqueda.getIdProvincia())));
+			criteria.add(Restrictions.eq("province", provinceService.findById(usuarioBusqueda.getIdProvincia())));
 			// UtilitiesCriteria.setCondicionCriteriaIgualdadLong(
 			// provinceService.findById(usuarioBusqueda.getIdProvincia()), criteria, "personalData.province");
 		}
 		if (usuarioBusqueda.getIdLocalidad() != null) {
-			criteria.add(Restrictions.eq("personalData.locality",
-					localityService.findById(usuarioBusqueda.getIdLocalidad())));
+			criteria.add(Restrictions.eq("locality", localityService.findById(usuarioBusqueda.getIdLocalidad())));
 			// UtilitiesCriteria.setCondicionCriteriaIgualdadLong(
 			// localityService.findById(usuarioBusqueda.getIdLocalidad()), criteria, "personalData.locality");
 		}
-		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria,
-				"personalData.education");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria, "education");
 	}
 
 	/**
 	 * Crea el documento.
-	 * 
+	 *
 	 * @param file Fichero subido por el usuario.
 	 * @param user a la que se asocia.
 	 * @return user generado
 	 * @throws DataAccessException Excepción SQL
 	 * @throws IOException Excepción entrada/salida
 	 */
-	private Users crearImagen(byte[] file, Users user) throws IOException {
+	private Users crearImagen(final byte[] file, final Users user) throws IOException {
 		cargarDatosPersonaleUser(file, user);
 		userRepository.save(user);
 		return user;
@@ -277,7 +280,7 @@ public class UserServiceImpl implements UserService {
 	 * @see
 	 */
 	@Override
-	public Users fiindOne(String id) {
+	public Users fiindOne(final String id) {
 		final Users user = userRepository.findOne(id);
 		return user;
 	}
@@ -289,7 +292,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public Users findByIdCard(final String cnp) {
-		return this.userRepository.findByPersonalDataIdCard(cnp);
+		return this.userRepository.findByIdCard(cnp);
 	}
 
 	/**
@@ -330,12 +333,82 @@ public class UserServiceImpl implements UserService {
 
 	/*
 	 * Metoda care genereaza automat 100 de utilizatori
-	 * 
+	 *
 	 * @see ro.per.online.services.UserService#save(ro.per.online.persistence.entities.Users)
 	 */
 	@Override
 	@Transactional(readOnly = false)
-	public Users save(Users entity) {
+	public Users save(final Users entity) {
 		return userRepository.save(entity);
+	}
+
+	/**
+	 * Guarda una lista de usuarios.
+	 * @param usuarios lista
+	 * @return lista de usuarios
+	 */
+	@Override
+	public List<Users> guardado(final List<Users> usuarios) {
+		return (List<Users>) userRepository.save(usuarios);
+	}
+
+	/**
+	 * Establece una lista de usuarios como dados de baja lógica.
+	 * @param listaUsuarios Lista de usuarios a modificar
+	 * @return lista de usuarios modificada
+	 */
+	@Override
+	public List<Users> bajaLogica(final List<String> listaUsuarios) {
+		final Date fecha = new Date();
+		final List<Users> listaGuardar = userRepository.findByUsernameIn(listaUsuarios);
+		for (final Users usuario : listaGuardar) {
+			usuario.setDateDeleted(fecha);
+			usuario.setUserDeleted(utilities.getUsuarioLogado().getUsername());
+		}
+		return (List<Users>) userRepository.save(listaGuardar);
+	}
+
+	/**
+	 * Establece una lista de usuarios como inactivos.
+	 * @param listaUsuarios Lista de usuarios a modificar
+	 * @return lista de usuarios modificada
+	 */
+	@Override
+	public List<Users> desactivar(final List<String> listaUsuarios) {
+		final Date fecha = new Date();
+		final List<Users> listaGuardar = userRepository.findByUsernameIn(listaUsuarios);
+		for (final Users usuario : listaGuardar) {
+			usuario.setValidated(false);
+			usuario.setUserUpdated(utilities.getUsuarioLogado().getUsername());
+		}
+		return (List<Users>) userRepository.save(listaGuardar);
+	}
+
+	/**
+	 * Devuelve una lista con nombres de los usuarios que estén presentes en la lista y en BBDD.
+	 * @param listaNombres lista de nombres que se buscarán en bbdd
+	 * @return Lista de nombres de usuarios presentes en la BBDD
+	 */
+	@Override
+	public List<String> buscarListaDeUsernames(final List<String> listaNombres) {
+		return userRepository.findUsernamesByUsername(listaNombres);
+	}
+
+	/**
+	 * Busca el usuario por criteria sin paginar.
+	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @return lista de usuarios
+	 */
+	@Override
+	public List<Users> buscarUsuario(final UsuarioBusqueda usuarioBusqueda) {
+		try {
+			session = sessionFactory.openSession();
+			final Criteria criteria = session.createCriteria(Users.class);
+			creaCriteria(usuarioBusqueda, criteria);
+			return criteria.list();
+		}
+		finally {
+			session.close();
+		}
 	}
 }

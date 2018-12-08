@@ -32,12 +32,21 @@ public interface LocalityService {
 
 	/**
 	 * Comprueba si existe un municipio conociendo su nombre.
-	 * 
+	 *
 	 * @param name nombre del municipio
 	 * @param provincia a la que pertenece el municipio
 	 * @return valor booleano
 	 */
 	boolean existeByNameIgnoreCaseAndProvincia(String name, PProvince provincia);
+
+	/**
+	 * Cauta un municipio conociendo su nombre.
+	 *
+	 * @param name nombre del municipio
+	 * @param judetul
+	 * @return PLocality localidad
+	 */
+	PLocality localidadByNameIgnoreCaseAndProvincia(String name, PProvince provincia);
 
 	/**
 	 * Cauta toate localitatile

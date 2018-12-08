@@ -26,29 +26,6 @@
 			</div>
 			<div id="contenido">
 				<ui:insert name="content">Default content</ui:insert>
-				<script type="text/javascript">
-		$(document).ready(function() {
-			var ruta = window.location.pathname.substring(1).split('/');
-		       if(ruta[1] == 'users'|| ruta[1] == 'expedientes'|| ruta[1] == 'solicitudes'|| ruta[1] == 'alertas'){
-		    	   $('.itemUsuarios').addClass('activeMenu');
-		    	   return;
-		       }else if(ruta[1] == 'actividades'|| ruta[1] == 'administracionFormulariosEvaluacion'|| ruta[1] == 
-		    		   'fuentes'|| ruta[1] == 'medidas'|| ruta[1] == 'puestos'|| ruta[1] == 'riesgos'|| ruta[1] == 'tareas' ){
-		    	   $('.itemAdministracion').addClass('activeMenu');
-		       }else if(ruta[1] == 'index.xhtml' ){
-		    	   document.getElementsByClassName('itemInicio')[0].parentNode.classList.add('activeMenu');
-		    	   return;
-		       }else if(ruta[1] == 'estadisticas' ){
-		    	   $('.itemEstadisticas').addClass('activeMenu');
-		       }else if(ruta[1] == 'formacion' ){
-		    	   $('.itemFormacion').addClass('activeMenu');
-		       }else if(ruta[1] == 'actividadFuenteIcono' || ruta[1] == 'gestorCategorias' || ruta[1] == 
-		    		   'gestorDocumental' || ruta[1] == 'gestorEtiquetas' || ruta[1] == 'gestorLinks' || ruta[1] == 
-		    		   'gestorParametros' || ruta[1] == 'gestorTerminos' || ruta[1] == 'gestorVideos' || ruta[1] == 'preguntasFrecuentes' ){
-		    	   $('.itemGestorDocumental').addClass('activeMenu');
-		       }
-		})
-	</script>
 			</div>
 			<div id="footer">
 				<ui:include src="footer.xhtml" />

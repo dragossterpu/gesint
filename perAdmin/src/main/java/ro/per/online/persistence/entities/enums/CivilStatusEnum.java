@@ -40,7 +40,7 @@ public enum CivilStatusEnum {
 	/**
 	 * Altul.
 	 */
-	OTHER("Altul"),
+	OTHER("Alta"),
 
 	/**
 	 * Nespecificat.
@@ -58,8 +58,8 @@ public enum CivilStatusEnum {
 	 *
 	 */
 	public static List<CivilStatusEnum> getStatus() {
-		List<CivilStatusEnum> civilStatuts = new ArrayList<>();
-		for (CivilStatusEnum civilStatut : CivilStatusEnum.values()) {
+		final List<CivilStatusEnum> civilStatuts = new ArrayList<>();
+		for (final CivilStatusEnum civilStatut : CivilStatusEnum.values()) {
 			civilStatuts.add(civilStatut);
 		}
 		return civilStatuts;

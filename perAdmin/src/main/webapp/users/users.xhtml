@@ -136,6 +136,19 @@
 					</div>
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="validated" value="Activ/Inactiv:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:selectOneMenu class="selectFiltro" id="validated"
+								value="#{userBean.userBusqueda.validated}">
+								<f:selectItem itemLabel="TODOS" itemValue="" />
+								<f:selectItem itemLabel="ACTIV" itemValue="true" />
+								<f:selectItem itemLabel="INACTIV" itemValue="false" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<h:outputLabel for="provinciasSelect" styleClass="buscador" value="Organizația/Județul:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">							
@@ -186,7 +199,8 @@
 						oncomplete="$('.mensajeSinResultados').css('opacity', 1)"
 						onstart="PF('statusDialog').show()" class="right"
 						onsuccess="PF('statusDialog').hide()"/>
-						<p:commandButton value="Nou membru" action="#{userBean.getFormAltaUsuario}"  icon="fa fa-user-plus"/>
+					<p:commandButton value="Nou membru" styleClass="newActionTable"
+					 action="#{userBean.getFormAltaUsuario}"  icon="fa fa-user-plus"/>
 				</div>
 			</div>
 			<div class="resultadosFiltro">
@@ -231,14 +245,14 @@
 							<h:outputText value="#{user.username}" />
 						</p:column>
 						<p:column headerText="Județul/Organizația " sortBy="#{user.province.name}" style="width:16%;" visible="#{userBean.list[5]}" exportable="#{userBean.list[5]}">
-							<h:outputText value="#{user.personalData.province.name}" />
+							<h:outputText value="#{user.province.name}" />
 						</p:column>
-						<p:column headerText="Activ/Inactiv" sortBy="#{user.personalData.validated}"
+						<p:column headerText="Activ/Inactiv" sortBy="#{user.validated}"
 							visible="#{userBean.list[6]}" exportable="#{userBean.list[6]}" style="width:10%;text-align:center;">
 							<h:outputText styleClass="fa fa-check-circle"
-									rendered="#{user.personalData.validated}" />
+									rendered="#{user.validated}" />
 							<h:outputText styleClass="fa fa-times-circle"
-									rendered="#{not user.personalData.validated}" />
+									rendered="#{not user.validated}" />
 						</p:column>
 						<p:column styleClass="botonTabla text-center" exportable="false" style="width:10%;" toggleable="false">
 							<h:commandLink title="Modificare utilizator"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
@@ -260,7 +274,29 @@
     					</f:facet>
 					</p:dataTable>
 				</p:outputPanel>
+ 				<p:dialog header="Procesamiento masivo"
+                        id="dlgProcseoMasivo" widgetVar="cdMasivo"
+                        modal="true">
 
+                        <h:outputText
+                            value="Elija el método de entrada de datos." />
+                        <p:button
+                            title="Obțineți utilizatorii pe ecran"
+                            value="Por pantalla"
+                            outcome="/users/operacion_masiva_pantalla.xhtml?faces-redirect=true">
+                            <f:param name="esBorrado"
+                                value="#{usuarioController.usuarioForm.esBorrado}" />
+                        </p:button>
+
+                        <p:button title="Obțineți utilizatorii după fișier"
+                            value="Por fichero"
+                            outcome="/users/operacion_masiva_fichero.xhtml?faces-redirect=true">
+                            <f:param name="esBorrado"
+                                value="#{usuarioController.usuarioForm.esBorrado}" />
+                             <f:param name="plantilla"
+                                value="#{Constantes.PLANTILLAOTROS}" />
+                        </p:button>
+                    </p:dialog>
 				<p:confirmDialog global="true">
 					<div class="centrarBotonesDialog">
 						<p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
