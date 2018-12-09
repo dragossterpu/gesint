@@ -310,7 +310,7 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	 * @param event evento de carga
 	 */
 	public void cargaFicheroUsuarios(final FileUploadEvent event) {
-		operacionMasivaFicheroService.procesarOperacionMasivaFichero(event, "ÎNREGISTRARE",
+		operacionMasivaFicheroService.procesarOperacionMasivaFichero(event, "ALTA",
 				"Înregistrare membrii masiv.");
 
 	}

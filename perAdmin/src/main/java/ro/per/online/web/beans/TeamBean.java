@@ -279,19 +279,18 @@ public class TeamBean implements Serializable {
 	}
 
 	public void alta() {
-		for (int i = 0; i < 400; i++) {
+		for (int i = 0; i < 1200; i++) {
 			final Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
 			user.setEmail("proba@gmail.com");
-			user.setLastName(Generador.apellidoFinal());
+			user.setName(Generador.apellidoFinal().toUpperCase());
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
-			final PersonalData pd = new PersonalData();
-			pd.setSex(SexEnum.randomLetter());
+			user.setSex(SexEnum.randomLetter());
 			if (user.getSex().getName().equals("MAN")) {
-				user.setName(Generador.nombreFinalHombre());
+				user.setLastName(Generador.nombreFinalHombre());
 			}
 			else {
-				user.setName(Generador.nombreFinal());
+				user.setLastName(Generador.nombreFinal());
 			}
 			user.setAddress(Generador.nombresCalleFinal().concat("  Nr: ").concat(Generador.getNumeroCalle()));
 			user.setBirthDate(Generador.obtenerFechaNastere());
@@ -313,7 +312,7 @@ public class TeamBean implements Serializable {
 			user.setAlertChannel(AlertChannelEnum.EMAIL);
 			user.setValidated(true);
 			user.setWorkplace(Generador.meserii());
-			user.setUsername(pd.getPersonalEmail());
+			user.setUsername(user.getPersonalEmail());
 			user.setRole(RoleEnum.ROLE_MEMBRU);
 			user.setUserCreate("system");
 			userService.save(user);

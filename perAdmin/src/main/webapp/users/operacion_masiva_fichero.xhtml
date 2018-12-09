@@ -73,14 +73,14 @@
                             value="Anulați"
                             rendered="#{procesoMasivoBean.esBorradoMasivo == 'true' or procesoMasivoBean.esBorradoMasivo == 'false'}"/>
 
-                    <ui:decorate
-                            template="/componentes/dialogoConfirmacion.xhtml">
-                        <ui:param name="ruta"
-                                  value="#{procesoMasivoBean.esBorradoMasivo != 'true' and procesoMasivoBean.esBorradoMasivo != 'false' ?
-                            '/users/altaUser' : 
-                            '/users/users'}"/>
-                    </ui:decorate>
-
+						<p:dialog id="dialog" widgetVar="dialogMessage" header="INFO"
+							closable="false">
+							<p:messages for="dialogMessage" autoUpdate="true"
+								showDetail="true" showSummary="true" />
+							<div class="centrarBotonesDialog">
+								<p:button value="Închideți" outcome="/users/users" />
+							</div>
+						</p:dialog>
                 </h:form>
             </div>
         </div>

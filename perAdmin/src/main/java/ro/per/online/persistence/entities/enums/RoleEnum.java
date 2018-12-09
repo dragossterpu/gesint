@@ -66,11 +66,13 @@ public enum RoleEnum {
 	 * Descrierea enum.
 	 */
 	private String description;
-
+	
+	
 	/**
 	 * @return Nombre del enum sin el prefijo "ROLE_"
 	 */
 	public String getNombre() {
 		return name().substring(5);
 	}
+	
 }

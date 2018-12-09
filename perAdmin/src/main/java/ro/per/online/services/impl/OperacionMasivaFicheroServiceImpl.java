@@ -28,6 +28,7 @@ import ro.per.online.exceptions.PerException;
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.enums.AlertChannelEnum;
 import ro.per.online.persistence.entities.enums.CivilStatusEnum;
 import ro.per.online.persistence.entities.enums.EducationEnum;
 import ro.per.online.persistence.entities.enums.RoleEnum;
@@ -36,6 +37,7 @@ import ro.per.online.persistence.entities.enums.SexEnum;
 import ro.per.online.persistence.entities.enums.TypeLocalityEnum;
 import ro.per.online.services.LocalityService;
 import ro.per.online.services.OperacionMasivaFicheroService;
+import ro.per.online.services.ProvinceService;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
 import ro.per.online.util.Utilities;
@@ -53,6 +55,13 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 	 */
 	@Autowired
 	private UserService usuarioService;
+	
+	/**
+	 * Variabila utilizata pentru a injecta serviciul provinciei.
+	 *
+	 */
+	@Autowired
+	private ProvinceService provinceService;
 
 	/**
 	 * Encriptador para la contraseña.
@@ -276,6 +285,8 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		usuario.setUsername(cellValue);
 		// Email
 		usuario.setEmail(cellValue);
+		// Email personal
+		usuario.setPersonalEmail(cellValue);
 		// Rol
 		cellValue = dataFormatter.formatCellValue(colIterator.next());
 		utilities.existeRol(RoleEnum.valueOf(cellValue));
@@ -317,14 +328,15 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		// PROVINCIA
 		cellValue = obtenerIdCelda(dataFormatter.formatCellValue(colIterator.next()).trim());
 		utilities.esEntero(cellValue);
-		final PProvince provincia = new PProvince();
+		 PProvince provincia = new PProvince();
 		try {
 			provincia.setId(Long.valueOf(cellValue));
 		}
 		catch (final NumberFormatException e) {
 			throw new PerException("Codul judeţului trebuie să fie numeric.");
-		}
-		if (applicationController.getProvinces().indexOf(provincia) != -1) {
+		}		
+		provincia= provinceService.findById(provincia.getId());
+		if (provincia != null) {
 			usuario.setProvince(provincia);
 		}
 		else {
@@ -346,6 +358,10 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 			usuario.setLocality(localidad);
 		}
 		usuario.setPassword(passwordEncoder.encode("1"));
+		// MEMBRU ACTIV
+		usuario.setValidated(true);
+		// SCANAL DE COMUNICARE
+		usuario.setAlertChannel(AlertChannelEnum.EMAIL);
 	}
 
 	/**

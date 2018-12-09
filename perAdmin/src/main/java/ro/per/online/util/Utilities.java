@@ -314,7 +314,16 @@ public class Utilities {
 			throw new PerException("Câmpul rol nu este un valid.");
 		}
 	}
-
+	/**
+	 * Verificați dacă există un rol trecut prin parametru.
+	 * @param descripcion del enum
+	 * @throws PerException excepción propia de per
+	 */
+	public void existeRol(final String descripcion) throws PerException {
+		if (!RoleEnum.getRoles().contains(descripcion)) {
+			throw new PerException("Câmpul rol nu este un valid.");
+		}
+	}
 	/**
 	 * Verificați dacă există un camp valabil pentru educatie trecut ca parametru.
 	 * @param descripcion del enum

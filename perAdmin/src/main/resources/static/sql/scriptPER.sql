@@ -488,147 +488,147 @@ COMMIT;
 --Utilizatori
 
 	
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('danut.pop@per.ro', current_date, null, null, 'system', null, null, 'danut.pop@per.ro', 'POP', 'Dănuț', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('14/04/58', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 73,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('14/04/58', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 73,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Profesor la Facultatea de drept', 'ROLE_ADMIN',null,true);
 COMMIT;		
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('mircia.gutau@per.ro', current_date, null, null, 'system', null, null, 'mircia.gutau@per.ro', 'GUTĂU', 'Mircia', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('14/04/58', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 302,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('14/04/58', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 302,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 40, 'MAN', 'Primar Râmnicu Vâlcea', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('cristian.anghel@per.ro', current_date, null, null, 'system', null, null, 'cristian.anghel@per.ro', 'ANGHEL', 'Cristian', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 185,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 185,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 26, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN', null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('radu.cristescu@per.ro', current_date, null, null, 'system', null, null, 'radu.cristescu@per.ro', 'CRISTESCU', 'Radu', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN', null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('bob.vasile@per.ro', current_date, null, null, 'system', null, null, 'bob.vasile@per.ro', 'BOB', 'Vasile', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('cristinel.deaconescu@per.ro', current_date, null, null, 'system', null, null, 'cristinel.deaconescu@per.ro', 'DEACONESCU', 'Cristinel', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('viorel.dobre@per.ro', current_date, null, null, 'system', null, null, 'viorel.dobre@per.ro', 'DOBRE', 'Viorel', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('mirica.dimitrescu@per.ro', current_date, null, null, 'system', null, null, 'mirica.dimitrescu@per.ro', 'DIMITRESCU', 'Mirică', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('bianca.vasile@per.ro', current_date, null, null, 'system', null, null, 'bianca.vasile@per.ro', 'VASILE', 'Bianca', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('daniel.diaconu@per.ro', current_date, null, null, 'system', null, null, 'daniel.diaconu@per.ro', 'DIACONU', 'Daniel', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('ovidiu.zara@per.ro', current_date, null, null, 'system', null, null, 'ovidiu.zara@per.ro', 'ZARĂ', 'Ovidiu', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('danut.frunza@per.ro', current_date, null, null, 'system', null, null, 'danut.frunza@per.ro', 'FRUNZĂ', 'Dănuț', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
- INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('dragos.sterpu@per.ro', current_date, null, null, 'system', null, null, 'dragos.sterpu@per.ro', 'STERPU', 'Dragoş', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
-  INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+  INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('costica.popsor@per.ro', current_date, null, null, 'system', null, null, 'costica.popsor@per.ro', 'POPȘOR', 'Costică', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('danut.frangu@per.ro', current_date, null, null, 'system', null, null, 'danut.frangu@per.ro', 'FRANGU', 'Dănuț', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
-INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('eugen.vizitiu@per.ro', current_date, null, null, 'system', null, null, 'eugen.vizitiu@per.ro', 'VIZITIU', 'Eugen', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
- INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('tineret@per.ro', current_date, null, null, 'system', null, null, 'tineret@per.ro', 'POP', 'Dănuț', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
- INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email, last_name, name, 
+ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('admin', current_date, null, null, 'system', null, null, 'admin@per.ro', 'ADMIN', 'ADMIN', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'FACULTY', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
 

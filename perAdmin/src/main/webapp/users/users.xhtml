@@ -226,7 +226,12 @@
 										<p:dataExporter type="csv" target="userTable" fileName="userList" />
 									</h:commandLink>
 								</div>
-								<span class="titulo">UTILIZATORI/MEMBRII</span>
+								<span class="titulo">UTILIZATORI/ MEMBRII</span>
+								<p:menuButton value="Operații masive membri: Înregistrare/ Blocare/ Eliminare" styleClass="newActionSelectTable" icon="fa fa-plus">
+							        <p:menuitem value="Înregistrare masivă"  icon="fa fa-plus" outcome="/users/operacion_masiva_fichero.xhtml"  styleClass="sentenceText" />
+							        <p:menuitem value="Blocare masivă" action="#{teamBean.abrirDialogoOrdenaMembru()}"   icon="fa fa-pencil" styleClass="sentenceText"/>
+							        <p:menuitem value="Eliminare masivă" action="#{teamBean.abrirDialogoOrdenaMembru()}"   icon="fa fa-trash" styleClass="sentenceText"/>
+							    </p:menuButton>
 							</p:outputPanel>
 						</f:facet>
 						
@@ -260,7 +265,7 @@
 							<p:commandButton title="Eliminare" icon="fa fa-trash" styleClass="modBtn"  actionListener="#{userBean.removeUser(user)}" 
 							update="searchListUsers" oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">
 								
-								<p:confirm header="Ștergere utilizator" message="Sunteți sigur că doriți să ștergeți acest utilizator?" icon="fa fa-warning-sign" />
+								<p:confirm header="Ștergere utilizator" message="Sunteți sigur că doriți să eliminați acest utilizator?" icon="fa fa-warning-sign" />
 							</p:commandButton>
 						</p:column>
 						<f:facet name="footer">
