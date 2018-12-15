@@ -24,7 +24,7 @@ public enum SeccionesEnum {
 	/**
 	 * Sección de usuarios.
 	 */
-	USUARIOS("UTILIZATORI"),
+	USUARIOS("MEMBRII"),
 
 	/**
 	 * Sección de inicio.
@@ -33,7 +33,7 @@ public enum SeccionesEnum {
 	/**
 	 * Sección de administración de formularios.
 	 */
-	ADMINFORMULARIOS("ADMINISTRARE DE FORMULARE"),
+	ADMINFORMULARIOS("ADMINISTRAȚIE FORMULARE"),
 
 	/**
 	 * Sección de administración.
@@ -43,12 +43,12 @@ public enum SeccionesEnum {
 	/**
 	 * Sección de alertas y avisos.
 	 */
-	ALERTAS("ALERTE/COMUNICAȚII"),
+	ALERTAS("COMUNICAȚII"),
 
 	/**
 	 * Sección de estadísticas de evaluaciones.
 	 */
-	ESTADISTICA("STATISTICA"),
+	ESTADISTICA("STATISTICĂ"),
 
 	/**
 	 * Sección de estadísticas de usuario.
@@ -79,11 +79,6 @@ public enum SeccionesEnum {
 	 * Sección de administración.
 	 */
 	SOLICITUDES("APLICAȚII"),
-
-	/**
-	 * Sección de valorame.
-	 */
-	VALORAME("DA-MI NOTA"),
 
 	/**
 	 * Sección de propiedades.

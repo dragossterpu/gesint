@@ -22,7 +22,7 @@ import ro.per.online.services.RegistroActividadService;
 
 /**
  * Bean para la gestión del registro de actividad.
- * 
+ *
  * @author STAD
  *
  */
@@ -34,7 +34,7 @@ import ro.per.online.services.RegistroActividadService;
 public class RegistroActividadBean implements Serializable {
 
 	/**
-		 * 
+		 *
 		 */
 	private static final long serialVersionUID = 1L;
 
@@ -73,7 +73,7 @@ public class RegistroActividadBean implements Serializable {
 	 * Devuelve una lista con las nombre de usuario que contengan la cadena de texto que se recibe como parámetro.
 	 * @param infoUsuario Usuario por el que se hace la consulta
 	 * @return Listado de resultados
-	 * 
+	 *
 	 */
 	public List<String> autocompletarUsuario(final String infoUsuario) {
 		return regActividadService
@@ -86,13 +86,13 @@ public class RegistroActividadBean implements Serializable {
 	 */
 	public void buscarRegActividad() {
 		model.setBusqueda(registroBusqueda);
-		model.load(0, Constantes.TAMPAGINA, Constantes.FECHAALTA, SortOrder.DESCENDING, null);
+		model.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 
 	}
 
 	/**
 	 * Inicializa el bean.
-	 * 
+	 *
 	 */
 	@PostConstruct
 	public void init() {

@@ -27,7 +27,7 @@ import org.springframework.transaction.TransactionException;
 import lombok.Getter;
 import lombok.Setter;
 import ro.per.online.constantes.Constantes;
-import ro.per.online.jsf.scope.FacesViewScope;
+import ro.per.online.constantes.NumeroMagic;
 import ro.per.online.lazydata.LazyDataUsers;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.persistence.entities.enums.SeccionesEnum;
@@ -44,7 +44,7 @@ import ro.per.online.util.Utilities;
 @Getter
 @Setter
 @Controller("procesoMasivoBean")
-@Scope(FacesViewScope.NAME)
+@Scope("session")
 public class ProcesoMasivoUsuariosBean implements Serializable {
 
 	/**
@@ -84,7 +84,7 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	/**
 	 * Número máximo de columnas visibles en la vista.
 	 */
-	private int numeroColumnasListadoUsuarios = 17;
+	private int numeroColumnasListadoUsuarios = NumeroMagic.NUMBERSEVENTEEN;
 
 	/**
 	 * LazyModel para la paginación desde servidor de los datos de la búsqueda de usuarios.
@@ -107,9 +107,14 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	private transient ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 
 	/**
-	 * Indica si es borrado masivo o bloqueo masivo.
+	 * Indica si es borrado masivo.
 	 */
 	private String esBorradoMasivo;
+
+	/**
+	 * Indica si es bloqueo masivo.
+	 */
+	private String esBloqueoMasivo;
 
 	/**
 	 * Indica el título de la página.
@@ -119,7 +124,7 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	/**
 	 * Indica el nombre de la plantillaDescarga.
 	 */
-	private String plantillaDescarga;
+	private String plantillaDescargaAlta;
 
 	/**
 	 * Objeto que contendrá el fichero a descargar.
@@ -132,35 +137,30 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	private Set<Users> listaUsuariosSeleccionados;
 
 	/**
+	 * Tip de operatie masiva.
+	 */
+	private String tipoAltaUserMasivo;
+
+	/**
+	 * Tip string resultado
+	 */
+	private String resultado;
+
+	/**
 	 * Inicializa las variables necesarias del controlador.
 	 */
 	@PostConstruct
 	public void init() {
 		final HttpServletRequest req = (HttpServletRequest) context.getRequest();
-		esBorradoMasivo = String.valueOf(req.getParameter("esBorrado"));
-		plantillaDescarga = Constantes.PLANTILLAALTA;
+		tipoAltaUserMasivo = Constantes.ALTA;
+		esBorradoMasivo = Constantes.ESBORRADO;
+		esBloqueoMasivo = Constantes.ESBLOQUEO;
+		plantillaDescargaAlta = String.valueOf(req.getParameter("plantilla"));
 		usuarioBusqueda = new UsuarioBusqueda();
 		usuarioBusqueda.setUsuariosSeleccionados(new ArrayList<>());
 		listaUsuariosSeleccionados = new HashSet<>();
 		model = new LazyDataUsers(usuarioService);
 		setList(utilities.listaTrue(numeroColumnasListadoUsuarios));
-		preparPantallaPorOperacion();
-	}
-
-	/**
-	 * Establece el título de la página.
-	 */
-	public void preparPantallaPorOperacion() {
-		if (Constantes.TRUE.equals(esBorradoMasivo)) {
-			titulo = "Ștergerea masivă a membrilor";
-		}
-		else if (Constantes.FALSE.equals(esBorradoMasivo)) {
-			titulo = "Blocarea masivă a membrilor";
-			usuarioBusqueda.setValidated(true);
-		}
-		else {
-			titulo = "Înregistrarea masivă a membrilor";
-		}
 	}
 
 	/**
@@ -310,9 +310,8 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	 * @param event evento de carga
 	 */
 	public void cargaFicheroUsuarios(final FileUploadEvent event) {
-		operacionMasivaFicheroService.procesarOperacionMasivaFichero(event, "ALTA",
-				"Înregistrare membrii masiv.");
-
+		operacionMasivaFicheroService.procesarOperacionMasivaFichero(event, Constantes.ALTA,
+				"executând înregistrarea în masă a utilizatorilor.");
 	}
 
 	/**
@@ -331,5 +330,39 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	public void borradoFicheroUsuarios(final FileUploadEvent event) {
 		operacionMasivaFicheroService.procesarOperacionMasivaFichero(event, "ELIMINARE",
 				"executând eliminarea logică în masă a utilizatorilor.");
+	}
+
+	/**
+	 * Transmite datele utilizatorului pe care dorim să le modificăm în formular, astfel încât acestea să schimbe
+	 * valorile pe care le doresc.
+	 *
+	 * @param usuario Utilizator recuperat din formularul de căutare al utilizatorului
+	 * @return URL-ul paginii de modificare a utilizatorului
+	 */
+	public String getFormOperaMasiv(final String tipo) {
+		resultado = null;
+		this.tipoAltaUserMasivo = null;
+		this.esBorradoMasivo = null;
+		this.esBloqueoMasivo = null;
+		this.titulo = "";
+		if (tipo.equals(Constantes.ALTA)) {
+			this.tipoAltaUserMasivo = tipo;
+			this.titulo = "Înregistrare masivă a membrilor prin fișier";
+			plantillaDescargaAlta = "fisier_inregistrare_masiva_membri.xlsx";
+			resultado = "/users/reg_masiva_file?faces-redirect=true";
+
+		}
+		else if (tipo.equals(Constantes.ESBORRADO)) {
+			this.esBorradoMasivo = tipo;
+			this.titulo = "Eliminarea masivă a membrilor";
+			resultado = "/users/del_masiva_file?faces-redirect=true";
+		}
+		else {
+			this.esBloqueoMasivo = tipo;
+			usuarioBusqueda.setValidated(true);
+			this.titulo = "Blocarea masivă a membrilor";
+			resultado = "/users/bloq_masiva_file?faces-redirect=true";
+		}
+		return resultado;
 	}
 }

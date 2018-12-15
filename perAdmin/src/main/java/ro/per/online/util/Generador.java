@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import ro.per.online.constantes.Constantes;
+
 /**
  * Métodos de utilidades.
  * @author STAD
@@ -51,9 +53,41 @@ public class Generador {
 				"Oprea", "Voinea", "Dochioiu", "Albu", "Tabacu", "Manole", "Cristea", "Toma", "Stănescu", "Pușcașu",
 				"Tomescu", "Meceanu", "Ionescu", "Marinescu", "Georgescu", "Vasilescu", "Stoican", "Maican",
 				"Gheorghiu", "Vasiliu", "Pâclea", "Pecaru", "Stoicescu", "Tomescu", "Reaboiu", "Rîciu", "Roateș",
-				"Scafariu", "Sebeșanu", "Șdirea", "Șabac", "Theodorescu" };
-		String apellido = apellidos[1 + new Random().nextInt(59)];
+				"Scafariu", "Sebeșanu", "Șdirea", "Șabac", "Theodorescu", "Acatrinei", "Babageanu", "Bâclea", "Bâgioi",
+				"Beceanu", "Bicăjan", "Bechir", "Băcean", "Becleanu", "Bedean", "Bidirean ", "Bilcan", "Ionescu",
+				"Georgescu", "Vasilescu", "Balagiu", "Bâtrânu", "Bălăcean", "Cabariu", "Cîju", "Căciuleanu",
+				"Câmpureanu", "Chelarașu", "Calcea", "Cîrje", "Cherchez", "Cheregi", "Cimponeriu", "Cămui", "Cerbeanu",
+				"Deaconu", "Diamandescu", "Diceanu", "Dăncescu", "Delcescu", "Fabriș", "Ficior", "Federciuc", "Feișan",
+				"Feleacă", "Filimonescu", "Gâdinceanu", "Giblea", "Geană", "Ginculescu", "Găinariu", "Henciu",
+				"Hăncescu", "Herdean", "Idriceanu", "Ienășescu", "Iftimia", "Jeberean", "Jecan", "Jătăreanu", "Leacă",
+				"Laciu", "Lăceanu", "Logofătu", "Mecineanu", "Macavei", "Mândrescu", "Măgădan", "Miculeasa", "Meiroșu",
+				"Nădișan", "Năescu", "Nuță", "Nicoale", "Nanciu", "Nicolea", "Obăcescu", "Ogaru", "Odobeștianu",
+				"Ogrezeanu", "Pâcleanu", "Pârgaru", "Plăvănescu", "Pălean", "Pencescu", "Păltinișanu", "Rebegeanu",
+				"Robaciu", "Răcășanu", "Râșnoveanu", "Rudișteanu", "Săbiescu", "Secăleanu", "Secașu", "Săcășean",
+				"Scărlătescu" };
+		final String apellido = apellidos[1 + new Random().nextInt(150)];
 		return apellido.toUpperCase();
+	}
+
+	/**
+	 * Obtiene un cnp.
+	 * @return cnp al azar
+	 */
+	public static String generaCnp(final String sex, final Date fecha) {
+
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		final String anString = sdf.format(fecha);
+
+		final SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+		final String day = dayFormat.format(fecha);
+
+		final SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+		final String month = monthFormat.format(fecha);
+
+		final String cnp = sex.concat(anString.substring(2)).concat(month).concat(day).concat("4")
+				.concat(getCodigoPostal());
+
+		return cnp;
 	}
 
 	/**
@@ -133,7 +167,7 @@ public class Generador {
 	 * @return número aleatorio
 	 */
 	public static String getPinNumber() {
-		return getRandomChars(NUMBERS, 4);
+		return getRandomChars(NUMBERS, 6);
 	}
 
 	/**
@@ -165,7 +199,10 @@ public class Generador {
 	 * @return numero cuerpo
 	 */
 	public static String getTelefon() {
-		return getRandomChars(NUMBERS, 9);
+		String telefono = null;
+		final String resto = getRandomChars(NUMBERS, 7);
+		telefono = "07".concat(resto);
+		return telefono;
 	}
 
 	/**
@@ -214,13 +251,18 @@ public class Generador {
 	 * @return nombre al azar
 	 */
 	public static String nombreFinal() {
-		final String[] nombres = { "Andreea", "Elena", "Alexandra", "Denisa", "Ioana", "Gabriela", "Stefania", "Daria",
+		final String[] nombres = { "Andreea", "Elena", "Alexandra", "Denisa", "Ioana", "Gabriela", "Ștefania", "Daria",
 				"Mihaela", "Gabriela", "Eugenia", "Cristina", "Bianca", "Georgiana", "Nicleta", "Teodora", "Diana",
 				"Alexia", "Ionela", "Maria", "Cristina", "Viorica", "Iulia", "Ileana", "Tudora", "Ana", "Florentina",
-				"Larisa", "Sara", "Miruna", "Olga", "Olga Maria", "Adela", "Maria Adela", "Roxana", "Rebeca", "Raluca",
+				"Larisa", "Sara", "Miruna", "Olga", "Amelia", "Adela", "Anastasia", "Roxana", "Rebeca", "Raluca",
 				"Gina", "Georgeta", "Sofia", "Natalia", "Irina", "Antonia", "Daciana", "Manuela", "Adelina",
-				"Dana Maria", "Andra", "Alina", "Delia", "Maria Isabel" };
-		return nombres[1 + new Random().nextInt(50)];
+				"Dana Maria", "Andra", "Alina", "Delia", "Isabela", "Anița", "Adina", "Andreea", "Angela", "Aurelia",
+				"Camelia", "Carmen", "Cătălina", "Cecilia", "Claudia", "Doina", "Dumitra", "Elvira", "Eugenia",
+				"Gabriela", "Georgeta", "Georgiana", "Lacramiora", "Ilinca", "Jana", "Laura", "Lavinia", "Lia",
+				"Liliana", "Luminița", "Margareta", "Melania", "Mirela", "Monica", "Nicoleta", "Oana", "Olimpia",
+				"Olivia", "Paula", "Petronela", "Ramona", "Rodica", "Ruxandra", "Silvia", "Sorina", "Ștefania", "Stela",
+				"Tatiana", "Valentina", "Vasilica", "Victoria", "Violeta", "Virginia", "Viviana", "Romanița" };
+		return nombres[1 + new Random().nextInt(90)];
 
 	}
 
@@ -229,12 +271,17 @@ public class Generador {
 	 * @return nombre al azar
 	 */
 	public static String nombreFinalHombre() {
-		final String[] nombres = { "Mihai", "Ion", "Vasile", "Marius Andrei", "Grigore", "Adrian", "Iulian", "Marian",
+		final String[] nombres = { "Mihai", "Ion", "Vasile", "Marius", "Grigore", "Adrian", "Iulian", "Marian",
 				"Nicolae", "Gabriel", "Eugen", "Cristi", "Cristian", "Tudor", "Bogdan", "Ionel", "Claudiu", "Ovidiu",
 				"Dan", "Marin", "Cristian", "Viorel", "Iulian", "David", "Tudorel", "Darius", "Cornel", "Marius",
-				"Dan Andrei", "Tudor Cristial", "Denis", "Robert", "Sebastian", "Luca", "Luis", "David", "Ioan David",
-				"Rares", "Anghel", "Nicusor", "Tudor Adrian", "Cosmin" };
-		return nombres[1 + new Random().nextInt(41)];
+				"Andrei", "Tudorel", "Denis", "Robert", "Sebastian", "Luca", "Luis", "David", "Ioan", "Rareș", "Anghel",
+				"Nicușor", "Costin", "Cosmin", "Alin", "Anton", "Aurel", "Călin", "Cătălin", "Cezar", "Ciprian",
+				"Constantin", "Costel", "Daniel", "Dorin", "Doru", "Dumitru", "Emil", "Eugen", "Filip", "Florin",
+				"Gabriel", "George", "Gheorghe", "Grigore", "Horia", "Iacob", "Ioan", "Ion", "Iulian", "Ionel",
+				"Laurențiu", "Liviu", "Marin", "Marius", "Mihai", "Mircea", "Nelu", "Nicolae", "Octavian", "Ovidiu",
+				"Panait", "Paraschiv", "Petre", "Radu", "Răzvan", "Remus", "Robert", "Sebastian", "Sergiu", "Ștefan",
+				"Silviu", "Teodor" };
+		return nombres[1 + new Random().nextInt(90)];
 
 	}
 
@@ -243,17 +290,153 @@ public class Generador {
 	 * @return nombre de calle al azar
 	 */
 	public static String nombresCalleFinal() {
-		final String[] nombresCalle = { "Strada 1 Mai nr 34", "Aleea Barajul Dunarii nr 32", "Aleea Barbatesti nr 121",
-				"Intrarea Baritonului", "Soseaua Bucuresti Ploiesti", "Strada Bachus", "Strada Baia Sprie",
-				"Aleea Codrii Neamtului", "Bulevardul Camil Ressu", "Bulevardul Corneliu Coposu",
-				"Intrarea Caramidariei", "Strada C A Rosetti", "Bulevardul Dimitrie Pompeiu",
-				"Bulevardul Dimitrie Cantemir", "Bulevardul Dinicu Golescu", "Aleea Giurgeni", "Drumul Gazarului",
-				"Bulevardul Ghica Tei", "Strada Galautas", "Strada Gazelei", "Bulevardul Ion Mihalache",
-				"Strada Iacob Andrei", "Strada Iezeru", "Strada Ilioara", "Aleea Piatra Mare", "Bulevardul Poligrafiei",
-				"Bulevardul Protopopescu Pache", "Bulevardul Schitu Magureanu", "Aleea Stanciu George Cristian",
-				"Intrarea Scorusului", "Intrarea Securii" };
-		final String nombreCalle = nombresCalle[1 + new Random().nextInt(29)];
-		return nombreCalle.toUpperCase();
+		final String[] nombresCalle = { "Aleea Băişoara", "Aleea Cetinei", "Aleea Ghindei", "Aleea Sf. Capistrano",
+				"Aleea Sf. Eugeniu", "Aleea Sportivilor", "Aleea Stejarilor", "Aleea Vilelor", "B-dul 1 Decembrie 1918",
+				"B-dul Ferdinand I", "B-dul Horea", "B-dul Încoronării", "B-dul Revoluţiei 1989",
+				"Bulevardul Transilvaniei", "Calea Ciugudului", "Calea Labului", "Calea Moţilor",
+				"Esplanada Încoronării", "Esplanada Obeliscului", "Piaţa Alessandria", "Piaţa Amfiteatru",
+				"Piaţa Cetăţii", "Piaţa Consiliul Europei", "Piaţa Episcop Emilian Birdaş", "Piaţa Ion I. C. Brătianu",
+				"Piaţa Iuliu Maniu", "Piaţa Mihai Viteazul", "Piaţa Tricolorului", "Piaţa Visconti",
+				"Şoseaua de Centură", "Strada 11 Iunie", "Strada 9 Mai", "Strada Abrudului", "Strada Afrodita",
+				"Strada Agapia", "Strada Alba Regia", "Strada Albac", "Strada Albăstrelelor", "Strada Albinelor",
+				"Strada Alcala de Henares", "Strada Alecu Russo", "Strada Alessandria", "Strada Alexandru cel Bun",
+				"Strada Alexandru Ioan Cuza", "Strada Alexandru Lăpuşneanu", "Strada Alexandru Odobescu",
+				"Strada Alexandru Papiu Ilarian", "Strada Alexandru Rosetti", "Strada Alexandru Vlahuţă",
+				"Strada Alexandru Zane", "Strada Almaşului", "Strada Aluniş", "Strada Alunului", "Strada Ampoiţa",
+				"Strada Ampoiului", "Strada Amsberg", "Strada Amurgului", "Strada Ana Aslan", "Strada Ana Ipătescu",
+				"Strada Andrei Mureşanu", "Strada Anghel Saligny", "Strada Anina", "Strada Antigona",
+				"Strada Anton Pann", "Strada Apollo", "Strada Apulum", "Strada Apuseni", "Strada Aradului",
+				"Strada Arbuştilor", "Strada Ardealului", "Strada Arieşeni", "Strada Arieşului", "Strada Arinilor",
+				"Strada Armoniei", "Strada Arnsberg", "Strada Aromei", "Strada Aron Pumnul", "Strada Arsenie Boca",
+				"Strada Arţarului", "Strada Artemis", "Strada Atelierului", "Strada Atena", "Strada Augustin Bena",
+				"Strada Aurel Vlaicu", "Strada Aurorei", "Strada Avram Iancu", "Strada Avrig", "Strada Azuga",
+				"Strada Azur", "Strada Baba Novac", "Strada Baladei", "Strada Banatului", "Strada Barbu Catargiu",
+				"Strada Barbu Lăutaru", "Strada Barbu Ştefănescu Delavrancea", "Strada Basarabiei", "Strada Basmului",
+				"Strada Bayonne", "Strada Beclean", "Strada Bega", "Strada Bicaz", "Strada Biruinţei", "Strada Bistra",
+				"Strada Blandiana", "Strada Bobâlna", "Strada Bogdan Petriceicu Haşdeu", "Strada Brădişor",
+				"Strada Bradului", "Strada Brânduşei", "Strada Bronzului", "Strada Bucegi", "Strada Bucium",
+				"Strada Bucovinei", "Strada Bucureşti", "Strada Bujorului", "Strada Bulza", "Strada Bunta",
+				"Strada Buşteni", "Strada Busuiocului", "Strada Buziaş", "Strada Cabanei", "Strada Caisului",
+				"Strada Călăraşilor", "Strada Călimăneşti", "Strada Calistrat Hogaş", "Strada Călugăreni",
+				"Strada Călugărilor", "Strada Calypso", "Strada Camil Baltazar", "Strada Camil Petrescu",
+				"Strada Câmpeni", "Strada Câmpului", "Strada Cantonului", "Strada Căpâlna", "Strada Căprioarei",
+				"Strada Cărăbuşului", "Strada Caraiman", "Strada Carol Davila", "Strada Carpaţi", "Strada Carpenului",
+				"Strada Carul Mare", "Strada Carul Mic", "Strada Casandra", "Strada Castanului", "Strada Cătinei",
+				"Strada Cavnic", "Strada Cedrului", "Strada Cenade", "Strada Cerbului", "Strada Cetăţii",
+				"Strada Christian Tell", "Strada Cigaş", "Strada Cindrel", "Strada Ciobănaşului", "Strada Ciocârliei",
+				"Strada Ciprian Porumbescu", "Strada Cireşului", "Strada Ciucaşului", "Strada Clăbucet",
+				"Strada Cloşca", "Strada Coastei", "Strada Cocorilor", "Strada Colinelor", "Strada Colţeşti",
+				"Strada Comarnic", "Strada Condeiului", "Strada Constantin Brâncuşi", "Strada Constantin Daicoviciu",
+				"Strada Constantin Galeriu", "Strada Constantin Noica", "Strada Cordovanilor", "Strada Cornel Medrea",
+				"Strada Corneliu Baba", "Strada Corniştei", "Strada Costache Negruzzi", "Strada Costache Romanescu",
+				"Strada Covasna", "Strada Cozia", "Strada Crai Nou", "Strada Craivei", "Strada Crişan",
+				"Strada Crişanei", "Strada Cronos", "Strada Cucului", "Strada Cumpenei", "Strada Curcubeului",
+				"Strada Cutina", "Strada Dacilor", "Strada Dafinului", "Strada Daliei", "Strada David Prodan",
+				"Strada Dealul Furcilor", "Strada Dealului", "Strada Decebal", "Strada Diana", "Strada Digului",
+				"Strada Dimitrie Anghel", "Strada Dimitrie Bolintineanu", "Strada Dimitrie Cantemir",
+				"Strada Dimitrie Paciurea", "Strada Dinu Lipatti", "Strada Dobrogei", "Strada Doctor Aurel Lazăr",
+				"Strada Doctor Aurel Vlad", "Strada Doctor Ioan Raţiu", "Strada Doinei", "Strada Dorna",
+				"Strada Dr. Aurel Lazăr", "Strada Dr. Cornel Ciugudean", "Strada Dr. Ioan Dragomir", "Strada Drăgăşani",
+				"Strada Drâmbarului", "Strada Dumbrăviţei", "Strada Duzilor", "Strada Eftimie Murgu",
+				"Strada Elena Cuza", "Strada Elixirului", "Strada Emil Isac", "Strada Emil Racoviţă",
+				"Strada Emile Zola", "Strada Energiei", "Strada Episcop Emilian Birdaş", "Strada Eugen Ionescu",
+				"Strada Eugen Lovinescu", "Strada Fabricilor", "Strada Făgăraş", "Strada Făgetului", "Strada Fagului",
+				"Strada Fântânele", "Strada Feneş", "Strada Fericet", "Strada Flora", "Strada Florilor",
+				"Strada Fortuna", "Strada Francisca", "Strada Frasinului", "Strada Fraţii Jderi",
+				"Strada Frederic Mistral", "Strada Frunzei", "Strada Fuiorului", "Strada Gabriel Bethlen",
+				"Strada Gârda", "Strada Gardeniei", "Strada Gării", "Strada Garoafei", "Strada Garoafelor",
+				"Strada Geamăna", "Strada Gemenilor", "Strada Gemina", "Strada George Bacovia", "Strada George Bariţiu",
+				"Strada George Călinescu", "Strada George Coşbuc", "Strada George Emil Palade", "Strada George Enescu",
+				"Strada George Sand", "Strada George Topârceanu", "Strada Gheorghe Doja", "Strada Gheorghe Magheru",
+				"Strada Gheorghe Marinescu", "Strada Gheorghe Petraşcu", "Strada Gheorghe Pop de Băseşti",
+				"Strada Gheorghe Şincai", "Strada Gheorghe Sion", "Strada Gheorghe Ţiţeica", "Strada Ghioceilor",
+				"Strada Ghişiţelor", "Strada Gilău", "Strada Gladiolelor", "Strada Gloriei", "Strada Gorunului",
+				"Strada Govora", "Strada Grădinilor", "Strada Grâului", "Strada Greierului", "Strada Grigore Antipa",
+				"Strada Grigore Moisil", "Strada Grigore Vieru", "Strada Gruia Novac", "Strada Gutuiului",
+				"Strada Haiducilor", "Strada Haţeg", "Strada Hebe", "Strada Heleşteului", "Strada Henri Coandă",
+				"Strada Hera", "Strada Hobiţa", "Strada Holdei", "Strada Horezu", "Strada Huedin", "Strada Humuleşti",
+				"Strada I. C. Brătianu", "Strada Iancu Jianu", "Strada Iaşilor", "Strada Iasomiei", "Strada Iederii",
+				"Strada Ienupărului", "Strada Ilie Cleopa", "Strada Ineu", "Strada Inului", "Strada Ioan Alexandru",
+				"Strada Ioan Buteanu", "Strada Ioan Petru Culianu", "Strada Ioan Slavici", "Strada Ion Andreescu",
+				"Strada Ion Agârbiceanu", "Strada Ion Arion", "Strada Ion Barbu", "Strada Ion Budai-Deleanu",
+				"Strada Ion Creangă", "Strada Ion Ghica", "Strada Ion Heliade Rădulescu", "Strada Ion Lăncrănjan",
+				"Strada Ion Luca Caragiale", "Strada Ion Mincu", "Strada Ion Minulescu", "Strada Ionel Pop",
+				"Strada Ionel Teodoreanu", "Strada Iosif Jumanca", "Strada Iosif Sârbu", "Strada Iosif Vulcan",
+				"Strada Ipoteşti", "Strada Iris", "Strada Irisului", "Strada Izlaz", "Strada Izvorul Alb",
+				"Strada Izvorului", "Strada Jidvei", "Strada Jules Verne", "Strada Jupiter", "Strada La Dinamită",
+				"Strada La Recea", "Strada Lăcrimioarei", "Strada Lacului", "Strada Lalelelor", "Strada Lancrăm",
+				"Strada Lăpuşului", "Strada Lavandei", "Strada Libertăţii", "Strada Liceului", "Strada Liliacului",
+				"Strada Lipova", "Strada Lipovenilor", "Strada Livezii", "Strada Liviu Rebreanu", "Strada Lombardia",
+				"Strada Lotru", "Strada Lucian Blaga", "Strada Lugoj", "Strada Luminilor", "Strada Luncii",
+				"Strada Lupa Capitolina", "Strada Lupeni", "Strada Lupşa", "Strada Măceşului", "Strada Magnoliei",
+				"Strada Măgurei", "Strada Maia", "Strada Maior Tiberiu Iancu", "Strada Mănăstirii",
+				"Strada Maramureşului", "Strada Mărăşeşti", "Strada Mărăşti", "Strada Marcus Aurelius",
+				"Strada Marin Preda", "Strada Marin Sorescu", "Strada Marte", "Strada Măslinului",
+				"Strada Matei Basarab", "Strada Matei Corvin", "Strada Merilor", "Strada Merişor", "Strada Meteş",
+				"Strada Mierlei", "Strada Mihai Eminescu", "Strada Mihai Viteazul", "Strada Mihail Jora",
+				"Strada Mihail Kogălniceanu", "Strada Mihail Sadoveanu", "Strada Milenium", "Strada Militari",
+				"Strada Minerva", "Strada Mioriţei", "Strada Mirajului", "Strada Mircea cel Bătrân",
+				"Strada Mircea Eliade", "Strada Miron Costin", "Strada Mitologiei",
+				"Strada Mitropolit Alexandru Şterca Şuluţiu", "Strada Mitropolit Andrei Şaguna",
+				"Strada Mitropolit Simion Ştefan", "Strada Modena", "Strada Mogoş", "Strada Mohorului",
+				"Strada Moldovei", "Strada Molidului", "Strada Moneasa", "Strada Morii", "Strada Muncel",
+				"Strada Munteniei", "Strada Mureşului", "Strada Muşeţelului", "Strada Muzeului", "Strada Muzicanţilor",
+				"Strada Nada Florilor", "Strada Nădlac", "Strada Nanului", "Strada Napoca", "Strada Negoiu",
+				"Strada Negrileasa", "Strada Negru Vodă", "Strada Nemesis", "Strada Neptun", "Strada Nichita Stănescu",
+				"Strada Nicolae Bălcescu", "Strada Nicolae Creţulescu", "Strada Nicolae Golescu",
+				"Strada Nicolae Grigorescu", "Strada Nicolae Labiş", "Strada Nicolae Linca", "Strada Nicolae Pleşoianu",
+				"Strada Nicolae Titulescu", "Strada Nicolae Tonitza", "Strada Nina Cassian", "Strada Nopţii",
+				"Strada Nucilor", "Strada Nufărului", "Strada Oaşa", "Strada Ocnele Mari", "Strada Ocoliş",
+				"Strada Octavian Goga", "Strada Octavian Paler", "Strada Odiseea", "Strada Oituz", "Strada Olăneşti",
+				"Strada Olimp", "Strada Olteniei", "Strada Orfeu", "Strada Orhideelor", "Strada Orizontului",
+				"Strada Orlea", "Strada Oscar Han", "Strada Otilia Cazimir", "Strada Păcii", "Strada Padiş",
+				"Strada Pădurii", "Strada Păltiniş", "Strada Paltinului", "Strada Panait Istrati", "Strada Pandora",
+				"Strada Păpădiei", "Strada Parâng", "Strada Pârâul Iovului", "Strada Pârâul lui Stoica",
+				"Strada Pârâului", "Strada Păuliş", "Strada Peleaga", "Strada Pepinierei", "Strada Perla Harghitei",
+				"Strada Pescarilor", "Strada Petrache Poenaru", "Strada Petre Ispirescu", "Strada Petreşti",
+				"Strada Petroşani", "Strada Petru Cercel", "Strada Petru Dobra", "Strada Petru Maior",
+				"Strada Petuniei", "Strada Piatra Corbului", "Strada Piatra Craiului", "Strada Pictor Sava Henţia",
+				"Strada Piersicului", "Strada Pietrar", "Strada Pietroasa", "Strada Pinului", "Strada Platanului",
+				"Strada Plevnei", "Strada Plopilor", "Strada Poarta Sărutului", "Strada Poiana Narciselor",
+				"Strada Poiana Ruscăi", "Strada Poiana Vadului", "Strada Poieniţei", "Strada Poligonului",
+				"Strada Ponor", "Strada Popa Vasile Claudiu", "Strada Postăvarului", "Strada Predeal",
+				"Strada Prieteniei", "Strada Primăverii", "Strada Prislop", "Strada Profesor Eugen Hulea",
+				"Strada Putna", "Strada Răchitei", "Strada Rădeşti", "Strada Radna", "Strada Râmeţ", "Strada Rânca",
+				"Strada Rândunelelor", "Strada Rapsodiei", "Strada Rariştei", "Strada Răşinari", "Strada Râului",
+				"Strada Râuşor", "Strada Răzoare", "Strada Răzorului", "Strada Recaş", "Strada Regimentul V Vânători",
+				"Strada Regina Maria", "Strada Republicii", "Strada Reteag", "Strada Retezat", "Strada Rodiei",
+				"Strada Rodnei", "Strada Rogozului", "Strada Rohia", "Strada Roica", "Strada Rojomal", "Strada Roma",
+				"Strada Romaniţa", "Strada Roşia Montană", "Strada Rotundă", "Strada Rozelor", "Strada Sabin Bălaşa",
+				"Strada Sadu", "Strada Sălaj", "Strada Salcâmului", "Strada Salciei", "Strada Salviei",
+				"Strada Samuel Micu", "Strada Şardului", "Strada Sarmigezetusa", "Strada Saturn", "Strada Scărişoara",
+				"Strada Scurtă", "Strada Sebeşului", "Strada Secarei", "Strada Selişte", "Strada Septimiu Albini",
+				"Strada Septimius Severus", "Strada Serenadei", "Strada Sergiu Celibadache", "Strada Şesuri",
+				"Strada Sibiel", "Strada Sihastrului", "Strada Simion Balint", "Strada Simion Bărnuţiu",
+				"Strada Sînzienelor", "Strada Siretului", "Strada Şiria", "Strada Sitarului", "Strada Sliven",
+				"Strada Soarelui", "Strada Socului", "Strada Sofia", "Strada Sohodol", "Strada Şoimului",
+				"Strada Someş", "Strada Sovata", "Strada Spicului", "Strada Spiru Haret", "Strada Stadionului",
+				"Strada Stăneşti", "Strada Stânjenelului", "Strada Ştefan Augustin Doinaş", "Strada Ştefan cel Mare",
+				"Strada Ştefan Luchian", "Strada Ştefan Pascu", "Strada Stejarului", "Strada Streiului",
+				"Strada Strunga", "Strada Stufului", "Strada Suceviţa", "Strada Şugag", "Strada Şurianului",
+				"Strada Taberei", "Strada Take Ionescu", "Strada Tălmaciu", "Strada Târgului", "Strada Ţarina",
+				"Strada Tarniţa", "Strada Teilor", "Strada Theodor Pallady", "Strada Tibru", "Strada Tihuţa",
+				"Strada Timişului", "Strada Timotei Cipariu", "Strada Tinereţii", "Strada Tineretului", "Strada Tisa",
+				"Strada Tismana", "Strada Titu Maiorescu", "Strada Topliţei", "Strada Toporaşilor", "Strada Traian",
+				"Strada Traian Vuia", "Strada Trandafirilor", "Strada Transilvaniei", "Strada Trestiei",
+				"Strada Tribunalului", "Strada Trifoiului", "Strada Tuberozelor", "Strada Tudor Arghezi",
+				"Strada Tudor Vladimirescu", "Strada Tulnicului", "Strada Turnătoriei", "Strada Unirii",
+				"Strada Uranus", "Strada Uricani", "Strada Vacanţei", "Strada Vadului", "Strada Văii", "Strada Vâlcele",
+				"Strada Valea Aramei", "Strada Valea Argintului", "Strada Valea Aurului", "Strada Valea Devii",
+				"Strada Valea Frumoasei", "Strada Valea Mică", "Strada Valea Popii", "Strada Valeriu Braniştei",
+				"Strada Vânătorilor", "Strada Varese", "Strada Vârtop", "Strada Vasile Alecsandri",
+				"Strada Vasile Goldiş", "Strada Veneţia", "Strada Venus", "Strada Verona", "Strada Vesta",
+				"Strada Viadana", "Strada Victor Babeş", "Strada Victor Hugo", "Strada Victoriei", "Strada Vidra",
+				"Strada Viilor", "Strada Violetelor", "Strada Viorelelor", "Strada Vlădeasa", "Strada Voineasa",
+				"Strada Voroneţ", "Strada Vrejului", "Strada Zarandului", "Strada Zărneşti", "Strada Zarzarului",
+				"Strada Zăvoi", "Strada Zefirului", "Strada Zenit", "Strada Zlatnei", "Strada Zori de Zi",
+				"StradaTheodor Aman" };
+		final String nombreCalle = nombresCalle[1 + new Random().nextInt(650)];
+		return nombreCalle;
 	}
 
 	/**
@@ -261,8 +444,8 @@ public class Generador {
 	 * @return nombre al azar
 	 */
 	public static String nombreSex() {
-		final String[] nombres = { "MAN", "WOMAN", "OTHER", "UNSPECIFIED" };
-		return nombres[1 + new Random().nextInt(3)];
+		final String[] nombres = { "MAN", "WOMAN" };
+		return nombres[1 + new Random().nextInt(1)];
 
 	}
 
@@ -285,8 +468,8 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		fecha = Calendar.getInstance();
-		fecha.set(aleatorio.nextInt(10) + 1969, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
-		new SimpleDateFormat("dd/MM/yyyy");
+		fecha.set(aleatorio.nextInt(40) + 1959, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
+		new SimpleDateFormat(Constantes.FORMFECHA);
 		return fecha.getTime();
 	}
 
@@ -300,7 +483,7 @@ public class Generador {
 		aleatorio = new Random();
 		fecha = Calendar.getInstance();
 		fecha.set(aleatorio.nextInt(5) + 2014, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
-		new SimpleDateFormat("dd/MM/yyyy");
+		new SimpleDateFormat(Constantes.FORMFECHA);
 		return fecha.getTime();
 	}
 
@@ -313,7 +496,7 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		hora = Calendar.getInstance();
-		hora.set(aleatorio.nextInt(10) + 1969, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
+		hora.set(aleatorio.nextInt(40) + 1959, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat("hh/mm");
 		return hora.getTime();
 	}

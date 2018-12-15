@@ -508,7 +508,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('cristian.anghel@per.ro', current_date, null, null, 'system', null, null, 'cristian.anghel@per.ro', 'ANGHEL', 'Cristian', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 185,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 185,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 26, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN', null,true);
 COMMIT;	
 
@@ -516,7 +516,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('radu.cristescu@per.ro', current_date, null, null, 'system', null, null, 'radu.cristescu@per.ro', 'CRISTESCU', 'Radu', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN', null,true);
 COMMIT;	
 
@@ -524,7 +524,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('bob.vasile@per.ro', current_date, null, null, 'system', null, null, 'bob.vasile@per.ro', 'BOB', 'Vasile', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
@@ -532,7 +532,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('cristinel.deaconescu@per.ro', current_date, null, null, 'system', null, null, 'cristinel.deaconescu@per.ro', 'DEACONESCU', 'Cristinel', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
@@ -540,7 +540,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('viorel.dobre@per.ro', current_date, null, null, 'system', null, null, 'viorel.dobre@per.ro', 'DOBRE', 'Viorel', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
@@ -548,7 +548,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('mirica.dimitrescu@per.ro', current_date, null, null, 'system', null, null, 'mirica.dimitrescu@per.ro', 'DIMITRESCU', 'Mirică', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
@@ -556,7 +556,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('bianca.vasile@per.ro', current_date, null, null, 'system', null, null, 'bianca.vasile@per.ro', 'VASILE', 'Bianca', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
@@ -564,7 +564,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('daniel.diaconu@per.ro', current_date, null, null, 'system', null, null, 'daniel.diaconu@per.ro', 'DIACONU', 'Daniel', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
@@ -572,7 +572,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('ovidiu.zara@per.ro', current_date, null, null, 'system', null, null, 'ovidiu.zara@per.ro', 'ZARĂ', 'Ovidiu', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
@@ -580,7 +580,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('danut.frunza@per.ro', current_date, null, null, 'system', null, null, 'danut.frunza@per.ro', 'FRUNZĂ', 'Dănuț', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
@@ -588,7 +588,7 @@ COMMIT;
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('dragos.sterpu@per.ro', current_date, null, null, 'system', null, null, 'dragos.sterpu@per.ro', 'STERPU', 'Dragoş', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
@@ -596,7 +596,7 @@ COMMIT;
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('costica.popsor@per.ro', current_date, null, null, 'system', null, null, 'costica.popsor@per.ro', 'POPȘOR', 'Costică', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
@@ -604,7 +604,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('danut.frangu@per.ro', current_date, null, null, 'system', null, null, 'danut.frangu@per.ro', 'FRANGU', 'Dănuț', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
@@ -612,7 +612,7 @@ INSERT INTO public.users(username, date_create, date_deleted, date_updated, user
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('eugen.vizitiu@per.ro', current_date, null, null, 'system', null, null, 'eugen.vizitiu@per.ro', 'VIZITIU', 'Eugen', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
@@ -620,7 +620,7 @@ COMMIT;
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('tineret@per.ro', current_date, null, null, 'system', null, null, 'tineret@per.ro', 'POP', 'Dănuț', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
@@ -628,7 +628,7 @@ COMMIT;
 password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
 	
 VALUES ('admin', current_date, null, null, 'system', null, null, 'admin@per.ro', 'ADMIN', 'ADMIN', 
-'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/50', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
+'$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
 '0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
 
@@ -699,9 +699,76 @@ INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (18,'VIDEO');
 INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (19,'TEMPLATE');
 COMMIT;		
 	
+--Comune alba
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (330,'Albac','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (331,'Almașu Mare','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (332,'Arieșeni','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (333,'Avram Iancu','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (334,'Berghin','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (335,'Bistra','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (336,'Blandiana','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (337,'Bucerdea Grânoasă','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (338,'Bucium','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (339,'Câlnic','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (340,'Cenade','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (341,'Cergău','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (342,'Ceru-Băcăinți','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (343,'Cetatea de Baltă','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (344,'Ciugud','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (345,'Ciuruleasa','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (346,'Crăciunelu de Jos','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (347,'Cricău','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (348,'Cut','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (349,'Daia Română','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (350,'Doștat','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (351,'Fărău','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (352,'Galda de Jos','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (353,'Gârda de Sus','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (354,'Gârbova','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (355,'Hopârta','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (356,'Horea','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (357,'Ighiu','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (358,'Întregalde','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (359,'Jidvei','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (360,'Livezile','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (361,'Lupșa','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (362,'Lopadea Nouă','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (363,'Lunca Mureșului','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (364,'Meteș','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (365,'Mihalț','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (366,'Mirăslău','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (367,'Mogoș','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (368,'Noșlac','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (369,'Ocoliș','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (370,'Ohaba','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (371,'Pianu','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (372,'Poiana Vadului','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (373,'Ponor','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (374,'Poșaga','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (375,'Rădești','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (376,'Râmeț','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (377,'Rimetea','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (378,'Roșia de Secaș','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (379,'Roșia Montană','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (380,'Sălciua','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (381,'Săliștea','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (382,'Săsciori','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (383,'Sâncel','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (384,'Sântimbru','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (385,'Scărișoara','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (386,'Stremț','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (387,'Sohodol','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (388,'Șibot','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (389,'Șona','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (390,'Șpring','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (391,'Șugag','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (392,'Unirea','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (393,'Vadu Moților','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (394,'Valea Lungă','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (394,'Vidra','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (396,'Vințu de Jos','COMMUNE',FALSE,1,null);	
 	
-	
-		
+	COMMIT;		
 		
 	
 	

@@ -136,14 +136,14 @@
 					</div>
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<h:outputLabel for="validated" value="Activ/Inactiv:" />
+							<h:outputLabel for="validated" value="Activ/Blocat:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<p:selectOneMenu class="selectFiltro" id="validated"
 								value="#{userBean.userBusqueda.validated}">
 								<f:selectItem itemLabel="TODOS" itemValue="" />
 								<f:selectItem itemLabel="ACTIV" itemValue="true" />
-								<f:selectItem itemLabel="INACTIV" itemValue="false" />
+								<f:selectItem itemLabel="BLOCAT" itemValue="false" />
 							</p:selectOneMenu>
 						</div>
 					</div>
@@ -182,7 +182,7 @@
 					</div>
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<h:outputLabel for="dateUntil" value="Data înregistrării până :" />
+							<h:outputLabel for="dateUntil" value="Data înregistrării până:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<p:calendar id="dateUntil" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{userBean.userBusqueda.dateUntil}" />
@@ -226,11 +226,11 @@
 										<p:dataExporter type="csv" target="userTable" fileName="userList" />
 									</h:commandLink>
 								</div>
-								<span class="titulo">UTILIZATORI/ MEMBRII</span>
-								<p:menuButton value="Operații masive membri: Înregistrare/ Blocare/ Eliminare" styleClass="newActionSelectTable" icon="fa fa-plus">
-							        <p:menuitem value="Înregistrare masivă"  icon="fa fa-plus" outcome="/users/operacion_masiva_fichero.xhtml"  styleClass="sentenceText" />
-							        <p:menuitem value="Blocare masivă" action="#{teamBean.abrirDialogoOrdenaMembru()}"   icon="fa fa-pencil" styleClass="sentenceText"/>
-							        <p:menuitem value="Eliminare masivă" action="#{teamBean.abrirDialogoOrdenaMembru()}"   icon="fa fa-trash" styleClass="sentenceText"/>
+								<span class="titulo">MEMBRII</span>
+								<p:menuButton value="Procese masive membri" styleClass="newActionSelectTable" icon="fa fa-plus">
+							        <p:menuitem value="Înregistrare masivă"  icon="fa fa-plus" action="#{procesoMasivoBean.getFormOperaMasiv(procesoMasivoBean.tipoAltaUserMasivo)}"  styleClass="sentenceText" />
+							        <p:menuitem value="Eliminare masivă" action="#{procesoMasivoBean.getFormOperaMasiv(procesoMasivoBean.esBorradoMasivo)}"   icon="fa fa-trash" styleClass="sentenceText"/>
+							        <p:menuitem value="Blocare masivă" action="#{procesoMasivoBean.getFormOperaMasiv(procesoMasivoBean.esBloqueoMasivo)}"   icon="fa fa-pencil" styleClass="sentenceText"/>
 							    </p:menuButton>
 							</p:outputPanel>
 						</f:facet>
@@ -291,15 +291,6 @@
                             outcome="/users/operacion_masiva_pantalla.xhtml?faces-redirect=true">
                             <f:param name="esBorrado"
                                 value="#{usuarioController.usuarioForm.esBorrado}" />
-                        </p:button>
-
-                        <p:button title="Obțineți utilizatorii după fișier"
-                            value="Por fichero"
-                            outcome="/users/operacion_masiva_fichero.xhtml?faces-redirect=true">
-                            <f:param name="esBorrado"
-                                value="#{usuarioController.usuarioForm.esBorrado}" />
-                             <f:param name="plantilla"
-                                value="#{Constantes.PLANTILLAOTROS}" />
                         </p:button>
                     </p:dialog>
 				<p:confirmDialog global="true">

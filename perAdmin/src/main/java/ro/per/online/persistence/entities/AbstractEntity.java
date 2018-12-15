@@ -10,7 +10,6 @@ import javax.persistence.MappedSuperclass;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Getter;
@@ -43,7 +42,7 @@ public abstract class AbstractEntity implements Serializable {
 	/**
 	 * Data de creatie.
 	 */
-//	@CreatedDate
+	@CreatedDate
 	@Column(name = "date_create", nullable = false)
 	private Date dateCreate;
 
@@ -69,7 +68,7 @@ public abstract class AbstractEntity implements Serializable {
 	/**
 	 * Data ultimei modificari
 	 */
-//	@LastModifiedDate
+	// @LastModifiedDate
 	@Column(name = "date_updated")
 	private Date dateUpdated;
 

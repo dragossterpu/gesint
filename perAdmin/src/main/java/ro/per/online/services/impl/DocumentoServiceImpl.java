@@ -38,9 +38,9 @@ import ro.per.online.services.DocumentoService;
 import ro.per.online.web.beans.gd.DocumentoBusqueda;
 
 /**
- * 
+ *
  * Implementarea serviciului de documente.
- * 
+ *
  * @author STAD
  *
  */
@@ -78,14 +78,14 @@ public class DocumentoServiceImpl implements DocumentoService {
 
 	/**
 	 * Consulta en base de datos en base a los parámetros recibidos. La consulta se hace paginada.
-	 * 
+	 *
 	 * @param first Primer elemento a devolver de la búsqueda
 	 * @param pageSize Número máximo de registros a mostrar
 	 * @param sortField Campo por el cual se ordena la búsqueda
 	 * @param sortOrder Sentido de la ordenación
 	 * @param busquedaDocumento Objeto que contiene los criterios de búsqueda
 	 * @return Lista de los documentos que corresponden a los criterios recibidos
-	 * 
+	 *
 	 */
 	@Override
 	public List<Documento> buscarDocumentoPorCriteria(final int first, final int pageSize, final String sortField,
@@ -123,7 +123,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 	 * @param inspeccion inspección asociada al documento
 	 * @return Documento documento cargado en base de datos
 	 * @throws PerException Excepție posibilă
-	 * 
+	 *
 	 */
 	@Override
 	public Documento cargaDocumento(final UploadedFile file, final TipoDocumento tipo, final Users usuario)
@@ -142,7 +142,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 	/**
 	 * Recibe un archivo UploadedFile y los datos necesarios para general un Documento pero no lo almacena en base de
 	 * datos. Sólo deja el objeto preparado para guardarlo.
-	 * 
+	 *
 	 * @param file fichero a cargar en BDD
 	 * @param tipo tipo de documentp
 	 * @param inspeccion inspección asociada al documento
@@ -168,11 +168,11 @@ public class DocumentoServiceImpl implements DocumentoService {
 	private void creaCriteria(final DocumentoBusqueda busquedaDocumento, final Criteria criteria) {
 
 		if (busquedaDocumento.getFechaDesde() != null) {
-			criteria.add(Restrictions.ge(Constantes.FECHAALTA, busquedaDocumento.getFechaDesde()));
+			criteria.add(Restrictions.ge(Constantes.FECHACREACION, busquedaDocumento.getFechaDesde()));
 		}
 		if (busquedaDocumento.getFechaHasta() != null) {
 			final Date fechaHasta = new Date(busquedaDocumento.getFechaHasta().getTime() + TimeUnit.DAYS.toMillis(1));
-			criteria.add(Restrictions.le(Constantes.FECHAALTA, fechaHasta));
+			criteria.add(Restrictions.le(Constantes.FECHACREACION, fechaHasta));
 		}
 		if (busquedaDocumento.getNombre() != null) {
 			criteria.add(Restrictions.ilike("nombre", busquedaDocumento.getNombre(), MatchMode.ANYWHERE));
@@ -181,10 +181,10 @@ public class DocumentoServiceImpl implements DocumentoService {
 			criteria.add(Restrictions.eq("tipoDocumento", busquedaDocumento.getTipoDocumento()));
 		}
 		if (busquedaDocumento.isEliminado()) {
-			criteria.add(Restrictions.isNotNull("fechaBaja"));
+			criteria.add(Restrictions.isNotNull(Constantes.FECHABAJA));
 		}
 		else {
-			criteria.add(Restrictions.isNull("fechaBaja"));
+			criteria.add(Restrictions.isNull(Constantes.FECHABAJA));
 		}
 		if (busquedaDocumento.getDescripcion() != null) {
 			criteria.add(Restrictions.ilike("descripcion", busquedaDocumento.getDescripcion(), MatchMode.ANYWHERE));
@@ -264,7 +264,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 	/**
 	 * Ștergeți o serie de documente din baza de date. Documentul care trebuie șters este trecut ca parametru.
 	 * @param entity Documentul care trebuie șters
-	 * 
+	 *
 	 */
 	@Override
 	public void delete(final Documento entity) {
@@ -434,7 +434,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 	 * returnează documentele salvate.
 	 * @param entities Documente de salvat
 	 * @return lista documentelor salvate
-	 * 
+	 *
 	 */
 	@Override
 	public Iterable<Documento> save(final Iterable<Documento> entities) {

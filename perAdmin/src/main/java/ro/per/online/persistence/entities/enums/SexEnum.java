@@ -27,17 +27,17 @@ public enum SexEnum {
 	/**
 	 * Femeie.
 	 */
-	WOMAN("Femeie"),
+	WOMAN("Femeie");
 
 	/**
 	 * Altul.
 	 */
-	OTHER("Altul"),
+	// OTHER("Altul"),
 
 	/**
 	 * Nespecificat.
 	 */
-	UNSPECIFIED("Nespecificat");
+	// UNSPECIFIED("Nespecificat");
 
 	private static final List<SexEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
 
@@ -51,8 +51,8 @@ public enum SexEnum {
 	 * @see ro.mira.per.controller.AdminController.getRoles()
 	 */
 	public static List<SexEnum> getSex() {
-		List<SexEnum> sexs = new ArrayList<>();
-		for (SexEnum sex : SexEnum.values()) {
+		final List<SexEnum> sexs = new ArrayList<>();
+		for (final SexEnum sex : SexEnum.values()) {
 			sexs.add(sex);
 		}
 		return sexs;

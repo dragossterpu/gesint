@@ -141,7 +141,7 @@ public class RegistroActividadServiceImpl implements RegistroActividadService, S
 				criteria.addOrder(Order.desc(sortField));
 			}
 			else if (sortField == null) {
-				criteria.addOrder(Order.asc(Constantes.FECHAALTA));
+				criteria.addOrder(Order.asc(Constantes.FECHACREACION));
 			}
 
 			@SuppressWarnings(Constantes.UNCHECKED)
@@ -172,9 +172,9 @@ public class RegistroActividadServiceImpl implements RegistroActividadService, S
 	private void creaCriteria(final RegistroBusqueda registroBusqueda, final Criteria criteria) {
 
 		UtilitiesCriteria.setCondicionCriteriaFechaMayor(registroBusqueda.getFechaDesde(), criteria,
-				Constantes.FECHAALTA);
+				Constantes.FECHACREACION);
 		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(registroBusqueda.getFechaHasta(), criteria,
-				Constantes.FECHAALTA);
+				Constantes.FECHACREACION);
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(registroBusqueda.getNombreSeccion(), criteria,
 				Constantes.NOMBRESECCION);
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(registroBusqueda.getTipoRegActividad(), criteria,

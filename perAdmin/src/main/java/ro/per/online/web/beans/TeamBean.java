@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -78,11 +80,13 @@ public class TeamBean implements Serializable {
 	 * @return dni + letra
 	 */
 	public static String mail(final String nume, final String prenume) {
+		// final String limpioName = nume.toLowerCase();
 		final String limpioName = Normalizer.normalize(nume.toLowerCase(), Normalizer.Form.NFD);
-		limpioName.replace(" ", ".");
+		final Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		final String nombre = pattern.matcher(limpioName).replaceAll("");
 		final String limpioPrenume = Normalizer.normalize(prenume.toLowerCase(), Normalizer.Form.NFD);
-		limpioPrenume.replace(" ", ".");
-		return limpioName.concat(".").concat(limpioPrenume.concat(Generador.nombresMail()));
+		final String prenombre = pattern.matcher(limpioPrenume).replaceAll("");
+		return nombre.concat(".").concat(prenombre.concat(Generador.nombresMail()));
 	}
 
 	/**
@@ -279,24 +283,32 @@ public class TeamBean implements Serializable {
 	}
 
 	public void alta() {
+		String sex = null;
+		Date fecha = null;
 		for (int i = 0; i < 1200; i++) {
 			final Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
-			user.setEmail("proba@gmail.com");
 			user.setName(Generador.apellidoFinal().toUpperCase());
+
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
+			fecha = Generador.obtenerFechaNastere();
+			user.setBirthDate(fecha);
 			user.setSex(SexEnum.randomLetter());
+
 			if (user.getSex().getName().equals("MAN")) {
 				user.setLastName(Generador.nombreFinalHombre());
+				sex = "1";
 			}
 			else {
 				user.setLastName(Generador.nombreFinal());
+				sex = "2";
 			}
+			user.setEmail(mail(user.getName(), user.getLastName()));
+			user.setIdCard(Generador.generaCnp(sex, fecha));
 			user.setAddress(Generador.nombresCalleFinal().concat("  Nr: ").concat(Generador.getNumeroCalle()));
-			user.setBirthDate(Generador.obtenerFechaNastere());
+
 			user.setCivilStatus(CivilStatusEnum.randomLetter());
 			user.setEducation(EducationEnum.randomLetter());
-			user.setIdCard(Generador.getUnidadNumber());
 			final PProvince pro = new PProvince();
 			pro.setId(Generador.provinciasFinal());
 			user.setProvince(pro);
@@ -307,7 +319,7 @@ public class TeamBean implements Serializable {
 			locality = loc.get(rand.nextInt(loc.size()));
 			user.setLocality(locality);
 			user.setNumberCard(Generador.getDni());
-			user.setPersonalEmail(mail(user.getName(), user.getLastName()));
+			user.setPersonalEmail(user.getEmail());
 			user.setPhone(Generador.getTelefon());
 			user.setAlertChannel(AlertChannelEnum.EMAIL);
 			user.setValidated(true);

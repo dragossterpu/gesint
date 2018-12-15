@@ -254,21 +254,9 @@ public class UserBean implements Serializable {
 	private void cargarDatosPersonaleUser(final PProvince provincia, final PLocality nuevaLocalidad,
 			final Users usuario) {
 		final PersonalData pd = new PersonalData();
-		// pd.setAddress(usuario.getPersonalData().getAddress());
-		// pd.setBirthDate(usuario.getPersonalData().getBirthDate());
-		// pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
-		// pd.setEducation(usuario.getPersonalData().getEducation());
-		// pd.setIdCard(usuario.getPersonalData().getIdCard());
 		usuario.setLocality(nuevaLocalidad);
-		// pd.setNumberCard(usuario.getPersonalData().getNumberCard());
-		// pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
-		// pd.setPhone(usuario.getPersonalData().getPhone());
-		// pd.setPhoto(usuario.getPersonalData().getPhoto());
 		usuario.setProvince(provincia);
-		// pd.setSex(usuario.getPersonalData().getSex());
-		// pd.setValidated(usuario.getPersonalData().getValidated());
-		// pd.setWorkplace(usuario.getPersonalData().getWorkplace());
-		// usuario.setPersonalData(pd);
+
 	}
 
 	/**
@@ -404,7 +392,6 @@ public class UserBean implements Serializable {
 			this.usuario = usu;
 
 			if (validar()) {
-				final PersonalData pd = new PersonalData();
 				usuario.setLocality(localidadesSelected.get(0));
 				userService.save(usuario);
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,

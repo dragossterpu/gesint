@@ -184,7 +184,7 @@ public class GestorDocumentalBean implements Serializable {
 				this.documento.setMateriaIndexada(materiaIndexada);
 				this.documento.setDateDeleted(null);
 				this.documentoService.save(this.documento);
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, "ALTA",
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ALTA,
 						"Se ha guardado su documento con éxito");
 				this.recargaLista();
 				RequestContext.getCurrentInstance().reset("formAlta:asociado");

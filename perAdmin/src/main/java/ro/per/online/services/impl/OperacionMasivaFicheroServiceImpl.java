@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionException;
 import org.springframework.util.StringUtils;
 
+import ro.per.online.constantes.Constantes;
 import ro.per.online.exceptions.PerException;
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
@@ -55,7 +56,7 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 	 */
 	@Autowired
 	private UserService usuarioService;
-	
+
 	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
 	 *
@@ -111,16 +112,18 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		try {
 			final String mensaje = cargaFicheroOperacionMasiva(event.getFile(), tipoRegistro);
 			if (StringUtils.isEmpty(mensaje)) {
-				facesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO, "alta",
+				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO, Constantes.ALTA,
 						"Toți utilizatorii au fost procesați cu succes.", "messages");
 			}
 
 			else {
-				facesUtilities.setMensajeError("Au existat erori ".concat(mensajeExcepcion) + mensaje, "messages");
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+						"Au existat erori ".concat(mensajeExcepcion) + mensaje);
 			}
 		}
 		catch (final TransactionException | IOException | NoSuchElementException te) {
-			utilities.procesarExcepcion(te, SeccionesEnum.ADMINISTRACION, mensajeExcepcion, facesUtilities);
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"Au existat erori ".concat(mensajeExcepcion));
 		}
 	}
 
@@ -198,7 +201,7 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 			}
 		}
 		String hayErrores = "<br>Rezolvați-le și încercați din nou. ";
-		if (!listaUsuariosGuardar.isEmpty() && operacion.equals("ALTA")) {
+		if (!listaUsuariosGuardar.isEmpty() && operacion.equals(Constantes.ALTA)) {
 			usuarioService.guardado(listaUsuariosGuardar);
 			hayErrores = hayErrores.concat("Restul utilizatorilor au fost salvați cu succes.");
 		}
@@ -232,7 +235,7 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 			final List<Users> listaUsuariosGuardar, final Row row, final String username) {
 		final DataFormatter dataFormatter = new DataFormatter();
 		final StringBuilder mensaje = new StringBuilder();
-		if (operacion.equals("ALTA")) {
+		if (operacion.equals(Constantes.ALTA)) {
 			if (!listaBBDD.contains(username)) {
 				final Users usuario = new Users();
 				usuario.setUsername(username);
@@ -302,7 +305,7 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		usuario.setAddress(cellValue);
 		// DATA NASTERII
 		cellValue = dataFormatter.formatCellValue(colIterator.next());
-		final SimpleDateFormat formatoDeFecha = new SimpleDateFormat("dd/MM/yyyy");
+		final SimpleDateFormat formatoDeFecha = new SimpleDateFormat(Constantes.FORMFECHA);
 		try {
 			usuario.setBirthDate(formatoDeFecha.parse(cellValue));
 		}
@@ -328,14 +331,14 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		// PROVINCIA
 		cellValue = obtenerIdCelda(dataFormatter.formatCellValue(colIterator.next()).trim());
 		utilities.esEntero(cellValue);
-		 PProvince provincia = new PProvince();
+		PProvince provincia = new PProvince();
 		try {
 			provincia.setId(Long.valueOf(cellValue));
 		}
 		catch (final NumberFormatException e) {
 			throw new PerException("Codul judeţului trebuie să fie numeric.");
-		}		
-		provincia= provinceService.findById(provincia.getId());
+		}
+		provincia = provinceService.findById(provincia.getId());
 		if (provincia != null) {
 			usuario.setProvince(provincia);
 		}
