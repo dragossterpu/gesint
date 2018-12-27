@@ -1,4 +1,4 @@
-<ui:composition template="../layouts/layoutInterior.xhtml"
+<ui:composition template="../layouts/layoutInterior2.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -21,19 +21,13 @@
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<p:inputText id="text" converter="#{trimConverter}" value="#{proiectBean.proiectBusqueda.nume}" />
 						</div>
-					</div>
+					</div>					
+						<h:outputText value="Pentru a căuta mai mult de un cuvânt, separați prin virgule" styleClass="aclaraciones2" />
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<h:outputLabel for="username" styleClass="buscador" value="Utilizatorul proiectului:" />
-						</div>
-						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<p:inputText id="username" converter="#{trimConverter}" value="#{proiectBean.proiectBusqueda.username}" />
-						</div>
-					</div>						
-					<div class="ui-g campoBusqueda">
-						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<h:outputLabel for="materiaIndexada" value="Materie indexată: " />
-							<h:outputText value="Pentru a căuta mai mult de un termen, separați prin virgule" styleClass="aclaraciones" />
+						
+							<h:outputLabel for="materiaIndexada" value="Cuvinte cheie: " />
+							
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<p:inputText id="materiaIndexada" value="#{proiectBean.proiectBusqueda.materiaIndexata}" converter="#{trimConverter}" />
@@ -47,8 +41,8 @@
 							<p:selectOneMenu class="selectFiltro" id="validated"
 								value="#{proiectBean.proiectBusqueda.validated}">
 								<f:selectItem itemLabel="TOATE" itemValue="" />
-								<f:selectItem itemLabel="DA" itemValue="true" />
-								<f:selectItem itemLabel="NU" itemValue="false" />
+								<f:selectItem itemLabel="VALIDATE" itemValue="true" />
+								<f:selectItem itemLabel="NEVALIDATE" itemValue="false" />
 							</p:selectOneMenu>
 						</div>
 					</div>					
@@ -79,14 +73,14 @@
 						oncomplete="$('.mensajeSinResultados').css('opacity', 1)"
 						onstart="PF('statusDialog').show()" class="right"
 						onsuccess="PF('statusDialog').hide()"/>
-						<p:commandButton value="Nou proiect" action="#{userBean.proiectNou}"  icon="fa fa-user-plus"/>
+						<p:commandButton value="Proiect nou" action="#{proiectBean.proiectNou}"  icon="fa fa-user-plus"/>
 				</div>
 			</div>
 			
 			
 			<div class="resultadosFiltro">
 				<p:outputPanel layout="block" id="panelProiecte">
-				 <p:dataTable id="tablaProiecte" var="proiect" rowIndexVar="rowIndex" value="#{proiectBean.listaProiecte}" 
+				 <p:dataTable id="tablaProiecte" var="proiect" rowIndexVar="rowIndex" value="#{proiectBean.modelProiect}" 
 				  rows="10"  draggableColumns="true" paginator="true" lazy="true"
 				  resizableColumns="true"  sortOrder="descending" styleClass="modHeaderTable"
 				  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
@@ -97,19 +91,19 @@
 							<p:outputPanel>
 								<div class="left">
 									<h:commandLink
-										rendered="#{not empty proiectBean.listaProiecte}">
+										rendered="#{proiectBean.modelProiect.rowCount ne 0}">
 										<p:graphicImage value="/images/xls.png" />
 										<p:dataExporter type="xls" target="tablaProiecte"
 											fileName="listaProiecte" />
 									</h:commandLink>
 									<h:commandLink
-										rendered="#{not empty proiectBean.listaProiecte}">
+										rendered="#{proiectBean.modelProiect.rowCount ne 0}">
 										<p:graphicImage value="/images/pdf.png" />
 										<p:dataExporter type="pdf" target="tablaProiecte"
 											fileName="listaProiecte" />
 									</h:commandLink>
 									<h:commandLink
-										rendered="#{not empty proiectBean.listaProiecte}">
+										rendered="#{proiectBean.modelProiect.rowCount ne 0}">
 										<p:graphicImage value="/images/csv.png" />
 										<p:dataExporter type="csv" target="tablaProiecte"
 											fileName="listaProiecte" />
@@ -120,14 +114,25 @@
 							        <p:menuitem value="Nou proiect"  icon="fa fa-plus" action="#{proiectBean.proiectNou()}"  styleClass="sentenceText" />
 							        <p:menuitem value="Pozitie proiect" action="#{proiectBean.abrirDialogoOrdenaProiecte()}"   icon="fa fa-file-archive-o" styleClass="sentenceText"/>
 							    </p:menuButton>
+							    <p:commandButton id="toggler" type="button" 
+							 		value="Columnas" styleClass="botonColumnas" icon="fa fa-th"
+									rendered="#{proiectBean.modelProiect.rowCount ne 0}" />
+			                     <p:columnToggler datasource="tablaProiecte" trigger="toggler">
+			                            <p:ajax event="toggle" listener="#{proiectBean.onToggle}" />
+			                     </p:columnToggler>
 							</p:outputPanel>
-						</f:facet>						
-						<p:column headerText="Nume" style="width:20%;" sortBy="#{proiect.titlu}" visible="#{proiectBean.list[0]}" exportable="#{proiectBean.list[0]}">
+						</f:facet>	
+						<p:ajax event="rowSelect" oncomplete="PF('dlg').show()" update=":buscarProiecte:dialog" />	
+										
+						<p:column headerText="Nume" style="width:18%;" sortBy="#{proiect.titlu}" visible="#{proiectBean.list[0]}" exportable="#{proiectBean.list[0]}">
 							<h:outputText value="#{proiect.titlu}" />
 						</p:column>						
-						<p:column headerText="Descriere proiect" style="width:50%;" sortBy="#{proiect.text}" visible="#{proiectBean.list[1]}" exportable="#{proiectBean.list[1]}">
+						<p:column headerText="Categoria proiect" style="width:15%;" sortBy="#{proiect.categoria}" visible="#{proiectBean.list[1]}" exportable="#{proiectBean.list[1]}">
+							<h:outputText value="#{proiect.categoria}" />
+						</p:column>
+						<p:column headerText="Text proiect" style="width:50%;" sortBy="#{proiect.text}" visible="#{proiectBean.list[2]}" exportable="#{proiectBean.list[2]}">
 							<h:outputText value="#{proiect.text}" />
-							<h:outputText escape="false" id="descriereText" value="#{proiect.text.length() gt 5 ? fn:substring(proiect.text,0,40).concat('...') : proiect.text}"></h:outputText>
+							<h:outputText escape="false" id="descriereText" value="#{proiect.text.length() gt 20 ? fn:substring(proiect.text,0,20).concat('...') : proiect.text}"></h:outputText>
 							<p:tooltip id="toolTipText" for="descriereText" value="Pulsează pentru a vedea tot textul" position="top" />						
 						</p:column>
 						<p:column headerText="Validat/Invalidat" style="width:15%;" sortBy="#{proiect.validated}"
@@ -151,20 +156,17 @@
 						</p:column>  																
 						<f:facet name="footer">
        				 	Total:
-						<h:outputText value="#{fn:length(proiectBean.listaProiecte)}">
-    						<f:convertNumber type="number"
-                                maxIntegerDigits="5"
-                                maxFractionDigits="0"/>
-						</h:outputText>
+						<h:outputText value="#{proiectBean.modelProiect.rowCount}">
+	    						<f:convertNumber type="number"
+                                 maxIntegerDigits="5"
+                                 maxFractionDigits="0"/>
+							</h:outputText>
        				 	 proiecte
     				</f:facet>
-<!--     				<div class="ui-g-4"> -->
-<!-- 						<p:commandButton value="Caută alt membru" -->
-<!-- 						action="#{proiectBean.abrirDialogoOrdenaProiecte}" -->
-<!-- 						immediate="true" onstart="PF('statusDialog').show()" -->
-<!-- 						onsuccess="PF('statusDialog').hide()" update="buscarProiecte"/> -->
-<!-- 					</div> -->
 					</p:dataTable>
+					 <p:dialog id="dialog" header="Descrierea continutului" widgetVar="dlg" modal="true" height="500" width="800" resizable="false">
+	                    <h:outputText id="textoContinut" escape="false" value="#{proiectBean.proiect.text}" styleClass="saltoLinea"/>
+	                </p:dialog>
 				</p:outputPanel>
 				<p:confirmDialog global="true">
 					<div class="centrarBotonesDialog">
@@ -174,7 +176,7 @@
 							styleClass="ui-confirmdialog-no" icon="fa fa-remove" />
 					</div>
 				</p:confirmDialog>
-				<!-- <p:messages id="msgs" autoUpdate="true" closable="true" showSummary="true" showDetail="true"/> -->
+<!-- 				<p:messages id="msgs" autoUpdate="true" closable="true" showSummary="true" showDetail="true"/> -->
 			</div>
 			
 			<h:form id="formOrdenaProiecte">

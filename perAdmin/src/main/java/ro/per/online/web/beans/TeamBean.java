@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.poi.util.IOUtils;
@@ -28,6 +27,7 @@ import org.primefaces.model.SortOrder;
 import org.primefaces.model.UploadedFile;
 import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -57,6 +57,7 @@ import ro.per.online.services.UserService;
 import ro.per.online.util.CorreoElectronico;
 import ro.per.online.util.FacesUtilities;
 import ro.per.online.util.Generador;
+import ro.per.online.util.Utilities;
 
 /**
  * Clase utilizada pentru a incarca date in pagina de echipa PER.
@@ -68,7 +69,7 @@ import ro.per.online.util.Generador;
 @Setter
 @Getter
 @NoArgsConstructor
-@SessionScoped
+@Scope(Constantes.SESSION)
 public class TeamBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -83,10 +84,10 @@ public class TeamBean implements Serializable {
 		// final String limpioName = nume.toLowerCase();
 		final String limpioName = Normalizer.normalize(nume.toLowerCase(), Normalizer.Form.NFD);
 		final Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-		final String nombre = pattern.matcher(limpioName).replaceAll("");
+		final String nombre = pattern.matcher(limpioName).replaceAll(Constantes.ESPACIO);
 		final String limpioPrenume = Normalizer.normalize(prenume.toLowerCase(), Normalizer.Form.NFD);
-		final String prenombre = pattern.matcher(limpioPrenume).replaceAll("");
-		return nombre.concat(".").concat(prenombre.concat(Generador.nombresMail()));
+		final String prenombre = pattern.matcher(limpioPrenume).replaceAll(Constantes.ESPACIO);
+		return nombre.concat(Constantes.PUNTO).concat(prenombre.concat(Generador.nombresMail()));
 	}
 
 	/**
@@ -285,7 +286,7 @@ public class TeamBean implements Serializable {
 	public void alta() {
 		String sex = null;
 		Date fecha = null;
-		for (int i = 0; i < 1200; i++) {
+		for (int i = 0; i < 500; i++) {
 			final Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
 			user.setName(Generador.apellidoFinal().toUpperCase());
@@ -349,7 +350,7 @@ public class TeamBean implements Serializable {
 	 */
 	public void buscarUsuarios() {
 		modelUser.setUserBusqueda(usuarioBusqueda);
-		modelUser.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
+		modelUser.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 	}
 
 	/**
@@ -370,7 +371,7 @@ public class TeamBean implements Serializable {
 	 * @throws IOException
 	 */
 	public void cargaImagen(final FileUploadEvent event) throws IOException {
-		this.nombreDoc = "";
+		this.nombreDoc = Constantes.ESPACIO;
 		final UploadedFile uFile = event.getFile();
 		user = userService.cargaImagenSinGuardar(IOUtils.toByteArray(uFile.getInputstream()), user);
 		nombreDoc = uFile.getFileName();
@@ -386,12 +387,13 @@ public class TeamBean implements Serializable {
 			te = teamService.findByUser(team);
 			teamService.delete(te);
 			listaTeams.remove(te);
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO,
-					"Membru al echipei de conducere eliminat", null);
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ELIMINAREMENSAJE,
+					Constantes.OKELIMINMENSAJE);
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la eliminarea membrului echipei de conducere, încercați din nou mai târziu");
+					"A apărut o eroare la eliminarea membrului echipei de conducere. "
+							.concat(Constantes.DESCERRORMENSAJE));
 		}
 
 	}
@@ -468,7 +470,7 @@ public class TeamBean implements Serializable {
 		}
 
 		limpiarBuscadores();
-		// Utilities.limpiarSesion("teamBean");
+//		Utilities.limpiarSesion("teamBean");
 	}
 
 	/**
@@ -504,16 +506,16 @@ public class TeamBean implements Serializable {
 				user.setLocality(localidadesSelected.get(0));
 				userService.save(user);
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
-						"Utilizatorul a fost modificat corect");
+						Constantes.OKMODMENSAJE);
 			}
 			else {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
-						"A apărut o eroare");
+						Constantes.DESCERRORMENSAJE);
 			}
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
-					"A apărut o eroare");
+					Constantes.DESCERRORMENSAJE);
 		}
 	}
 
@@ -526,15 +528,15 @@ public class TeamBean implements Serializable {
 			this.team = tea;
 			;
 			teamService.save(tea);
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, " Modificare corectă ",
-					"Membrul a fost modificat corect.");
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
+					Constantes.REGMODOK);
 			final RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('dlgModifica').hide();");
 
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la modificarea utilizatorului, încercați din nou mai târziu.");
+					Constantes.DESCERRORMENSAJE);
 		}
 
 	}
@@ -571,7 +573,7 @@ public class TeamBean implements Serializable {
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la salvarea reordenării, încercați din nou mai târziu");
+					Constantes.DESCERRORMENSAJE);
 		}
 	}
 
@@ -584,12 +586,12 @@ public class TeamBean implements Serializable {
 		try {
 			final Team team = (Team) event.getObject();
 			teamService.save(team);
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO,
-					"Membru al echipei de conducere modificat", team.getTeam().getDescription());
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.REGMODOK,
+					team.getTeam().getDescription());
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare în încercarea de a modifica membrul echipei de conducere, încercați din nou mai târziu");
+					Constantes.DESCERRORMENSAJE);
 		}
 	}
 
@@ -664,7 +666,7 @@ public class TeamBean implements Serializable {
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la salvarea modificărilor, încercați din nou mai târziu");
+					Constantes.DESCERRORMENSAJE);
 		}
 	}
 
@@ -701,8 +703,8 @@ public class TeamBean implements Serializable {
 					final Long rank = listaPozitie.get(0).getRank() + 1;
 					tea.setRank(rank);
 					teamService.save(tea);
-					FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, " Înregistrare corectă ",
-							"Membrul a fost înregistrat corect.");
+					FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ALTAMENSAJE,
+							Constantes.OKALTAMENSAJE);
 					limpiarCamposNewTeam();
 					listaTeams = teamService.fiindByTeam();
 					final RequestContext context = RequestContext.getCurrentInstance();
@@ -715,7 +717,7 @@ public class TeamBean implements Serializable {
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la înregistrarea utilizatorului, încercați din nou mai târziu.");
+					Constantes.DESCERRORMENSAJE);
 			volver = "/teams/newTeam?faces-redirect=true";
 		}
 		return volver;
@@ -732,11 +734,11 @@ public class TeamBean implements Serializable {
 		boolean validado = true;
 
 		if (!validarUsername()) {
-			this.mensajeError = "El usuario ya existe en el sistema";
+			this.mensajeError = "Membrul există deja în sistem";
 			validado = false;
 		}
 		if (!validarNifUnico()) {
-			this.mensajeError = "El nif ya existe en el sistema";
+			this.mensajeError = "CNP-ul există deja în sistem";
 			validado = false;
 		}
 		return validado;
@@ -754,7 +756,7 @@ public class TeamBean implements Serializable {
 			}
 			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-						"Se ha producido un error a validar el nif del usuario, inténtelo de nuevo más tarde");
+						"A apărut o eroare la validarea cnp-ului membrului. ".concat(Constantes.DESCERRORMENSAJE));
 			}
 		}
 		return resultado;

@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
 				}
 			}
 			else {
-				criteria.addOrder(Order.desc("dateCreate"));
+				criteria.addOrder(Order.desc(Constantes.FECHACREACION));
 			}
 			List<Users> usuariosList;
 			creaCriteria(usuarioBusqueda, criteria);
@@ -168,21 +168,7 @@ public class UserServiceImpl implements UserService {
 	 */
 	private void cargarDatosPersonaleUser(final byte[] fileBlob, final Users usuario) {
 		final PersonalData pd = new PersonalData();
-		// pd.setAddress(usuario.getPersonalData().getAddress());
-		// pd.setBirthDate(usuario.getPersonalData().getBirthDate());
-		// pd.setCivilStatus(usuario.getPersonalData().getCivilStatus());
-		// pd.setEducation(usuario.getPersonalData().getEducation());
-		// pd.setIdCard(usuario.getPersonalData().getIdCard());
-		// pd.setLocality(usuario.getPersonalData().getLocality());
-		// pd.setNumberCard(usuario.getPersonalData().getNumberCard());
-		// pd.setPersonalEmail(usuario.getPersonalData().getPersonalEmail());
-		// pd.setPhone(usuario.getPersonalData().getPhone());
 		usuario.setPhoto(fileBlob);
-		// pd.setProvince(usuario.getPersonalData().getProvince());
-		// pd.setSex(usuario.getPersonalData().getSex());
-		// pd.setValidated(usuario.getPersonalData().getValidated());
-		// pd.setWorkplace(usuario.getPersonalData().getWorkplace());
-		// usuario.setPersonalData(pd);
 	}
 
 	/**
@@ -195,7 +181,7 @@ public class UserServiceImpl implements UserService {
 			}
 			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-						"Error mesaj");
+						Constantes.DESCERRORMENSAJE);
 			}
 		}
 	}
@@ -212,7 +198,8 @@ public class UserServiceImpl implements UserService {
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getName(), criteria, "name");
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getLastName(), criteria, "lastName");
 		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getId(), criteria, "province.id");
-		UtilitiesCriteria.setCondicionCriteriaIgualdadBoolean(usuarioBusqueda.getValidated(), criteria, "validated");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadBoolean(usuarioBusqueda.getValidated(), criteria,
+				Constantes.VALIDAT);
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getIdCard(), criteria, "idCard");
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getEmail(), criteria, "email");
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getRole(), criteria, "role");
@@ -220,23 +207,34 @@ public class UserServiceImpl implements UserService {
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getCivilStatus(), criteria, "civilStatus");
 		if (usuarioBusqueda.getTypeLocality() != null) {
 			criteria.createAlias("locality", "locality");
-
 			UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getTypeLocality(), criteria,
 					"locality.typelocality");
 		}
-
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria, "education");
 		if (usuarioBusqueda.getIdProvincia() != null) {
 			criteria.add(Restrictions.eq("province", provinceService.findById(usuarioBusqueda.getIdProvincia())));
-			// UtilitiesCriteria.setCondicionCriteriaIgualdadLong(
-			// provinceService.findById(usuarioBusqueda.getIdProvincia()), criteria, "personalData.province");
 		}
 		if (usuarioBusqueda.getIdLocalidad() != null) {
 			criteria.add(Restrictions.eq("locality", localityService.findById(usuarioBusqueda.getIdLocalidad())));
-			// UtilitiesCriteria.setCondicionCriteriaIgualdadLong(
-			// localityService.findById(usuarioBusqueda.getIdLocalidad()), criteria, "personalData.locality");
 		}
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria, "education");
+		extractUserEliminado(usuarioBusqueda, criteria);
+	}
+
+	/**
+	 * @param usuarioBusqueda
+	 * @param criteria
+	 *
+	 */
+	private void extractUserEliminado(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
+		if (!usuarioBusqueda.getEliminado().equals(Constantes.ESPACIO)) {
+			if (usuarioBusqueda.getEliminado().equals("NO")) {
+				criteria.add(Restrictions.isNull(Constantes.FECHABAJA));
+			}
+			else {
+				criteria.add(Restrictions.isNotNull(Constantes.FECHABAJA));
+			}
+		}
 	}
 
 	/**

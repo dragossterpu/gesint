@@ -217,7 +217,7 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	 */
 	private List<String> validarListaSeleccionados(final Set<Users> setSeleccionados) {
 		if (listaUsuariosSeleccionados == null || listaUsuariosSeleccionados.isEmpty()) {
-			facesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, "Membri selectați",
+			FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, "Membri selectați",
 					"Trebuie să selectați cel puțin un membru din listă pentru a procesa operația masivă.",
 					Constantes.IDMENSAJEGLOBAL);
 		}
@@ -301,7 +301,7 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 					"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", plantilla));
 		}
 		catch (final IOException e) {
-			facesUtilities.setMensajeError("A apărut o eroare la descărcarea șablonului.", Constantes.IDMENSAJEGLOBAL);
+			facesUtilities.setMensajeError("A apărut o eroare la descărcarea fișierului.", Constantes.IDMENSAJEGLOBAL);
 		}
 	}
 
@@ -319,7 +319,7 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	 * @param event evento de carga
 	 */
 	public void bloqueoFicheroUsuarios(final FileUploadEvent event) {
-		operacionMasivaFicheroService.procesarOperacionMasivaFichero(event, "DEZACTIVARE",
+		operacionMasivaFicheroService.procesarOperacionMasivaFichero(event, Constantes.BLOCARE,
 				"executând blocarea în masă a utilizatorilor.");
 	}
 
@@ -328,7 +328,7 @@ public class ProcesoMasivoUsuariosBean implements Serializable {
 	 * @param event evento de carga
 	 */
 	public void borradoFicheroUsuarios(final FileUploadEvent event) {
-		operacionMasivaFicheroService.procesarOperacionMasivaFichero(event, "ELIMINARE",
+		operacionMasivaFicheroService.procesarOperacionMasivaFichero(event, Constantes.ELIMINARE,
 				"executând eliminarea logică în masă a utilizatorilor.");
 	}
 

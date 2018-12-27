@@ -1,0 +1,97 @@
+<ui:composition template="../layouts/layoutInterior2.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="content">
+		<div class="content_newForm">
+				<div class="titleFormulario">
+					<h3 style="margin-top: 0">Înregistrare nou proiect</h3>
+				</div>
+		<div class="container-fluid">
+			
+			  <div class="aclaraciones">Câmpurile marcate cu (*) sunt obligatorii</div>
+			<h:form id="form" class="tabsInvert">
+				<p:growl id="msgs" showDetail="true" />
+				<p:accordionPanel multiple="true" activeIndex="0,1,2,3">
+					<p:tab title="Date generale proiect">						
+						   <div class="tabAccordion">									
+								<div class="ui-g">
+									<div class="ui-g-12 ui-md-6 ui-lg-4">
+										<b><h:outputLabel for="nombre" value="* Titlul proiectului:" /></b>
+										<p:inputText id="nombre"
+											value="#{proiectBean.proiect.titlu}" required="true"
+											requiredMessage="Introduce titlul proiectului" />
+									</div>
+									<div class="ui-g-12 ui-md-6 ui-lg-4">
+										<b><h:outputLabel for="categoriaSelect" value="* Categoria:" /></b>
+										<p:importEnum
+											type="ro.per.online.persistence.entities.enums.CategoryEnum"
+											var="categoria" allSuffix="ALL_ENUM_VALUES" />
+										<p:selectOneMenu value="#{proiectBean.proiect.categoria}"
+											id="categoriaSelect"
+											required="true" requiredMessage="Alegeți o categorie pentru noul proiect" styleClass="form-control form-select">
+											<f:selectItem itemLabel="Alege o categorie" itemValue="" />
+											<f:selectItems value="#{categoria.ALL_ENUM_VALUES}" var="categoria"
+												itemLabel="#{categoria.description}" itemValue="#{categoria}" />
+										</p:selectOneMenu>											
+									</div>
+									
+								</div>
+								<p:separator />
+								<div class="ui-g">																																						
+										<div class="ui-g-12 ui-md-6 ui-lg-4">
+										<b><h:outputLabel for="validated" value="Validați proiectul:" /></b>
+										<p:selectOneMenu styleClass="form-control form-select" id="validated"
+											value="#{proiectBean.proiect.validated}">
+											<f:selectItem itemLabel="Validezi proiectul" itemValue="" />
+											<f:selectItem itemLabel="VALIDAT" itemValue="true" />
+											<f:selectItem itemLabel="NEVALIDAT" itemValue="false" />
+										</p:selectOneMenu>
+									</div>
+									<div class="aclaraciones2">Proiectul poate fi validat și de la opțiunile vizualizarea/ modificarea proiectului.</div>
+								</div>
+								<p:separator />
+								<div class="ui-g">
+									 <div class="aclaraciones2">Cuvintele cheie ajută la căutările viitoare. Dacă doriți să introduceți mai mult de un  cuvânt, separați-le prin virgule, separați-le prin virgule(Ex : psd, hoți )</div>
+									 <div class="ui-g-12 ui-md-6 ui-lg-4">
+										<b><h:outputLabel for="materiaIndexada" value="Cuvinte cheie:" /></b>
+	           						 	<p:inputText id="materiaIndexada" value="#{proiectBean.proiect.materiaIndexata}" converter="#{trimConverter}" />
+									</div>
+								</div>
+							</div>
+							<p:separator />					
+							<p:outputPanel  id="panelEditorRespuestas">
+                                  <h5><h:outputText value="* Descrierea proiectului."/></h5>
+                                <p:textEditor id="editortexto" value="#{proiectBean.proiect.text}" height="300" style="margin-bottom:10px" >                                  
+                                    <ui:include src="toolbarEditor.xhtml"/>                               
+                                </p:textEditor>
+                                <p:messages for="editortexto" autoUpdate="true" closable="true" />
+                            </p:outputPanel>
+
+							<div class="botonesFormulario">
+								<p:commandButton
+									actionListener="#{proiectBean.altaProiect(proiectBean.proiect)}"
+									value="Înregistrați" update ="@form"/>
+							</div>
+					</p:tab>
+					</p:accordionPanel>
+				<p:dialog id="dialog" widgetVar="dialogMessage" header="Informativ"
+					closable="true">
+					<p:messages for="dialogMessage" autoUpdate="true" showDetail="true"
+						showSummary="true" />
+						 <div class="centrarBotonesDialog">
+                   <p:button value="Cerrar" outcome="/proiecte/proiecte" />
+               </div>
+				</p:dialog>			
+		</h:form>
+
+		</div>
+		<div class="botonesFormulario">
+					<p:button outcome="/proiecte/proiecte" value="Anulează"
+						icon="fa fa-fw fa-undo" />
+				</div>
+		</div>
+	</ui:define>
+</ui:composition>

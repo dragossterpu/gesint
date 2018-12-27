@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
@@ -16,8 +15,10 @@ import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.Visibility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,10 +28,11 @@ import ro.per.online.lazydata.LazyDataProiect;
 import ro.per.online.persistence.entities.Proiecte;
 import ro.per.online.services.ProiectService;
 import ro.per.online.util.FacesUtilities;
+import ro.per.online.util.Utilities;
 
 /**
  * Clase utilizada pentru a incarca proiectele PER.
- * 
+ *
  * @author STAD
  *
  */
@@ -38,7 +40,7 @@ import ro.per.online.util.FacesUtilities;
 @Setter
 @Getter
 @NoArgsConstructor
-@SessionScoped
+@Scope(Constantes.SESSION)
 public class ProiectBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -50,7 +52,7 @@ public class ProiectBean implements Serializable {
 
 	/**
 	 * Variala utilizata pentruinjectarea serviciului de proiecte.
-	 * 
+	 *
 	 */
 	@Autowired
 	private transient ProiectService proiectService;
@@ -107,9 +109,10 @@ public class ProiectBean implements Serializable {
 	/**
 	 * Căută proiecte pe baza unui filtru.
 	 */
+	@Transactional
 	public void buscarProiecte() {
 		modelProiect.setProiectBusqueda(proiectBusqueda);
-		modelProiect.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
+		modelProiect.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 	}
 
 	/**
@@ -120,11 +123,12 @@ public class ProiectBean implements Serializable {
 		try {
 			proiectService.delete(proiect);
 			listaProiecte.remove(proiect);
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, "Proiect eliminat", null);
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ELIMINAREMENSAJE,
+					Constantes.OKELIMINMENSAJE);
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la eliminarea proiectului, încercați din nou mai târziu");
+					"A apărut o eroare la eliminarea proiectului.".concat(Constantes.DESCERRORMENSAJE));
 		}
 
 	}
@@ -153,6 +157,7 @@ public class ProiectBean implements Serializable {
 			this.list.add(Boolean.TRUE);
 		}
 		limpiarBusqueda();
+//		Utilities.limpiarSesion("proiectBean");
 	}
 
 	/**
@@ -161,6 +166,7 @@ public class ProiectBean implements Serializable {
 	public void limpiarBusqueda() {
 		proiectBusqueda = new ProiectBusqueda();
 		modelProiect = new LazyDataProiect(proiectService);
+		modelProiect.setRowCount(0);
 	}
 
 	/**
@@ -172,19 +178,24 @@ public class ProiectBean implements Serializable {
 			this.proiect = proie;
 			;
 			proiectService.save(proiect);
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, " Modificare corectă ",
-					"Proiectul a fost modificat corect.");
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.MODIFICAREMENSAJE,
+					Constantes.OKMODMENSAJE);
 			final RequestContext context = RequestContext.getCurrentInstance();
 			context.execute("PF('dlgModifica').hide();");
 
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la modificarea proiectului, încercați din nou mai târziu.");
+					"A apărut o eroare la modificarea proiectului. ".concat(Constantes.DESCERRORMENSAJE));
 		}
 
 	}
 
+	/**
+	 * Reordeneaza proiectul
+	 *
+	 *
+	 */
 	public void onReorder() {
 		try {
 			reordenarProiecte();
@@ -193,7 +204,7 @@ public class ProiectBean implements Serializable {
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la salvarea reordenării, încercați din nou mai târziu");
+					"A apărut o eroare la salvarea reordenării. ".concat(Constantes.DESCERRORMENSAJE));
 		}
 	}
 
@@ -206,12 +217,12 @@ public class ProiectBean implements Serializable {
 		try {
 			final Proiecte proiect = (Proiecte) event.getObject();
 			proiectService.save(proiect);
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, "Proiect modificat",
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.MODIFICAREMENSAJE,
 					proiect.getTitlu());
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare în încercarea de a modificaproiectul, încercați din nou mai târziu");
+					"A apărut o eroare în încercarea de a modifica proiectul. ".concat(Constantes.DESCERRORMENSAJE));
 		}
 	}
 
@@ -238,8 +249,7 @@ public class ProiectBean implements Serializable {
 	 */
 	public String proiectNou() {
 		proiect = new Proiecte();
-		modelProiect = new LazyDataProiect(proiectService);
-		return "/proiecte/newProiect?faces-redirect=true";
+		return "/proiecte/altaProiect?faces-redirect=true";
 	}
 
 	/**
@@ -258,10 +268,40 @@ public class ProiectBean implements Serializable {
 				context.execute("PF('dlgOrdena').hide();");
 			}
 		}
-		catch (DataAccessException e) {
+		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la salvarea modificărilor, încercați din nou mai târziu");
+					"A apărut o eroare la salvarea modificărilor. ".concat(Constantes.DESCERRORMENSAJE));
 		}
 	}
 
+	/**
+	 * Inregistratrea proiectului.
+	 * @param proi Proiecte
+	 */
+	public void altaProiect(final Proiecte proi) {
+		try {
+			this.proiect = proi;
+			// Cautam cea mai mare pozitie din lista
+			listaPozitie = proiectService.findAllByOrderByRankDesc();
+			// Adaugam inca una
+			if (listaPozitie.isEmpty()) {
+				proiect.setRank(1L);
+			}
+			else {
+				final Long rank = listaPozitie.get(0).getRank() + 1;
+				proiect.setRank(rank);
+			}
+			// Salvam proiectul
+			proiectService.save(proiect);
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ALTAMENSAJE,
+					Constantes.OKALTAMENSAJE);
+
+		}
+		catch (
+
+		final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					Constantes.DESCERRORMENSAJE);
+		}
+	}
 }

@@ -1,5 +1,6 @@
 package ro.per.online.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -16,6 +17,7 @@ import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ro.per.online.constantes.Constantes;
 import ro.per.online.persistence.entities.Proiecte;
@@ -27,11 +29,12 @@ import ro.per.online.web.beans.ProiectBusqueda;
 
 /**
  * Implementación del servicio de centros.
- * 
+ *
  * @author STAD
  */
 
 @Service
+@Transactional
 public class ProiectServiceImpl implements ProiectService {
 
 	/**
@@ -70,7 +73,7 @@ public class ProiectServiceImpl implements ProiectService {
 			final SortOrder sortOrder, final ProiectBusqueda proiectBusqueda) {
 		try {
 			session = sessionFactory.openSession();
-			final Criteria criteria = session.createCriteria(Proiecte.class, "proiecte");
+			final Criteria criteria = session.createCriteria(Proiecte.class, Constantes.PROIECTE);
 			criteria.setFirstResult(first);
 			criteria.setMaxResults(pageSize);
 			if (sortField != null) {
@@ -82,7 +85,7 @@ public class ProiectServiceImpl implements ProiectService {
 				}
 			}
 			else {
-				criteria.addOrder(Order.asc("orden"));
+				criteria.addOrder(Order.asc("rank"));
 			}
 			List<Proiecte> proiecteList;
 			creaCriteria(proiectBusqueda, criteria);
@@ -106,7 +109,7 @@ public class ProiectServiceImpl implements ProiectService {
 			}
 			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-						"Error mesaj");
+						Constantes.DESCERRORMENSAJE);
 			}
 		}
 	}
@@ -123,21 +126,23 @@ public class ProiectServiceImpl implements ProiectService {
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(proiectBusqueda.getNume(), criteria, "titlu");
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(proiectBusqueda.getUsername(), criteria, "usuario");
 		criteriaMateriaIndexada(criteria, proiectBusqueda.getMateriaIndexata());
-		UtilitiesCriteria.setCondicionCriteriaIgualdadBoolean(proiectBusqueda.getValidated(), criteria, "validated");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadBoolean(proiectBusqueda.getValidated(), criteria,
+				Constantes.VALIDAT);
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 	}
 
 	/**
 	 * Añade al criteria el filtro de la materia indexada introducida en el formulario.
-	 * 
+	 *
 	 * @param criteria Criteria al que se añadirán los parámetros.
 	 * @param materiaIndexada materia indexada introducida en el filtro (separada por comas)
 	 */
 	private void criteriaMateriaIndexada(final Criteria criteria, final String materiaIndexada) {
 		if (materiaIndexada != null) {
-			final String[] claves = materiaIndexada.split(",");
+			final String[] claves = materiaIndexada.split(Constantes.COMA);
 			final Criterion[] clavesOr = new Criterion[claves.length];
 			for (int i = 0; i < claves.length; i++) {
-				clavesOr[i] = Restrictions.ilike("materiaIndexada", claves[i].trim(), MatchMode.ANYWHERE);
+				clavesOr[i] = Restrictions.ilike("materiaIndexata", claves[i].trim(), MatchMode.ANYWHERE);
 			}
 			criteria.add(Restrictions.or(clavesOr));
 		}
@@ -145,7 +150,7 @@ public class ProiectServiceImpl implements ProiectService {
 
 	/**
 	 * Elimina un proiect
-	 * 
+	 *
 	 * @param proiect Proiecte
 	 */
 	@Override
@@ -172,7 +177,7 @@ public class ProiectServiceImpl implements ProiectService {
 	public int getCounCriteria(final ProiectBusqueda busqueda) {
 		try {
 			session = sessionFactory.openSession();
-			final Criteria teria = session.createCriteria(Proiecte.class, "proiecte");
+			final Criteria teria = session.createCriteria(Proiecte.class, Constantes.PROIECTE);
 			creaCriteria(busqueda, teria);
 			teria.setProjection(Projections.rowCount());
 			final Long cnt = (Long) teria.uniqueResult();
@@ -197,4 +202,38 @@ public class ProiectServiceImpl implements ProiectService {
 
 	}
 
+	/**
+	 * Cauta ultima pozitie din lista
+	 */
+	@Override
+	public List<Proiecte> findAllByOrderByRankDesc() {
+		return (ArrayList<Proiecte>) proiectRepository.findAllByOrderByRankAsc();
+	}
+
+	/**
+	 * Prepara el criteria pasado como parámetro para la paginación de Primefaces.
+	 *
+	 * @param criteria criteria a configurar
+	 * @param first primer elemento
+	 * @param pageSize tamaño de cada página de resultados
+	 * @param sortField campo por el que se ordenan los resultados
+	 * @param sortOrder sentido de la ordenacion (ascendente/descendente)
+	 * @param defaultField campo de ordenación por defecto
+	 */
+	@Override
+	public void prepararPaginacionOrdenCriteria(final Criteria criteria, final int first, final int pageSize,
+			final String sortField, final SortOrder sortOrder, final String defaultField) {
+		criteria.setFirstResult(first);
+		criteria.setMaxResults(pageSize);
+
+		if (sortField != null && sortOrder.equals(SortOrder.ASCENDING)) {
+			criteria.addOrder(Order.asc(sortField));
+		}
+		else if (sortField != null && sortOrder.equals(SortOrder.DESCENDING)) {
+			criteria.addOrder(Order.desc(sortField));
+		}
+		else if (sortField == null) {
+			criteria.addOrder(Order.asc(defaultField));
+		}
+	}
 }

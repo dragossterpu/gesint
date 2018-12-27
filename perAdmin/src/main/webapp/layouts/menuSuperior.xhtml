@@ -5,15 +5,14 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:form>
 		<p:menubar styleClass="navPrimary">			
-			<p:menuitem value=" Acasă" icon="fa fa-fw fa-home" outcome="/index" styleClass="itemInicio" />			
-			<p:submenu label="Utilizatori/Membrii" icon="fa fa-fw fa-group" styleClass="itemUsuarios">
-				<p:menuitem value="Utilizatori/Membrii" outcome="/users/users"/>
+			<p:menuitem value="Acasă" icon="fa fa-fw fa-home" outcome="/index" styleClass="itemInicio" />			
+			<p:submenu label="Membrii" icon="fa fa-fw fa-group" styleClass="itemUsuarios">
+				<p:menuitem value="Membrii" outcome="/users/users"/>
 				<p:menuitem value="Equipa de conducere" outcome="/teams/teams" />
-<!-- 				<p:menuitem value="Statistică membrii" outcome="/enConstruccion" /> -->
 				<p:separator />	
 				<p:menuitem value="Alerte/Avize" outcome="/alertas/alertas" />
 			</p:submenu>
-			<p:menuitem value="Alerte/Comunicări" icon="fa fa-fw fa-home" outcome="/alertas/alertas" styleClass="itemInicio" />
+			<p:menuitem value="Alerte/Comunicări" icon="fa fa-fw fa-envelope-square" outcome="/alertas/alertas" styleClass="itemInicio" />
 			<p:submenu label="Administrație generală" icon="fa fa-fw fa-cogs" styleClass="itemAdministracion" >								
 				<p:menuitem value="Actividades" outcome="/enConstruccion" />
 				<p:menuitem value="Puestos de trabajo" outcome="/enConstruccion" />
@@ -30,7 +29,8 @@
 			</p:submenu>
 			<p:submenu label="Statistică" icon="fa fa-fw fa-bar-chart" styleClass="itemEstadisticas" >
 				<p:menuitem value="MicroStrategy"  outcome="/enConstruccion"/>
-				<p:menuitem value="Organizații" outcome="/enConstruccion" />															
+				<p:menuitem value="Organizații" outcome="/enConstruccion" />
+				<p:menuitem value="Statistică membrii" outcome="/enConstruccion" />															
 			</p:submenu>
 			<p:submenu label="Portal" icon="fa fa-fw fa-globe" styleClass="itemGestorDocumental">
 				<p:submenu label="Gestor Documental" outcome="/enConstruccion">
@@ -56,11 +56,19 @@
                     <p:menuitem value="Incidencias"  outcome="/enConstruccion"/>                                                            
                     <p:menuitem value="Categorias" outcome="/enConstruccion" />                                                            
                 </p:submenu>
+               
 			</p:submenu>
-			<p:submenu label="#{request.remoteUser}" icon="fa fa-fw fa-user" class="ui-menuitem ui-menubar-options" >
-				<p:menuitem value="Mi Perfil" class="miperfi" onclick="" outcome="/enConstruccion" icon="fa fa-fw fa-user"/>
-<!-- 				<p:menuitem value="Salir"  outcome="/logout"  icon="fa fa-fw fa-sign-out"/>				 -->
-			</p:submenu>
+			 <p:submenu label="Bine ai venit:   #{request.remoteUser}" icon="fa fa-fw fa-user" class="ui-menuitem ui-menubar-options"> </p:submenu>
 		</p:menubar>
+		<div id="headerDatos">
+	    <div id="headerDatos">
+	        <h:form>
+	            	<p:link outcome="/enConstruccion" value="Profilul meu" />
+					|
+					<p:link href="/logout" value="Închidere aplicație" />
+	        </h:form>
+	    </div>
+		</div>
 	</h:form>
+	
 </ui:composition>

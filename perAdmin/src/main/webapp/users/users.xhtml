@@ -1,4 +1,4 @@
-<ui:composition template="../layouts/layoutInterior.xhtml"
+<ui:composition template="../layouts/layoutInterior2.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -7,7 +7,6 @@
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:my="http://java.sun.com/jsf/composite/composites"
 	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
-
 	<ui:define name="content">
 		<p:importConstants type="ro.per.online.constantes.Constantes" var="Constantes" />
 
@@ -15,7 +14,7 @@
 			<div class="filtro">
 				<div class="bloqueFormulario">
 
-					<div class="titleFormulario">Căutare utilizatori </div>
+					<div class="titleFormulario">Căutare membrii </div>
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<h:outputLabel for="idCard"  styleClass="buscador" value="CNP:" />
@@ -27,7 +26,7 @@
 
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<h:outputLabel for="name" styleClass="buscador" value="Nume:" />
+							<h:outputLabel for="name" styleClass="buscador" value="Nume (Numele de familie):" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<p:inputText id="name" converter="#{trimConverter}" value="#{userBean.userBusqueda.name}" />
@@ -136,25 +135,38 @@
 					</div>
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<h:outputLabel for="validated" value="Activ/Blocat:" />
+							<h:outputLabel for="validated" value="Blocaţi/Neblocaţi:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<p:selectOneMenu class="selectFiltro" id="validated"
 								value="#{userBean.userBusqueda.validated}">
-								<f:selectItem itemLabel="TODOS" itemValue="" />
-								<f:selectItem itemLabel="ACTIV" itemValue="true" />
-								<f:selectItem itemLabel="BLOCAT" itemValue="false" />
+								<f:selectItem itemLabel="TOŢI" itemValue="" />
+								<f:selectItem itemLabel="NEBLOCAŢI" itemValue="true" />
+								<f:selectItem itemLabel="BLOCAŢI" itemValue="false" />
 							</p:selectOneMenu>
 						</div>
 					</div>
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
-							<h:outputLabel for="provinciasSelect" styleClass="buscador" value="Organizația/Județul:" />
+							<h:outputLabel for="eliminado" value="Activi/Eliminaţi:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:selectOneMenu class="selectFiltro" id="eliminado"
+								value="#{userBean.userBusqueda.eliminado}">
+								<f:selectItem itemLabel="TOŢI" itemValue="" />
+								<f:selectItem itemLabel="ELIMINAŢI" itemValue="SI" />
+								<f:selectItem itemLabel="ACTIVI" itemValue="NO" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="provinciasSelect" styleClass="buscador" value="Județul:" />
 						</div>
 						<div class="ui-g-12 ui-md-6 ui-lg-6">							
 	                    <p:selectOneMenu  value="#{userBean.userBusqueda.idProvincia}"  id="provinciasSelect"
 	                       class="selectFiltro" >
-	                        <f:selectItem itemLabel="Alege una..." itemValue="" />
+	                        <f:selectItem itemLabel="Alege unul..." itemValue="" />
 	                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.id}" />
 	                          <p:ajax event="change" update="locality"
 									listener="#{userBean.actualizarLocalidades(userBean.userBusqueda.idProvincia)}" />                        
@@ -235,37 +247,44 @@
 							</p:outputPanel>
 						</f:facet>
 						
-						<p:column headerText="Data inregistrării" sortBy="#{user.dateCreate}" style="width:16%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
+						<p:column headerText="Data inregistrării" sortBy="#{user.dateCreate}" style="width:13%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
 							<h:outputText value="#{user.dateCreate}">
 								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="Europe/Madrid" />
 							</h:outputText>
 						</p:column>
-						<p:column headerText="Nume" sortBy="#{user.name}" style="width:16%;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
+						<p:column headerText="Nume" sortBy="#{user.name}" style="width:14%;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
 							<h:outputText value="#{user.name}" />
 						</p:column>
-						<p:column headerText="Prenume" sortBy="#{user.lastName}" style="width:16%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
+						<p:column headerText="Prenume" sortBy="#{user.lastName}" style="width:12%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
 							<h:outputText value="#{user.lastName}" />
 						</p:column>
-						<p:column headerText="Email" sortBy="#{user.username}" style="width:20%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
+						<p:column headerText="Email" sortBy="#{user.username}" style="width:25%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
 							<h:outputText value="#{user.username}" />
 						</p:column>
-						<p:column headerText="Județul/Organizația " sortBy="#{user.province.name}" style="width:16%;" visible="#{userBean.list[5]}" exportable="#{userBean.list[5]}">
+						<p:column headerText="Județul"  style="width:12%;" visible="#{userBean.list[4]}" exportable="#{userBean.list[4]}">
 							<h:outputText value="#{user.province.name}" />
 						</p:column>
-						<p:column headerText="Activ/Inactiv" sortBy="#{user.validated}"
-							visible="#{userBean.list[6]}" exportable="#{userBean.list[6]}" style="width:10%;text-align:center;">
+						<p:column headerText="Blocați/Neblocați" sortBy="#{user.validated}"
+							visible="#{userBean.list[5]}" exportable="#{userBean.list[5]}" style="width:14%;text-align:center;">
 							<h:outputText styleClass="fa fa-check-circle"
 									rendered="#{user.validated}" />
 							<h:outputText styleClass="fa fa-times-circle"
 									rendered="#{not user.validated}" />
 						</p:column>
+						<p:column headerText="Activi/Eliminați" sortBy="#{user.dateDeleted}"
+							visible="#{userBean.list[6]}" exportable="#{userBean.list[6]}" style="width:13%;text-align:center;">
+							<h:outputText styleClass="fa fa-check-circle"
+									rendered="#{user.dateDeleted == null}" />
+							<h:outputText styleClass="fa fa-times-circle"
+									rendered="#{user.dateDeleted != null}" />
+						</p:column>
 						<p:column styleClass="botonTabla text-center" exportable="false" style="width:10%;" toggleable="false">
-							<h:commandLink title="Modificare utilizator"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
+							<h:commandLink title="Modificare membru"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
 								action="#{userBean.getFormModificarUsuario(user)}" update="userTable" />
-							<p:commandButton title="Eliminare" icon="fa fa-trash" styleClass="modBtn"  actionListener="#{userBean.removeUser(user)}" 
+							<p:commandButton title="Eliminare membru" icon="fa fa-trash" styleClass="modBtn"  actionListener="#{userBean.eliminarUsuario(user)}" 
 							update="searchListUsers" oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">
 								
-								<p:confirm header="Ștergere utilizator" message="Sunteți sigur că doriți să eliminați acest utilizator?" icon="fa fa-warning-sign" />
+								<p:confirm header="Eliminare membru" message="Sunteți sigur că doriți să eliminați DEFINITIV acest membru?" icon="fa fa-warning-sign" />
 							</p:commandButton>
 						</p:column>
 						<f:facet name="footer">
@@ -275,7 +294,7 @@
                                  maxIntegerDigits="5"
                                  maxFractionDigits="0"/>
 							</h:outputText>
-							de utilizatori /membrii
+							de membrii
     					</f:facet>
 					</p:dataTable>
 				</p:outputPanel>

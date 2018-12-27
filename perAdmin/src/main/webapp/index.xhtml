@@ -7,9 +7,12 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:pe="http://primefaces.org/ui/extensions" 
 	xmlns:p="http://primefaces.org/ui">
+
+<div id="fb-root"></div>
+
 <f:view>
 	<ui:composition template="layouts/layoutInterior.xhtml">
-		<ui:define name="title">Ecologistii</ui:define>
+		<ui:define name="title">Ecologiștii</ui:define>
 		<ui:define name="content">	
 			<h:form id="formHome">
 				<h3>STATISTICĂ</h3>	  
@@ -38,6 +41,11 @@
 					closable="false" resizable="false" showHeader="false">
 					<p:graphicImage value="/images/loading.gif" />
 				</p:dialog>
+				
+				<div class="fb-page" data-href="https://www.facebook.com/facebook" data-tabs="timeline" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+				<blockquote cite="https://www.facebook.com/facebook" class="fb-xfbml-parse-ignore">
+				<a href="https://www.facebook.com/facebook">Facebook</a></blockquote>
+				</div>
 		</h:form>		
 		</ui:define>
 	</ui:composition>

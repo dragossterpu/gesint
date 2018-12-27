@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import ro.per.online.persistence.entities.Users;
-import ro.per.online.persistence.entities.enums.RoleEnum;
 
 /**
  * Implementación del Service de Login.
@@ -35,11 +34,31 @@ public class LoginService implements UserDetailsService, Serializable {
 		 * Establece los detalles de conexión del usuario.
 		 * @param user User
 		 */
-		public UserRepositoryUserDetails(Users user) {
+		public UserRepositoryUserDetails(final Users user) {
 			super();
-			setUsername(user.getUsername());
-			setPassword(user.getPassword());
-			setRole(user.getRole());
+			this.setUsername(user.getUsername());
+			this.setPassword(user.getPassword());
+			this.setRole(user.getRole());
+			this.setAddress(user.getAddress());
+			this.setAlertChannel(user.getAlertChannel());
+			this.setBirthDate(user.getBirthDate());
+			this.setCivilStatus(user.getCivilStatus());
+			this.setDateCreate(user.getDateCreate());
+			this.setDateDeleted(user.getDateDeleted());
+			this.setEducation(user.getEducation());
+			this.setEmail(user.getEmail());
+			this.setIdCard(user.getIdCard());
+			this.setLastName(user.getLastName());
+			this.setLocality(user.getLocality());
+			this.setName(user.getName());
+			this.setNumberCard(user.getNumberCard());
+			this.setPersonalEmail(user.getPersonalEmail());
+			this.setPhone(user.getPhone());
+			this.setPhoto(user.getPhoto());
+			this.setProvince(user.getProvince());
+			this.setSex(user.getSex());
+			this.setValidated(user.getValidated());
+			this.setWorkplace(user.getWorkplace());
 		}
 
 		/**
@@ -47,7 +66,7 @@ public class LoginService implements UserDetailsService, Serializable {
 		 */
 		@Override
 		public Collection<? extends GrantedAuthority> getAuthorities() {
-			Set<GrantedAuthority> authorities = new HashSet<>();
+			final Set<GrantedAuthority> authorities = new HashSet<>();
 			authorities.add(new SimpleGrantedAuthority(getRole().name()));
 
 			return authorities;
@@ -58,6 +77,8 @@ public class LoginService implements UserDetailsService, Serializable {
 		 */
 		@Override
 		public boolean isAccountNonExpired() {
+			// Falta implementar las condiciones
+			// Ej return getFechaBaja() == null;
 			return true;
 		}
 
@@ -67,7 +88,7 @@ public class LoginService implements UserDetailsService, Serializable {
 		@Override
 		public boolean isAccountNonLocked() {
 			boolean isAccountNonLocked = false;
-			if (getRole() != null && (getRole().equals(RoleEnum.ROLE_ADMIN))) {
+			if (this.getValidated()) {
 				isAccountNonLocked = true;
 			}
 			return isAccountNonLocked;
@@ -86,13 +107,17 @@ public class LoginService implements UserDetailsService, Serializable {
 		 */
 		@Override
 		public boolean isEnabled() {
-			return true;
+			boolean isEnabled = false;
+			if (this.getDateDeleted() == null) {
+				isEnabled = true;
+			}
+			return isEnabled;
 		}
 
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -112,7 +137,7 @@ public class LoginService implements UserDetailsService, Serializable {
 	public UserDetails loadUserByUsername(final String username) {
 		final Users user = this.userService.fiindOne(username);
 		if (null == user) {
-			throw new UsernameNotFoundException("El usuario no existe.");
+			throw new UsernameNotFoundException("Utilizatorul nu există.");
 		}
 
 		return new UserRepositoryUserDetails(user);

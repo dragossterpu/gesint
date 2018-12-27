@@ -63,6 +63,36 @@ public final class Constantes {
 	public static final String ERRORMENSAJE = "Eroare";
 
 	/**
+	 * Palabra "Error" para no repetirla n veces dentro de una clase.
+	 */
+	public static final String ALTAMENSAJE = "Înregistrare";
+
+	/**
+	 * Palabra "Error" para no repetirla n veces dentro de una clase.
+	 */
+	public static final String ELIMINAREMENSAJE = "Eliminare";
+
+	/**
+	 * Palabra "Error" para no repetirla n veces dentro de una clase.
+	 */
+	public static final String MODIFICAREMENSAJE = "Modificare";
+
+	/**
+	 * Palabra "Error" para no repetirla n veces dentro de una clase.
+	 */
+	public static final String OKALTAMENSAJE = "Registrul a fost înregistrat corect.";
+
+	/**
+	 * Palabra "Error" para no repetirla n veces dentro de una clase.
+	 */
+	public static final String OKELIMINMENSAJE = "Registrul a fost eliminat corect.";
+
+	/**
+	 * Palabra "Error" para no repetirla n veces dentro de una clase.
+	 */
+	public static final String OKMODMENSAJE = "Registrul a fost modificat corect.";
+
+	/**
 	 * Identificador del mensaje global que se muestra en la aplicación.
 	 */
 	public static final String IDMENSAJEGLOBAL = "messages";
@@ -160,7 +190,7 @@ public final class Constantes {
 	/**
 	 * The Constant CAMBIODATOS.
 	 */
-	public static final String CAMBIODATOS = "Modificări date membrii";
+	public static final String CAMBIODATOS = "Modificare date registru";
 
 	/**
 	 * The Constant ALTA.
@@ -381,6 +411,56 @@ public final class Constantes {
 	 * Constanta pentru cuvantul esBloqueo.
 	 */
 	public static final String ESBLOQUEO = "esBloqueo";
+
+	/**
+	 * Constanta pentru o linie.
+	 */
+	public static final String LINIE = "-";
+
+	/**
+	 * Constanta pentru cuvantul membru.
+	 */
+	public static final String MEMBRUL = "membrul '";
+
+	/**
+	 * Constanta pentru cuvantul membru.
+	 */
+	public static final String EXISTERORI = "Au existat erori ";
+
+	/**
+	 * Constanta pentru cuvantul Blocare.
+	 */
+	public static final String BLOCARE = "Blocare";
+
+	/**
+	 * Constanta pentru cuvantul Eliminare.
+	 */
+	public static final String ELIMINARE = "Eliminare";
+
+	/**
+	 * Constanta pentru fraza Registrul a fost modificat corect.
+	 */
+	public static final String REGMODOK = "Registrul a fost modificat corect.";
+
+	/**
+	 * Constanta pentru fraza Registrul a fost modificat corect.
+	 */
+	public static final String REGALTAOK = "Registrul a fost salvat corect.";
+
+	/**
+	 * Constanta pentru fraza Registrul a fost modificat corect.
+	 */
+	public static final String REGDELOK = "Registrul a fost eliminat corect.";
+
+	/**
+	 * Constanta pentru cuvantul proiecte.
+	 */
+	public static final String PROIECTE = "proiecte";
+
+	/**
+	 * Constanta pentru cuvantul validated.
+	 */
+	public static final String VALIDAT = "validated";
 
 	/***********************
 	 * Anotaciones

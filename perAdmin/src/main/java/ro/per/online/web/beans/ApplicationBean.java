@@ -1,5 +1,6 @@
 package ro.per.online.web.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,8 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -121,4 +124,14 @@ public class ApplicationBean implements Serializable {
 		setMapaParametrosMail(mapaParametros);
 	}
 
+	/**
+	 * Método logout de backoffice.
+	 * @throws IOException excepción lanzada
+	 */
+	public void logout() throws IOException {
+		final HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+				.getRequest();
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+		FacesContext.getCurrentInstance().getExternalContext().redirect(req.getContextPath() + "/logout");
+	}
 }

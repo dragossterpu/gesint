@@ -9,10 +9,15 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions">
 
-    <p:dialog id="dialog" widgetVar="dialogMessage" header="INFO" closable="false" width="30%">
-        <p:messages for="dialogMessage" autoUpdate="true" showDetail="true" showSummary="true" escape="false"/>
-        <div class="centrarBotonesDialog">
-            <p:button value="Cerrar" outcome="#{ruta}" />
-        </div>
+                    <p:button outcome="/users/users" value="Anulați"/>
+
+						    <p:dialog id="dialog" widgetVar="dialogMessage" header="Información" closable="false" width="30%">
+						        <p:messages for="dialogMessage" autoUpdate="true" showDetail="true" showSummary="true" escape="false"/>
+						        <div class="centrarBotonesDialog">
+						            <p:button value="Închideți" outcome="/users/users" />
+						        </div>
+						    </p:dialog>
+						<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="./images/loading.gif" />
     </p:dialog>
 </ui:composition>

@@ -14,7 +14,7 @@ import lombok.Setter;
 
 /**
  * Gestiona peticiones HTTP relativas al inicio y finalización de sesiones en el sistema.
- * 
+ *
  * @author STAD
  */
 @Getter
@@ -25,7 +25,7 @@ public class LoginController {
 	/**
 	 * Intercepta peticiones a la ruta de login "/login" y responde de manera distinta si es una petición normal o AJAX
 	 * (útil en caso de caducar la sesión actual).
-	 * 
+	 *
 	 * @param request peticion http del cliente
 	 * @param response respuesta http del servidor
 	 * @return acción de login mapeada en el dispatcher en caso de peticion normal, fuerza redirección en caso de
@@ -49,4 +49,12 @@ public class LoginController {
 		return respuesta;
 	}
 
+	/**
+	 * Request Mapping de logout.
+	 * @return @RequestMapping
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/logout")
+	public String logout() {
+		return "logout";
+	}
 }

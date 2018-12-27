@@ -9,6 +9,7 @@
 				<div class="titleFormulario">
 					<h3 style="margin-top: 0">Modificați membru</h3>
 				</div>
+
 		<div class="container-fluid">
 			<h:form id="form" class="tabsInvert">
 				<p:growl id="msgs" showDetail="true" />
@@ -143,27 +144,47 @@
 								</p:selectOneMenu>
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
-									<b><h:outputLabel for="provinciaSelect" value="Județul/Organizația:" /></b>
-									<p:selectOneMenu value="#{userBean.provinciaSelect}" converter="#{selectConverter}"
-										id="provinciaSelect" filter="true" filterMatchMode="startsWith"
-										 styleClass="form-control form-select">
-										<f:selectItem itemLabel="#{userBean.provinciaSelect.name}" />
-										<f:selectItems value="#{userBean.provinces}"  var="provincia"
-											itemLabel="#{provincia.name}" itemValue="#{provincia}" />
-									</p:selectOneMenu>	
+								<b><h:outputText for="eliminado" value="Situație membru :  " /></b>
+								 <p:selectBooleanButton id="eliminado" value="#{userBean.eliminado}" onLabel="Eliminat" offLabel="Activ" style="width:80px" />
+ 
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									   <b><h:outputLabel for="provinciaSelect" value="Județul/Organizația:" /></b>
+				                        <p:selectOneMenu value="#{userBean.usuario.province}" id="provinciaSelect" 
+				                        styleClass="form-control form-select" converter="#{selectConverter}" >
+				                            <f:selectItems value="#{userBean.provinces}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia}" />
+				                            <p:ajax partialSubmit="false" listener="#{userBean.buscarMunicipiu()}" update="@form" />
+				                        </p:selectOneMenu>
+				                       <p:messages for="provinciaSelect" autoUpdate="true" closable="true" />								
+<!-- 									<b><h:outputLabel for="provinciaSelect" value="Județul/Organizația:" /></b> -->
+<!-- 									<p:selectOneMenu value="#{userBean.provinciaSelect}" converter="#{selectConverter}" -->
+<!-- 										id="provinciaSelect" filter="true" filterMatchMode="startsWith" -->
+<!-- 										 styleClass="form-control form-select"> -->
+<!-- 										<f:selectItem itemLabel="#{userBean.provinciaSelect.name}" /> -->
+<!-- 										<f:selectItems value="#{userBean.provinces}"  var="provincia" -->
+<!-- 											itemLabel="#{provincia.name}" itemValue="#{provincia}" /> -->
+<!-- 									</p:selectOneMenu>	 -->
 								</div>
 							</div>
 							<p:separator />
 							<div class="ui-g">
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 								<b><h:outputLabel for="municipiosSelect"  value="Alegeți o altă localitate :" /></b>
-									<p:separator />									
-									<p:selectOneMenu styleClass="form-control form-select"
-										value="#{userBean.usuario.locality}" id="municipiosSelect" converter="#{selectConverter}">																	
-										<f:selectItem itemLabel="#{userBean.usuario.locality.name}" itemValue="#{userBean.usuario.locality}" />
-										<f:selectItems value="#{userBean.localidadesSelected}"
-											var="locality"  itemLabel="#{locality.name}" itemValue="#{locality}"/>
-									</p:selectOneMenu>								
+		                        <p:selectOneMenu value="#{userBean.usuario.locality}" id="municipiosSelect" converter="#{selectConverter}">
+		                            <f:selectItem itemLabel="Seleccione uno" itemValue="" />
+		                            <f:selectItems value="#{userBean.localidades}" var="localidadSelected" itemLabel="#{localidadSelected.name}" itemValue="#{localidadSelected}" />
+		                        </p:selectOneMenu>
+		                        <p:messages for="municipiosSelect" autoUpdate="true" closable="true" />
+								
+								
+<!-- 								<b><h:outputLabel for="municipiosSelect"  value="Alegeți o altă localitate :" /></b> -->
+<!-- 									<p:separator />									 -->
+<!-- 									<p:selectOneMenu styleClass="form-control form-select" -->
+<!-- 										value="#{userBean.usuario.locality}" id="municipiosSelect" converter="#{selectConverter}">																	 -->
+<!-- 										<f:selectItem itemLabel="#{userBean.usuario.locality.name}" itemValue="#{userBean.usuario.locality}" /> -->
+<!-- 										<f:selectItems value="#{userBean.localidadesSelected}" -->
+<!-- 											var="locality"  itemLabel="#{locality.name}" itemValue="#{locality}"/> -->
+<!-- 									</p:selectOneMenu>								 -->
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 								<b><h:outputLabel for="municipio"  value="Înregistrați o nouă localitate:" /></b>
@@ -175,7 +196,7 @@
 							<p:separator />
 							<div class="ui-g">									
 								<div class="ui-g-12 ui-md-6 ui-lg-4">								
-									<b><h:outputLabel for="imagen" value="Fotografia :" /></b>
+									<b><h:outputLabel for="imagenG" value="Fotografia :" /></b>
 									<p:separator />
 									<p:graphicImage rendered="#{not empty userBean.usuario.photo}" id="imagenG" value="#{userBean.usuario.imageUser}" cache="false" stream="false">
 									<f:param name="id" value="#{userBean.usuario.id}" />
@@ -185,7 +206,7 @@
 									<b><h:outputLabel for="imagenNueva" value=" Încarcă noua fotografie :" /></b>
 									<p:separator />
 									<p:fileUpload fileUploadListener="#{userBean.cargaImagen}" mode="advanced" dragDropSupport="false"
-									   sizeLimit="204800" invalidSizeMessage=" Dimensiunea maximă permisă este de 20MB" required="true" 
+									   sizeLimit="20480" invalidSizeMessage=" Dimensiunea maximă permisă este de 2MB" required="true" 
 									   fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
 									   uploadLabel=" Salvează noua fotografie" cancelLabel=" Renunțare" label="Încarcă/Caută fotografia" update="imagenG" /> 
 								</div>									
@@ -220,26 +241,32 @@
 				<p:selectOneMenu value="#{userBean.tipLocalidadSelected}" id="typeLocality" class="selectFiltro" style="min-width:initial;" 
 				effect="fold" required="#{param['form:guardar']!=null}"  requiredMessage="Este obligatoriu să alegeți un tip de localitate">
 					<f:selectItem itemLabel="Alege unul..." itemValue="" />
-					<f:selectItems value="#{typeLocalitys.ALL_ENUM_VALUES}"
-					var="tipLocalidadSelected"
-					itemLabel="#{tipLocalidadSelected.description}"
-					itemValue="#{tipLocalidadSelected}" />
+					<f:selectItems value="#{typeLocalitys.ALL_ENUM_VALUES}" var="tipLocalidadSelected" itemLabel="#{tipLocalidadSelected.description}"
+				itemValue="#{tipLocalidadSelected}" />
 				</p:selectOneMenu>
-				
+			<b><h:outputLabel for="provinciaSelect" value="Județul/Organizația:" /></b>
+									<p:selectOneMenu value="#{userBean.provinciaSelect}" converter="#{selectConverter}"
+										id="provinciaSelect" filter="true" filterMatchMode="startsWith"
+										 styleClass="form-control form-select">
+										<f:selectItem itemLabel="#{userBean.provinciaSelect.name}" />
+										<f:selectItems value="#{userBean.provinces}"  var="provincia"
+											itemLabel="#{provincia.name}" itemValue="#{provincia}" />
+									</p:selectOneMenu>		
 			
 			<div class="centrarBotonesDialog">
-				<p:commandButton id="guardar" value="Inregistrare" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, userBean.provinciaSelect,userBean.tipLocalidadSelected, userBean.usuario)}" 
+				<p:commandButton id="guardar" value="Înregistrează" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, userBean.usuario.province,userBean.tipLocalidadSelected, userBean.usuario)}" 
 				update ="@form"  oncomplete="PF('dialogMunicipio').hide()"/>
-				<p:commandButton value="Cerrar" onclick="PF('dialogMunicipio').hide()"/>
+				<p:commandButton value="Închidere" onclick="PF('dialogMunicipio').hide()"/>
 			</div>
-		</p:dialog>				
+		</p:dialog>	
+				<div class="botonesFormulario">
+			<p:button outcome="/users/users" value="Întoarcere" icon="fa fa-fw fa-undo" />
+		</div>			
 		</h:form>
 
 		</div>
-		<div class="botonesFormulario">
-					<p:button outcome="/users/users" value="Volver"
-						icon="fa fa-fw fa-undo" />
-				</div>
+
 		</div>
+
 	</ui:define>
 </ui:composition>

@@ -68,7 +68,59 @@ public class Generador {
 		final String apellido = apellidos[1 + new Random().nextInt(150)];
 		return apellido.toUpperCase();
 	}
-
+	/**
+	 * Obtiene un apellido final de la lista.
+	 * @return apellido al azar
+	 */
+	public static String apellidoFinal2() {
+		final String[] apellidos = { "Niță", "Pop", "Popa", "Popescu", "Ionescu", "Acsinte", "Stan", "Dumitrescu", "Băcan",
+				"Gheorghiu", "Ioniță", "Marin", "Tudor", "Dobre", "Barbu", "Nistor", "Florea", "Ene", "Dinu",
+				"Georgescu", "Stoica", "Diaconu", "Diaconescu", "Bicescu", "Bârgoveanu", "Băiceanu", "Nistor", "Căilnicean",
+				"Oprea", "Voinea", "Cârciumăreasa", "Albu", "Călescu", "Manole", "Cristea", "Călimăceanu", "Stănescu", "Cîșlariu",
+				"Tomescu", "Dacian", "Ionescu", "Marinescu", "Georgescu", "Vasilescu", "Daniilescu", "Dalaban",
+				"Gheorghiu", "Vasiliu", "Davidescu", "Dășanu", "Stoicescu", "Tomescu", "Deaconu", "Dedulescu", "Denciu",
+				"Despinescu", "Dobriceanu", "Dodea", "Dogaru", "Theodorescu", "Dițulescu", "Eftimie", "Enăceanu", "Fiertu",
+				"Filipoiu", "Firescu", "Firuleasa", "Fîntînaru", "Gabrea", "Gabrilescu", "Gafiței", "Garabagiu", "Ionescu",
+				"Georgescu", "Vasilescu", "Podaru", "Gălățeanu", "Geamănu", "Habageriu", "Hangiu", "Hedeșan",
+				"Helgiu", "Henciu", "Herdeș", "Hergehelegiu", "Iacob", "Ieftimie", "Ienășescu", "Ieremia", "Iftodi",
+				"Deaconu", "Ignăteanu", "Ignătescu", "Ilinca", "Ipătescu", "Iriminescu", "Isăceanu", "Ispir", "Istrătescu",
+				"Ivănoiu", "Jderu", "Jeleanu", "Jercălău", "Jidaru", "Jilăveanu", "Largu", "Lateș",
+				"Lazariu", "Lăpușan", "Lefterescu", "Leahă", "Licsandru", "Lișcă", "Lupșan", "Lunceanu", "Maftei",
+				"Manea", "Manole", "Mareș", "Marinescu", "Matei", "Măgureanu", "Medeleanu", "Micescu", "Miclea",
+				"Miclescu", "Mîndrescu", "Neacșu", "Neaga", "Nicolae", "Noica", "Nuțu", "Ogaru", "Ogăraru",
+				"Paicu", "Panait", "Pârvu", "Pleșan", "Poenaru", "Popa", "Popescu", "Popovici",
+				"Preda", "Radu", "Robu", "Roceanu", "Romașcanu", "Rontea", "Roșca", "Roșianu",
+				"Rotaru" };
+		final String apellido = apellidos[1 + new Random().nextInt(150)];
+		return apellido.toUpperCase();
+	}
+	
+	/**
+	 * Obtiene un apellido final de la lista.
+	 * @return apellido al azar
+	 */
+	public static String apellidoFinal3() {
+		final String[] apellidos = { "Niță", "Pop", "Popa", "Popescu", "Ionescu", "Samoilă", "Stan", "Dumitrescu", "Savu",
+				"Sabău", "Ioniță", "Marin", "Tudor", "Săceanu", "Barbu", "Nistor", "Florea", "Săftoiu", "Dinu",
+				"Georgescu", "Stoica", "Diaconu", "Diaconescu", "Sălăgean", "Barbu", "Sălișteanu", "Nistor", "Sârbu",
+				"Oprea", "Voinea", "Sebeșanu", "Albu", "Secășanu", "Manole", "Cristea", "Silișteanu", "Stănescu", "Silvășanu",
+				"Tomescu", "Simionescu", "Ionescu", "Marinescu", "Georgescu", "Vasilescu", "Suciu", "Surdu",
+				"Gheorghiu", "Vasiliu", "Strungaru", "Stoica", "Stoicescu", "Tomescu", "Stîngă", "Dedulescu", "Denciu",
+				"Stejaru", "Viziru", "Stângă", "Dogaru", "Vișănescu", "Stanciu", "Eftimie", "Stan", "Stamate",
+				"Sitaru", "Firescu", "Simionescu", "Sima", "Sîrbu", "Gabrilescu", "Slătineanu", "Sorescu", "Ionescu",
+				"Georgescu", "Vasilescu", "Spătaru", "Seciu", "Seceanu", "Tabără", "Talpă", "Tanasă",
+				"Tapalagă", "Tatomirescu", "Tăbăcar", "Tănase", "Tănăsie", "Tătar", "Tătărășanu", "Tâmplaru", "Teacă",
+				"Deaconu", "Teașcă", "Teișanu", "Teodoreanu", "Teodorescu", "Ticușan", "Timofe", "Toader", "Todea",
+				"Todoran", "Topliceanu", "Trașă", "Trușcă", "Tudor", "Uceanu", "Udescu", "Udrescu",
+				"Lazariu", "Ulea", "Ulmeanu", "Ungheanu", "Ungureanu", "Ungurușan", "Urâtu", "Urderean", "Maftei",
+				"Manea", "Manole", "Ureche", "Marinescu", "Matei", "Urleanu", "Ursu", "Urzică", "Urziceanu",
+				"Uțescu", "Vamăș", "Neacșu", "Vanța", "Nicolae", "Vasilache", "Vasilescu", "Vasiliu", "Vatamanu",
+				"Văcariu", "Panait", "Vădean", "Vărzariu", "Vânătoru", "Popa", "Popescu", "Velcean",
+				"Preda", "Radu", "Vereștiuc", "Vermeșan", "Viașu", "Vidrașcu", "Roșca", "Vlașcu",
+				"Vințu" };
+		final String apellido = apellidos[1 + new Random().nextInt(150)];
+		return apellido.toUpperCase();
+	}
 	/**
 	 * Obtiene un cnp.
 	 * @return cnp al azar

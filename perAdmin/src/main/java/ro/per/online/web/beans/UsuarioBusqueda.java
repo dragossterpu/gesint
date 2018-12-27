@@ -134,4 +134,9 @@ public class UsuarioBusqueda implements Serializable {
 	 * Lista de usuarios seleccionados.
 	 */
 	private List<Users> usuariosSeleccionados;
+
+	/**
+	 * Variable para personas eliminadas
+	 */
+	private String eliminado = "";
 }

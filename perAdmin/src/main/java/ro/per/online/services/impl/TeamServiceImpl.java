@@ -28,7 +28,7 @@ public class TeamServiceImpl implements TeamService {
 
 	/**
 	 * Elimina un membru al echipei de conducere
-	 * 
+	 *
 	 * @param team membru al echipei de conducere
 	 */
 	@Override
@@ -55,6 +55,9 @@ public class TeamServiceImpl implements TeamService {
 		return (ArrayList<Team>) teamRepository.findAllByOrderByRankAsc();
 	}
 
+	/**
+	 * Cauta ultima pozitie din lista
+	 */
 	@Override
 	public List<Team> findAllByOrderByRankDesc() {
 		return (ArrayList<Team>) teamRepository.findAllByOrderByRankDesc();
@@ -72,7 +75,7 @@ public class TeamServiceImpl implements TeamService {
 
 	/**
 	 * Salvați sau actualizați un team.
-	 * 
+	 *
 	 * @param team
 	 * @return Team actualizat
 	 */

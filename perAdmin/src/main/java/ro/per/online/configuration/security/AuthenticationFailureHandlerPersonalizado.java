@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Manejador de errores de autenticación en el login.
- * 
+ *
  * @author STAD
  *
  */
@@ -21,23 +21,22 @@ public class AuthenticationFailureHandlerPersonalizado extends SimpleUrlAuthenti
 
 	/**
 	 * Controla el funcionamiento del sistema cuando se produce un error al hacer login.
-	 * 
+	 *
 	 */
 	@Override
 	public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response,
 			final AuthenticationException exception) throws IOException, ServletException {
 
-		final StringBuilder textoReg = new StringBuilder(
-				"Se ha producido un intento de login fallido en el sistema\n\n");
-		textoReg.append("Error detectado: ");
+		final StringBuilder textoReg = new StringBuilder("S-a produs o încercare de conectare nereușită în sistem.");
+		textoReg.append("Eroare detectată: ");
 		if (exception.getMessage().contains("locked")) {
-			textoReg.append("Cuenta bloqueada");
+			textoReg.append("Contul a fost blocat");
 		}
 		else if (exception.getMessage().contains("Bad credentials")) {
-			textoReg.append("Usuario o contraseña incorrectos");
+			textoReg.append("Nume de utilizator sau parolă incorecte");
 		}
 		else if (exception.getMessage().contains("Maximum sessions")) {
-			textoReg.append("Ya existe una sesión abierta para este usuario");
+			textoReg.append("Există deja o sesiune deschisă pentru acest utilizator");
 		}
 
 		saveException(request, exception);

@@ -112,18 +112,18 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		try {
 			final String mensaje = cargaFicheroOperacionMasiva(event.getFile(), tipoRegistro);
 			if (StringUtils.isEmpty(mensaje)) {
-				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO, Constantes.ALTA,
-						"Toți utilizatorii au fost procesați cu succes.", "messages");
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ALTA,
+						"Toți utilizatorii au fost procesați cu succes.");
 			}
 
 			else {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-						"Au existat erori ".concat(mensajeExcepcion) + mensaje);
+						Constantes.EXISTERORI.concat(mensajeExcepcion) + mensaje);
 			}
 		}
 		catch (final TransactionException | IOException | NoSuchElementException te) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"Au existat erori ".concat(mensajeExcepcion));
+					Constantes.EXISTERORI.concat(mensajeExcepcion));
 		}
 	}
 
@@ -200,18 +200,18 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 				}
 			}
 		}
-		String hayErrores = "<br>Rezolvați-le și încercați din nou. ";
+		String hayErrores = "Rezolvați-le și încercați din nou.";
 		if (!listaUsuariosGuardar.isEmpty() && operacion.equals(Constantes.ALTA)) {
 			usuarioService.guardado(listaUsuariosGuardar);
-			hayErrores = hayErrores.concat("Restul utilizatorilor au fost salvați cu succes.");
+			hayErrores = hayErrores.concat(" Restul membrilor au fost salvați cu succes.");
 		}
-		else if (operacion.equals("ELIMINARE")) {
+		else if (operacion.equals(Constantes.ELIMINARE)) {
 			usuarioService.bajaLogica(listaBBDD);
-			hayErrores = hayErrores.concat("Restul utilizatorilor s-au eliminat cu succes.");
+			hayErrores = hayErrores.concat(" Restul membrilor s-au eliminat cu succes.");
 		}
-		else if (operacion.equals("BLOCARE")) {
+		else if (operacion.equals(Constantes.BLOCARE)) {
 			usuarioService.desactivar(listaBBDD);
-			hayErrores = hayErrores.concat("El resto de usuarios se han desactivado con éxito.");
+			hayErrores = hayErrores.concat(" Restul membrilor s-au blocat cu succes.");
 		}
 
 		if (!StringUtils.isEmpty(mensaje.toString())) {
@@ -243,19 +243,18 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 					obtenerDatosUsuarioAlta(usuario, row.cellIterator(), dataFormatter);
 					listaUsuariosGuardar.add(usuario);
 				}
-				catch (final PerException e) {
-					anadirRegistroError(mensaje, row, e);
+				catch (final Exception e) {
+					FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+							Constantes.ERRORMENSAJE);
 				}
 			}
 			else {
-				anadirRegistroError(mensaje, row,
-						new PerException(" membrul '" + username + "' există deja în baza de date."));
+				anadirRegistroError(mensaje, row, (Constantes.MEMBRUL + username + "' există deja în baza de date."));
 			}
 		}
 		else {
-			if (!listaBBDD.contains(username)) {
-				anadirRegistroError(mensaje, row,
-						new PerException(" membrul'" + username + "' nu este găsit în baza de date."));
+			if (!listaBBDD.contains(username) && operacion.equals(Constantes.ALTA)) {
+				anadirRegistroError(mensaje, row, (Constantes.MEMBRUL + username + "' nu este găsit în baza de date."));
 			}
 		}
 
@@ -373,11 +372,12 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 	 * @param row fila en la que se ha producido el error
 	 * @param e el error que ha casuado el problema
 	 */
-	private void anadirRegistroError(final StringBuilder mensaje, final Row row, final PerException e) {
+	private void anadirRegistroError(final StringBuilder mensaje, final Row row, final String e) {
 		if (StringUtils.isEmpty(mensaje)) {
-			mensaje.append("Următoarele înregistrări conțin un tip de eroare și nu au fost salvate:<br>");
+			mensaje.append("Următoarele înregistrări conțin un tip de eroare și nu au fost salvate:");
 		}
-		mensaje.append("<br>").append("înregistrare ").append(row.getRowNum()).append(": ").append(e.getMessage());
+		mensaje.append("înregistrarea membrului de pe rândul ").append(row.getRowNum())
+				.append(":  al fișierului de proces masiv").append(e);
 	}
 
 	/**
@@ -386,8 +386,9 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 	 * @return id obtenido
 	 */
 	private String obtenerIdCelda(final String celda) {
-		String valor = "";
-		valor = celda.substring(0, celda.indexOf("-")).trim();
+
+		String valor = Constantes.ESPACIO;
+		valor = celda.substring(0, celda.indexOf(Constantes.LINIE)).trim();
 		return valor;
 	}
 }

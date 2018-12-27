@@ -1,10 +1,12 @@
 package ro.per.online.persistence.entities;
 
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,8 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
+import org.hibernate.annotations.Type;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,13 +24,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.per.online.persistence.entities.enums.CategoryEnum;
 
 /**
- * 
+ *
  * Entitate pentru proiecte.
- * 
+ *
  * @author STAD
- * 
+ *
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,8 +40,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "PROICTE")
-public class Proiecte implements Serializable {
+@Table(name = "PROIECTE")
+public class Proiecte extends AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -62,15 +64,28 @@ public class Proiecte implements Serializable {
 	 * Continutul textului.
 	 */
 	@Lob
+	@Type(type = "org.hibernate.type.TextType")
 	@Column(name = "TEXT")
 	private String text;
 
 	/**
-	 * Continutul textului.
+	 * Rangul de afisare in pagina.
 	 */
-	@Lob
 	@Column(name = "RANK")
 	private Long rank;
+
+	/**
+	 * Data publicarii.
+	 */
+	@Column(name = "date_publish")
+	private Date datePublish;
+
+	/**
+	 * Educatie utilizator.
+	 */
+	@Column(name = "categoria")
+	@Enumerated(EnumType.STRING)
+	private CategoryEnum categoria;
 
 	/**
 	 * Validat
@@ -91,17 +106,18 @@ public class Proiecte implements Serializable {
 	@JoinColumn(name = "username")
 	private Users usuario;
 
-	/**
-	 * Fotoografia publicatie.
-	 */
-	@Column(name = "IMAGE")
-	private byte[] image;
+	// /**
+	// * Fotoografia publicatie.
+	// */
+	// @Column(name = "IMAGE")
+	// private byte[] image;
+	//
+	// /**
+	// * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine.
+	// * @return StreamedContent
+	// */
+	// public StreamedContent getImageProject() {
+	// return new DefaultStreamedContent(new ByteArrayInputStream(this.image));
+	// }
 
-	/**
-	 * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine.
-	 * @return StreamedContent
-	 */
-	public StreamedContent getImageProject() {
-		return new DefaultStreamedContent(new ByteArrayInputStream(this.image));
-	}
 }

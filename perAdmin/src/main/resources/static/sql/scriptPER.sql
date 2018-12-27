@@ -698,7 +698,70 @@ INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (17,'RESURSE MATERIALE');
 INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (18,'VIDEO');
 INSERT into public.TIPO_DOCUMENTO (ID,NOMBRE) values (19,'TEMPLATE');
 COMMIT;		
+
+--/**
+--PSD LEGISLATIVE 1990
+INSERT INTO public.rezultate(id, data_alegerilor, procentajtotalmandate, procentajtotalvoturipartid, procentajtotalvoturi, 
+procentajtotalvoturiconsjud, procentajtotalvoturiconslocal, procentajtotalvoturideputat, procentajtotalvoturieuro, 
+procentajtotalvoturiprimar, procentajtotalvoturiprimarcap, procentajtotalvoturisenat, tip_alegeri, totalmandate, totalvoturi, 
+totalvoturiconsjud, totalvoturiconslocal, totalvoturideputat, totalvoturieuro, totalvoturipartid, totalvoturiprimar, 
+totalvoturiprimarcap, totalvoturisenat, turulalegerilor)
+VALUES (1, to_date('20/05/1990', 'DDD/MM/YYYY'), 76.47 , 67.02, 94.13, null,null, 66.41, null,null, null, 76.47, 'GENERALE', 354, 13956180, null, null
+, 9089659, null, null, null, null,  9353006,1);
+INSERT INTO public.partid(id, independent, sigla, nume, old_nume, rezultate) VALUES (1, 'NOT','PSD','Partidul Social Democrat','Frontul Salvării Naționale', 1);
+INSERT INTO public.alegeri_partid(id_alegeri, id_partid)VALUES (1, 1);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (1, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 87.15, 'GENERALE', null, 36);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (2, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 86.79, 'GENERALE', null, 7);	
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (3, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 86.10, 'GENERALE', null, 39);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (4, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 86.54, 'GENERALE', null, 30);	
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (5, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 85.91, 'GENERALE', null, 23);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (6, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 85.00, 'GENERALE', null, 13);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (7, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 11.04, 'GENERALE', null, 43);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (8, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 16.63, 'GENERALE', null, 16);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (9, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 14.27, 'GENERALE', null, 28);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (10, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 41.73, 'GENERALE', null, 32);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (11, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 41.31, 'GENERALE', null, 14);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (12, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 45.42, 'GENERALE', null, 5);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (13, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 45.63, 'GENERALE', null, 37);	
 	
+--UDMR	LEGISLATIVE 1990	
+INSERT INTO public.rezultate(id, data_alegerilor, procentajtotalmandate, procentajtotalvoturipartid, procentajtotalvoturi, 
+procentajtotalvoturiconsjud, procentajtotalvoturiconslocal, procentajtotalvoturideputat, procentajtotalvoturieuro, 
+procentajtotalvoturiprimar, procentajtotalvoturiprimarcap, procentajtotalvoturisenat, tip_alegeri, totalmandate, totalvoturi, 
+totalvoturiconsjud, totalvoturiconslocal, totalvoturideputat, totalvoturieuro, totalvoturipartid, totalvoturiprimar, 
+totalvoturiprimarcap, totalvoturisenat, turulalegerilor)
+VALUES (2, to_date('20/05/90', 'DD/MM/YY'), 7.2 , 7.02, 94.13, null,null, 7.23, null,null, null, 10.08, 'GENERALE', 41, 13956180, null, null
+, 991601, null, null, null, null,  1004353,1 );
+INSERT INTO public.partid(id, independent, sigla, nume, old_nume, rezultate) VALUES (2, 'NOT','UDMR','Uniunea Democrată a Maghiarilor din România','Uniunea Democrată a Maghiarilor din România', 1);
+INSERT INTO public.alegeri_partid(id_alegeri, id_partid)VALUES (1, 2);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (14, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 85.23, 'GENERALE', null, 43);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (15, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 77.10, 'GENERALE', null, 16);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (16, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 41.96, 'GENERALE', null, 28);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (17, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 38.16, 'GENERALE', null, 32);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (18, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 28.28, 'GENERALE', null, 5);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (19, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 23.68, 'GENERALE', null, 33);
+
+COMMIT;
+--*/
 --Comune alba
   INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (330,'Albac','COMMUNE',FALSE,1,null);
   INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (331,'Almașu Mare','COMMUNE',FALSE,1,null);
@@ -765,7 +828,7 @@ COMMIT;
   INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (392,'Unirea','COMMUNE',FALSE,1,null);
   INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (393,'Vadu Moților','COMMUNE',FALSE,1,null);
   INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (394,'Valea Lungă','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (394,'Vidra','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (395,'Vidra','COMMUNE',FALSE,1,null);
   INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (396,'Vințu de Jos','COMMUNE',FALSE,1,null);	
 	
 	COMMIT;		
