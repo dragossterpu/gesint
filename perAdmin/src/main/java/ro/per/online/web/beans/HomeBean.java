@@ -296,7 +296,7 @@ public class HomeBean implements Serializable {
 	private Integer cargarUserUltimo(final Integer dias, Integer user, Date desde, final PProvince judetul) {
 		final UsuarioBusqueda usuarioBusqueda = new UsuarioBusqueda();
 		if (judetul != null) {
-			usuarioBusqueda.setIdProvincia(judetul.getId());
+			usuarioBusqueda.setIdProvincia(judetul.getIndicator());
 		}
 		final LocalDate date = unidadTemoporalFechas("DAYS");
 		desde = RestarFechaMes(dias, "DAYS");
@@ -617,7 +617,7 @@ public class HomeBean implements Serializable {
 		try {
 			final PProvince provincia = provinceService.findByName(descripcion);
 			loadDatosMembriiNoi(provincia);
-			mapaUserByProvince = statService.getUserByProvince(provincia.getId());
+			mapaUserByProvince = statService.getUserByProvince(provincia.getIndicator());
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,

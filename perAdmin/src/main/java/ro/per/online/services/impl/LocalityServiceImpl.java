@@ -91,10 +91,25 @@ public class LocalityServiceImpl implements LocalityService {
 	public List<PLocality> fiindAll() {
 		return (ArrayList<PLocality>) localityRepository.findAll();
 	}
-
+	/**
+	 * Cauta o localitate dupa id acestuia
+	 * @param descripcion
+	 * @return PLocality
+	 *
+	 */
 	@Override
 	public PLocality findById(final Long localidadId) {
 		return localityRepository.findOne(localidadId);
+	}
+	/**
+	 * Cauta o localitate dupa numele acestuia
+	 * @param descripcion
+	 * @return PLocality
+	 *
+	 */
+	@Override
+	public PLocality findByName(final String local) {
+		return localityRepository.findByName(local);
 	}
 
 	/**

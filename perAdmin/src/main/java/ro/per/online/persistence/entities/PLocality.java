@@ -77,7 +77,7 @@ public class PLocality implements Serializable {
 	 * Judetul localitatii.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "id_province", foreignKey = @ForeignKey(name = "FK_PROVINCE"), nullable = false)
+	@JoinColumn(name = "code_province", foreignKey = @ForeignKey(name = "FK_PROVINCE"), nullable = false)
 	private PProvince province;
 
 	/**

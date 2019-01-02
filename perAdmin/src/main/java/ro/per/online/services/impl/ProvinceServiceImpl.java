@@ -36,12 +36,12 @@ public class ProvinceServiceImpl implements ProvinceService {
 
 	@Override
 	public PProvince fiindOne(final PProvince province) {
-		provinceRepository.findOne(province.getId());
+		provinceRepository.findOne(province.getIndicator());
 		return province;
 	}
 
 	@Override
-	public PProvince findById(final Long province) {
+	public PProvince findById(final String province) {
 		return provinceRepository.findOne(province);
 	}
 

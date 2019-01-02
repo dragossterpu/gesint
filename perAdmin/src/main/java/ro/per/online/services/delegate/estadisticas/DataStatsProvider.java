@@ -80,7 +80,7 @@ public interface DataStatsProvider {
 	 * @return
 	 *
 	 */
-	List<ModelStats> getUserByProvince(Long id);
+	List<ModelStats> getUserByProvince(String id);
 
 	List<ModelStats> getUserProvince();
 }

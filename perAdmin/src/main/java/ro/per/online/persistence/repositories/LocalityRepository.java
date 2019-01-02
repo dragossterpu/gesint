@@ -43,4 +43,13 @@ public interface LocalityRepository extends CrudRepository<PLocality, Long> {
 	 *
 	 */
 	PLocality findByNameIgnoreCaseAndProvince(String name, PProvince provincia);
+	
+	
+	/**
+	 * Cauta o localitate dupa numele acestuia
+	 * @param descripcion
+	 * @return PLocality
+	 *
+	 */
+	PLocality findByName(String descripcion);
 }

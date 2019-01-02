@@ -79,7 +79,7 @@ public interface StatsService {
 	 * @return
 	 *
 	 */
-	List<ModelStats> getUserByProvince(Long id);
+	List<ModelStats> getUserByProvince(String string);
 
 	List<ModelStats> getUserProvince();
 }

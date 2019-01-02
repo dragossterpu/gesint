@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -99,6 +100,16 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 	 * Localitate aleasa.
 	 */
 	private PLocality localidad;
+
+	/**
+	 * Variabila pentru cnp
+	 */
+	private String cnp;
+
+	/**
+	 * Variabila pentru data nasterii
+	 */
+	private Date fecha;
 
 	/**
 	 * Procesa la operación masiva de un fichero.
@@ -240,7 +251,7 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 				final Users usuario = new Users();
 				usuario.setUsername(username);
 				try {
-					obtenerDatosUsuarioAlta(usuario, row.cellIterator(), dataFormatter);
+					obtenerDatosUsuarioAlta(usuario, row.cellIterator(), dataFormatter, mensaje);
 					listaUsuariosGuardar.add(usuario);
 				}
 				catch (final Exception e) {
@@ -270,8 +281,9 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 	 * @throws PdyrhException excepción de PDYRH
 	 */
 	private void obtenerDatosUsuarioAlta(final Users usuario, final Iterator<Cell> colIterator,
-			final DataFormatter dataFormatter) throws PerException {
+			final DataFormatter dataFormatter, final StringBuilder mensaje) throws PerException {
 		String cellValue;
+		cnp = Constantes.ESPACIO;
 		colIterator.next();
 		// Nume
 		cellValue = dataFormatter.formatCellValue(colIterator.next());
@@ -282,6 +294,7 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		// CNP
 		cellValue = dataFormatter.formatCellValue(colIterator.next());
 		usuario.setIdCard(cellValue);
+		cnp = usuario.getIdCard();
 		// Utilizator
 		cellValue = dataFormatter.formatCellValue(colIterator.next());
 		usuario.setUsername(cellValue);
@@ -306,9 +319,12 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		cellValue = dataFormatter.formatCellValue(colIterator.next());
 		final SimpleDateFormat formatoDeFecha = new SimpleDateFormat(Constantes.FORMFECHA);
 		try {
+
 			usuario.setBirthDate(formatoDeFecha.parse(cellValue));
+			fecha = usuario.getBirthDate();
 		}
 		catch (final ParseException e1) {
+			mensaje.append("Eroare apărută la procesarea datei de naștere");
 			utilities.procesarExcepcion(e1, SeccionesEnum.OTROS, "Eroare apărută la procesarea datei de naștere",
 					facesUtilities);
 		}
@@ -322,7 +338,14 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		// SEX
 		cellValue = dataFormatter.formatCellValue(colIterator.next());
 		utilities.existeSex(SexEnum.valueOf(cellValue));
-		usuario.setSex(SexEnum.valueOf(cellValue));
+		final String sex = cellValue;
+		if (valideazaCnp(sex, fecha, cnp)) {
+			usuario.setSex(SexEnum.valueOf(cellValue));
+		}
+		else {
+			mensaje.append(
+					"Datele introduse în registru nu sunt corecte. Verificați , data nașterii, sexul sau cnp-ul membrului.");
+		}
 		// STARE CIVILA
 		cellValue = dataFormatter.formatCellValue(colIterator.next());
 		utilities.existeCivilStatus(CivilStatusEnum.valueOf(cellValue));
@@ -332,16 +355,18 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		utilities.esEntero(cellValue);
 		PProvince provincia = new PProvince();
 		try {
-			provincia.setId(Long.valueOf(cellValue));
+			provincia.setIndicator(String.valueOf(cellValue));
 		}
 		catch (final NumberFormatException e) {
+			mensaje.append(" Codul judeţului trebuie să fie numeric.");
 			throw new PerException("Codul judeţului trebuie să fie numeric.");
 		}
-		provincia = provinceService.findById(provincia.getId());
+		provincia = provinceService.findById(provincia.getIndicator());
 		if (provincia != null) {
 			usuario.setProvince(provincia);
 		}
 		else {
+			mensaje.append(" Judeţul nu este prezent în baza de date.");
 			throw new PerException("Judeţul nu este prezent în baza de date.");
 		}
 		// TIPUL LOCALITATII
@@ -364,6 +389,38 @@ public class OperacionMasivaFicheroServiceImpl implements OperacionMasivaFichero
 		usuario.setValidated(true);
 		// SCANAL DE COMUNICARE
 		usuario.setAlertChannel(AlertChannelEnum.EMAIL);
+	}
+
+	/**
+	 * Metoda de validare a unicității numelui de utilizator.
+	 * @return boolean
+	 */
+	private boolean valideazaCnp(final String sex, final Date fecha, final String cnp) {
+		boolean resultado = true;
+		if (cnp.length() == 11) {
+			final String an = cnp.substring(1, 3);
+			final String luna = cnp.substring(3, 5);
+			final String zi = cnp.substring(5, 7);
+			final String cnpul = cnp.substring(0, 1);
+			final Date data = fecha;
+			final SimpleDateFormat sdf = new SimpleDateFormat("yy");
+			final SimpleDateFormat lsdf = new SimpleDateFormat("MM");
+			final SimpleDateFormat zsdf = new SimpleDateFormat("dd");
+			final String anString = sdf.format(data);
+			final String lunaString = lsdf.format(data);
+			final String ziString = zsdf.format(data);
+			if (an.equals(anString) && luna.equals(lunaString) && zi.equals(ziString)
+					&& (sex.equals("MAN") && cnpul.equals("1") || sex.equals("WOMAN") && cnpul.equals("2"))) {
+				resultado = true;
+			}
+			else {
+				resultado = false;
+			}
+		}
+		else {
+			resultado = false;
+		}
+		return resultado;
 	}
 
 	/**

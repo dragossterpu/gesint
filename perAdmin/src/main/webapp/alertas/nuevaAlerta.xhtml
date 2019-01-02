@@ -21,7 +21,7 @@
 									<h:outputText value="#{usuario.username}" />
 								</p:column>
 								<p:column headerText="CANAL DE COMUNICARE" style="width:20%;" styleClass="text-center">
-									<h:outputText value="#{usuario.personalData.alertChannel}" />
+									<h:outputText value="#{usuario.alertChannel}" />
 								</p:column>
 								<p:column styleClass="botonTabla text-center" exportable="false"
 									toggleable="false" style="width:5%;">
@@ -150,7 +150,7 @@
 							<h:outputLabel for="provinciasSelect" styleClass="dialogLabel" value="Organizația/Județul:" />
 							 <p:selectOneMenu  value="#{alertaBean.usuarioBusqueda.idProvincia}"  id="provinciasSelect" class="selectFiltro" >
 	                        <f:selectItem itemLabel="Alege una..." itemValue="" />
-	                        <f:selectItems  value="#{alertaBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.id}" />                        
+	                        <f:selectItems  value="#{alertaBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.indicator}" />                        
 	                    </p:selectOneMenu>	
 							
 							<h:outputLabel for="role" styleClass="dialogLabel" value="Rol:" />

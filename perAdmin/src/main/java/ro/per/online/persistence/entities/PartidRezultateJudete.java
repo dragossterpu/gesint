@@ -95,7 +95,7 @@ public class PartidRezultateJudete implements Serializable {
 	 * Judetul.
 	 */
 	@OneToOne
-	@JoinColumn(name = "ID_JUDET", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_U_PROVINCE"))
+	@JoinColumn(name = "ID_JUDET", referencedColumnName = "code_province", foreignKey = @ForeignKey(name = "FK_U_PROVINCE"))
 	private PProvince judetul;
 
 }

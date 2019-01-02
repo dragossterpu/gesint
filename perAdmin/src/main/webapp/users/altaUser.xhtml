@@ -140,10 +140,10 @@
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="provinciaSelect" value="* Județul/Organizația:" /></b>
-									 <p:selectOneMenu  value="#{userBean.idProvincia}"  id="provinciaSelect"
+									 <p:selectOneMenu  value="#{userBean.idProvincia}"  id="provinciaSelect" 
 				                       class="selectFiltro" required="true" requiredMessage="Selectați județul/ organizația">
 				                        <f:selectItem itemLabel="Alege una..." itemValue="" />
-				                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.id}" />
+				                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.indicator}" />
 				                          <p:ajax event="change" update="locality"
 												listener="#{userBean.actualizarLocalidades(userBean.idProvincia)}" />                        
 				                    </p:selectOneMenu>	
@@ -208,27 +208,23 @@
 				</p:dialog>
 			
 		<p:dialog id="crearMunicipio" widgetVar="dialogMunicipio" header="Înregistrare oraș/localitate nouă" position="center" resizable="false" onShow="$('[id*=inputNombre]').val('');" modal="true" width="40%" >
-			<h:outputLabel for="inputNombre" value=" Numele noii localități (*):" />
+	<h:outputLabel for="inputNombre" value=" Numele noii localități (*):" />
 			<p:inputText id="inputNombre" binding="#{nombreMunicipio}"
 				required="#{param['form:guardar']!=null}" requiredMessage="Numele orașului nu poate fi gol" converter="#{trimConverter}" />
 			
-			<h:outputLabel for="typeLocality" value="Alegeți tipul localității (*):" />
+			<h:outputLabel for="inputTipLocalitate" value="Alegeți tipul localității (*):" />
 			<p:importEnum type="ro.per.online.persistence.entities.enums.TypeLocalityEnum"
 				var="typeLocalitys" allSuffix="ALL_ENUM_VALUES" />
 				<p:selectOneMenu value="#{userBean.tipLocalidadSelected}" id="typeLocality" class="selectFiltro" style="min-width:initial;" 
 				effect="fold" required="#{param['form:guardar']!=null}"  requiredMessage="Este obligatoriu să alegeți un tip de localitate">
 					<f:selectItem itemLabel="Alege unul..." itemValue="" />
-					<f:selectItems value="#{typeLocalitys.ALL_ENUM_VALUES}"
-					var="tipLocalidadSelected"
-					itemLabel="#{tipLocalidadSelected.description}"
-					itemValue="#{tipLocalidadSelected}" />
+					<f:selectItems value="#{typeLocalitys.ALL_ENUM_VALUES}" var="tipLocalidadSelected" itemLabel="#{tipLocalidadSelected.description}"
+				itemValue="#{tipLocalidadSelected}" />
 				</p:selectOneMenu>
-				
-			
 			<div class="centrarBotonesDialog">
-				<p:commandButton id="guardar" value="Inregistrare" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, userBean.provinciaSelect,userBean.tipLocalidadSelected, userBean.usuario)}" 
+				<p:commandButton id="guardar" value="Înregistrează" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, userBean.idProvincia,userBean.tipLocalidadSelected, userBean.usuario)}" 
 				update ="@form"  oncomplete="PF('dialogMunicipio').hide()"/>
-				<p:commandButton value="Cerrar" onclick="PF('dialogMunicipio').hide()"/>
+				<p:commandButton value="Închidere" onclick="PF('dialogMunicipio').hide()"/>
 			</div>
 		</p:dialog>				
 		</h:form>

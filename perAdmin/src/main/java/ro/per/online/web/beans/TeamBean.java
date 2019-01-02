@@ -57,7 +57,6 @@ import ro.per.online.services.UserService;
 import ro.per.online.util.CorreoElectronico;
 import ro.per.online.util.FacesUtilities;
 import ro.per.online.util.Generador;
-import ro.per.online.util.Utilities;
 
 /**
  * Clase utilizada pentru a incarca date in pagina de echipa PER.
@@ -286,10 +285,10 @@ public class TeamBean implements Serializable {
 	public void alta() {
 		String sex = null;
 		Date fecha = null;
-		for (int i = 0; i < 500; i++) {
+		for (int i = 0; i < 1000; i++) {
 			final Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
-			user.setName(Generador.apellidoFinal().toUpperCase());
+			user.setName(Generador.apellidoFinal3().toUpperCase());
 
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
 			fecha = Generador.obtenerFechaNastere();
@@ -311,7 +310,7 @@ public class TeamBean implements Serializable {
 			user.setCivilStatus(CivilStatusEnum.randomLetter());
 			user.setEducation(EducationEnum.randomLetter());
 			final PProvince pro = new PProvince();
-			pro.setId(Generador.provinciasFinal());
+			pro.setIndicator(Generador.provinciasFinal());
 			user.setProvince(pro);
 			List<PLocality> loc = new ArrayList<>();
 			loc = localityService.findByProvince(pro);
@@ -470,7 +469,7 @@ public class TeamBean implements Serializable {
 		}
 
 		limpiarBuscadores();
-//		Utilities.limpiarSesion("teamBean");
+		// Utilities.limpiarSesion("teamBean");
 	}
 
 	/**

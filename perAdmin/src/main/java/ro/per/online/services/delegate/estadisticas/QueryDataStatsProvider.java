@@ -197,7 +197,7 @@ public class QueryDataStatsProvider implements DataStatsProvider {
 	 * @param statsBusqueda StatsBusqueda
 	 * @return Long
 	 */
-	private List getModeloDatosTotalesUsuariosRegJudet(final Long id) {
+	private List getModeloDatosTotalesUsuariosRegJudet(final String id) {
 		final String query = getQueryModeloDatosTotalesJudet(id);
 		final List<ModelStats> listaModelo = new ArrayList<>();
 		entityManager.getProperties().put("id", id);
@@ -465,7 +465,7 @@ public class QueryDataStatsProvider implements DataStatsProvider {
 	 */
 	private String getQueryModeloDatosTotales() {
 		final StringBuilder query = new StringBuilder(
-				"select   p.name as organizatia  , count(*) as numar from users u , PPROVINCE p where u.province_id= p.id  group by p.name order by 2 desc");
+				"select   p.name as organizatia  , count(*) as numar from users u , PPROVINCE p where u.code_province= p.code_province  group by p.name order by 2 desc");
 		return query.toString();
 	}
 
@@ -475,10 +475,10 @@ public class QueryDataStatsProvider implements DataStatsProvider {
 	 * @param statsBusqueda StatsBusqueda
 	 * @return String
 	 */
-	private String getQueryModeloDatosTotalesJudet(final Long id) {
+	private String getQueryModeloDatosTotalesJudet(final String id) {
 		final MapSqlParameterSource parameters = new MapSqlParameterSource();
 		final StringBuilder query = new StringBuilder(
-				"select  p.name as organizatia,p.population, count(*) as numar from users u , PPROVINCE p where u.province_id=:id  group by p.name,p.population order by 2 desc");
+				"select  p.name as organizatia,p.population, count(*) as numar from users u , PPROVINCE p where u.code_province=:id  group by p.name,p.population order by 2 desc");
 		parameters.addValue("id", id);
 		return query.toString();
 	}
@@ -537,7 +537,7 @@ public class QueryDataStatsProvider implements DataStatsProvider {
 	 *
 	 */
 	@Override
-	public List<ModelStats> getUserByProvince(final Long id) {
+	public List<ModelStats> getUserByProvince(final String id) {
 		List<ModelStats> modelo = new ArrayList<ModelStats>();
 		modelo = getModeloDatosTotalesUsuariosRegJudet(id);
 		return modelo;

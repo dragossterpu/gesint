@@ -60,9 +60,6 @@ public class Users extends AbstractEntity implements Serializable {
 	@Column(name = "username", length = 150, nullable = false)
 	private String username;
 
-	// @Embedded
-	// private PersonalData personalData;
-
 	/**
 	 * Parola utilizatorlui.
 	 */
@@ -116,7 +113,7 @@ public class Users extends AbstractEntity implements Serializable {
 	 * Cuerpo al que pertenece el usuario.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "PROVINCE_ID", foreignKey = @ForeignKey(name = "FK_U_PROVINCE"))
+	@JoinColumn(name = "code_province")
 	private PProvince province;
 
 	/**

@@ -68,59 +68,59 @@ public class Generador {
 		final String apellido = apellidos[1 + new Random().nextInt(150)];
 		return apellido.toUpperCase();
 	}
+
 	/**
 	 * Obtiene un apellido final de la lista.
 	 * @return apellido al azar
 	 */
 	public static String apellidoFinal2() {
-		final String[] apellidos = { "Niță", "Pop", "Popa", "Popescu", "Ionescu", "Acsinte", "Stan", "Dumitrescu", "Băcan",
-				"Gheorghiu", "Ioniță", "Marin", "Tudor", "Dobre", "Barbu", "Nistor", "Florea", "Ene", "Dinu",
-				"Georgescu", "Stoica", "Diaconu", "Diaconescu", "Bicescu", "Bârgoveanu", "Băiceanu", "Nistor", "Căilnicean",
-				"Oprea", "Voinea", "Cârciumăreasa", "Albu", "Călescu", "Manole", "Cristea", "Călimăceanu", "Stănescu", "Cîșlariu",
-				"Tomescu", "Dacian", "Ionescu", "Marinescu", "Georgescu", "Vasilescu", "Daniilescu", "Dalaban",
-				"Gheorghiu", "Vasiliu", "Davidescu", "Dășanu", "Stoicescu", "Tomescu", "Deaconu", "Dedulescu", "Denciu",
-				"Despinescu", "Dobriceanu", "Dodea", "Dogaru", "Theodorescu", "Dițulescu", "Eftimie", "Enăceanu", "Fiertu",
-				"Filipoiu", "Firescu", "Firuleasa", "Fîntînaru", "Gabrea", "Gabrilescu", "Gafiței", "Garabagiu", "Ionescu",
-				"Georgescu", "Vasilescu", "Podaru", "Gălățeanu", "Geamănu", "Habageriu", "Hangiu", "Hedeșan",
-				"Helgiu", "Henciu", "Herdeș", "Hergehelegiu", "Iacob", "Ieftimie", "Ienășescu", "Ieremia", "Iftodi",
-				"Deaconu", "Ignăteanu", "Ignătescu", "Ilinca", "Ipătescu", "Iriminescu", "Isăceanu", "Ispir", "Istrătescu",
-				"Ivănoiu", "Jderu", "Jeleanu", "Jercălău", "Jidaru", "Jilăveanu", "Largu", "Lateș",
-				"Lazariu", "Lăpușan", "Lefterescu", "Leahă", "Licsandru", "Lișcă", "Lupșan", "Lunceanu", "Maftei",
-				"Manea", "Manole", "Mareș", "Marinescu", "Matei", "Măgureanu", "Medeleanu", "Micescu", "Miclea",
-				"Miclescu", "Mîndrescu", "Neacșu", "Neaga", "Nicolae", "Noica", "Nuțu", "Ogaru", "Ogăraru",
-				"Paicu", "Panait", "Pârvu", "Pleșan", "Poenaru", "Popa", "Popescu", "Popovici",
-				"Preda", "Radu", "Robu", "Roceanu", "Romașcanu", "Rontea", "Roșca", "Roșianu",
-				"Rotaru" };
+		final String[] apellidos = { "Niță", "Pop", "Popa", "Popescu", "Ionescu", "Acsinte", "Stan", "Dumitrescu",
+				"Băcan", "Gheorghiu", "Ioniță", "Marin", "Tudor", "Dobre", "Barbu", "Nistor", "Florea", "Ene", "Dinu",
+				"Georgescu", "Stoica", "Diaconu", "Diaconescu", "Bicescu", "Bârgoveanu", "Băiceanu", "Nistor",
+				"Căilnicean", "Oprea", "Voinea", "Cârciumăreasa", "Albu", "Călescu", "Manole", "Cristea", "Călimăceanu",
+				"Stănescu", "Cîșlariu", "Tomescu", "Dacian", "Ionescu", "Marinescu", "Georgescu", "Vasilescu",
+				"Daniilescu", "Dalaban", "Gheorghiu", "Vasiliu", "Davidescu", "Dășanu", "Stoicescu", "Tomescu",
+				"Deaconu", "Dedulescu", "Denciu", "Despinescu", "Dobriceanu", "Dodea", "Dogaru", "Theodorescu",
+				"Dițulescu", "Eftimie", "Enăceanu", "Fiertu", "Filipoiu", "Firescu", "Firuleasa", "Fîntînaru", "Gabrea",
+				"Gabrilescu", "Gafiței", "Garabagiu", "Ionescu", "Georgescu", "Vasilescu", "Podaru", "Gălățeanu",
+				"Geamănu", "Habageriu", "Hangiu", "Hedeșan", "Helgiu", "Henciu", "Herdeș", "Hergehelegiu", "Iacob",
+				"Ieftimie", "Ienășescu", "Ieremia", "Iftodi", "Deaconu", "Ignăteanu", "Ignătescu", "Ilinca", "Ipătescu",
+				"Iriminescu", "Isăceanu", "Ispir", "Istrătescu", "Ivănoiu", "Jderu", "Jeleanu", "Jercălău", "Jidaru",
+				"Jilăveanu", "Largu", "Lateș", "Lazariu", "Lăpușan", "Lefterescu", "Leahă", "Licsandru", "Lișcă",
+				"Lupșan", "Lunceanu", "Maftei", "Manea", "Manole", "Mareș", "Marinescu", "Matei", "Măgureanu",
+				"Medeleanu", "Micescu", "Miclea", "Miclescu", "Mîndrescu", "Neacșu", "Neaga", "Nicolae", "Noica",
+				"Nuțu", "Ogaru", "Ogăraru", "Paicu", "Panait", "Pârvu", "Pleșan", "Poenaru", "Popa", "Popescu",
+				"Popovici", "Preda", "Radu", "Robu", "Roceanu", "Romașcanu", "Rontea", "Roșca", "Roșianu", "Rotaru" };
 		final String apellido = apellidos[1 + new Random().nextInt(150)];
 		return apellido.toUpperCase();
 	}
-	
+
 	/**
 	 * Obtiene un apellido final de la lista.
 	 * @return apellido al azar
 	 */
 	public static String apellidoFinal3() {
-		final String[] apellidos = { "Niță", "Pop", "Popa", "Popescu", "Ionescu", "Samoilă", "Stan", "Dumitrescu", "Savu",
-				"Sabău", "Ioniță", "Marin", "Tudor", "Săceanu", "Barbu", "Nistor", "Florea", "Săftoiu", "Dinu",
+		final String[] apellidos = { "Niță", "Pop", "Popa", "Popescu", "Ionescu", "Samoilă", "Stan", "Dumitrescu",
+				"Savu", "Sabău", "Ioniță", "Marin", "Tudor", "Săceanu", "Barbu", "Nistor", "Florea", "Săftoiu", "Dinu",
 				"Georgescu", "Stoica", "Diaconu", "Diaconescu", "Sălăgean", "Barbu", "Sălișteanu", "Nistor", "Sârbu",
-				"Oprea", "Voinea", "Sebeșanu", "Albu", "Secășanu", "Manole", "Cristea", "Silișteanu", "Stănescu", "Silvășanu",
-				"Tomescu", "Simionescu", "Ionescu", "Marinescu", "Georgescu", "Vasilescu", "Suciu", "Surdu",
-				"Gheorghiu", "Vasiliu", "Strungaru", "Stoica", "Stoicescu", "Tomescu", "Stîngă", "Dedulescu", "Denciu",
-				"Stejaru", "Viziru", "Stângă", "Dogaru", "Vișănescu", "Stanciu", "Eftimie", "Stan", "Stamate",
+				"Oprea", "Voinea", "Sebeșanu", "Albu", "Secășanu", "Manole", "Cristea", "Silișteanu", "Stănescu",
+				"Silvășanu", "Tomescu", "Simionescu", "Ionescu", "Marinescu", "Georgescu", "Vasilescu", "Suciu",
+				"Surdu", "Gheorghiu", "Vasiliu", "Strungaru", "Stoica", "Stoicescu", "Tomescu", "Stîngă", "Dedulescu",
+				"Denciu", "Stejaru", "Viziru", "Stângă", "Dogaru", "Vișănescu", "Stanciu", "Eftimie", "Stan", "Stamate",
 				"Sitaru", "Firescu", "Simionescu", "Sima", "Sîrbu", "Gabrilescu", "Slătineanu", "Sorescu", "Ionescu",
-				"Georgescu", "Vasilescu", "Spătaru", "Seciu", "Seceanu", "Tabără", "Talpă", "Tanasă",
-				"Tapalagă", "Tatomirescu", "Tăbăcar", "Tănase", "Tănăsie", "Tătar", "Tătărășanu", "Tâmplaru", "Teacă",
-				"Deaconu", "Teașcă", "Teișanu", "Teodoreanu", "Teodorescu", "Ticușan", "Timofe", "Toader", "Todea",
-				"Todoran", "Topliceanu", "Trașă", "Trușcă", "Tudor", "Uceanu", "Udescu", "Udrescu",
-				"Lazariu", "Ulea", "Ulmeanu", "Ungheanu", "Ungureanu", "Ungurușan", "Urâtu", "Urderean", "Maftei",
-				"Manea", "Manole", "Ureche", "Marinescu", "Matei", "Urleanu", "Ursu", "Urzică", "Urziceanu",
-				"Uțescu", "Vamăș", "Neacșu", "Vanța", "Nicolae", "Vasilache", "Vasilescu", "Vasiliu", "Vatamanu",
-				"Văcariu", "Panait", "Vădean", "Vărzariu", "Vânătoru", "Popa", "Popescu", "Velcean",
-				"Preda", "Radu", "Vereștiuc", "Vermeșan", "Viașu", "Vidrașcu", "Roșca", "Vlașcu",
-				"Vințu" };
+				"Georgescu", "Vasilescu", "Spătaru", "Seciu", "Seceanu", "Tabără", "Talpă", "Tanasă", "Tapalagă",
+				"Tatomirescu", "Tăbăcar", "Tănase", "Tănăsie", "Tătar", "Tătărășanu", "Tâmplaru", "Teacă", "Deaconu",
+				"Teașcă", "Teișanu", "Teodoreanu", "Teodorescu", "Ticușan", "Timofe", "Toader", "Todea", "Todoran",
+				"Topliceanu", "Trașă", "Trușcă", "Tudor", "Uceanu", "Udescu", "Udrescu", "Lazariu", "Ulea", "Ulmeanu",
+				"Ungheanu", "Ungureanu", "Ungurușan", "Urâtu", "Urderean", "Maftei", "Manea", "Manole", "Ureche",
+				"Marinescu", "Matei", "Urleanu", "Ursu", "Urzică", "Urziceanu", "Uțescu", "Vamăș", "Neacșu", "Vanța",
+				"Nicolae", "Vasilache", "Vasilescu", "Vasiliu", "Vatamanu", "Văcariu", "Panait", "Vădean", "Vărzariu",
+				"Vânătoru", "Popa", "Popescu", "Velcean", "Preda", "Radu", "Vereștiuc", "Vermeșan", "Viașu", "Vidrașcu",
+				"Roșca", "Vlașcu", "Vințu" };
 		final String apellido = apellidos[1 + new Random().nextInt(150)];
 		return apellido.toUpperCase();
 	}
+
 	/**
 	 * Obtiene un cnp.
 	 * @return cnp al azar
@@ -583,12 +583,11 @@ public class Generador {
 	 * Obtiene una provincia final de la lista.
 	 * @return provincia al azar
 	 */
-	public static Long provinciasFinal() {
-		final Long[] provincias = { 10L, 2L, 17L, 3L, 10L, 8L, 10L, 11L, 3L, 6L, 7L, 10L, 10L, 11L, 8L, 5L, 8L, 6L, 9L,
-				10L, 1L, 4L, 4L, 1L, 12L, 2L, 13L, 5L, 14L, 15L, 10L, 33L, 34L, 10L, 35L, 36L, 37L, 19L, 38L, 39L, 10L,
-				16L, 17L, 18L, 10L, 19L, 20L, 10L, 21L, 22L, 23L, 24L, 10L, 25L, 26L, 27L, 10L, 28L, 29L, 30L, 10L, 32L,
-				31L };
-		final Long provincia = provincias[1 + new Random().nextInt(59)];
+	public static String provinciasFinal() {
+		final String[] provincias = { "AB", "AR", "AG", "BC", "BH", "BN", "BT", "BV", "BR", "B", "BZ", "CS", "CL", "CJ",
+				"CT", "CV", "DB", "DJ", "GL", "GR", "GJ", "HD", "IL", "IS", "IF", "MM", "MH", "MS", "NT", "OT", "PH",
+				"SM", "SJ", "SB", "SV", "TR", "TM", "TL", "VS", "VL", "VN", "HR" };
+		final String provincia = provincias[1 + new Random().nextInt(41)];
 		return provincia;
 	}
 

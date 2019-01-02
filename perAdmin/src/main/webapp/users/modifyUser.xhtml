@@ -1,4 +1,4 @@
-<ui:composition template="../layouts/layoutInterior.xhtml"
+<ui:composition template="/layouts/layoutInterior.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -11,7 +11,7 @@
 				</div>
 
 		<div class="container-fluid">
-			<h:form id="form" class="tabsInvert">
+			<h:form id="formModific" class="tabsInvert">
 				<p:growl id="msgs" showDetail="true" />
 				<p:accordionPanel multiple="true" activeIndex="0,1,2,3">
 					<p:tab title="Informații personale / comunicare">
@@ -149,49 +149,33 @@
  
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
-									   <b><h:outputLabel for="provinciaSelect" value="Județul/Organizația:" /></b>
-				                        <p:selectOneMenu value="#{userBean.usuario.province}" id="provinciaSelect" 
-				                        styleClass="form-control form-select" converter="#{selectConverter}" >
-				                            <f:selectItems value="#{userBean.provinces}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia}" />
-				                            <p:ajax partialSubmit="false" listener="#{userBean.buscarMunicipiu()}" update="@form" />
-				                        </p:selectOneMenu>
-				                       <p:messages for="provinciaSelect" autoUpdate="true" closable="true" />								
-<!-- 									<b><h:outputLabel for="provinciaSelect" value="Județul/Organizația:" /></b> -->
-<!-- 									<p:selectOneMenu value="#{userBean.provinciaSelect}" converter="#{selectConverter}" -->
-<!-- 										id="provinciaSelect" filter="true" filterMatchMode="startsWith" -->
-<!-- 										 styleClass="form-control form-select"> -->
-<!-- 										<f:selectItem itemLabel="#{userBean.provinciaSelect.name}" /> -->
-<!-- 										<f:selectItems value="#{userBean.provinces}"  var="provincia" -->
-<!-- 											itemLabel="#{provincia.name}" itemValue="#{provincia}" /> -->
-<!-- 									</p:selectOneMenu>	 -->
+								<b><h:outputLabel for="provinciaSelect" value="Județul/Organizația (*):" /></b>
+									<p:selectOneMenu value="#{userBean.usuario.province.name}" id="provinciasSelect" styleClass="form-control form-select"
+										filter="true" filterMatchMode="startsWith"  effect="fold">
+										<f:selectItem itemLabel="Toate" itemValue="" />
+										<f:selectItems value="#{userBean.provinces}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia.name}" />
+										 <p:ajax event="change" update="municipiosSelect"
+											listener="#{userBean.actualLocalidades(userBean.usuario.province.name)}" />   
+									</p:selectOneMenu> 								
 								</div>
 							</div>
 							<p:separator />
 							<div class="ui-g">
+								<div class="ui-g-12 ui-md-6 ui-lg-4">								
+								<p:selectOneMenu value="#{userBean.usuario.locality.name}" id="municipiosSelect" filter="true" 
+									filterMatchMode="startsWith" styleClass="form-control form-select" >															
+									<f:selectItem itemLabel="#{userBean.usuario.locality.name}" itemValue="#{userBean.usuario.locality.name}"/>
+									<f:selectItems value="#{userBean.localidades}" var="municipio" itemLabel="#{municipio.name}" itemValue="#{municipio.name}" />
+								</p:selectOneMenu>
+								<p:messages for="municipiosSelect" autoUpdate="true"  closable="true"/>
+							</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
-								<b><h:outputLabel for="municipiosSelect"  value="Alegeți o altă localitate :" /></b>
-		                        <p:selectOneMenu value="#{userBean.usuario.locality}" id="municipiosSelect" converter="#{selectConverter}">
-		                            <f:selectItem itemLabel="Seleccione uno" itemValue="" />
-		                            <f:selectItems value="#{userBean.localidades}" var="localidadSelected" itemLabel="#{localidadSelected.name}" itemValue="#{localidadSelected}" />
-		                        </p:selectOneMenu>
-		                        <p:messages for="municipiosSelect" autoUpdate="true" closable="true" />
-								
-								
-<!-- 								<b><h:outputLabel for="municipiosSelect"  value="Alegeți o altă localitate :" /></b> -->
-<!-- 									<p:separator />									 -->
-<!-- 									<p:selectOneMenu styleClass="form-control form-select" -->
-<!-- 										value="#{userBean.usuario.locality}" id="municipiosSelect" converter="#{selectConverter}">																	 -->
-<!-- 										<f:selectItem itemLabel="#{userBean.usuario.locality.name}" itemValue="#{userBean.usuario.locality}" /> -->
-<!-- 										<f:selectItems value="#{userBean.localidadesSelected}" -->
-<!-- 											var="locality"  itemLabel="#{locality.name}" itemValue="#{locality}"/> -->
-<!-- 									</p:selectOneMenu>								 -->
-								</div>
-								<div class="ui-g-12 ui-md-6 ui-lg-4">
-								<b><h:outputLabel for="municipio"  value="Înregistrați o nouă localitate:" /></b>
-								<p:separator />
-								<p:commandButton id="buttLocalidad" title="Adăugare localitate" 
-									type="button" onclick="PF('dialogMunicipio').show()" icon="fa fa-fw fa fa-plus" update="crearMunicipio" />									
-								</div>
+									<b><h:outputLabel for="municipiosSelect"  value="Înregistrați o nouă localitate (*):" /></b>
+									<p:separator />
+									<p:commandButton id="buttMunicipio" title="Adăugați o nouă localitate (trebuie să selectați anterior un județ)" 
+										type="button" onclick="PF('dialogMunicipio').show()" icon="fa fa-fw fa fa-plus" update="crearMunicipio" 
+										disabled="#{userBean.localidades == null}"/>									
+								</div>													
 							</div>					
 							<p:separator />
 							<div class="ui-g">									
@@ -206,7 +190,7 @@
 									<b><h:outputLabel for="imagenNueva" value=" Încarcă noua fotografie :" /></b>
 									<p:separator />
 									<p:fileUpload fileUploadListener="#{userBean.cargaImagen}" mode="advanced" dragDropSupport="false"
-									   sizeLimit="20480" invalidSizeMessage=" Dimensiunea maximă permisă este de 2MB" required="true" 
+									   sizeLimit="204800" invalidSizeMessage=" Dimensiunea maximă permisă este de 20MB" required="true" 
 									   fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
 									   uploadLabel=" Salvează noua fotografie" cancelLabel=" Renunțare" label="Încarcă/Caută fotografia" update="imagenG" /> 
 								</div>									
@@ -215,7 +199,7 @@
 								<p:commandButton actionListener="#{userBean.restaurarClave}"
 									value="Resetați parola" />
 								<p:commandButton
-									actionListener="#{userBean.modificarUsuario(userBean.usuario)}"
+									actionListener="#{userBean.modificarUsuario(userBean.usuario, userBean.usuario.province.name, userBean.usuario.locality.name)}"
 									value="Salvare" update ="@form"/>
 							</div>
 						</div>
@@ -245,16 +229,16 @@
 				itemValue="#{tipLocalidadSelected}" />
 				</p:selectOneMenu>
 			<b><h:outputLabel for="provinciaSelect" value="Județul/Organizația:" /></b>
-									<p:selectOneMenu value="#{userBean.provinciaSelect}" converter="#{selectConverter}"
+									<p:selectOneMenu value="#{userBean.usuario.province.name}" 
 										id="provinciaSelect" filter="true" filterMatchMode="startsWith"
 										 styleClass="form-control form-select">
-										<f:selectItem itemLabel="#{userBean.provinciaSelect.name}" />
+										<f:selectItem itemLabel="#{userBean.usuario.province.name}" />
 										<f:selectItems value="#{userBean.provinces}"  var="provincia"
-											itemLabel="#{provincia.name}" itemValue="#{provincia}" />
+											itemLabel="#{provincia.name}" itemValue="#{provincia.name}" />
 									</p:selectOneMenu>		
 			
 			<div class="centrarBotonesDialog">
-				<p:commandButton id="guardar" value="Înregistrează" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, userBean.usuario.province,userBean.tipLocalidadSelected, userBean.usuario)}" 
+				<p:commandButton id="guardar" value="Înregistrează" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, userBean.usuario.province.name,userBean.tipLocalidadSelected, userBean.usuario)}" 
 				update ="@form"  oncomplete="PF('dialogMunicipio').hide()"/>
 				<p:commandButton value="Închidere" onclick="PF('dialogMunicipio').hide()"/>
 			</div>

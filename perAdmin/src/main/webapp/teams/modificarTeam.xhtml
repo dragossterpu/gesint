@@ -78,12 +78,12 @@
 
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="provinciaSelect" value="Provincia:" /></b>
-									<p:selectOneMenu value="#{businessmanBean.idProvincia}"
+									<p:selectOneMenu value="#{businessmanBean.idProvincia}" converter="#{selectConverter}"
 										id="provinciaSelect" styleClass="form-control form-select">
 										<f:selectItem itemLabel="Seleccione una" itemValue="" />
 										<f:selectItems value="#{businessmanBean.listaProvincias}"
 											var="provincia" itemLabel="#{provincia.nombre}"
-											itemValue="#{provincia.id}" />
+											itemValue="#{provincia}" />
 									</p:selectOneMenu>
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">

@@ -197,7 +197,6 @@ public class UserServiceImpl implements UserService {
 				Constantes.FECHACREACION);
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getName(), criteria, "name");
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getLastName(), criteria, "lastName");
-		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(usuarioBusqueda.getId(), criteria, "province.id");
 		UtilitiesCriteria.setCondicionCriteriaIgualdadBoolean(usuarioBusqueda.getValidated(), criteria,
 				Constantes.VALIDAT);
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getIdCard(), criteria, "idCard");
@@ -211,7 +210,7 @@ public class UserServiceImpl implements UserService {
 					"locality.typelocality");
 		}
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria, "education");
-		if (usuarioBusqueda.getIdProvincia() != null) {
+		if (usuarioBusqueda.getIdProvincia() != null && !usuarioBusqueda.getIdProvincia().equals("")) {
 			criteria.add(Restrictions.eq("province", provinceService.findById(usuarioBusqueda.getIdProvincia())));
 		}
 		if (usuarioBusqueda.getIdLocalidad() != null) {

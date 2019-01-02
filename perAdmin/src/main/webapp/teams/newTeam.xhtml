@@ -99,9 +99,9 @@
 							<p:inputText id="lastName" converter="#{trimConverter}" value="#{teamBean.usuarioBusqueda.lastName}" />
 							
 							<h:outputLabel for="provinciaSelect" value="Organizația/Județul:" styleClass="dialogLabel"/>
-			                 <p:selectOneMenu value="#{teamBean.usuarioBusqueda.id}" id="provinciaSelect" >
+			                 <p:selectOneMenu value="#{teamBean.usuarioBusqueda.idProvincia}" id="provinciaSelect">
 			                    <f:selectItem itemLabel="Alege una..." itemValue="" />
-			                    <f:selectItems value="#{teamBean.listaProvincias}" var="provinciaSelect" itemLabel="#{provinciaSelect.name}" itemValue="#{provinciaSelect.id}" />
+			                    <f:selectItems value="#{teamBean.listaProvincias}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia.indicator}" />
 			                 </p:selectOneMenu>
 						</p:panelGrid>
 						 <p:commandButton actionListener="#{teamBean.alta}" id="crear" 

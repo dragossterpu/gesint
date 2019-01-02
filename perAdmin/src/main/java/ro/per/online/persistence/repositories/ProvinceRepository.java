@@ -8,7 +8,7 @@ import ro.per.online.persistence.entities.PProvince;
  * Repositoriu pentru entitatea PProvince.
  * @author STAD
  */
-public interface ProvinceRepository extends CrudRepository<PProvince, Long> {
+public interface ProvinceRepository extends CrudRepository<PProvince, String> {
 
 	/**
 	 * Cauta un judet dupa numele acestuia

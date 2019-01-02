@@ -367,6 +367,7 @@ public class AlertaBean implements Serializable {
 	 */
 	public String enviarAlertaUsuarios() {
 		this.alerta = new Alerta();
+		this.utilizatorExtern = "";
 		this.usuariosSeleccionados = new ArrayList<>();
 		this.usuariosSeleccionadosFinales = new ArrayList<>();
 		this.modelUser = new LazyDataUsers(this.usuarioService);

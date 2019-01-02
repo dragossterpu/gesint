@@ -40,7 +40,7 @@ public class PCountry implements Serializable {
 	 * Id.
 	 */
 	@Id
-	@Column(name = "CODE")
+	@Column(name = "CODE", length = 4)
 	private String code;
 
 	/**

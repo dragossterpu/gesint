@@ -138,7 +138,7 @@ public class StatsServiceImpl implements StatsService, Serializable {
 	}
 
 	@Override
-	public List<ModelStats> getUserByProvince(final Long id) {
+	public List<ModelStats> getUserByProvince(final String id) {
 		initProveedorDatos();
 		return proveedorDatos.getUserByProvince(id);
 	}

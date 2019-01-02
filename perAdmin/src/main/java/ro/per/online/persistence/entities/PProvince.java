@@ -43,8 +43,8 @@ public class PProvince implements Serializable {
 	 * Id.
 	 */
 	@Id
-	@Column(name = "ID")
-	private Long id;
+	@Column(name = "code_province")
+	private String indicator;
 
 	/**
 	 * Numele judetului.
@@ -57,12 +57,6 @@ public class PProvince implements Serializable {
 	 */
 	@Column(name = "RESIDENCE", length = 100)
 	private String residence;
-
-	/**
-	 * Indicator.
-	 */
-	@Column(name = "INDICATOR", length = 3)
-	private String indicator;
 
 	/**
 	 * Populatie.

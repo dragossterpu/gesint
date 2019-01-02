@@ -92,7 +92,7 @@ public class UsuarioBusqueda implements Serializable {
 	/**
 	 * Filtru judet utilizator.
 	 */
-	private Long idProvincia;
+	private String idProvincia;
 
 	/**
 	 * Filtru localitate utilizator.

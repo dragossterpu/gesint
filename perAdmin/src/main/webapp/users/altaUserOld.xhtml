@@ -178,11 +178,11 @@
 								</p:column>
 								<p:column>
 									<p:selectOneMenu  value="#{userBean.userBusqueda.idProvincia}"  id="provinciasSelect"
-				                       class="selectFiltro" >
+				                       class="selectFiltro" converter="#{selectConverter}">
 				                        <f:selectItem itemLabel="Alege una..." itemValue="" />
 				                        <f:selectItems  value="#{userBean.provinces}"  required="true"
 										requiredMessage=" Alege un județ"
-				                        var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.id}" />
+				                        var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia}" />
 				                          <p:ajax event="change" update="locality"
 												listener="#{userBean.actualizarLocalidades(userBean.userBusqueda.idProvincia)}" />                        
 				                    </p:selectOneMenu>

@@ -167,7 +167,7 @@
 	                    <p:selectOneMenu  value="#{userBean.userBusqueda.idProvincia}"  id="provinciasSelect"
 	                       class="selectFiltro" >
 	                        <f:selectItem itemLabel="Alege unul..." itemValue="" />
-	                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.id}" />
+	                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.indicator}" />
 	                          <p:ajax event="change" update="locality"
 									listener="#{userBean.actualizarLocalidades(userBean.userBusqueda.idProvincia)}" />                        
 	                    </p:selectOneMenu>						
@@ -307,7 +307,7 @@
                         <p:button
                             title="Obțineți utilizatorii pe ecran"
                             value="Por pantalla"
-                            outcome="/users/operacion_masiva_pantalla.xhtml?faces-redirect=true">
+                            outcome="/users/reg_masiva_file.xhtml?faces-redirect=true">
                             <f:param name="esBorrado"
                                 value="#{usuarioController.usuarioForm.esBorrado}" />
                         </p:button>

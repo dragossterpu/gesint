@@ -1,5 +1,3 @@
-
---Tari
 insert into pcountry (code, name) values ('AR','Argentina');
 insert into pcountry (code, name) values ('AU','Australia');
 insert into pcountry (code, name) values ('AT','Austria');
@@ -95,382 +93,531 @@ insert into pcountry (code, name) values ('DS','Diaspora');
 insert into pcountry (code, name) values ('ALL','Alta');
 COMMIT;
 
---Judete
+--JudeteNPAI3307
 
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (1,'Alba', 'Alba Iulia', 342376 ,'AB','RO');	
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (2,'Arad', 'Arad', 430629, 'AR','RO');	
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (3,'Argeș','Pitești',612431,'AG','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (4,'Bacău','Bacău',616168 ,'BC','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (5,'Bihor','Oradea',575398 ,'BH','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (6,'Bistrița-Năsăud','Bistrița',286225 ,'BN','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (7,'Botoșani','Botoșani',412626 ,'BT','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (8,'Brașov','Brașov',549217 ,'BV','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (9,'Brăila','Brăila',321212 ,'BR','RO');	
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (10,'București','București',1883425 ,'B','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (11,'Buzău','Buzău',451069 ,'BZ','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (12,'Caraș-Severin','Reșița',295579 ,'CS','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (13,'Călărași','Călărași',306691 ,'CL','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (14,'Cluj','Cluj-Napoca',691106 ,'CJ','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (15,'Constanța','Constanța',684082 ,'CT','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (16,'Covasna','Sfântu Gheorghe',210177 ,'CV','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (17,'Dâmbovița','Târgoviște',518745 ,'DB','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (18,'Dolj','Craiova',660544 ,'DJ','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (19,'Galați','Galați',536167 ,'GL','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (20,'Giurgiu','Giurgiu',281422 ,'GR','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (21,'Gorj','Târgu Jiu',341594 ,'GJ','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (22,'Hunedoara','Deva',418565 ,'HD','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (23,'Ialomița','Slobozia',274148 ,'IL','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (24,'Iași','Iași',772348 ,'IS','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (25,'Ilfov','Buftea',388738 ,'IF','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (26,'Maramureș','Baia Mare',478659 ,'MM','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (27,'Mehedinți','Drobeta-Turnu Severin',265390 ,'MH','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (28,'Mureș','Târgu Mureș',550846 ,'MS','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (29,'Neamț','Piatra Neamț',470766 ,'NT','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (30,'Olt','Slatina',436400 ,'OT','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (31,'Prahova','Ploiești',762886 ,'PH','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (32,'Satu Mare','Satu Mare',344360 ,'SM','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (33,'Sălaj','Zalău',224384 ,'SJ','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (34,'Sibiu','Sibiu',397322 ,'SB','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (35,'Suceava','Suceava',634810, 'SV','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (36,'Teleorman','Alexandria',380123 ,'TR','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (37,'Timiș','Timișoara',683540 ,'TM','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (38,'Tulcea','Tulcea',213083 ,'TL','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (39,'Vaslui','Vaslui',395499 ,'VS','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (40,'Vâlcea','Râmnicu Vâlcea',371714 ,'VL','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (41,'Vrancea','Focșani',	340310 ,'VN','RO');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (42,'Diaspora','Diaspora',5000000 ,'DS','DS');
-INSERT INTO public.pprovince(id, name,residence, population, indicator,code) VALUES (43,'Harghita','Miercurea Ciuc',310867 ,'HR','RO');
+CREATE TABLE public.pprovince_old
+(
+  id numeric,
+  name character varying,
+  residence character varying,
+  population numeric,
+  indicator character varying,
+  code character varying
+);
+
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (1,'Alba', 'Alba Iulia', 342376 ,'AB','RO');	
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (2,'Arad', 'Arad', 430629, 'AR','RO');	
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (3,'Argeș','Pitești',612431,'AG','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (4,'Bacău','Bacău',616168 ,'BC','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (5,'Bihor','Oradea',575398 ,'BH','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (6,'Bistrița-Năsăud','Bistrița',286225 ,'BN','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (7,'Botoșani','Botoșani',412626 ,'BT','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (8,'Brașov','Brașov',549217 ,'BV','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (9,'Brăila','Brăila',321212 ,'BR','RO');	
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (10,'București','București',1883425 ,'B','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (11,'Buzău','Buzău',451069 ,'BZ','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (12,'Caraș-Severin','Reșița',295579 ,'CS','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (13,'Călărași','Călărași',306691 ,'CL','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (14,'Cluj','Cluj-Napoca',691106 ,'CJ','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (15,'Constanța','Constanța',684082 ,'CT','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (16,'Covasna','Sfântu Gheorghe',210177 ,'CV','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (17,'Dâmbovița','Târgoviște',518745 ,'DB','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (18,'Dolj','Craiova',660544 ,'DJ','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (19,'Galați','Galați',536167 ,'GL','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (20,'Giurgiu','Giurgiu',281422 ,'GR','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (21,'Gorj','Târgu Jiu',341594 ,'GJ','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (22,'Hunedoara','Deva',418565 ,'HD','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (23,'Ialomița','Slobozia',274148 ,'IL','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (24,'Iași','Iași',772348 ,'IS','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (25,'Ilfov','Buftea',388738 ,'IF','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (26,'Maramureș','Baia Mare',478659 ,'MM','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (27,'Mehedinți','Drobeta-Turnu Severin',265390 ,'MH','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (28,'Mureș','Târgu Mureș',550846 ,'MS','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (29,'Neamț','Piatra Neamț',470766 ,'NT','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (30,'Olt','Slatina',436400 ,'OT','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (31,'Prahova','Ploiești',762886 ,'PH','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (32,'Satu Mare','Satu Mare',344360 ,'SM','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (33,'Sălaj','Zalău',224384 ,'SJ','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (34,'Sibiu','Sibiu',397322 ,'SB','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (35,'Suceava','Suceava',634810, 'SV','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (36,'Teleorman','Alexandria',380123 ,'TR','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (37,'Timiș','Timișoara',683540 ,'TM','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (38,'Tulcea','Tulcea',213083 ,'TL','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (39,'Vaslui','Vaslui',395499 ,'VS','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (40,'Vâlcea','Râmnicu Vâlcea',371714 ,'VL','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (41,'Vrancea','Focșani',	340310 ,'VN','RO');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (42,'Diaspora','Diaspora',5000000 ,'DS','DS');
+INSERT INTO public.pprovince_old(id, name,residence, population, indicator,code) VALUES (43,'Harghita','Miercurea Ciuc',310867 ,'HR','RO');
+COMMIT;
+
+
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Alba', 'Alba Iulia', 342376 ,'AB','RO');	
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Arad', 'Arad', 430629, 'AR','RO');	
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Argeș','Pitești',612431,'AG','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Bacău','Bacău',616168 ,'BC','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Bihor','Oradea',575398 ,'BH','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Bistrița-Năsăud','Bistrița',286225 ,'BN','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Botoșani','Botoșani',412626 ,'BT','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Brașov','Brașov',549217 ,'BV','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Brăila','Brăila',321212 ,'BR','RO');	
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('București','București',1883425 ,'B','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Buzău','Buzău',451069 ,'BZ','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Caraș-Severin','Reșița',295579 ,'CS','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Călărași','Călărași',306691 ,'CL','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Cluj','Cluj-Napoca',691106 ,'CJ','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Constanța','Constanța',684082 ,'CT','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Covasna','Sfântu Gheorghe',210177 ,'CV','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Dâmbovița','Târgoviște',518745 ,'DB','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Dolj','Craiova',660544 ,'DJ','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Galați','Galați',536167 ,'GL','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Giurgiu','Giurgiu',281422 ,'GR','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Gorj','Târgu Jiu',341594 ,'GJ','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Hunedoara','Deva',418565 ,'HD','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Ialomița','Slobozia',274148 ,'IL','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Iași','Iași',772348 ,'IS','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Ilfov','Buftea',388738 ,'IF','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Maramureș','Baia Mare',478659 ,'MM','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Mehedinți','Drobeta-Turnu Severin',265390 ,'MH','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Mureș','Târgu Mureș',550846 ,'MS','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Neamț','Piatra Neamț',470766 ,'NT','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Olt','Slatina',436400 ,'OT','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Prahova','Ploiești',762886 ,'PH','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Satu Mare','Satu Mare',344360 ,'SM','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Sălaj','Zalău',224384 ,'SJ','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Sibiu','Sibiu',397322 ,'SB','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Suceava','Suceava',634810, 'SV','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Teleorman','Alexandria',380123 ,'TR','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Timiș','Timișoara',683540 ,'TM','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Tulcea','Tulcea',213083 ,'TL','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Vaslui','Vaslui',395499 ,'VS','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Vâlcea','Râmnicu Vâlcea',371714 ,'VL','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Vrancea','Focșani',	340310 ,'VN','RO');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Diaspora','Diaspora',5000000 ,'DS','DS');
+INSERT INTO public.pprovince(name,residence, population, code_province,code) VALUES ('Harghita','Miercurea Ciuc',310867 ,'HR','RO');
 COMMIT;
 
 
 
 --Localitati
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (1,'Aiud','MUNICIPALITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (2,'Blaj','MUNICIPALITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (3,'Sebeș','MUNICIPALITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (4,'Alba Iulia','MUNICIPALITY',TRUE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (5,'Abrud','CITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (6,'Baia de Arieș','CITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (7,'Câmpeni','CITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (8,'Cugir','CITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (9,'Ocna Mureș','CITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (10,'Teiuș','CITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (11,'Zlatna','CITY',FALSE,1,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (12,'Arad','MUNICIPALITY',TRUE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (13,'Chișineu-Criș','CITY',FALSE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (14,'Curtici','CITY',FALSE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (15,'Ineu','CITY',FALSE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (16,'Lipova','CITY',FALSE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (17,'Pâncota','CITY',FALSE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (18,'Pecica','CITY',FALSE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (19,'Sântana','CITY',FALSE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (20,'Sebiș','CITY',FALSE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (21,'Nădlac','CITY',TRUE,2,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (22,'Câmpulung','CITY',FALSE,3,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (23,'Costești','CITY',FALSE,3,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (24,'Curtea de Argeș','CITY',FALSE,3,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (25,'Mioveni','CITY',FALSE,3,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (26,'Pitești','CITY',TRUE,3,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (27,'Stefanesti','CITY',FALSE,3,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (28,'Topoloveni','CITY',FALSE,3,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (29,'Bacău','MUNICIPALITY',TRUE,4,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (30,'Buhusi','CITY',FALSE,4,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (31,'Comanesti','CITY',FALSE,4,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (32,'Darmanesti','CITY',FALSE,4,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (33,'Moinesti','CITY',FALSE,4,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (34,'Onești','CITY',FALSE,4,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (35,'Slănic-Moldova','CITY',FALSE,4,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (36,'Târgu Ocna','CITY',FALSE,4,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (37,'Beiuș','MUNICIPALITY',FALSE,5,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (38,'Marghita','MUNICIPALITY',FALSE,5,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (39,'Salonta','MUNICIPALITY',FALSE,5,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (40,'Oradea','MUNICIPALITY',TRUE,5,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (41,'Aleșd','CITY',FALSE,5,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (42,'Nucet','CITY',FALSE,5,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (43,'Săcueni','CITY',FALSE,5,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (44,'Valea lui Mihai','CITY',FALSE,5,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (45,'Vașcău','CITY',FALSE,5,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (46,'Ștei','CITY',FALSE,5,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (47,'Beclean','CITY',FALSE,6,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (48,'Bistrița','MUNICIPALITY',TRUE,6,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (49,'Năsăud','CITY',FALSE,6,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (50,'Sângeorz Băi','CITY',FALSE,6,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (51,'Dorohoi','MUNICIPALITY',FALSE,7,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (52,'Botoșani','MUNICIPALITY',TRUE,7,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (53,'Bucecea','CITY',FALSE,7,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (54,'Darabani','CITY',FALSE,7,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (55,'Flămânzi','CITY',FALSE,7,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (56,'Săveni','CITY',FALSE,7,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (57,'Ștefănești','CITY',FALSE,7,null);	
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (58,'Codlea','MUNICIPALITY',FALSE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (59,'Făgăraș','MUNICIPALITY',FALSE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (60,'Săcele','MUNICIPALITY',FALSE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (61,'Brașov','MUNICIPALITY',TRUE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (62,'Ghimbav','CITY',FALSE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (63,'Predeal','CITY',FALSE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (64,'Râșnov','CITY',FALSE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (65,'Rupea','CITY',FALSE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (66,'Victoria','CITY',FALSE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (67,'Zărnești','CITY',FALSE,8,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (68,'Brăila','MUNICIPALITY',TRUE,9,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (69,'Făurei','CITY',FALSE,9,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (70,'Ianca','CITY',FALSE,9,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (71,'Însurăței','CITY',FALSE,9,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (72,'București','SECTOR',TRUE,10,'Sector 1');
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (73,'București','SECTOR',TRUE,10,'Sector 2');
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (74,'București','SECTOR',TRUE,10,'Sector 3');
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (75,'București','SECTOR',TRUE,10,'Sector 4');
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (76,'București','SECTOR',TRUE,10,'Sector 5');
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (77,'București','SECTOR',TRUE,10,'Sector 6');
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (78,'București','MUNICIPALITY',TRUE,10,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (79,'Râmnicu Sărat','MUNICIPALITY',FALSE,11,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (80,'Buzău','MUNICIPALITY',TRUE,11,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (81,'Nehoiu','CITY',FALSE,11,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (82,'Pogoanele','CITY',FALSE,11,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (83,'Pătârlagele','CITY',FALSE,11,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (84,'Caransebeș','MUNICIPALITY',FALSE,12,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (85,'Reșița','MUNICIPALITY',TRUE,12,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (86,'Anina','CITY',FALSE,12,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (87,'Băile Herculane','CITY',FALSE,12,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (88,'Bocșa','CITY',FALSE,12,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (89,'Moldova Nouă','CITY',FALSE,12,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (90,'Oravița','CITY',FALSE,12,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (91,'Oțelu Roșu','CITY',FALSE,12,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (92,'Oltenița','MUNICIPALITY',FALSE,13,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (93,'Călărași','MUNICIPALITY',TRUE,13,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (94,'Budești','CITY',FALSE,13,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (95,'Fundulea','CITY',FALSE,13,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (96,'Lehliu Gară','CITY',FALSE,13,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (97,'Câmpia Turzii','MUNICIPALITY',FALSE,14,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (98,'Dej','MUNICIPALITY',FALSE,14,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (99,'Gherla','MUNICIPALITY',TRUE,14,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (100,'Turda','MUNICIPALITY',TRUE,14,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (101,'Cluj-Napoca','MUNICIPALITY',TRUE,14,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (102,'Huedin','CITY',FALSE,14,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (103,'Mangalia','MUNICIPALITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (104,'Medgidia','MUNICIPALITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (105,'Constanța','MUNICIPALITY',TRUE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (106,'Băneasa','CITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (107,'Cernavodă','CITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (108,'Eforie','CITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (109,'Hârșova','CITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (110,'Murfatlar','CITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (111,'Năvodari','CITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (112,'Negru Vodă','CITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (113,'Ovidiu','CITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (114,'Techirghiol','CITY',FALSE,15,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (115,'Târgu Secuiesc','MUNICIPALITY',FALSE,16,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (116,'Sfântu Gheorghe','MUNICIPALITY',TRUE,16,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (117,'Baraolt','CITY',FALSE,16,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (118,'Covasna','CITY',FALSE,16,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (119,'Întorsura Buzăului','CITY',FALSE,16,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (120,'Moreni','MUNICIPALITY',FALSE,17,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (121,'Târgoviște','MUNICIPALITY',TRUE,17,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (122,'Fieni','CITY',FALSE,17,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (123,'Găești','CITY',FALSE,17,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (124,'Pucioasa','CITY',FALSE,17,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (125,'Răcari','CITY',FALSE,17,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (126,'Titu','CITY',FALSE,17,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (127,'Băilești','MUNICIPALITY',FALSE,18,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (128,'Calafat','MUNICIPALITY',FALSE,18,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (129,'Craiova','MUNICIPALITY',TRUE,18,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (130,'Bechet','CITY',FALSE,18,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (131,'Dăbuleni','CITY',FALSE,18,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (132,'Filiași','CITY',FALSE,18,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (133,'Segarcea','CITY',FALSE,18,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (134,'Tecuci','MUNICIPALITY',FALSE,19,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (135,'Galați','MUNICIPALITY',TRUE,19,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (136,'Berești','CITY',FALSE,19,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (137,'Târgu Bujor','CITY',FALSE,19,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (138,'Giurgiu','MUNICIPALITY',TRUE,20,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (139,'Bolintin-Vale','CITY',FALSE,20,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (140,'Mihăilești','CITY',FALSE,20,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (141,'Motru','MUNICIPALITY',FALSE,21,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (142,'Târgu Jiu','MUNICIPALITY',TRUE,21,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (143,'Bumbești-Jiu','CITY',FALSE,21,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (144,'Novaci','CITY',FALSE,21,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (145,'Rovinari','CITY',FALSE,21,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (146,'Târgu Cărbunești','CITY',FALSE,21,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (147,'Tismana','CITY',FALSE,21,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (148,'Turceni','CITY',FALSE,21,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (149,'Țicleni','CITY',FALSE,21,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (150,'Brad','MUNICIPALITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (151,'Hunedoara','MUNICIPALITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (152,'Lupeni','MUNICIPALITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (153,'Orăștie','MUNICIPALITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (154,'Petroșani','MUNICIPALITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (155,'Vulcan','MUNICIPALITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (156,'Deva','MUNICIPALITY',TRUE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (157,'Aninoasa','CITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (158,'Călan','CITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (159,'Geoagiu','CITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (160,'Hațeg','CITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (161,'Petrila','CITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (162,'Simeria','CITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (163,'Uricani','CITY',FALSE,22,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (164,'Fetești','MUNICIPALITY',FALSE,23,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (165,'Urziceni','MUNICIPALITY',FALSE,23,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (166,'Slobozia','MUNICIPALITY',TRUE,23,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (167,'Amara','CITY',FALSE,23,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (168,'Căzănești','CITY',FALSE,23,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (169,'Fierbinți-Târg','CITY',FALSE,23,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (170,'Țăndărei','CITY',FALSE,23,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (171,'Pașcani','MUNICIPALITY',FALSE,24,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (172,'Iași','MUNICIPALITY',TRUE,24,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (173,'Hârlău','CITY',FALSE,24,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (174,'Podu Iloaiei','CITY',FALSE,24,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (175,'Târgu Frumos','CITY',FALSE,24,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (176,'Bragadiru','CITY',FALSE,25,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (177,'Buftea','CITY',FALSE,25,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (178,'Chitila','CITY',FALSE,25,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (179,'jpgMăgurele','CITY',FALSE,25,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (180,'Otopeni','CITY',FALSE,25,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (181,'Pantelimon','CITY',FALSE,25,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (182,'Popești-Leordeni','CITY',FALSE,25,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (183,'Voluntari','CITY',FALSE,25,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (184,'Sighetu Marmației','MUNICIPALITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (185,'Baia Mare','MUNICIPALITY',TRUE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (186,'Baia Sprie','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (187,'Borșa','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (188,'Cavnic','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (189,'Dragomirești','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (190,'Săliștea de Sus','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (191,'Seini','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (192,'Șomcuta Mare','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (193,'Tăuții-Măgherăuș','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (194,'Târgu Lăpuș','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (195,'Ulmeni','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (196,'Vișeu de Sus','CITY',FALSE,26,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (197,'Orșova','MUNICIPALITY',FALSE,27,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (198,'Drobeta-Turnu Severin','MUNICIPALITY',TRUE,27,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (199,'Baia de Aramă','CITY',FALSE,27,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (200,'Strehaia','CITY',FALSE,27,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (201,'Reghin','MUNICIPALITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (202,'Sighișoara','MUNICIPALITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (203,'Târnăveni','MUNICIPALITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (204,'Târgu Mureș','MUNICIPALITY',TRUE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (205,'Iernut','CITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (206,'Luduș','CITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (207,'Miercurea Nirajului','CITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (208,'Sovata','CITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (209,'Sângeorgiu de Pădure','CITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (210,'Sărmașu','CITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (211,'Ungheni','CITY',FALSE,28,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (212,'Roman','MUNICIPALITY',FALSE,29,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (213,'Piatra Neamț','MUNICIPALITY',TRUE,29,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (214,'Bicaz','CITY',FALSE,29,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (215,'Roznov','CITY',FALSE,29,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (216,'Târgu Neamț','CITY',FALSE,29,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (217,'Caracal','MUNICIPALITY',FALSE,30,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (218,'Slatina','MUNICIPALITY',TRUE,30,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (219,'Balș','CITY',FALSE,30,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (220,'Corabia','CITY',FALSE,30,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (221,'Drăgănești-Olt','CITY',FALSE,30,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (222,'Piatra-Olt','CITY',FALSE,30,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (223,'Potcoava','CITY',FALSE,30,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (224,'Scornicești','CITY',FALSE,30,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (225,'Câmpina','MUNICIPALITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (226,'Ploiești','MUNICIPALITY',TRUE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (227,'Azuga','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (228,'Băicoi','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (229,'Boldești-Scăeni','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (230,'Breaza','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (231,'Bușteni','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (232,'Comarnic','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (233,'Mizil','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (234,'Plopeni','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (235,'Sinaia','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (236,'Slănic','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (237,'Urlați','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (238,'Vălenii de Munte','CITY',FALSE,31,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (239,'Carei','MUNICIPALITY',FALSE,32,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (240,'Satu Mare','MUNICIPALITY',TRUE,32,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (241,'Ardud','CITY',FALSE,32,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (242,'Livada','CITY',FALSE,32,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (243,'Negrești-Oaș','CITY',FALSE,32,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (244,'Tășnad','CITY',FALSE,32,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (245,'Zalău','MUNICIPALITY',TRUE,33,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (246,'Cehu Silvaniei','CITY',FALSE,33,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (247,'Jibou','CITY',FALSE,33,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (248,'Șimleu Silvaniei','CITY',FALSE,33,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (249,'Mediaș','MUNICIPALITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (250,'Sibiu','MUNICIPALITY',TRUE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (251,'Agnita','CITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (252,'Avrig','CITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (253,'Cisnădie','CITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (254,'Copșa Mică','CITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (255,'Dumbrăveni','CITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (256,'Miercurea Sibiului','CITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (257,'Ocna Sibiului','CITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (258,'Săliște','CITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (259,'Tălmaciu','CITY',FALSE,34,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (260,'Câmpulung Moldovenesc','MUNICIPALITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (261,'Fălticeni','MUNICIPALITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (262,'Rădăuți','MUNICIPALITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (263,'Vatra Dornei','MUNICIPALITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (264,'Suceava','MUNICIPALITY',TRUE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (265,'Broșteni','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (266,'Cajvana','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (267,'Dolhasca','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (268,'Frasin','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (269,'Gura Humorului','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (270,'Liteni','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (271,'Milișăuți','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (272,'Salcea','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (273,'Siret','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (274,'Solca','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (275,'Vicovu de Sus','CITY',FALSE,35,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (276,'Roșiorii de Vede','MUNICIPALITY',FALSE,36,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (277,'Turnu Măgurele','MUNICIPALITY',FALSE,36,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (278,'Alexandria','MUNICIPALITY',TRUE,36,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (279,'Videle','CITY',FALSE,36,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (280,'Zimnicea','CITY',FALSE,36,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (281,'Lugoj','MUNICIPALITY',FALSE,37,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (282,'Timișoara','MUNICIPALITY',TRUE,37,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (283,'Buziaș','CITY',FALSE,37,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (284,'Ciacova','CITY',FALSE,37,nulL);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (285,'Deta','CITY',FALSE,37,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (286,'Făget','CITY',FALSE,37,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (287,'Gătaia','CITY',FALSE,37,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (288,'Jimbolia','CITY',FALSE,37,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (289,'Recaș','CITY',FALSE,37,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (290,'Sânnicolau Mare','CITY',FALSE,37,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (291,'Tulcea','MUNICIPALITY',TRUE,38,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (292,'Babadag','CITY',FALSE,38,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (293,'Isaccea','CITY',FALSE,38,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (294,'Măcin','CITY',FALSE,38,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (295,'Sulina','CITY',FALSE,38,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (296,'Bârlad','MUNICIPALITY',FALSE,39,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (297,'Huși','MUNICIPALITY',FALSE,39,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (298,'Vaslui','MUNICIPALITY',TRUE,39,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (299,'Murgeni','CITY',FALSE,39,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (300,'Negrești','CITY',FALSE,39,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (301,'Drăgășani','MUNICIPALITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (302,'Râmnicu Vâlcea','MUNICIPALITY',TRUE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (303,'Berbești','CITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (304,'Brezoi','CITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (305,'Băbeni','CITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (306,'Băile Govora','CITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (307,'Băile Olănești','CITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (308,'Bălcești','CITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (309,'Călimănești','CITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (310,'Horezu','CITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (311,'Ocnele Mari','CITY',FALSE,40,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (316,'Adjud','MUNICIPALITY',FALSE,41,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (317,'Focșani','MUNICIPALITY',TRUE,41,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (318,'Mărășești','CITY',FALSE,41,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (319,'Odobești','CITY',FALSE,41,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (320,'Panciu','CITY',FALSE,41,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (321,'Gheorgheni','MUNICIPALITY',FALSE,43,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (322,'Odorheiu Secuiesc','MUNICIPALITY',FALSE,43,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (323,'Toplița','MUNICIPALITY',FALSE,43,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (324,'Miercurea Ciuc','MUNICIPALITY',TRUE,43,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (325,'Băile Tușnad','CITY',FALSE,43,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (326,'Bălan','CITY',FALSE,43,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (327,'Borsec','CITY',FALSE,43,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (328,'Cristuru Secuiesc','CITY',FALSE,43,null);
-INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (329,'Vlăhița','CITY',FALSE,43,null);
+
+CREATE TABLE public.plocality_old
+(
+  id numeric,
+  name character varying,
+  typelocality character varying,
+  residence boolean,
+  id_province numeric,
+  sector character varying
+);
+
+
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (1,'Aiud','MUNICIPALITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (2,'Blaj','MUNICIPALITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (3,'Sebeș','MUNICIPALITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (4,'Alba Iulia','MUNICIPALITY',TRUE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (5,'Abrud','CITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (6,'Baia de Arieș','CITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (7,'Câmpeni','CITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (8,'Cugir','CITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (9,'Ocna Mureș','CITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (10,'Teiuș','CITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (11,'Zlatna','CITY',FALSE,1,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (12,'Arad','MUNICIPALITY',TRUE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (13,'Chișineu-Criș','CITY',FALSE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (14,'Curtici','CITY',FALSE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (15,'Ineu','CITY',FALSE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (16,'Lipova','CITY',FALSE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (17,'Pâncota','CITY',FALSE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (18,'Pecica','CITY',FALSE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (19,'Sântana','CITY',FALSE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (20,'Sebiș','CITY',FALSE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (21,'Nădlac','CITY',TRUE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (22,'Câmpulung','CITY',FALSE,2,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (23,'Costești','CITY',FALSE,3,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (24,'Curtea de Argeș','CITY',FALSE,3,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (25,'Mioveni','CITY',FALSE,3,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (26,'Pitești','CITY',TRUE,3,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (27,'Stefanesti','CITY',FALSE,3,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (28,'Topoloveni','CITY',FALSE,3,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (29,'Bacău','MUNICIPALITY',TRUE,4,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (30,'Buhusi','CITY',FALSE,4,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (31,'Comanesti','CITY',FALSE,4,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (32,'Darmanesti','CITY',FALSE,4,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (33,'Moinesti','CITY',FALSE,4,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (34,'Onești','CITY',FALSE,4,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (35,'Slănic-Moldova','CITY',FALSE,4,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (36,'Târgu Ocna','CITY',FALSE,4,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (37,'Beiuș','MUNICIPALITY',FALSE,5,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (38,'Marghita','MUNICIPALITY',FALSE,5,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (39,'Salonta','MUNICIPALITY',FALSE,5,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (40,'Oradea','MUNICIPALITY',TRUE,5,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (41,'Aleșd','CITY',FALSE,5,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (42,'Nucet','CITY',FALSE,5,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (43,'Săcueni','CITY',FALSE,5,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (44,'Valea lui Mihai','CITY',FALSE,5,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (45,'Vașcău','CITY',FALSE,5,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (46,'Ștei','CITY',FALSE,5,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (47,'Beclean','CITY',FALSE,6,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (48,'Bistrița','MUNICIPALITY',TRUE,6,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (49,'Năsăud','CITY',FALSE,6,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (50,'Sângeorz Băi','CITY',FALSE,6,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (51,'Dorohoi','MUNICIPALITY',FALSE,7,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (52,'Botoșani','MUNICIPALITY',TRUE,7,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (53,'Bucecea','CITY',FALSE,7,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (54,'Darabani','CITY',FALSE,7,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (55,'Flămânzi','CITY',FALSE,7,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (56,'Săveni','CITY',FALSE,7,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (57,'Ștefănești','CITY',FALSE,7,null);	
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (58,'Codlea','MUNICIPALITY',FALSE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (59,'Făgăraș','MUNICIPALITY',FALSE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (60,'Săcele','MUNICIPALITY',FALSE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (61,'Brașov','MUNICIPALITY',TRUE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (62,'Ghimbav','CITY',FALSE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (63,'Predeal','CITY',FALSE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (64,'Râșnov','CITY',FALSE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (65,'Rupea','CITY',FALSE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (66,'Victoria','CITY',FALSE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (67,'Zărnești','CITY',FALSE,8,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (68,'Brăila','MUNICIPALITY',TRUE,9,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (69,'Făurei','CITY',FALSE,9,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (70,'Ianca','CITY',FALSE,9,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (71,'Însurăței','CITY',FALSE,9,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (72,'București','SECTOR',TRUE,10,'Sector 1');
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (73,'București','SECTOR',TRUE,10,'Sector 2');
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (74,'București','SECTOR',TRUE,10,'Sector 3');
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (75,'București','SECTOR',TRUE,10,'Sector 4');
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (76,'București','SECTOR',TRUE,10,'Sector 5');
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (77,'București','SECTOR',TRUE,10,'Sector 6');
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (78,'București','MUNICIPALITY',TRUE,10,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (79,'Râmnicu Sărat','MUNICIPALITY',FALSE,11,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (80,'Buzău','MUNICIPALITY',TRUE,11,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (81,'Nehoiu','CITY',FALSE,11,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (82,'Pogoanele','CITY',FALSE,11,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (83,'Pătârlagele','CITY',FALSE,11,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (84,'Caransebeș','MUNICIPALITY',FALSE,12,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (85,'Reșița','MUNICIPALITY',TRUE,12,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (86,'Anina','CITY',FALSE,12,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (87,'Băile Herculane','CITY',FALSE,12,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (88,'Bocșa','CITY',FALSE,12,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (89,'Moldova Nouă','CITY',FALSE,12,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (90,'Oravița','CITY',FALSE,12,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (91,'Oțelu Roșu','CITY',FALSE,12,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (92,'Oltenița','MUNICIPALITY',FALSE,13,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (93,'Călărași','MUNICIPALITY',TRUE,13,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (94,'Budești','CITY',FALSE,13,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (95,'Fundulea','CITY',FALSE,13,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (96,'Lehliu Gară','CITY',FALSE,13,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (97,'Câmpia Turzii','MUNICIPALITY',FALSE,14,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (98,'Dej','MUNICIPALITY',FALSE,14,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (99,'Gherla','MUNICIPALITY',TRUE,14,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (100,'Turda','MUNICIPALITY',TRUE,14,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (101,'Cluj-Napoca','MUNICIPALITY',TRUE,14,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (102,'Huedin','CITY',FALSE,14,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (103,'Mangalia','MUNICIPALITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (104,'Medgidia','MUNICIPALITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (105,'Constanța','MUNICIPALITY',TRUE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (106,'Băneasa','CITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (107,'Cernavodă','CITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (108,'Eforie','CITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (109,'Hârșova','CITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (110,'Murfatlar','CITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (111,'Năvodari','CITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (112,'Negru Vodă','CITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (113,'Ovidiu','CITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (114,'Techirghiol','CITY',FALSE,15,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (115,'Târgu Secuiesc','MUNICIPALITY',FALSE,16,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (116,'Sfântu Gheorghe','MUNICIPALITY',TRUE,16,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (117,'Baraolt','CITY',FALSE,16,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (118,'Covasna','CITY',FALSE,16,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (119,'Întorsura Buzăului','CITY',FALSE,16,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (120,'Moreni','MUNICIPALITY',FALSE,17,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (121,'Târgoviște','MUNICIPALITY',TRUE,17,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (122,'Fieni','CITY',FALSE,17,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (123,'Găești','CITY',FALSE,17,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (124,'Pucioasa','CITY',FALSE,17,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (125,'Răcari','CITY',FALSE,17,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (126,'Titu','CITY',FALSE,17,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (127,'Băilești','MUNICIPALITY',FALSE,18,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (128,'Calafat','MUNICIPALITY',FALSE,18,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (129,'Craiova','MUNICIPALITY',TRUE,18,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (130,'Bechet','CITY',FALSE,18,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (131,'Dăbuleni','CITY',FALSE,18,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (132,'Filiași','CITY',FALSE,18,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (133,'Segarcea','CITY',FALSE,18,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (134,'Tecuci','MUNICIPALITY',FALSE,19,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (135,'Galați','MUNICIPALITY',TRUE,19,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (136,'Berești','CITY',FALSE,19,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (137,'Târgu Bujor','CITY',FALSE,19,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (138,'Giurgiu','MUNICIPALITY',TRUE,20,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (139,'Bolintin-Vale','CITY',FALSE,20,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (140,'Mihăilești','CITY',FALSE,20,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (141,'Motru','MUNICIPALITY',FALSE,21,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (142,'Târgu Jiu','MUNICIPALITY',TRUE,21,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (143,'Bumbești-Jiu','CITY',FALSE,21,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (144,'Novaci','CITY',FALSE,21,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (145,'Rovinari','CITY',FALSE,21,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (146,'Târgu Cărbunești','CITY',FALSE,21,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (147,'Tismana','CITY',FALSE,21,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (148,'Turceni','CITY',FALSE,21,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (149,'Țicleni','CITY',FALSE,21,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (150,'Brad','MUNICIPALITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (151,'Hunedoara','MUNICIPALITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (152,'Lupeni','MUNICIPALITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (153,'Orăștie','MUNICIPALITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (154,'Petroșani','MUNICIPALITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (155,'Vulcan','MUNICIPALITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (156,'Deva','MUNICIPALITY',TRUE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (157,'Aninoasa','CITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (158,'Călan','CITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (159,'Geoagiu','CITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (160,'Hațeg','CITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (161,'Petrila','CITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (162,'Simeria','CITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (163,'Uricani','CITY',FALSE,22,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (164,'Fetești','MUNICIPALITY',FALSE,23,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (165,'Urziceni','MUNICIPALITY',FALSE,23,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (166,'Slobozia','MUNICIPALITY',TRUE,23,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (167,'Amara','CITY',FALSE,23,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (168,'Căzănești','CITY',FALSE,23,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (169,'Fierbinți-Târg','CITY',FALSE,23,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (170,'Țăndărei','CITY',FALSE,23,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (171,'Pașcani','MUNICIPALITY',FALSE,24,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (172,'Iași','MUNICIPALITY',TRUE,24,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (173,'Hârlău','CITY',FALSE,24,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (174,'Podu Iloaiei','CITY',FALSE,24,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (175,'Târgu Frumos','CITY',FALSE,24,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (176,'Bragadiru','CITY',FALSE,25,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (177,'Buftea','CITY',FALSE,25,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (178,'Chitila','CITY',FALSE,25,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (179,'jpgMăgurele','CITY',FALSE,25,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (180,'Otopeni','CITY',FALSE,25,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (181,'Pantelimon','CITY',FALSE,25,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (182,'Popești-Leordeni','CITY',FALSE,25,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (183,'Voluntari','CITY',FALSE,25,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (184,'Sighetu Marmației','MUNICIPALITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (185,'Baia Mare','MUNICIPALITY',TRUE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (186,'Baia Sprie','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (187,'Borșa','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (188,'Cavnic','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (189,'Dragomirești','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (190,'Săliștea de Sus','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (191,'Seini','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (192,'Șomcuta Mare','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (193,'Tăuții-Măgherăuș','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (194,'Târgu Lăpuș','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (195,'Ulmeni','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (196,'Vișeu de Sus','CITY',FALSE,26,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (197,'Orșova','MUNICIPALITY',FALSE,27,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (198,'Drobeta-Turnu Severin','MUNICIPALITY',TRUE,27,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (199,'Baia de Aramă','CITY',FALSE,27,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (200,'Strehaia','CITY',FALSE,27,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (201,'Reghin','MUNICIPALITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (202,'Sighișoara','MUNICIPALITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (203,'Târnăveni','MUNICIPALITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (204,'Târgu Mureș','MUNICIPALITY',TRUE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (205,'Iernut','CITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (206,'Luduș','CITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (207,'Miercurea Nirajului','CITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (208,'Sovata','CITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (209,'Sângeorgiu de Pădure','CITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (210,'Sărmașu','CITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (211,'Ungheni','CITY',FALSE,28,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (212,'Roman','MUNICIPALITY',FALSE,29,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (213,'Piatra Neamț','MUNICIPALITY',TRUE,29,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (214,'Bicaz','CITY',FALSE,29,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (215,'Roznov','CITY',FALSE,29,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (216,'Târgu Neamț','CITY',FALSE,29,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (217,'Caracal','MUNICIPALITY',FALSE,30,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (218,'Slatina','MUNICIPALITY',TRUE,30,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (219,'Balș','CITY',FALSE,30,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (220,'Corabia','CITY',FALSE,30,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (221,'Drăgănești-Olt','CITY',FALSE,30,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (222,'Piatra-Olt','CITY',FALSE,30,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (223,'Potcoava','CITY',FALSE,30,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (224,'Scornicești','CITY',FALSE,30,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (225,'Câmpina','MUNICIPALITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (226,'Ploiești','MUNICIPALITY',TRUE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (227,'Azuga','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (228,'Băicoi','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (229,'Boldești-Scăeni','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (230,'Breaza','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (231,'Bușteni','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (232,'Comarnic','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (233,'Mizil','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (234,'Plopeni','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (235,'Sinaia','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (236,'Slănic','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (237,'Urlați','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (238,'Vălenii de Munte','CITY',FALSE,31,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (239,'Carei','MUNICIPALITY',FALSE,32,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (240,'Satu Mare','MUNICIPALITY',TRUE,32,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (241,'Ardud','CITY',FALSE,32,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (242,'Livada','CITY',FALSE,32,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (243,'Negrești-Oaș','CITY',FALSE,32,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (244,'Tășnad','CITY',FALSE,32,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (245,'Zalău','MUNICIPALITY',TRUE,33,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (246,'Cehu Silvaniei','CITY',FALSE,33,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (247,'Jibou','CITY',FALSE,33,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (248,'Șimleu Silvaniei','CITY',FALSE,33,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (249,'Mediaș','MUNICIPALITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (250,'Sibiu','MUNICIPALITY',TRUE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (251,'Agnita','CITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (252,'Avrig','CITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (253,'Cisnădie','CITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (254,'Copșa Mică','CITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (255,'Dumbrăveni','CITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (256,'Miercurea Sibiului','CITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (257,'Ocna Sibiului','CITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (258,'Săliște','CITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (259,'Tălmaciu','CITY',FALSE,34,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (260,'Câmpulung Moldovenesc','MUNICIPALITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (261,'Fălticeni','MUNICIPALITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (262,'Rădăuți','MUNICIPALITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (263,'Vatra Dornei','MUNICIPALITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (264,'Suceava','MUNICIPALITY',TRUE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (265,'Broșteni','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (266,'Cajvana','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (267,'Dolhasca','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (268,'Frasin','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (269,'Gura Humorului','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (270,'Liteni','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (271,'Milișăuți','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (272,'Salcea','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (273,'Siret','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (274,'Solca','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (275,'Vicovu de Sus','CITY',FALSE,35,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (276,'Roșiorii de Vede','MUNICIPALITY',FALSE,36,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (277,'Turnu Măgurele','MUNICIPALITY',FALSE,36,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (278,'Alexandria','MUNICIPALITY',TRUE,36,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (279,'Videle','CITY',FALSE,36,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (280,'Zimnicea','CITY',FALSE,36,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (281,'Lugoj','MUNICIPALITY',FALSE,37,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (282,'Timișoara','MUNICIPALITY',TRUE,37,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (283,'Buziaș','CITY',FALSE,37,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (284,'Ciacova','CITY',FALSE,37,nulL);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (285,'Deta','CITY',FALSE,37,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (286,'Făget','CITY',FALSE,37,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (287,'Gătaia','CITY',FALSE,37,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (288,'Jimbolia','CITY',FALSE,37,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (289,'Recaș','CITY',FALSE,37,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (290,'Sânnicolau Mare','CITY',FALSE,37,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (291,'Tulcea','MUNICIPALITY',TRUE,38,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (292,'Babadag','CITY',FALSE,38,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (293,'Isaccea','CITY',FALSE,38,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (294,'Măcin','CITY',FALSE,38,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (295,'Sulina','CITY',FALSE,38,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (296,'Bârlad','MUNICIPALITY',FALSE,39,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (297,'Huși','MUNICIPALITY',FALSE,39,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (298,'Vaslui','MUNICIPALITY',TRUE,39,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (299,'Murgeni','CITY',FALSE,39,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (300,'Negrești','CITY',FALSE,39,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (301,'Drăgășani','MUNICIPALITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (302,'Râmnicu Vâlcea','MUNICIPALITY',TRUE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (303,'Berbești','CITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (304,'Brezoi','CITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (305,'Băbeni','CITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (306,'Băile Govora','CITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (307,'Băile Olănești','CITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (308,'Bălcești','CITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (309,'Călimănești','CITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (310,'Horezu','CITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (311,'Ocnele Mari','CITY',FALSE,40,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (316,'Adjud','MUNICIPALITY',FALSE,41,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (317,'Focșani','MUNICIPALITY',TRUE,41,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (318,'Mărășești','CITY',FALSE,41,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (319,'Odobești','CITY',FALSE,41,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (320,'Panciu','CITY',FALSE,41,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (321,'Gheorgheni','MUNICIPALITY',FALSE,43,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (322,'Odorheiu Secuiesc','MUNICIPALITY',FALSE,43,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (323,'Toplița','MUNICIPALITY',FALSE,43,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (324,'Miercurea Ciuc','MUNICIPALITY',TRUE,43,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (325,'Băile Tușnad','CITY',FALSE,43,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (326,'Bălan','CITY',FALSE,43,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (327,'Borsec','CITY',FALSE,43,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (328,'Cristuru Secuiesc','CITY',FALSE,43,null);
+INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (329,'Vlăhița','CITY',FALSE,43,null);
 COMMIT;	
+--Comune alba
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (330,'Albac','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (331,'Almașu Mare','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (332,'Arieșeni','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (333,'Avram Iancu','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (334,'Berghin','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (335,'Bistra','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (336,'Blandiana','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (337,'Bucerdea Grânoasă','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (338,'Bucium','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (339,'Câlnic','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (340,'Cenade','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (341,'Cergău','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (342,'Ceru-Băcăinți','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (343,'Cetatea de Baltă','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (344,'Ciugud','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (345,'Ciuruleasa','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (346,'Crăciunelu de Jos','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (347,'Cricău','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (348,'Cut','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (349,'Daia Română','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (350,'Doștat','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (351,'Fărău','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (352,'Galda de Jos','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (353,'Gârda de Sus','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (354,'Gârbova','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (355,'Hopârta','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (356,'Horea','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (357,'Ighiu','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (358,'Întregalde','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (359,'Jidvei','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (360,'Livezile','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (361,'Lupșa','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (362,'Lopadea Nouă','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (363,'Lunca Mureșului','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (364,'Meteș','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (365,'Mihalț','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (366,'Mirăslău','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (367,'Mogoș','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (368,'Noșlac','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (369,'Ocoliș','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (370,'Ohaba','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (371,'Pianu','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (372,'Poiana Vadului','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (373,'Ponor','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (374,'Poșaga','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (375,'Rădești','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (376,'Râmeț','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (377,'Rimetea','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (378,'Roșia de Secaș','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (379,'Roșia Montană','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (380,'Sălciua','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (381,'Săliștea','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (382,'Săsciori','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (383,'Sâncel','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (384,'Sântimbru','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (385,'Scărișoara','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (386,'Stremț','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (387,'Sohodol','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (388,'Șibot','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (389,'Șona','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (390,'Șpring','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (391,'Șugag','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (392,'Unirea','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (393,'Vadu Moților','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (394,'Valea Lungă','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (395,'Vidra','COMMUNE',FALSE,1,null);
+  INSERT INTO public.plocality_old(id, name, typelocality, residence, id_province,sector)VALUES (396,'Vințu de Jos','COMMUNE',FALSE,1,null);	
+	
+	COMMIT;		
+	
+INSERT INTO public.plocality(id, name, typelocality, residence, code_province,sector)
+            select l.id,l.name,l.typelocality, l.residence, p.indicator ,l.sector 
+			from plocality_old l, pprovince_old p where 
+l.id_province = p.id;
+  
+  -- iNSERCIÓN CNAE
+ DROP TABLE public.plocality_old; 
+ DROP TABLE public.pprovince_old; 
+COMMIT;	
+
 --Carga date echipa
 	INSERT INTO public.pteam(id,name,description, organization) VALUES (1, 'Președinte',NULL, 'Conducerea Centrală');
 	INSERT INTO public.pteam(id,name,description, organization) VALUES (2, 'Prim-Vicepreședinte',NULL, 'Conducerea Centrală');
@@ -485,151 +632,154 @@ COMMIT;
 	INSERT INTO public.pteam(id,name,description, organization) VALUES (11,'Președinte OTER', NULL ,'Conducerea Centrală');
 	COMMIT;	
 
+	
+	
+	
 --Utilizatori
 
 	
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('danut.pop@per.ro', current_date, null, null, 'system', null, null, 'danut.pop@per.ro', 'POP', 'Dănuț', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('14/04/58', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 73,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Profesor la Facultatea de drept', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Profesor la Facultatea de drept', 'ROLE_ADMIN',null,true);
 COMMIT;		
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('mircia.gutau@per.ro', current_date, null, null, 'system', null, null, 'mircia.gutau@per.ro', 'GUTĂU', 'Mircia', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('14/04/58', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 302,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 40, 'MAN', 'Primar Râmnicu Vâlcea', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Primar Râmnicu Vâlcea', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('cristian.anghel@per.ro', current_date, null, null, 'system', null, null, 'cristian.anghel@per.ro', 'ANGHEL', 'Cristian', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 185,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 26, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN', null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN', null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('radu.cristescu@per.ro', current_date, null, null, 'system', null, null, 'radu.cristescu@per.ro', 'CRISTESCU', 'Radu', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN', null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN', null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('bob.vasile@per.ro', current_date, null, null, 'system', null, null, 'bob.vasile@per.ro', 'BOB', 'Vasile', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('cristinel.deaconescu@per.ro', current_date, null, null, 'system', null, null, 'cristinel.deaconescu@per.ro', 'DEACONESCU', 'Cristinel', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('viorel.dobre@per.ro', current_date, null, null, 'system', null, null, 'viorel.dobre@per.ro', 'DOBRE', 'Viorel', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('mirica.dimitrescu@per.ro', current_date, null, null, 'system', null, null, 'mirica.dimitrescu@per.ro', 'DIMITRESCU', 'Mirică', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('bianca.vasile@per.ro', current_date, null, null, 'system', null, null, 'bianca.vasile@per.ro', 'VASILE', 'Bianca', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('daniel.diaconu@per.ro', current_date, null, null, 'system', null, null, 'daniel.diaconu@per.ro', 'DIACONU', 'Daniel', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('ovidiu.zara@per.ro', current_date, null, null, 'system', null, null, 'ovidiu.zara@per.ro', 'ZARĂ', 'Ovidiu', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;	
 
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('danut.frunza@per.ro', current_date, null, null, 'system', null, null, 'danut.frunza@per.ro', 'FRUNZĂ', 'Dănuț', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
  INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('dragos.sterpu@per.ro', current_date, null, null, 'system', null, null, 'dragos.sterpu@per.ro', 'STERPU', 'Dragoş', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
   INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('costica.popsor@per.ro', current_date, null, null, 'system', null, null, 'costica.popsor@per.ro', 'POPȘOR', 'Costică', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('danut.frangu@per.ro', current_date, null, null, 'system', null, null, 'danut.frangu@per.ro', 'FRANGU', 'Dănuț', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
 INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('eugen.vizitiu@per.ro', current_date, null, null, 'system', null, null, 'eugen.vizitiu@per.ro', 'VIZITIU', 'Eugen', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
  INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('tineret@per.ro', current_date, null, null, 'system', null, null, 'tineret@per.ro', 'POP', 'Dănuț', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
  
  INSERT INTO public.users(username, date_create, date_deleted, date_updated, user_create, user_deleted, user_updated, email,   name,last_name,
-password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, province_id, sex, workplace, role, photo,validated)
+password, address, birth_date, civil_status, education, id_card, locality_id, number_card, personal_email, phone, code_province, sex, workplace, role, photo,validated)
 	
 VALUES ('admin', current_date, null, null, 'system', null, null, 'admin@per.ro', 'ADMIN', 'ADMIN', 
 '$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve', 'Calea Victoriei nr 91-93', to_date('24/08/14', 'DD/MM/YY'),'MARRIED', 'STUDIISUPERIOARE', '1580414632611', 74,'RG.2881', 'proba@hotmail.com', 
-'0723452223', 10, 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
+'0723452223', 'B', 'MAN', 'Doctor inginer în specializarea Mecanică Tehnică', 'ROLE_ADMIN',null,true);
 COMMIT;
 
 --Team	
@@ -711,31 +861,31 @@ VALUES (1, to_date('20/05/1990', 'DDD/MM/YYYY'), 76.47 , 67.02, 94.13, null,null
 INSERT INTO public.partid(id, independent, sigla, nume, old_nume, rezultate) VALUES (1, 'NOT','PSD','Partidul Social Democrat','Frontul Salvării Naționale', 1);
 INSERT INTO public.alegeri_partid(id_alegeri, id_partid)VALUES (1, 1);
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (1, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 87.15, 'GENERALE', null, 36);
+	VALUES (1, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 87.15, 'GENERALE', null, 'TR');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (2, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 86.79, 'GENERALE', null, 7);	
+	VALUES (2, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 86.79, 'GENERALE', null, 'BT');	
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (3, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 86.10, 'GENERALE', null, 39);
+	VALUES (3, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 86.10, 'GENERALE', null, 'VS');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (4, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 86.54, 'GENERALE', null, 30);	
+	VALUES (4, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 86.54, 'GENERALE', null, 'OT');	
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (5, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 85.91, 'GENERALE', null, 23);
+	VALUES (5, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 85.91, 'GENERALE', null, 'IL');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (6, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 85.00, 'GENERALE', null, 13);
+	VALUES (6, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 85.00, 'GENERALE', null, 'CL');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (7, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 11.04, 'GENERALE', null, 43);
+	VALUES (7, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 11.04, 'GENERALE', null, 'HR');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (8, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 16.63, 'GENERALE', null, 16);
+	VALUES (8, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 16.63, 'GENERALE', null, 'CV');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (9, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 14.27, 'GENERALE', null, 28);
+	VALUES (9, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 14.27, 'GENERALE', null, 'MS');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (10, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 41.73, 'GENERALE', null, 32);
+	VALUES (10, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 41.73, 'GENERALE', null, 'SM');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (11, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 41.31, 'GENERALE', null, 14);
+	VALUES (11, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 41.31, 'GENERALE', null, 'CJ');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (12, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 45.42, 'GENERALE', null, 5);
+	VALUES (12, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 45.42, 'GENERALE', null, 'BH');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (13, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 45.63, 'GENERALE', null, 37);	
+	VALUES (13, to_date('20/05/1990', 'DD/MM/YYYY'), 1, 45.63, 'GENERALE', null, 'TM');	
 	
 --UDMR	LEGISLATIVE 1990	
 INSERT INTO public.rezultate(id, data_alegerilor, procentajtotalmandate, procentajtotalvoturipartid, procentajtotalvoturi, 
@@ -743,96 +893,86 @@ procentajtotalvoturiconsjud, procentajtotalvoturiconslocal, procentajtotalvoturi
 procentajtotalvoturiprimar, procentajtotalvoturiprimarcap, procentajtotalvoturisenat, tip_alegeri, totalmandate, totalvoturi, 
 totalvoturiconsjud, totalvoturiconslocal, totalvoturideputat, totalvoturieuro, totalvoturipartid, totalvoturiprimar, 
 totalvoturiprimarcap, totalvoturisenat, turulalegerilor)
-VALUES (2, to_date('20/05/90', 'DD/MM/YY'), 7.2 , 7.02, 94.13, null,null, 7.23, null,null, null, 10.08, 'GENERALE', 41, 13956180, null, null
+VALUES (2, to_date('20/05/90', 'DD/MM/YY'), 10.08 , 7.02, 94.13, null,null, 7.23, null,null, null, 10.08, 'GENERALE', 41, 13956180, null, null
 , 991601, null, null, null, null,  1004353,1 );
 INSERT INTO public.partid(id, independent, sigla, nume, old_nume, rezultate) VALUES (2, 'NOT','UDMR','Uniunea Democrată a Maghiarilor din România','Uniunea Democrată a Maghiarilor din România', 1);
 INSERT INTO public.alegeri_partid(id_alegeri, id_partid)VALUES (1, 2);
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (14, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 85.23, 'GENERALE', null, 43);
+	VALUES (14, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 85.23, 'GENERALE', null, 'HR');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (15, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 77.10, 'GENERALE', null, 16);
+	VALUES (15, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 77.10, 'GENERALE', null, 'CV');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (16, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 41.96, 'GENERALE', null, 28);
+	VALUES (16, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 41.96, 'GENERALE', null, 'MS');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (17, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 38.16, 'GENERALE', null, 32);
+	VALUES (17, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 38.16, 'GENERALE', null, 'SM');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (18, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 28.28, 'GENERALE', null, 5);
+	VALUES (18, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 28.28, 'GENERALE', null, 'BH');
 INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
-	VALUES (19, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 23.68, 'GENERALE', null, 33);
-
+	VALUES (19, to_date('20/05/1990', 'DD/MM/YYYY'), 2, 23.68, 'GENERALE', null, 'SJ');
 COMMIT;
+
+--PNL	LEGISLATIVE 1990	
+INSERT INTO public.rezultate(id, data_alegerilor, procentajtotalmandate, procentajtotalvoturipartid, procentajtotalvoturi, 
+procentajtotalvoturiconsjud, procentajtotalvoturiconslocal, procentajtotalvoturideputat, procentajtotalvoturieuro, 
+procentajtotalvoturiprimar, procentajtotalvoturiprimarcap, procentajtotalvoturisenat, tip_alegeri, totalmandate, totalvoturi, 
+totalvoturiconsjud, totalvoturiconslocal, totalvoturideputat, totalvoturieuro, totalvoturipartid, totalvoturiprimar, 
+totalvoturiprimarcap, totalvoturisenat, turulalegerilor)
+VALUES (3, to_date('20/05/90', 'DD/MM/YY'), 7.06 , 7.02, 94.13, null,null, 6.41, null,null, null, 8.4, 'GENERALE', 39, 13956180, null, null
+, 879290, null, null, null, null,  985094,1 );
+INSERT INTO public.partid(id, independent, sigla, nume, old_nume, rezultate) VALUES (3, 'NOT','PNL','Partidul Național Liberal','Partidul Național Liberal', 1);
+INSERT INTO public.alegeri_partid(id_alegeri, id_partid)VALUES (1, 3);
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (20, to_date('20/05/1990', 'DD/MM/YYYY'), 3, 17.94, 'GENERALE', null, 'TM');
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (21, to_date('20/05/1990', 'DD/MM/YYYY'), 3, 11.70, 'GENERALE', null, 'B');
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (22, to_date('20/05/1990', 'DD/MM/YYYY'), 3, 10.14, 'GENERALE', null, 'AR');
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (23, to_date('20/05/1990', 'DD/MM/YYYY'), 3, 9.65, 'GENERALE', null, 'CS');
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (24, to_date('20/05/1990', 'DD/MM/YYYY'), 3, 9.65, 'GENERALE', null, 'BV');
+INSERT INTO public.partid_rezultat_judet(id, data_alegerilor, partid, procentajtotalvoturi, tip_alegeri, totalvoturi, id_judet)
+	VALUES (25, to_date('20/05/1990', 'DD/MM/YYYY'), 3, 8.83, 'GENERALE', null, 'SB');
+COMMIT;
+
+--PER	LEGISLATIVE 1990	
+INSERT INTO public.rezultate(id, data_alegerilor, procentajtotalmandate, procentajtotalvoturipartid, procentajtotalvoturi, 
+procentajtotalvoturiconsjud, procentajtotalvoturiconslocal, procentajtotalvoturideputat, procentajtotalvoturieuro, 
+procentajtotalvoturiprimar, procentajtotalvoturiprimarcap, procentajtotalvoturisenat, tip_alegeri, totalmandate, totalvoturi, 
+totalvoturiconsjud, totalvoturiconslocal, totalvoturideputat, totalvoturieuro, totalvoturipartid, totalvoturiprimar, 
+totalvoturiprimarcap, totalvoturisenat, turulalegerilor)
+VALUES (4, to_date('20/05/90', 'DD/MM/YY'), 2.45 , 7.02, 94.13, null,null, 2.62, null,null, null, 0.84, 'GENERALE', 13, 13956180, null, null
+, 358864, null, null, null, null,  348637,1 );
+INSERT INTO public.partid(id, independent, sigla, nume, old_nume, rezultate) VALUES (4, 'NOT','PER','Partidul Ecologist din România','Mișcarea Ecologistă din România', 1);
+INSERT INTO public.alegeri_partid(id_alegeri, id_partid)VALUES (1, 4);
+COMMIT;
+
+--PNȚCD	LEGISLATIVE 1990	
+--INSERT INTO public.rezultate(id, data_alegerilor, procentajtotalmandate, procentajtotalvoturipartid, procentajtotalvoturi, 
+--procentajtotalvoturiconsjud, procentajtotalvoturiconslocal, procentajtotalvoturideputat, procentajtotalvoturieuro, 
+--procentajtotalvoturiprimar, procentajtotalvoturiprimarcap, procentajtotalvoturisenat, tip_alegeri, totalmandate, totalvoturi, 
+--totalvoturiconsjud, totalvoturiconslocal, totalvoturideputat, totalvoturieuro, totalvoturipartid, totalvoturiprimar, 
+--totalvoturiprimarcap, totalvoturisenat, turulalegerilor)
+--VALUES (5, to_date('20/05/90', 'DD/MM/YY'), 2.5 , 7.02, 94.13, null,null, 2.56, null,null, null, 0,84, 'GENERALE', 13, 13956180, null, null
+--, 351357, null, null, null, null,  341478,1 );
+--INSERT INTO public.partid(id, independent, sigla, nume, old_nume, rezultate) VALUES (5, 'NOT','PNȚCD','Partidul Național Țărănesc Creștin Democrat','Partidul Național Țărănesc Creștin Democrat', 1);
+--INSERT INTO public.alegeri_partid(id_alegeri, id_partid)VALUES (1, 5);
+--COMMIT;
+
+--AUR	LEGISLATIVE 1990	
+--INSERT INTO public.rezultate(id, data_alegerilor, procentajtotalmandate, procentajtotalvoturipartid, procentajtotalvoturi, 
+--procentajtotalvoturiconsjud, procentajtotalvoturiconslocal, procentajtotalvoturideputat, procentajtotalvoturieuro, 
+--procentajtotalvoturiprimar, procentajtotalvoturiprimarcap, procentajtotalvoturisenat, tip_alegeri, totalmandate, totalvoturi, 
+--totalvoturiconsjud, totalvoturiconslocal, totalvoturideputat, totalvoturieuro, totalvoturipartid, totalvoturiprimar, 
+--totalvoturiprimarcap, totalvoturisenat, turulalegerilor)
+--VALUES (6, to_date('20/05/90', 'DD/MM/YY'), 2.5 , 7.02, 94.13, null,null, 2.56, null,null, null, 0,84, 'GENERALE', 13, 13956180, null, null
+--, 351357, null, null, null, null,  300473,1 );
+--INSERT INTO public.partid(id, independent, sigla, nume, old_nume, rezultate) VALUES (6, 'NOT','AUR','Alianța pentru Unitatea Românilor','Alianța pentru Unitatea Românilor', 1);
+--INSERT INTO public.alegeri_partid(id_alegeri, id_partid)VALUES (1, 6);
+COMMIT;
+
 --*/
---Comune alba
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (330,'Albac','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (331,'Almașu Mare','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (332,'Arieșeni','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (333,'Avram Iancu','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (334,'Berghin','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (335,'Bistra','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (336,'Blandiana','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (337,'Bucerdea Grânoasă','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (338,'Bucium','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (339,'Câlnic','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (340,'Cenade','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (341,'Cergău','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (342,'Ceru-Băcăinți','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (343,'Cetatea de Baltă','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (344,'Ciugud','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (345,'Ciuruleasa','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (346,'Crăciunelu de Jos','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (347,'Cricău','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (348,'Cut','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (349,'Daia Română','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (350,'Doștat','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (351,'Fărău','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (352,'Galda de Jos','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (353,'Gârda de Sus','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (354,'Gârbova','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (355,'Hopârta','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (356,'Horea','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (357,'Ighiu','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (358,'Întregalde','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (359,'Jidvei','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (360,'Livezile','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (361,'Lupșa','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (362,'Lopadea Nouă','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (363,'Lunca Mureșului','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (364,'Meteș','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (365,'Mihalț','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (366,'Mirăslău','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (367,'Mogoș','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (368,'Noșlac','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (369,'Ocoliș','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (370,'Ohaba','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (371,'Pianu','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (372,'Poiana Vadului','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (373,'Ponor','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (374,'Poșaga','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (375,'Rădești','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (376,'Râmeț','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (377,'Rimetea','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (378,'Roșia de Secaș','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (379,'Roșia Montană','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (380,'Sălciua','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (381,'Săliștea','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (382,'Săsciori','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (383,'Sâncel','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (384,'Sântimbru','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (385,'Scărișoara','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (386,'Stremț','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (387,'Sohodol','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (388,'Șibot','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (389,'Șona','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (390,'Șpring','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (391,'Șugag','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (392,'Unirea','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (393,'Vadu Moților','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (394,'Valea Lungă','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (395,'Vidra','COMMUNE',FALSE,1,null);
-  INSERT INTO public.plocality(id, name, typelocality, residence, id_province,sector)VALUES (396,'Vințu de Jos','COMMUNE',FALSE,1,null);	
-	
-	COMMIT;		
-		
+
 	
 	
 		

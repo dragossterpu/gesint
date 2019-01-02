@@ -28,10 +28,10 @@ public interface ProvinceService {
 
 	/**
 	 * Cauta un judet
-	 * @param province Judetul
+	 * @param string Judetul
 	 * @return PProvince province
 	 */
-	PProvince findById(Long province);
+	PProvince findById(String string);
 
 	/**
 	 * @param descripción
