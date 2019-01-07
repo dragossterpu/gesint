@@ -1,4 +1,4 @@
-<ui:composition template="../layouts/layoutInterior.xhtml"
+<ui:composition template="../layouts/layoutInterior2.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -16,7 +16,7 @@
 								resizableColumns="true" pageLinks="4" paginatorAlwaysVisible="false" paginatorPosition="botton"
 								rendered="#{not empty alertaBean.usuariosSeleccionadosFinales}"
 								rowKey="#{usuario.id}">
-								<f:facet name="header">Membrii cărora li se va trimite alerta/ comunicarea</f:facet>
+								<f:facet name="header">Membrii cărora li se va trimite alerta/ comunicarea via EMAIL</f:facet>
 								<p:column headerText="EMAIL" style="width:65%;">
 									<h:outputText value="#{usuario.username}" />
 								</p:column>
@@ -32,7 +32,7 @@
 							</p:dataTable>
 							<div class="ui-g">
 								<p:outputPanel rendered="#{empty alertaBean.usuariosSeleccionadosFinales}" class="ui-g-2">
-									<h:outputLabel for="destinatario" value="*Destinatar:" />
+									<h:outputLabel for="destinatario" value="* Destinatar:" />
 								</p:outputPanel>
 								<p:outputPanel rendered="#{empty alertaBean.usuariosSeleccionadosFinales}" class="ui-g-6">
 									<p:inputText id="destinatario" ajax="true" value="#{alertaBean.nombreUsuario}"
@@ -45,27 +45,13 @@
 									<p:message for="destinatario" display="tooltip" />
 								</p:outputPanel>
 								<div class="ui-g-4">
-									<p:commandButton value="Căutați membri" icon="fa fa-search"
+									<p:commandButton value="Căutați" icon="fa fa-search"
 										action="#{alertaBean.abrirDialogoBusquedaUsuarios}"
 										immediate="true" onstart="PF('statusDialog').show()"
 										onsuccess="PF('statusDialog').hide()" update="formBusquedaUsuarios"/>
 								</div>
 							</div>							
-							<div class="ui-g" >
-								<p:outputPanel rendered="#{alertaBean.opcion == 3}" class="ui-g-2">
-									<h:outputLabel for="userExtern" value="*Destinatar extern:" />
-								</p:outputPanel>
-								<p:outputPanel rendered="#{alertaBean.opcion == 3}" class="ui-g-10" >
-									<p:inputText id="userExtern" ajax="true" value="#{alertaBean.utilizatorExtern}" 
-										required="#{empty alertaBean.utilizatorExtern}"
-										requiredMessage="Trebuie să introduceți un destinatar extern pentru alertă."
-										validatorMessage="Format e-mail nevalid." >
-										<f:validateRegex
-											pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-									</p:inputText>
-									<p:message for="userExtern" display="tooltip" />
-								</p:outputPanel>
-							</div>
+							
 							<div class="ui-g">
 								<div class="ui-g-2">
 									<h:outputLabel for="asunto" value="*Subiect:" />
@@ -106,7 +92,7 @@
 			                            </p:commandButton>
 			                        </p:column>
 			                        <p:column styleClass="botonTabla" >
-			                            <p:commandButton title="Elimină" icon="fa fa-trash" actionListener="#{alertaBean.eliminarDocumento(documento)}" update=":formAlta:panelAdjuntos tablaDocumentos">
+			                            <p:commandButton title="Elimină" icon="fa fa-trash" actionListener="#{alertaBean.eliminarDocumento(documento)}" update=":formCargaDocumentos:panelAdjuntos tablaDocumentos">
 			                                <p:confirm header="Ștergeți documentul" message="Sigur doriți să ștergeți acest document?" icon="fa fa-warning-sign" />
 			                            </p:commandButton>
 			                        </p:column>	
@@ -139,20 +125,17 @@
 						<p:ajax event="change" update="formBusquedaUsuarios:panelBuscadorUsuarios" listener="#{alertaBean.limpiarBuscadores}" />
 						<f:selectItem itemLabel="Membrii" itemValue="1" />
 						<f:selectItem itemLabel="Echipa de conducere" itemValue="2" />
-						<f:selectItem itemLabel="Email extern" itemValue="3" />
-					</p:selectOneButton>
-					
+						<f:selectItem itemLabel="Destinatar extern PER" itemValue="3" />
+					</p:selectOneButton>				
 					<p:panelGrid id="pestanaUsuarios" columns="2">					
 						<p:panelGrid id="filtroUsuarios" columns="2" rendered="#{alertaBean.opcion == 1}">
 							<h:outputLabel for="nombreUser" styleClass="dialogLabel" value="Nume:" />
 							<p:inputText id="nombreUser" value="#{alertaBean.usuarioBusqueda.username}" />
-
 							<h:outputLabel for="provinciasSelect" styleClass="dialogLabel" value="Organizația/Județul:" />
 							 <p:selectOneMenu  value="#{alertaBean.usuarioBusqueda.idProvincia}"  id="provinciasSelect" class="selectFiltro" >
 	                        <f:selectItem itemLabel="Alege una..." itemValue="" />
 	                        <f:selectItems  value="#{alertaBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.indicator}" />                        
-	                    </p:selectOneMenu>	
-							
+	                    </p:selectOneMenu>								
 							<h:outputLabel for="role" styleClass="dialogLabel" value="Rol:" />
 							 <p:importEnum type="ro.per.online.persistence.entities.enums.RoleEnum" var="roles" allSuffix="ALL_ENUM_VALUES" />
 		                    <p:selectOneMenu value="#{alertaBean.usuarioBusqueda.role}" id="role" class="selectFiltro">
@@ -160,6 +143,20 @@
 		                        <f:selectItems value="#{roles.ALL_ENUM_VALUES}" var="roleUser" itemLabel="#{roleUser.description}" itemValue="#{roleUser}" />
 		                    </p:selectOneMenu>		                   
 						</p:panelGrid>
+						<p:panelGrid id="filtroUsuariosExternos" columns="2" rendered="#{alertaBean.opcion == 3}">
+								<p:outputPanel rendered="#{alertaBean.opcion == 3}" >
+									<h:outputLabel for="userExtern" value="* Destinatar extern PER:" />
+								</p:outputPanel>
+								<p:outputPanel rendered="#{alertaBean.opcion == 3}" class="ui-g-10" >
+									<p:inputText id="userExtern" ajax="true" value="#{alertaBean.utilizatorExtern}" 
+										required="#{empty alertaBean.utilizatorExtern}"
+										requiredMessage="Trebuie să introduceți un destinatar extern pentru alertă.">
+									</p:inputText>
+									<p:message for="userExtern" display="tooltip" />
+								</p:outputPanel>
+						</p:panelGrid>
+						
+						
 						 <p:commandButton action="#{alertaBean.buscarUsuarios()}" rendered="#{alertaBean.opcion == 1}"
 							value="Căutare membrii" icon="fa fa-search"
 							update=":formBusquedaUsuarios:tablaUsuarios"
@@ -174,19 +171,16 @@
 							<p:ajax event="page" listener="#{alertaBean.onChangePageUsuarios()}" />
 							<p:ajax event="rowUnselectCheckbox" listener="#{alertaBean.onRowUnSelectedUser}" />
 							<p:ajax event="rowSelectCheckbox" listener="#{alertaBean.onRowSelectedUser}" />
-							<p:ajax event="toggleSelect" listener="#{alertaBean.onToggleSelectUsers}" global="true" />
-							
+							<p:ajax event="toggleSelect" listener="#{alertaBean.onToggleSelectUsers}" global="true" />							
 							<p:column selectionMode="multiple"
 								style="width:16px;text-align:center" />
-
 							<p:column headerText="Nume" width="150">										
 								<h:outputText value="#{usuario.nombreCompleto}" />
 							</p:column>
 							<f:facet name="footer">
-      				 				Total: #{alertaBean.modelUser.rowCount} utilizatori aleși.
+      				 				Total: #{alertaBean.modelUser.rowCount} membrii aleși.
    							</f:facet>
-						</p:dataTable>
-						
+						</p:dataTable>						
 						<p:dataTable var="team" value="#{alertaBean.listaTeams}" rendered="#{alertaBean.opcion == 2}" rows="10" id="tablaTeam" 
 						paginator="true" lazy="true" resizableColumns="true"  sortOrder="descending" styleClass="modHeaderTable"
 						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
@@ -195,11 +189,9 @@
 							<p:ajax event="page" listener="#{alertaBean.onChangePageUsuarios()}" />
 							<p:ajax event="rowUnselectCheckbox" listener="#{alertaBean.onRowUnSelectedUser}" />
 							<p:ajax event="rowSelectCheckbox" listener="#{alertaBean.onRowSelectedUser}" />
-							<p:ajax event="toggleSelect" listener="#{alertaBean.onToggleSelectUsers}" global="true" />
-							
+							<p:ajax event="toggleSelect" listener="#{alertaBean.onToggleSelectUsers}" global="true" />							
 							<p:column selectionMode="multiple"
-								style="width:16px;text-align:center" />
-							
+								style="width:16px;text-align:center" />							
 							<p:column headerText="Nume" width="150">										
 								<h:outputText value="#{team.user.nombreCompleto}" />
 							</p:column>							
@@ -225,7 +217,7 @@
 				<p:dialog header="Atașați documente corespondenței electronice" widgetVar="dlgCargaDoc" dynamic="true" width="800" height="800">
 				<div class="aclaraciones">Se acceptă documentele care coincid ca nume și extensie cu documentele încărcate.</div>
 				<div class="bloqueVista">
-		            <p:dataTable var="documento" value="#{alertaBean.documentosCargados}">
+		            <p:dataTable id="tablaDoc" var="documento" value="#{alertaBean.documentosCargados}">
 		                <p:column headerText="DOCUMENT" width="50%">
 		                    <h:outputText value="#{documento.descripcion}" />
 		                </p:column>
@@ -235,23 +227,23 @@
 		            </p:dataTable>
 		        </div>
 		       <p:separator />
-		        <div class="aclaraciones">
+		        <div class="aclaraciones2">
 		            (1).- Pentru fiecare tip de document, unul sau mai multe documente pot fi încărcate simultan. 
-		            <strong>Dacă oricare dintre ele este alcătuită din două sau mai multe părți, numele lor trebuie să înceapă cu numele necesar pentru documentul respectiv și un număr secvențial 
-		            </strong> (ex: organigrama_1.doc, organigramaParte2.ppt). Dimensiunea maximă per fișier încărcat este de 20 MB.
+		            <strong>Dacă oricare dintre ele este alcătuită din două sau mai multe părți, numele lor trebuie să înceapă cu numele documentului respectiv și un număr secvențial 
+		            </strong> (ex: organigrama_1.doc, organigrama_2.doc). Dimensiunea maximă per fișier încărcat este de 20 MB.
 		        </div>
 		                <div class="bloqueVista">
-            <h:form id="formAlta">
 
                 <p:fileUpload width="50%" cancelLabel="ANULARE" label="SELECTAREA DOCUMENTULUI" uploadLabel="ÎNCĂRCARE DOCUMENTE" 
                 fileUploadListener="#{alertaBean.gestionarCargaDocumento}" mode="advanced" dragDropSupport="false" 
-                sizelimit="20971520" multiple="true" update=":form:tablaDocumentos" autofileLimit="30" 
-                allowTypes="/(\.|\/)(jpe?g|png|bmp|doc|docx|pptx|ppt|pub|xls|xlsx|pdf)$/i" sequential="true" />
-
+                sizelimit="20971520" multiple="true" update=":formCargaDocumentos:panelAdjuntos tablaDocumentos" autofileLimit="30" 
+                allowTypes="/(\.|\/)(jpe?g|png|bmp|doc|docx|pptx|ppt|pub|xls|xlsx|pdf)$/i" sequential="true" 
+                oncomplete="PF('dlgCargaDoc').hide()"/>
+				<p:commandButton value="Închidere" onclick="PF('dlgCargaDoc').hide()"/>
 
                 <p:outputPanel id="panelAdjuntos">
                     <p:dataTable id="tablaDocumentos" var="documento" value="#{alertaBean.alerta.documentos}" editable="true" onkeypress="if (event.keyCode == 13) {return false; }" emptyMessage="Nu sunt încărcate documente.">
-                        <p:ajax event="rowEdit" listener="#{alertaBean.onRowEdit}" update=":formCargaDocumentos:formAlta:msgs" />
+                        <p:ajax event="rowEdit" listener="#{alertaBean.onRowEdit}" update=":formCargaDocumentos:msgs" />
 
                         <p:column headerText="Documentele încărcate">
                             <h:outputText value="#{documento.nombre}" />
@@ -262,8 +254,8 @@
                             </p:commandButton>
                         </p:column>
                         <p:column styleClass="botonTabla" >
-                            <p:commandButton title="Elimină" icon="fa fa-trash" actionListener="#{alertaBean.eliminarDocumento(documento)}" update=":formAlta:panelAdjuntos tablaDocumentos">
-                                <p:confirm header="Ștergeți documentul" message="Sigur doriți să ștergeți acest document?" icon="fa fa-warning-sign" />
+                            <p:commandButton title="Elimină" icon="fa fa-trash" action="#{alertaBean.eliminarDocumento(documento)}" update=":formCargaDocumentos:panelAdjuntos tablaDocumentos">
+                                <p:confirm header="Ștergeți documentul" message="Sigur doriți să eliminați acest document?" icon="fa fa-warning-sign" />
                             </p:commandButton>
                         </p:column>
 
@@ -278,8 +270,10 @@
                 <div class="botonesFormulario">
                     <p:button outcome="/alertas/alertas" value="Înapoi" icon="fa fa-fw fa-undo" />
                 </div>
+<!--                	<p:outputPanel class="btnModalAcept"> -->
+<!-- 						<p:commandButton value="Acceptați" onclick="PF('dlgCargaDoc').hide()" update="tablaDocumentos" actionListener="#{alertaBean.cargarDocumentos(documento))}"/> -->
+<!-- 					</p:outputPanel> -->
                 <p:messages id="msgs" autoUpdate="true" closable="true" showDetail="true" />
-            </h:form>
         </div>				
 			</p:dialog>
 		</h:form>

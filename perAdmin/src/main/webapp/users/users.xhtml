@@ -8,7 +8,7 @@
 	xmlns:my="http://java.sun.com/jsf/composite/composites"
 	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
 	<ui:define name="content">
-		<p:importConstants type="ro.per.online.constantes.Constantes" var="Constantes" />
+		<p:importConstants type="ro.per.online.constantes.NumeroMagic" var="NumeroMagic" />
 
 		<h:form id="searchListUsers">
 			<div class="filtro">
@@ -217,7 +217,7 @@
 			</div>
 			<div class="resultadosFiltro">
 				<p:outputPanel layout="block" id="userPanel">
-					<p:dataTable var="user" value="#{userBean.model}"  rows="#{Constantes.TAMPAGINA}" id="userTable"  draggableColumns="true" 
+					<p:dataTable var="user" value="#{userBean.model}"  rows="#{NumeroMagic.NUMBERFIFTEEN}" id="userTable"  draggableColumns="true" 
 					paginator="true" lazy="true" resizableColumns="true"  sortOrder="descending" styleClass="modHeaderTable"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
 					rowKey="#{user.username}" rowsPerPageTemplate="10,25,50" pageLinks="4" paginatorPosition="bottom"

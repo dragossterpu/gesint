@@ -117,4 +117,9 @@ public interface UserService {
 	 * @return Listado resultante de la búsqueda
 	 */
 	List<Users> buscarUsuario(UsuarioBusqueda usuarioBusqueda);
+	/**
+	 * Devuelve una lista de destinatari externi de PER.
+	 * @return Listado resultante de la búsqueda
+	 */
+	List<Users> findByName();
 }

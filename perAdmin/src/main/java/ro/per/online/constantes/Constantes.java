@@ -70,6 +70,11 @@ public final class Constantes {
 	/**
 	 * Palabra "Error" para no repetirla n veces dentro de una clase.
 	 */
+	public static final String CARGADOC = "Încărcarea fișiere";
+
+	/**
+	 * Palabra "Error" para no repetirla n veces dentro de una clase.
+	 */
 	public static final String ELIMINAREMENSAJE = "Eliminare";
 
 	/**
@@ -127,15 +132,6 @@ public final class Constantes {
 	 */
 	public static final String IMGSISTEM = "./static/images/escudo_ipss.png";
 
-	/**
-	 * Altura del gráfico estadístico de totales. De verificat !!!!!
-	 */
-	public static final Integer ALTURAGRAFICOTOTALES = 110;
-
-	/**
-	 * Radio del gráfico estadístico de totales. De verificat !!!!!
-	 */
-	public static final Integer INTERVALORADIOGRAFICOTOTALES = 100;
 
 	/**
 	 * Constante para las estadisticas totales de evaluat.
@@ -217,10 +213,6 @@ public final class Constantes {
 	 */
 	public static final String UNCHECKED = "unchecked";
 
-	/**
-	 * Tamaño de página para los listados.
-	 */
-	public static final int TAMPAGINA = 15;
 
 	/**
 	 * Tamaño de página para los listados.
@@ -461,6 +453,15 @@ public final class Constantes {
 	 * Constanta pentru cuvantul validated.
 	 */
 	public static final String VALIDAT = "validated";
+	/**
+	 * Constanta pentru cuvantul msgs
+	 */
+	public static final String MSGS ="msgs";
+	
+	/**
+	 * Constanta pentru cuvantul DESTINATAR
+	 */
+	public static final String DESTINATAR ="DESTINATAR EXTERN";
 
 	/***********************
 	 * Anotaciones

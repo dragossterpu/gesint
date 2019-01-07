@@ -36,6 +36,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ro.per.online.constantes.Constantes;
+import ro.per.online.constantes.NumeroMagic;
 import ro.per.online.lazydata.LazyDataUsers;
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
@@ -198,7 +199,7 @@ public class TeamBean implements Serializable {
 	/**
 	 * Indică dacă doriți să căutați după datele utilizatorului (opțiunea 1).
 	 */
-	private Integer opcion = 1;
+	private Integer opcion = NumeroMagic.NUMBERONE;
 
 	/**
 	 * Variabila utilizata pentru un utilizator.
@@ -349,7 +350,7 @@ public class TeamBean implements Serializable {
 	 */
 	public void buscarUsuarios() {
 		modelUser.setUserBusqueda(usuarioBusqueda);
-		modelUser.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
+		modelUser.load(0, NumeroMagic.NUMBERFIFTEEN, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 	}
 
 	/**
@@ -358,7 +359,7 @@ public class TeamBean implements Serializable {
 	 */
 	public List<Users> buscaUsuarios() {
 		modelUser.setUserBusqueda(usuarioBusqueda);
-		return modelUser.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
+		return modelUser.load(0, NumeroMagic.NUMBERFIFTEEN, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 	}
 
 	/**

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import lombok.Getter;
 import lombok.Setter;
 import ro.per.online.constantes.Constantes;
+import ro.per.online.constantes.NumeroMagic;
 import ro.per.online.exceptions.PerException;
 import ro.per.online.lazydata.LazyModelDocumentos;
 import ro.per.online.persistence.entities.Documento;
@@ -140,8 +141,8 @@ public class GestorDocumentalBean implements Serializable {
 	 */
 	public void buscaDocumento() {
 		this.model.setBusqueda(this.documentoBusqueda);
-		this.model.load(0, Constantes.TAMPAGINA, "fechaAlta", SortOrder.DESCENDING, null);
-		this.nombreDoc = "";
+		this.model.load(0, NumeroMagic.NUMBERFIFTEEN, "fechaAlta", SortOrder.DESCENDING, null);
+		this.nombreDoc = Constantes.ESPACIO;
 	}
 
 	/**

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import lombok.Getter;
 import lombok.Setter;
 import ro.per.online.constantes.Constantes;
+import ro.per.online.constantes.NumeroMagic;
 import ro.per.online.lazydata.LazyDataRegistro;
 import ro.per.online.persistence.entities.RegistroActividad;
 import ro.per.online.services.RegistroActividadService;
@@ -86,7 +87,7 @@ public class RegistroActividadBean implements Serializable {
 	 */
 	public void buscarRegActividad() {
 		model.setBusqueda(registroBusqueda);
-		model.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
+		model.load(0, NumeroMagic.NUMBERFIFTEEN, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 
 	}
 

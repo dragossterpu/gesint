@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,19 +31,22 @@ import lombok.Setter;
 import lombok.ToString;
 import ro.per.online.constantes.Constantes;
 
+import ro.per.online.persistence.entities.enums.AlertChannelEnum;
+
+
+
 /**
  * Entitate pentru alerte.
  * @author STAD
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode()
+@EqualsAndHashCode(callSuper = false, of = "id")
 @Builder
 @ToString
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
-@Entity
+@Entity@EntityListeners(AuditingEntityListener.class)
 @Table(name = "ALERT")
 public class Alerta extends AbstractEntity implements Serializable {
 
@@ -65,10 +70,13 @@ public class Alerta extends AbstractEntity implements Serializable {
 	@Column(name = "BODY", nullable = false, length = 1024)
 	private String descripcion;
 
-	/** The channel. */
-	@Column(name = "CHANNEL", columnDefinition = Constantes.NUMERIC, length = 10)
-	private int channel;
-
+	/**
+	 * /** The channel. 
+	 */
+	@Column(name = "CHANNEL")
+	@Enumerated(EnumType.STRING)
+	private AlertChannelEnum channel;
+	
 	/** The body. */
 	@Column(name = "TO_", nullable = false, length = 100)
 	private String destinatario;
@@ -88,5 +96,11 @@ public class Alerta extends AbstractEntity implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "alerta_docs", joinColumns = @JoinColumn(name = "id_alerta"), inverseJoinColumns = @JoinColumn(name = "id_documento"))
 	private List<Documento> documentos;
+	
+	/**
+	 * Trimitere automatica.
+	 */
+	@Column(name = "auto")
+	private Boolean automatic;
 
 }

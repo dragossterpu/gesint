@@ -19,6 +19,7 @@ import org.primefaces.model.chart.MeterGaugeChartModel;
 import org.primefaces.model.chart.PieChartModel;
 
 import ro.per.online.constantes.Constantes;
+import ro.per.online.constantes.NumeroMagic;
 import ro.per.online.persistence.entities.ModelStats;
 import ro.per.online.web.beans.StatsBusqueda;
 
@@ -80,8 +81,8 @@ public class ManagerStatsDataGraphic {
 
 		graficoEvaluacionesTotales.setIntervals(intervals);
 		graficoEvaluacionesTotales.setValue(modeloDatosEvaluacionesTotales.getCantidad());
-		graficoEvaluacionesTotales.setLabelHeightAdjust(Constantes.ALTURAGRAFICOTOTALES);
-		graficoEvaluacionesTotales.setIntervalOuterRadius(Constantes.INTERVALORADIOGRAFICOTOTALES);
+		graficoEvaluacionesTotales.setLabelHeightAdjust(NumeroMagic.MUNAROSUTAZECE);
+		graficoEvaluacionesTotales.setIntervalOuterRadius(NumeroMagic.NUMBERHUNDRED);
 		graficoEvaluacionesTotales.setSeriesColors("66cc66,93b75f,E7E658,cc6666");
 	}
 
@@ -401,8 +402,8 @@ public class ManagerStatsDataGraphic {
 
 		grafico.setValue(modelo.getCantidad());
 		grafico.setIntervals(intervals);
-		grafico.setLabelHeightAdjust(Constantes.ALTURAGRAFICOTOTALES);
-		grafico.setIntervalOuterRadius(Constantes.INTERVALORADIOGRAFICOTOTALES);
+		grafico.setLabelHeightAdjust(NumeroMagic.MUNAROSUTAZECE);
+		grafico.setIntervalOuterRadius(NumeroMagic.NUMBERHUNDRED);
 		grafico.setSeriesColors("66cc66,93b75f,E7E658,cc6666");
 
 	}

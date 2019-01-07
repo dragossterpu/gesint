@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import lombok.Getter;
 import lombok.Setter;
 import ro.per.online.constantes.Constantes;
+import ro.per.online.constantes.NumeroMagic;
 import ro.per.online.exceptions.PerException;
 import ro.per.online.lazydata.LazyDataAlertas;
 import ro.per.online.lazydata.LazyDataUsers;
@@ -38,6 +39,8 @@ import ro.per.online.persistence.entities.Team;
 import ro.per.online.persistence.entities.TipoDocumento;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.persistence.entities.enums.AlertChannelEnum;
+import ro.per.online.persistence.entities.enums.EducationEnum;
+import ro.per.online.persistence.entities.enums.RoleEnum;
 import ro.per.online.persistence.entities.enums.SeccionesEnum;
 import ro.per.online.persistence.entities.enums.TipoRegistroEnum;
 import ro.per.online.services.AlertaService;
@@ -64,12 +67,12 @@ public class AlertaBean implements Serializable {
 	/**
 	 * Serial ID.
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = NumeroMagic.NUMBERONELONG;
 
 	/**
 	 * Numero de columnas de la tabla de alertas.
 	 */
-	private static final int NUMBERCOLUMNASTABLA = 4;
+	private static final int NUMBERCOLUMNASTABLA = NumeroMagic.NUMBERFOUR;
 
 	/**
 	 * Alerta nueva.
@@ -129,6 +132,11 @@ public class AlertaBean implements Serializable {
 	private List<Users> usuariosSeleccionados;
 
 	/**
+	 * Lista de usuarios externo seleccionados.
+	 */
+	private List<Users> usuariosExternosSeleccionados;
+
+	/**
 	 * Lista de usuarios seleccionados.
 	 */
 	private List<Users> usuariosSeleccionadosFinales;
@@ -166,6 +174,9 @@ public class AlertaBean implements Serializable {
 	 */
 	private Team team;
 
+	/**
+	 * Numar de membri
+	 */
 	private Integer numarMembrii;
 
 	/**
@@ -225,12 +236,19 @@ public class AlertaBean implements Serializable {
 	private List<Documento> documentosCargados;
 
 	/**
+	 * Variabila utilizata pentru a injecta serviciul provinciei.
+	 *
+	 */
+	@Autowired
+	private UserService userService;
+
+	/**
 	 * Abre el diálogo para búsqueda de usuarios.
 	 */
 	public void abrirDialogoBusquedaUsuarios() {
 		this.team = new Team();
 		this.modelUser = new LazyDataUsers(this.usuarioService);
-		this.opcion = 2;
+		this.opcion = NumeroMagic.NUMBERTWO;
 		this.provinces = this.provinceService.fiindAll();
 		this.listaTeams = this.teamService.fiindByTeam();
 		this.numarMembrii = this.listaTeams.size();
@@ -242,7 +260,7 @@ public class AlertaBean implements Serializable {
 	 * Deschide dialogul pentru incarcarea documentelor.
 	 */
 	public void abrirDialogoCargaDoc() {
-		this.documentosCargados = new ArrayList();
+		this.documentosCargados = new ArrayList<>();
 		final RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('dlgCargaDoc').show();");
 	}
@@ -268,18 +286,18 @@ public class AlertaBean implements Serializable {
 	 */
 	public void buscarAlertas() {
 		this.model.setBusqueda(this.alertaBusqueda);
-		this.model.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
+		this.model.load(0, NumeroMagic.NUMBERFIFTEEN, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 	}
 
 	/**
 	 * Busca usuarios en base a un filtro.
 	 */
 	public void buscarUsuarios() {
-		if (this.opcion == 1) {
+		if (this.opcion == NumeroMagic.NUMBERONE) {
 			this.modelUser.setUserBusqueda(this.usuarioBusqueda);
-			this.modelUser.load(0, Constantes.TAMPAGINA, "dateCreate", SortOrder.DESCENDING, null);
+			this.modelUser.load(0, NumeroMagic.NUMBERFIFTEEN, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 		}
-		else if (this.opcion == 2) {
+		else if (this.opcion == NumeroMagic.NUMBERTWO) {
 			this.listaTeams = this.teamService.fiindByTeam();
 			this.numarMembrii = this.listaTeams.size();
 		}
@@ -335,7 +353,7 @@ public class AlertaBean implements Serializable {
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la trimiterea avertizării, încercați din nou mai târziu");
+					"A apărut o eroare la trimiterea avertizării ".concat(Constantes.DESCERRORMENSAJE));
 			this.registroActividadService.guardarRegistroError(SeccionesEnum.ALERTAS.name(), Constantes.ALERTA, e);
 		}
 		return fechaEnvio;
@@ -356,7 +374,7 @@ public class AlertaBean implements Serializable {
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"Se ha producido un error al enviar la alerta, inténtelo de nuevo más tarde");
+					"Se ha producido un error al enviar la alerta ".concat(Constantes.DESCERRORMENSAJE));
 			this.registroActividadService.guardarRegistroError(SeccionesEnum.ALERTAS.name(), Constantes.ALERTA, e);
 		}
 	}
@@ -367,7 +385,7 @@ public class AlertaBean implements Serializable {
 	 */
 	public String enviarAlertaUsuarios() {
 		this.alerta = new Alerta();
-		this.utilizatorExtern = "";
+		this.utilizatorExtern = Constantes.ESPACIO;
 		this.usuariosSeleccionados = new ArrayList<>();
 		this.usuariosSeleccionadosFinales = new ArrayList<>();
 		this.modelUser = new LazyDataUsers(this.usuarioService);
@@ -391,7 +409,8 @@ public class AlertaBean implements Serializable {
 	 * Método para establecer los usuarios en el listado general.
 	 */
 	public void establecerUsuariosFinales() {
-		if (this.opcion == 2) {
+		final Users usua = new Users();
+		if (this.opcion == NumeroMagic.NUMBERTWO) {
 			for (final Users user : this.usuariosSeleccionadosFinales) {
 				user.getUsername();
 				if (!this.usuariosSeleccionadosFinales.contains(user)) {
@@ -399,11 +418,52 @@ public class AlertaBean implements Serializable {
 				}
 			}
 		}
-		else if (this.opcion == 3) {
-			final Users usuarioExterno = new Users();
-			usuarioExterno.setUsername("Utilizator extern");
-			this.usuariosSeleccionadosFinales.add(usuarioExterno);
+		else if (this.opcion == NumeroMagic.NUMBERTHREE) {
+			if (utilizatorExtern != null) {
+				String[] claves = utilizatorExtern.split(",");
+				for (int i = 0; i < claves.length; i++) {
+					String nombre = claves[i].trim();
+					final Users usu = userService.fiindOne(nombre);
+					if (usu == null) {
+						usua.setUsername(nombre);
+						usua.setAddress(null);
+						usua.setAlertChannel(AlertChannelEnum.EMAIL);
+						usua.setBirthDate(new Date());
+						usua.setCivilStatus(null);
+						usua.setEducation(EducationEnum.NESPECIFICAT);
+						usua.setEmail(nombre);
+						usua.setProvince(null);
+						usua.setIdCard(null);
+						usua.setLastName("VIA EMAIL");
+						usua.setLocality(null);
+						usua.setName(Constantes.DESTINATAR);
+						usua.setNumberCard(null);
+						usua.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
+						usua.setPersonalEmail(nombre);
+						usua.setPhone(null);
+
+						usua.setRole(RoleEnum.ROLE_ALTUL);
+						usua.setSex(null);
+						usua.setValidated(false);
+						usua.setWorkplace(null);
+						userService.save(usua);
+						this.usuariosSeleccionadosFinales.add(usua);
+					}
+
+					else {
+						this.usuariosSeleccionadosFinales.add(usu);
+					}
+				}
+			}
 		}
+
+	}
+
+	/**
+	 * Método para cargar ocumentos.
+	 */
+	public void cargarDocumentos(final Documento documento) {
+		this.documentosCargados.add(documento);
 	}
 
 	/**
@@ -421,29 +481,27 @@ public class AlertaBean implements Serializable {
 			if (this.esDocumentacion(archivo)) {
 				final Documento documento = this.documentoService.cargaDocumento(archivo, tipo, usuario);
 				this.documentosCargados.add(documento);
-				// if (opcion == 3) {
-				// alerta.setDestinatario(utilizatorExtern);
-				// }
-				// alerta.setDateCreate(new Date());
-				// alerta.setUserCreate(usuario.getUsername());
-				// List<Documento> documentos = new ArrayList();
-				// documentos.add(documento);
-				// List<Users> users = usuariosSeleccionadosFinales;
-				// String destinatario = "";
-				// for (final Users usu : users) {
-				// destinatario.concat(usu.getUsername().concat(","));
-				// }
-				// alerta.setDestinatario(destinatario);
-				// alerta.setDocumentos(documentos);
-				// alerta = alertaService.save(alerta);
+				if (opcion == 3) {
+					alerta.setDestinatario(utilizatorExtern);
+				}
+				final List<Documento> documentos = new ArrayList<>();
+				documentos.add(documento);
+				final List<Users> users = usuariosSeleccionadosFinales;
+				final String destinatario = Constantes.ESPACIO;
+				for (final Users usu : users) {
+					destinatario.concat(usu.getUsername().concat(Constantes.COMA));
+				}
+				alerta.setDestinatario(destinatario);
+				alerta.setDocumentos(documentos);
+				alerta = alertaService.save(alerta);
 				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO, Constantes.ALTA,
-						"Document/e încărcat cu succes", "msgs");
+						"Document/e încărcat cu succes", Constantes.MSGS);
 			}
 			else {
-				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, "Încărcarea fișierelor",
+				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, Constantes.CARGADOC,
 						"Fișierul " + archivo.getFileName()
 								+ " nu este valabil, numele sau extensia nu corespunde cu documentul încărcat.",
-						"msgs");
+						Constantes.MSGS);
 			}
 		}
 
@@ -451,12 +509,26 @@ public class AlertaBean implements Serializable {
 
 				PerException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, TipoRegistroEnum.EROARE.name(),
-					"A apărut o eroare la încărcarea documentului, încercați din nou mai târziu");
+					"A apărut o eroare la încărcarea documentului. ".concat(Constantes.DESCERRORMENSAJE));
 			final String descripcion = "A apărut o eroare la încărcarea documentului";
 			this.regActividadService.guardarRegistroError(descripcion, SeccionesEnum.GESTORDOCUMENTAL.getDescripcion(),
 					e);
 		}
 		return "/alertas/cargaDocumentos";
+	}
+
+	/**
+	 * Realiza la baja lógica del documento que podrá ser recuperado desde la papelera.
+	 *
+	 * @param document Documento al que se dará de baja lógica
+	 */
+	public void eliminarDocumento(final Documento document) {
+		try {
+			this.documentosCargados.remove(document);
+			this.documentoService.delete(document);
+		}
+		catch (final DataAccessException e) {
+		}
 	}
 
 	/**
@@ -467,10 +539,11 @@ public class AlertaBean implements Serializable {
 		this.alerta = new Alerta();
 		this.alertaBusqueda = new AlertaBusqueda();
 		this.usuarioBusqueda = new UsuarioBusqueda();
+		this.usuariosExternosSeleccionados = usuarioService.findByName();
 		this.team = new Team();
 		this.numarMembrii = 0;
-		this.provinces = new ArrayList();
-		this.listaTeams = new ArrayList();
+		this.provinces = new ArrayList<>();
+		this.listaTeams = new ArrayList<>();
 		this.list = new ArrayList<>();
 		for (int i = 0; i < NUMBERCOLUMNASTABLA; i++) {
 			this.list.add(Boolean.TRUE);
@@ -521,8 +594,8 @@ public class AlertaBean implements Serializable {
 	 * Muestra el cuadro de dialogo de alertas con la alerta actual.
 	 * @param a Alerta
 	 */
-	public void mostrarDialogoAlertaConDetalle(final Alerta a) {
-		this.alertaActual = a;
+	public void mostrarDialogoAlertaConDetalle(final Alerta alert) {
+		this.alertaActual = alert;
 		final RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("PF('dialogAlertas').show();");
 	}
@@ -550,16 +623,17 @@ public class AlertaBean implements Serializable {
 	 * @param event evento lanzado que contiene la inspección
 	 */
 	public void onRowSelectedUser(final SelectEvent event) {
-		if (this.opcion == 1) {
-			final Users i = (Users) event.getObject();
-			this.usuariosSeleccionadosFinales.add(i);
+		if (this.opcion == NumeroMagic.NUMBERONE) {
+			final Users usu = (Users) event.getObject();
+			this.usuariosSeleccionadosFinales.add(usu);
 			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
 		}
-		else {
+		else if (this.opcion == NumeroMagic.NUMBERTWO) {
 			final Team team = (Team) event.getObject();
 			this.usuariosSeleccionadosFinales.add(team.getUser());
 			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
 		}
+
 	}
 
 	/**
@@ -567,7 +641,7 @@ public class AlertaBean implements Serializable {
 	 * @param event evento lanzado que contiene la inspección.
 	 */
 	public void onRowUnSelectedUser(final UnselectEvent event) {
-		if (this.opcion == 1) {
+		if (this.opcion == NumeroMagic.NUMBERONE) {
 			final Users us = (Users) event.getObject();
 			this.usuariosSeleccionadosFinales.remove(us);
 			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);

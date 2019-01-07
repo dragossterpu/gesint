@@ -311,6 +311,11 @@ public final class NumeroMagic {
 	 * Constantes para el número 31l
 	 */
 	public static final Long NUMBERTHIRTYONEL = 32L;
+	
+	/**
+	 * Constantes para el número 31l
+	 */
+	public static final int MUNAROSUTAZECE=110;
 
 	/**
 	 * Constructor de Numero mágico.

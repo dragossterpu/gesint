@@ -35,4 +35,11 @@ public interface UserRepository extends CrudRepository<Users, String> {
 	@Query("SELECT u.username FROM Users u where u.username in (:listaNombres)")
 	List<String> findUsernamesByUsername(@Param("listaNombres") List<String> listaNombres);
 
+	/**
+	 * Devuelve una lista con nombres de los usuarios que estén presentes en la lista y en BBDD.
+	 * @param nume dupa care se face cautarea in baza de date
+	 * @return Lista de nombres de usuarios presentes en la BBDD
+	 */
+	List<Users> findByName(String nume);
+
 }

@@ -134,7 +134,6 @@ public class UserServiceImpl implements UserService {
 		try {
 			this.session = this.sessionFactory.openSession();
 			final Criteria criteria = this.session.createCriteria(Users.class);
-			@SuppressWarnings(Constantes.UNCHECKED)
 			final List<Users> usuariosList = gestionarCriteriaUsuarios(usuarioBusqueda, criteria);
 			return usuariosList;
 		}
@@ -167,7 +166,6 @@ public class UserServiceImpl implements UserService {
 	 * @return usuario
 	 */
 	private void cargarDatosPersonaleUser(final byte[] fileBlob, final Users usuario) {
-		final PersonalData pd = new PersonalData();
 		usuario.setPhoto(fileBlob);
 	}
 
@@ -328,7 +326,7 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	/*
+	/**
 	 * Metoda care genereaza automat 100 de utilizatori
 	 *
 	 * @see ro.per.online.services.UserService#save(ro.per.online.persistence.entities.Users)
@@ -372,7 +370,6 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public List<Users> desactivar(final List<String> listaUsuarios) {
-		final Date fecha = new Date();
 		final List<Users> listaGuardar = userRepository.findByUsernameIn(listaUsuarios);
 		for (final Users usuario : listaGuardar) {
 			usuario.setValidated(false);
@@ -407,5 +404,11 @@ public class UserServiceImpl implements UserService {
 		finally {
 			session.close();
 		}
+	}
+
+	@Override
+	public List<Users> findByName() {
+		String nume = Constantes.DESTINATAR;
+		return (List<Users>) userRepository.findByName(nume);
 	}
 }

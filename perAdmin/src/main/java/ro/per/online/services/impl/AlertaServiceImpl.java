@@ -169,7 +169,7 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 
 		if (usuario.getAlertChannel().equals(AlertChannelEnum.EMAIL)) {
 			alertaLocal.setDestinatario(usuario.getUsername());
-			mailAlertaSender.send(alertaLocal, usuario);
+			// mailAlertaSender.send(alertaLocal, usuario);
 		}
 
 		// ENVIAMOS SMS SI PROCEDE

@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +34,6 @@ import lombok.Setter;
 import ro.per.online.constantes.Constantes;
 import ro.per.online.constantes.NumeroMagic;
 import ro.per.online.lazydata.LazyDataUsers;
-import ro.per.online.persistence.entities.Alerta;
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.Users;
@@ -64,7 +62,7 @@ public class UserBean implements Serializable {
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = NumeroMagic.NUMBERELEVENLONG;
 
 	/**
 	 * Utilizator/Membru.
@@ -249,7 +247,7 @@ public class UserBean implements Serializable {
 	 */
 	public void buscarUsuario() {
 		model.setUserBusqueda(userBusqueda);
-		model.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
+		model.load(0, NumeroMagic.NUMBERFIFTEEN, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 	}
 
 	/**
@@ -336,7 +334,7 @@ public class UserBean implements Serializable {
 		}
 		// Minor de varsta
 		final Calendar date = Calendar.getInstance();
-		date.add(Calendar.YEAR, -18);
+		date.add(Calendar.YEAR, -NumeroMagic.NUMBEREIGHTEEN);
 		this.currentDate = date.getTime();
 		return "/users/altaUser.xhtml?faces-redirect=true";
 	}
@@ -445,7 +443,7 @@ public class UserBean implements Serializable {
 			}
 			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-						"A apărut o eroar în căutatrea localităților care aparțin județului. Încercați din nou mai târziu.");
+						"A apărut o eroar în căutatrea localităților care aparțin județului ".concat(Constantes.DESCERRORMENSAJE));
 			}
 		}
 	}
@@ -481,7 +479,7 @@ public class UserBean implements Serializable {
 				usuario.setProvince(provincia);
 				userService.save(usuario);
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
-						"Membrul a fost modificat corect");
+						Constantes.REGMODOK);
 			}
 			else {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CAMBIODATOS,
@@ -503,7 +501,7 @@ public class UserBean implements Serializable {
 		try {
 			this.usuario = new Users();
 			this.usuario = usu;
-			final String valida = "Înregistrare";
+			final String valida = Constantes.ALTAMENSAJE;
 			// Validam noul utilizator
 			if (validar(valida)) {
 				usuario.setLocality(localityService.findById(idLocalidad));
@@ -514,7 +512,7 @@ public class UserBean implements Serializable {
 				usuario.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
 				userService.save(usuario);
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
-						"Membrul a fost înregistrat corect");
+						Constantes.OKMODMENSAJE);
 			}
 			else {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
@@ -555,7 +553,7 @@ public class UserBean implements Serializable {
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
-					"S-a produs o erroare în căutarea localitații. Încercați din nou mai târziu.", null, "inputNombre");
+					"S-a produs o erroare în căutarea localitații. ".concat(Constantes.DESCERRORMENSAJE), null, "inputNombre");
 		}
 		this.tipLocalidadSelected = null;
 		tipLocalidadSelected = tipLoclalitate;
@@ -576,7 +574,7 @@ public class UserBean implements Serializable {
 			}
 			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
-						"Eroare în salvarea localității. Încercați din nou mai târziu.", null, "inputNombre");
+						"Eroare în salvarea localității. ".concat(Constantes.DESCERRORMENSAJE), null, "inputNombre");
 			}
 		}
 	}
@@ -607,7 +605,7 @@ public class UserBean implements Serializable {
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.CLAVE,
-					"A apărut o eroare în regenerarea sau trimiterea parolei");
+					"A apărut o eroare în regenerarea sau trimiterea parolei. ".concat(Constantes.DESCERRORMENSAJE));
 		}
 		return "/users/modifyUser?faces-redirect=true";
 	}
@@ -703,10 +701,10 @@ public class UserBean implements Serializable {
 	 */
 	private boolean valideazaAn() {
 		boolean resultado = true;
-		if (this.usuario.getIdCard().length() > 7) {
-			final String an = this.usuario.getIdCard().substring(1, 3);
-			final String luna = this.usuario.getIdCard().substring(3, 5);
-			final String zi = this.usuario.getIdCard().substring(5, 7);
+		if (this.usuario.getIdCard().length() > NumeroMagic.NUMBERSEVEN) {
+			final String an = this.usuario.getIdCard().substring(1, NumeroMagic.NUMBERTHREE);
+			final String luna = this.usuario.getIdCard().substring(NumeroMagic.NUMBERTHREE, NumeroMagic.NUMBERFIVE);
+			final String zi = this.usuario.getIdCard().substring(NumeroMagic.NUMBERFIVE, NumeroMagic.NUMBERSEVEN);
 			final Date fecha = this.usuario.getBirthDate();
 			final SimpleDateFormat sdf = new SimpleDateFormat("yy");
 			final SimpleDateFormat lsdf = new SimpleDateFormat("MM");

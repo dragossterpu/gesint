@@ -117,15 +117,16 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 					helper.addAttachment(adj.getName(), adj);
 				}
 			}
-			mailSender.setUsername("elypseinfo@gmail.com");
+			mailSender.setUsername("dragos@peradmin.org");
 			// Set gmail email password
-			mailSender.setPassword("elypse18");
+			mailSender.setPassword("malu2012");
 			final Properties prop = mailSender.getJavaMailProperties();
 			prop.put("mail.smtp.auth", true);
-			prop.put("mail.smtp.ssl.trust", Constantes.SMTP);
+			prop.put("mail.smtp.ssl.trust", "mocha6005.mochahost.com");
 			prop.put("mail.smtp.starttls.enable", true);
-			prop.put("mail.smtp.host", Constantes.SMTP);
-			prop.put("mail.smtp.port", "587");
+			prop.put("mail.smtp.host", "mocha6005.mochahost.com");
+			prop.put("mail.smtp.port", "465");
+			prop.put("mail.smtp.ehlo", "false");
 			mailSender.send(message);
 			fechaEnvio = new Date();
 		}

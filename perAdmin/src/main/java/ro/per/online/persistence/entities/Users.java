@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,7 +46,7 @@ import ro.per.online.persistence.entities.enums.SexEnum;
 @ToString
 @Getter
 @Setter
-@Entity
+@Entity@EntityListeners(AuditingEntityListener.class)
 @Table(name = "USERS")
 public class Users extends AbstractEntity implements Serializable {
 

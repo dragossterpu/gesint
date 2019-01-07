@@ -24,6 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ro.per.online.constantes.Constantes;
+import ro.per.online.constantes.NumeroMagic;
 import ro.per.online.lazydata.LazyDataProiect;
 import ro.per.online.persistence.entities.Proiecte;
 import ro.per.online.services.ProiectService;
@@ -112,7 +113,7 @@ public class ProiectBean implements Serializable {
 	@Transactional
 	public void buscarProiecte() {
 		modelProiect.setProiectBusqueda(proiectBusqueda);
-		modelProiect.load(0, Constantes.TAMPAGINA, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
+		modelProiect.load(0, NumeroMagic.NUMBERFIFTEEN, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
 	}
 
 	/**
