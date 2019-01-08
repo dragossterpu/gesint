@@ -132,7 +132,6 @@ public final class Constantes {
 	 */
 	public static final String IMGSISTEM = "./static/images/escudo_ipss.png";
 
-
 	/**
 	 * Constante para las estadisticas totales de evaluat.
 	 */
@@ -212,7 +211,6 @@ public final class Constantes {
 	 * The Constant UNCHECKED.
 	 */
 	public static final String UNCHECKED = "unchecked";
-
 
 	/**
 	 * Tamaño de página para los listados.
@@ -453,15 +451,31 @@ public final class Constantes {
 	 * Constanta pentru cuvantul validated.
 	 */
 	public static final String VALIDAT = "validated";
+
 	/**
 	 * Constanta pentru cuvantul msgs
 	 */
-	public static final String MSGS ="msgs";
-	
+	public static final String MSGS = "msgs";
+
 	/**
 	 * Constanta pentru cuvantul DESTINATAR
 	 */
-	public static final String DESTINATAR ="DESTINATAR EXTERN";
+	public static final String DESTINATAR = "DESTINATAR EXTERN";
+
+	/**
+	 * Constanta pentru cuvantul DIALOGALERTAS
+	 */
+	public static final String DIALOGALERTAS = "PF('dialogAlertas').show();";
+
+	/**
+	 * Constanta pentru cuvantul DIALOGMESGHIDE
+	 */
+	public static final String DIALOGMESGHIDE = "PF('dialogMessage').hide()";
+
+	/**
+	 * Constanta pentru cuvantul DIALOGBUSQUEDASHOW
+	 */
+	public static final String DIALOGBUSQUEDASHOW = "PF('dlgBusqueda').show();";
 
 	/***********************
 	 * Anotaciones

@@ -54,7 +54,7 @@ public class Generador {
 				"Tomescu", "Meceanu", "Ionescu", "Marinescu", "Georgescu", "Vasilescu", "Stoican", "Maican",
 				"Gheorghiu", "Vasiliu", "Pâclea", "Pecaru", "Stoicescu", "Tomescu", "Reaboiu", "Rîciu", "Roateș",
 				"Scafariu", "Sebeșanu", "Șdirea", "Șabac", "Theodorescu", "Acatrinei", "Babageanu", "Bâclea", "Bâgioi",
-				"Beceanu", "Bicăjan", "Bechir", "Băcean", "Becleanu", "Bedean", "Bidirean ", "Bilcan", "Ionescu",
+				"Beceanu", "Bicăjan", "Bechir", "Băcean", "Becleanu", "Bedean", "Bidirean", "Bilcan", "Ionescu",
 				"Georgescu", "Vasilescu", "Balagiu", "Bâtrânu", "Bălăcean", "Cabariu", "Cîju", "Căciuleanu",
 				"Câmpureanu", "Chelarașu", "Calcea", "Cîrje", "Cherchez", "Cheregi", "Cimponeriu", "Cămui", "Cerbeanu",
 				"Deaconu", "Diamandescu", "Diceanu", "Dăncescu", "Delcescu", "Fabriș", "Ficior", "Federciuc", "Feișan",
@@ -534,7 +534,7 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		fecha = Calendar.getInstance();
-		fecha.set(aleatorio.nextInt(5) + 2014, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
+		fecha.set(aleatorio.nextInt(10) + 2008, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat(Constantes.FORMFECHA);
 		return fecha.getTime();
 	}
@@ -562,7 +562,7 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		hora = Calendar.getInstance();
-		hora.set(aleatorio.nextInt(5) + 2014, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
+		hora.set(aleatorio.nextInt(10) + 2008, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat("hh/mm");
 		return hora.getTime();
 	}
@@ -584,10 +584,10 @@ public class Generador {
 	 * @return provincia al azar
 	 */
 	public static String provinciasFinal() {
-		final String[] provincias = { "AB", "AR", "AG", "BC", "BH", "BN", "BT", "BV", "BR", "B", "BZ", "CS", "CL", "CJ",
-				"CT", "CV", "DB", "DJ", "GL", "GR", "GJ", "HD", "IL", "IS", "IF", "MM", "MH", "MS", "NT", "OT", "PH",
-				"SM", "SJ", "SB", "SV", "TR", "TM", "TL", "VS", "VL", "VN", "HR" };
-		final String provincia = provincias[1 + new Random().nextInt(41)];
+		final String[] provincias = { "AB", "AB", "AR", "AG", "BC", "BH", "BN", "BT", "BV", "BR", "B", "BZ", "CS", "CL",
+				"CJ", "CT", "CV", "DB", "DJ", "GL", "GR", "GJ", "HD", "IL", "IS", "IF", "MM", "MH", "MS", "NT", "OT",
+				"PH", "SM", "SJ", "SB", "SV", "TR", "TM", "TL", "VS", "VL", "VN", "HR" };
+		final String provincia = provincias[1 + new Random().nextInt(42)];
 		return provincia;
 	}
 

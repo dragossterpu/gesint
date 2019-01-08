@@ -259,7 +259,7 @@ public class TeamBean implements Serializable {
 		listaFunctii = pteamService.fiindAll();
 		modelUser = new LazyDataUsers(usuarioService);
 		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dlgBusqueda').show();");
+		context.execute(Constantes.DIALOGBUSQUEDASHOW);
 	}
 
 	/**
@@ -289,7 +289,7 @@ public class TeamBean implements Serializable {
 		for (int i = 0; i < 1000; i++) {
 			final Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
-			user.setName(Generador.apellidoFinal3().toUpperCase());
+			user.setName(Generador.apellidoFinal2().toUpperCase());
 
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
 			fecha = Generador.obtenerFechaNastere();
@@ -490,7 +490,7 @@ public class TeamBean implements Serializable {
 		usuariosSeleccionadosFinales = new ArrayList<>();
 		modelUser = new LazyDataUsers(usuarioService);
 		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dialogMessage').hide()");
+		context.execute(Constantes.DIALOGMESGHIDE);
 	}
 
 	/**

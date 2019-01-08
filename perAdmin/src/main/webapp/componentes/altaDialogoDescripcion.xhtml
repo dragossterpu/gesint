@@ -16,9 +16,9 @@
     <p:dialog id="altaDialog" widgetVar="altaDialogVar" header="Alta" position="center" resizable="false"
         onShow="$('[id*=inputDescripcion]').val('');" modal="true" width="30%">
         <p:panelGrid columns="2" layout="grid" >
-            <h:outputLabel for="inputDescripcion" value="Descripción (*):" />
+            <h:outputLabel for="inputDescripcion" value="DescripciÃ³n (*):" />
             <p:inputText id="inputDescripcion" binding="#{descripcionAlta}" converter="#{trimConverter}" required="#{param['formListado:guardar']!=null}"
-                requiredMessage="La descripción no puede estar vacía.">
+                requiredMessage="La descripciÃ³n no puede estar vacÃ­a.">
                 <f:attribute name="idServicio" value="#{idServicio}" />
                 <f:validator binding="#{genericValidator}" />
             </p:inputText>

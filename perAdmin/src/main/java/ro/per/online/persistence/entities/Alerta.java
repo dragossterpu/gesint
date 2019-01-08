@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -30,10 +29,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ro.per.online.constantes.Constantes;
-
 import ro.per.online.persistence.entities.enums.AlertChannelEnum;
-
-
 
 /**
  * Entitate pentru alerte.
@@ -46,7 +42,8 @@ import ro.per.online.persistence.entities.enums.AlertChannelEnum;
 @ToString
 @Getter
 @Setter
-@Entity@EntityListeners(AuditingEntityListener.class)
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "ALERT")
 public class Alerta extends AbstractEntity implements Serializable {
 
@@ -71,24 +68,22 @@ public class Alerta extends AbstractEntity implements Serializable {
 	private String descripcion;
 
 	/**
-	 * /** The channel. 
+	 * /** The channel.
 	 */
 	@Column(name = "CHANNEL")
 	@Enumerated(EnumType.STRING)
 	private AlertChannelEnum channel;
-	
-	/** The body. */
-	@Column(name = "TO_", nullable = false, length = 100)
-	private String destinatario;
 
 	/** The sended on. */
 	@Column(name = "SENDED_ON", length = 19)
 	private Date fechaEnvio;
 
-	/** The businessman. */
-	@ManyToOne
-	@JoinColumn(name = "USER_ID", nullable = true, unique = false)
-	private Users usuario;
+	/**
+	 * Lista cu destinatarii alertei.
+	 */
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "alerta_users", joinColumns = @JoinColumn(name = "id_alerta"), inverseJoinColumns = @JoinColumn(name = "username"))
+	private List<Users> listDestinatarios;
 
 	/**
 	 * Lista con los documentos asociados a la solicitud.
@@ -96,7 +91,7 @@ public class Alerta extends AbstractEntity implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "alerta_docs", joinColumns = @JoinColumn(name = "id_alerta"), inverseJoinColumns = @JoinColumn(name = "id_documento"))
 	private List<Documento> documentos;
-	
+
 	/**
 	 * Trimitere automatica.
 	 */

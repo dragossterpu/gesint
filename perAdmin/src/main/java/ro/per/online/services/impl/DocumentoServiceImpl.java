@@ -280,7 +280,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 	 */
 	@Override
 	public DefaultStreamedContent descargaDocumento(final Documento entity) throws PerException {
-		final Documento docu = documentoRepository.findById(entity.getId());
+		final Documento docu = documentoRepository.findOne(entity.getId());
 		DefaultStreamedContent streamDocumento;
 		if (docu != null) {
 			final DocumentoBlob doc = docu.getFichero();

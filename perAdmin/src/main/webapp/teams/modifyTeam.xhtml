@@ -204,7 +204,7 @@
 					<p:messages for="dialogMessage" autoUpdate="true" showDetail="true"
 						showSummary="true" />
 					<div class="centrarBotonesDialog">
-	                   <p:button value="Cerrar" outcome="/teams/teams" />
+	                   <p:button value="Închideţi" outcome="/teams/teams" />
 	               </div>
 				</p:dialog>
 			
@@ -227,7 +227,7 @@
 					<div class="centrarBotonesDialog">
 						<p:commandButton id="guardar" value="Înregistrare" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, teamBean.provinciaSelect,teamBean.tipLocalidadSelected, teamBean.usuario)}" 
 						update ="@form"  oncomplete="PF('dialogMunicipio').hide()"/>
-						<p:commandButton value="Cerrar" onclick="PF('dialogMunicipio').hide()"/>
+						<p:commandButton value="Închideţi" onclick="PF('dialogMunicipio').hide()"/>
 					</div>
 				</p:dialog>				
 		</h:form>

@@ -17,7 +17,7 @@
 							<h:outputLabel for="asunto" styleClass="buscador"
 								value="Titlu:" />
 						</div>
-						<div class="ui-g-12 ui-md-6 ui-lg-6">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">destinatario
 							<p:inputText id="asunto"
 								value="#{alertaBean.alertaBusqueda.asunto}" />
 						</div>
@@ -102,14 +102,17 @@
 									</h:commandLink>
 								</div>
 								<span class="titulo"> ALERTE/ COMUNICĂRI</span>
-								<p:commandButton action="#{alertaBean.abrirDialogoCargaDoc()}" icon="fa fa-plus"
-									value="Creați o alertă nouă" styleClass="newActionTable" />
+								 <div class="right">
+								 <p:commandButton id="toggler" type="button" value="Coloane" styleClass="botonToggler" icon="fa fa-th" />
+			                        <p:columnToggler datasource="tablaAlertas" trigger="toggler">
+			                            <p:ajax event="toggle" listener="#{alertaBean.onToggle}" />
+			                        </p:columnToggler>
+                        </div>
 							</p:outputPanel>
-						</f:facet>
-                    	
-
+							
+						</f:facet>                    	
 						<p:column headerText="Data creării"
-							sortBy="#{alerta.dateCreate}" style="width:10%;"
+							sortBy="#{alerta.dateCreate}" style="width:8%;"
 							visible="#{alertaBean.list[0]}"
 							exportable="#{alertaBean.list[0]}">
 							<h:outputText value="#{alerta.dateCreate}">
@@ -117,26 +120,26 @@
 							</h:outputText>
 						</p:column>
 						<p:column headerText="Data trimiterii"
-							sortBy="#{alerta.dateCreate}" style="width:10%;"
+							sortBy="#{alerta.dateCreate}" style="width:8%;"
 							visible="#{alertaBean.list[1]}"
 							exportable="#{alertaBean.list[1]}">
 							<h:outputText value="#{alerta.fechaEnvio}">
 								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="Europe/Madrid" />
 							</h:outputText>
 						</p:column>
-						<p:column headerText="Destinatar" sortBy="#{alerta.destinatario}" style="width:25%;"
+						<p:column headerText="Destinatar" sortBy="#{alerta.destinatarios}" style="width:25%;"
 							visible="#{alertaBean.list[2]}"
 							exportable="#{alertaBean.list[2]}">
-							<h:outputText value="#{alerta.destinatario}"/>
+							<h:outputText value="#{alerta.destinatarios}"/>
 						</p:column>
 
 						<p:column headerText="Canal de expediere" sortBy="#{alerta.usuario.alertChannel}"
-							style="width:10%;" visible="#{alertaBean.list[3]}"
+							style="width:15%;" visible="#{alertaBean.list[3]}"
 							exportable="#{alertaBean.list[3]}">
 							<h:outputText value="#{alerta.usuario.alertChannel.descripcion}" />
 						</p:column>
 						
-						<p:column headerText="Titlu" sortBy="#{alerta.asunto}" style="width:20%;"
+						<p:column headerText="Titlu" sortBy="#{alerta.asunto}" style="width:30%;"
 							visible="#{alertaBean.list[4]}"
 							exportable="#{alertaBean.list[4]}">
 							<h:outputText value="#{alerta.asunto}" />

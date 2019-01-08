@@ -7,6 +7,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.primefaces.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
@@ -29,7 +30,7 @@ import ro.per.online.jsf.scope.FacesViewScope;
 
 /**
  * Clase de arranque y configuración de Spring Boot.
- * 
+ *
  * @author STAD
  *
  */
@@ -40,7 +41,7 @@ public class PerApplication {
 
 	/**
 	 * Implementación que se va a usar para las páginas de error.
-	 * 
+	 *
 	 * @return ErrorPageRegistrar
 	 */
 	@Configuration
@@ -49,7 +50,7 @@ public class PerApplication {
 
 		/**
 		 * Implementación que se va a usar para las páginas de error.
-		 * 
+		 *
 		 * @return ErrorPageRegistrar
 		 */
 		@Override
@@ -71,7 +72,7 @@ public class PerApplication {
 	static class ConfigureJSFContextParametersProd implements ServletContextInitializer {
 
 		@Override
-		public void onStartup(ServletContext servletContext) throws ServletException {
+		public void onStartup(final ServletContext servletContext) throws ServletException {
 
 			servletContext.setInitParameter("javax.faces.DEFAULT_SUFFIX", ".xhtml");
 			servletContext.setInitParameter("javax.faces.PARTIAL_STATE_SAVING_METHOD", Constantes.TRUE);
@@ -128,7 +129,7 @@ public class PerApplication {
 
 	/**
 	 * Implementación que se va a usar para las páginas de error.
-	 * 
+	 *
 	 * @return ErrorPageRegistrar
 	 */
 	@Bean
@@ -143,7 +144,7 @@ public class PerApplication {
 	 */
 	@Bean
 	public JavaMailSenderImpl javaMailSender() {
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		return mailSender;
 	}
 
@@ -153,5 +154,13 @@ public class PerApplication {
 	@Bean
 	public SessionFactory sessionFactory() {
 		return entityManagerFactory.unwrap(SessionFactory.class);
+	}
+
+	/**
+	 * @return HibernateEntityManagerFactory.
+	 */
+	@Bean
+	public SessionFactory sessionFactory(final HibernateEntityManagerFactory hemf) {
+		return hemf.getSessionFactory();
 	}
 }

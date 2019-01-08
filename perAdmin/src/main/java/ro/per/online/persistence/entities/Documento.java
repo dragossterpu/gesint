@@ -31,7 +31,7 @@ import lombok.Setter;
 
 /**
  * Entitatea documentului. Orice fișier încărcat în aplicație este stocata în acesta tabla.
- * 
+ *
  * @author STAD
  */
 @AllArgsConstructor
@@ -44,6 +44,7 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "DOCUMENTOS")
 public class Documento extends AbstractEntity implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -58,7 +59,7 @@ public class Documento extends AbstractEntity implements Serializable {
 	/**
 	 * Fișier legat de document.
 	 */
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "ID_FICHERO", foreignKey = @ForeignKey(name = "FK_D_FICHERO"))
 	private DocumentoBlob fichero;
 

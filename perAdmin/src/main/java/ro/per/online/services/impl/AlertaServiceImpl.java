@@ -76,7 +76,7 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 	}
 
 	/**
-	 * Busca alertas con los parametros de búsqueda.
+	 * Căutați alerte cu parametrii de căutare.
 	 * @param alertaBusqueda AlertaBusqueda
 	 * @param sortOrder SortOrder
 	 * @param sortField String
@@ -123,40 +123,36 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 
 	}
 
-	/**
-	 * Devuelve el listado de alertas de un usuario en concreto.
-	 * @param usuarioModificando User
-	 * @return List<Alerta>
-	 */
-	@Override
-	public List<Alerta> buscarAlertasPorUsuario(final Users usuarioModificando) {
-		return alertaRepository.findAllByDestinatarioOrUsuario(usuarioModificando.getUsername(), usuarioModificando);
-	}
+	// /**
+	// * Returnează lista alertelor pentru un anumit utilizator.
+	// * @param usuarioModificando User
+	// * @return List<Alerta>
+	// */
+	// @Override
+	// public List<Alerta> buscarAlertasPorUsuario(final Users usuarioModificando) {
+	// return alertaRepository.findAllByDestinatarioOrUsuario(usuarioModificando.getUsername(), usuarioModificando);
+	// }
 
 	/**
-	 * Consulta criteria para la búsqueda de alertas.
+	 * Verificați criteriile pentru căutarea alertelor.
 	 *
 	 * @param criteria consulta criteria
-	 * @param alertaBusqueda Objeto que contiene los parámetros de búsqueda
+	 * @param alertaBusqueda Obiect care conține parametrii de căutare
 	 */
 	private void creaCriteria(final AlertaBusqueda alertaBusqueda, final Criteria criteria) {
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(alertaBusqueda.getDestinatario(), criteria,
 				Constantes.DESTINATARIO);
-
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(alertaBusqueda.getAsunto(), criteria, Constantes.ASUNTO);
-
 		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(alertaBusqueda.getId(), criteria, Constantes.ID);
-
 		UtilitiesCriteria.setCondicionCriteriaFechaMayor(alertaBusqueda.getFechaDesdeEnvio(), criteria,
 				Constantes.FECHAENVIO);
-
 		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(alertaBusqueda.getFechaHastaEnvio(), criteria,
 				Constantes.FECHAENVIO);
 
 	}
 
 	/**
-	 * Envia alerta individualmente.
+	 * Trimiteți alertă sau comunicare în mod individual.
 	 * @param alerta Alerta
 	 * @param usuario User
 	 */
@@ -164,31 +160,31 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 		Alerta alertaLocal;
 		alertaLocal = new Alerta();
 		BeanUtils.copyProperties(alerta, alertaLocal);
-		alertaLocal.setUsuario(usuario);
+
+		// alertaLocal.setListDestinatarios(listDestinatarios);.setUsuario(usuario);
 		// ENVIAMOS MAIL SI PROCEDE
 
 		if (usuario.getAlertChannel().equals(AlertChannelEnum.EMAIL)) {
-			alertaLocal.setDestinatario(usuario.getUsername());
+			// alertaLocal.setDestinatario(usuario.getUsername());
 			// mailAlertaSender.send(alertaLocal, usuario);
 		}
-
 		// ENVIAMOS SMS SI PROCEDE
 		if (usuario.getAlertChannel().equals(AlertChannelEnum.EMAIL_SMS)
 				|| usuario.getAlertChannel().equals(AlertChannelEnum.SMS)) {
-			alertaLocal.setDestinatario(usuario.getPhone());
+			// alertaLocal.setDestinatario(usuario.getPhone());
 		}
 
-		if (usuario.getUsername() == null) {
-			alertaLocal.setUsuario(null);
-		}
-		else {
-			alertaLocal.setUsuario(usuario);
-		}
+		// if (usuario.getUsername() == null) {
+		// alertaLocal.setUsuario(null);
+		// }
+		// else {
+		// alertaLocal.setUsuario(usuario);
+		// }
 		alertaRepository.save(alertaLocal);
 	}
 
 	/**
-	 * Obtiene el conteo de criteria.
+	 * Obțineți numărul
 	 * @param busqueda RegistroBusqueda
 	 * @return int
 	 */
@@ -218,7 +214,7 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 	}
 
 	/**
-	 * Guarda una alerta.
+	 * Salvați o alertă sau o comunicare
 	 * @param alerta Alerta
 	 * @return Alerta
 	 */
@@ -229,7 +225,7 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 	}
 
 	/**
-	 * Envía una alerta a los usuarios que contenga la lista adjuntada.
+	 * Trimiteți o alertă destinatarilor din lista atașată
 	 * @param alerta Alerta
 	 * @param usuariosSeleccionados List<User>
 	 */
@@ -241,7 +237,7 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 	}
 
 	/**
-	 * envia una alerta a un usuario determinado.
+	 * Trimiteți o alertă unui anumit utilizator.
 	 * @param alerta Alerta
 	 * @param usuario User
 	 */

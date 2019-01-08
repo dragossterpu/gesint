@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Enumerado para los diferentes tipos de secciones utilizadas para la gestión de mensajes.
+ * Sunt listate pentru diferitele tipuri de secțiuni utilizate pentru gestionarea mesajelor.
  *
  * @author STAD
  *
@@ -17,41 +17,41 @@ import lombok.NoArgsConstructor;
 public enum SeccionesEnum {
 
 	/**
-	 * Sección de usuarios.
+	 * Secțiunea de autentificare
 	 */
 	LOGIN("LOGIN"),
 
 	/**
-	 * Sección de usuarios.
+	 * Secțiunea Utilizatori.
 	 */
 	USUARIOS("MEMBRII"),
 
 	/**
-	 * Sección de inicio.
+	 * Secțiunea de Început.
 	 */
 	HOME("INICIO"),
 	/**
-	 * Sección de administración de formularios.
+	 * Secțiunea de administrare formulare.
 	 */
 	ADMINFORMULARIOS("ADMINISTRAȚIE FORMULARE"),
 
 	/**
-	 * Sección de administración.
+	 * Secțiunea de administrare.
 	 */
 	ADMINISTRACION("ADMINISTRARE"),
 
 	/**
-	 * Sección de alertas y avisos.
+	 * Secțiune de Alerte și avertismente.
 	 */
 	ALERTAS("COMUNICAȚII"),
 
 	/**
-	 * Sección de estadísticas de evaluaciones.
+	 * Secțiune de Statistica si Evaluări .
 	 */
 	ESTADISTICA("STATISTICĂ"),
 
 	/**
-	 * Sección de estadísticas de usuario.
+	 * Secțiunea Statistici utilizator.
 	 */
 	ESTADISTICAUSUARIO("STATISTICILE MEMBRILOR"),
 
@@ -66,32 +66,32 @@ public enum SeccionesEnum {
 	PUBLICATIONS("PUBLICAȚII"),
 
 	/**
-	 * Sección de formularios.
+	 * Secțiunea de formulare.
 	 */
 	COMUNICACIONES("COMUNICAȚII"),
 
 	/**
-	 * Sección de gestor documental.
+	 * Secțiunea de management al documentelor.
 	 */
 	GESTORDOCUMENTAL("MANAGER DOCUMENTAR"),
 
 	/**
-	 * Sección de administración.
+	 * Secțiunea de solicitări.
 	 */
 	SOLICITUDES("APLICAȚII"),
 
 	/**
-	 * Sección de propiedades.
+	 * Secțiunea de proprietăți.
 	 */
 	PROPIEDADES("PROPRIETĂȚI"),
 
 	/**
-	 * Sección de otros.
+	 * Alte secțiuni.
 	 */
 	OTROS("ALTELE");
 
 	/**
-	 * Descripción de la sección.
+	 * Descrierea secțiunii.
 	 */
 	private String descripcion;
 

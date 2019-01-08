@@ -54,7 +54,7 @@ import ro.per.online.util.FacesUtilities;
 import ro.per.online.util.Utilities;
 
 /**
- * Controlador de las operaciones relacionadas con la gestión de alertas.
+ * Controlorul operațiunilor legate de gestionarea alertelor.
  *
  * @author STAD
  */
@@ -70,84 +70,85 @@ public class AlertaBean implements Serializable {
 	private static final long serialVersionUID = NumeroMagic.NUMBERONELONG;
 
 	/**
-	 * Numero de columnas de la tabla de alertas.
+	 * Numărul de coloane din tabelul de alerte.
 	 */
-	private static final int NUMBERCOLUMNASTABLA = NumeroMagic.NUMBERFOUR;
+	private static final int NUMBERCOLUMNASTABLA = NumeroMagic.NUMBERFIVE;
 
 	/**
-	 * Alerta nueva.
+	 * Alerta noua.
 	 */
 	private transient Alerta alerta;
 
 	/**
-	 * Service de alertas.
+	 * Variala utilizata pentru injectarea serviciului de alerte.
 	 */
 	@Autowired
 	private transient AlertaService alertaService;
 
 	/**
-	 * Service de usuarios.
+	 * Variala utilizata pentru injectarea serviciului de utilizatori.
 	 */
 	@Autowired
 	private transient UserService usuarioService;
 
 	/**
-	 * Lazy model para las usuarios.
+	 * Lazy model pentru utilizatori.
 	 */
 	private transient LazyDataUsers modelUser;
 
 	/**
-	 * Clase de búsqueda de usuarios.
+	 * Clasa de căutare a utilizatorilor.
 	 */
 	private UsuarioBusqueda usuarioBusqueda;
 
 	/**
-	 * Clase de búsqueda de alertas.
+	 * Clasa de căutare a alertelor.
 	 */
 	private AlertaBusqueda alertaBusqueda;
 
 	/**
-	 * LazyModel para la visualización paginada de datos en la vista.
+	 * LazyModel pentru afișarea paginată a datelor din vizualizare.
 	 */
 	private LazyDataAlertas model;
 
 	/**
-	 * Listado de alertas por usuario.
+	 * Listă de alerte per utilizator.
 	 */
 	private List<Alerta> lstAlertas;
 
 	/**
-	 * Usuario que se esta modificando en el momento.
+	 * Utilizator care se modifică în acest moment.
 	 */
 	private Alerta alertaActual;
 
 	/**
-	 * Indica qué colomnas aparecen en el listado.
+	 * Indicați ce colomne apar în listă.
 	 */
 	private List<Boolean> list;
 
 	/**
-	 * Lista de usuarios seleccionados.
+	 * Lista utilizatorilor selectați.
 	 */
 	private List<Users> usuariosSeleccionados;
 
 	/**
-	 * Lista de usuarios externo seleccionados.
+	 * Lista utilizatorilor externi selectați.
 	 */
 	private List<Users> usuariosExternosSeleccionados;
 
 	/**
-	 * Lista de usuarios seleccionados.
+	 * Lista utilizatorilor selectați final.
 	 */
 	private List<Users> usuariosSeleccionadosFinales;
 
 	/**
-	 * Nombre de usuario que se usará para mandar el correo a un único destinatario.
+	 * Numele de utilizator care va fi folosit pentru a trimite e-mailul unui singur destinatar.
 	 */
 	private String nombreUsuario = Constantes.ESPACIO;
 
 	/**
-	 * Indica si se quiere buscar por datos de usuario (opción 1) o datos de expediente (opción 2).
+	 * Indicați dacă doriți să căutați după echipa de conducere (opțiunea 1), membrii (opțiunea 2) sau destinatari
+	 * externi (opțiunea 3)
 	 */
 	private Integer opcion = 1;
 
@@ -157,20 +158,20 @@ public class AlertaBean implements Serializable {
 	private List<Team> listaTeams;
 
 	/**
-	 * Variala utilizata pentruinjectarea serviciului de team.
+	 * Variala utilizata pentru injectarea serviciului pentru echipa de conducere.
 	 *
 	 */
 	@Autowired
 	private transient TeamService teamService;
 
 	/**
-	 * Servicio de registro de actividad.
+	 * Variala utilizata pentru injectarea serviciului înregistrare a activității.
 	 */
 	@Autowired
 	private transient RegistroActividadServiceImpl registroActividadService;
 
 	/**
-	 * Objeto de búsqueda de usuario.
+	 * Obiectul echipei de conducere.
 	 */
 	private Team team;
 
@@ -198,40 +199,40 @@ public class AlertaBean implements Serializable {
 	private String utilizatorExtern;
 
 	/**
-	 * Lista de tipos de documentación asociados a la solicitud.
+	 * Lista de documente asociate cererii.
 	 */
 	private List<Documento> listadoDocumentos;
 
 	/**
-	 * Servicio de documentos.
+	 * Serviciul de documente.
 	 */
 	@Autowired
 	private transient DocumentoService documentoService;
 
 	/**
-	 * Mapa con las extensiones de archivo aceptadas en el sistema.
+	 * Extensiile de fișier acceptate în sistem..
 	 */
 	private Map<String, String> extensiones;
 
 	/**
-	 * Servicio del registro de actividad.
+	 * Serviciul de înregistrare a activității.
 	 */
 	@Autowired
 	private transient RegistroActividadService regActividadService;
 
 	/**
-	 * Bean de datos comunes de la aplicación.
+	 * Bean de date comune de aplicatie.
 	 */
 	@Autowired
 	private transient ApplicationBean applicationBean;
 
 	/**
-	 * Archivo siendo subido o descargado.
+	 * Fișier încărcat sau descărcat.
 	 */
 	private transient StreamedContent file;
 
 	/**
-	 * Lista documentos cargados .
+	 * Lista documentelor încărcate.
 	 */
 	private List<Documento> documentosCargados;
 
@@ -243,7 +244,7 @@ public class AlertaBean implements Serializable {
 	private UserService userService;
 
 	/**
-	 * Abre el diálogo para búsqueda de usuarios.
+	 * Deschideți dialogul pentru căutarea utilizatorilor.
 	 */
 	public void abrirDialogoBusquedaUsuarios() {
 		this.team = new Team();
@@ -253,7 +254,7 @@ public class AlertaBean implements Serializable {
 		this.listaTeams = this.teamService.fiindByTeam();
 		this.numarMembrii = this.listaTeams.size();
 		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dlgBusqueda').show();");
+		context.execute(Constantes.DIALOGBUSQUEDASHOW);
 	}
 
 	/**
@@ -266,7 +267,7 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
-	 * Busca la alerta en el array local de alertas.
+	 * Găsiți alerta din matricea de alertă locală.
 	 * @param id Long
 	 * @return Alerta
 	 */
@@ -282,7 +283,7 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
-	 * Busca alertas en base al filtro de búsqueda.
+	 * Căutați alerte pe baza filtrului de căutare.
 	 */
 	public void buscarAlertas() {
 		this.model.setBusqueda(this.alertaBusqueda);
@@ -290,7 +291,7 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
-	 * Busca usuarios en base a un filtro.
+	 * Căutați utilizatori pe baza unui filtru.
 	 */
 	public void buscarUsuarios() {
 		if (this.opcion == NumeroMagic.NUMBERONE) {
@@ -303,25 +304,25 @@ public class AlertaBean implements Serializable {
 		}
 	}
 
-	/**
-	 * Devuelve un listado de alertas por el correo del usuario.
-	 * @param usuario User
-	 * @return List<Alerta>
-	 */
-	public List<Alerta> cargarListaAlertas(final Users usuario) {
-		this.lstAlertas = this.alertaService.buscarAlertasPorUsuario(usuario);
-		return this.lstAlertas;
-	}
+	// /**
+	// * Returnează o listă de alerte cu e-mail-ul utilizatorului.
+	// * @param usuario User
+	// * @return List<Alerta>
+	// */
+	// public List<Alerta> cargarListaAlertas(final Users usuario) {
+	// this.lstAlertas = this.alertaService.buscarAlertasPorUsuario(usuario);
+	// return this.lstAlertas;
+	// }
 
 	/**
-	 * Borra la alerta actual que se esta visualizando.
+	 * Șterge alerta curentă care este vizionată.
 	 */
 	public void clearAlerta() {
 		this.alertaActual = null;
 	}
 
 	/**
-	 * Carga alerta por el identificador.
+	 * Încarcă alerta cu identificator ei.
 	 * @param alertaLocal Alerta
 	 */
 	public void detalleAlerta(final Alerta alertaLocal) {
@@ -329,7 +330,7 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
-	 * Envia alerta a los usuarios indicados.
+	 * Trimiteți alerte destinatarilor indicați.
 	 */
 	public Date enviarAlerta() {
 		Date fechaEnvio = null;
@@ -347,20 +348,55 @@ public class AlertaBean implements Serializable {
 			this.registroActividadService.guardarRegistroAltaModificacion(this.alerta.getId(),
 					this.alerta.getDescripcion(), SeccionesEnum.ALERTAS.name(), Constantes.DELAALERTA);
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ENVIOALERTA,
-					"Alerta a fost trimisă corect.");
-			this.limpiarCamposNuevaAlerta();
+					"Alerta/Comunicarea a fost trimisă corect.");
+			this.limpiarBuscadores();
 			fechaEnvio = new Date();
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la trimiterea avertizării ".concat(Constantes.DESCERRORMENSAJE));
+					"A apărut o eroare la trimiterea Alertei/Comunicării ".concat(Constantes.DESCERRORMENSAJE));
 			this.registroActividadService.guardarRegistroError(SeccionesEnum.ALERTAS.name(), Constantes.ALERTA, e);
 		}
 		return fechaEnvio;
 	}
 
 	/**
-	 * Envia la alerta a un usuario en especifico.
+	 * Salvati alerta in baza de date.
+	 */
+	public Date guardarAlerta() {
+		final Date fechaEnvio = null;
+		try {
+			if (!this.usuariosSeleccionadosFinales.isEmpty()) {
+				alerta.setListDestinatarios(usuariosSeleccionadosFinales);
+				if (!this.documentosCargados.isEmpty()) {
+					alerta.setDocumentos(documentosCargados);
+				}
+				alerta.setAsunto(this.alerta.getAsunto());
+				alerta.setChannel(AlertChannelEnum.EMAIL);
+				alerta.setDescripcion(this.alerta.getDescripcion());
+				if (this.alerta.getAutomatic()) {
+					alerta.setAutomatic(this.alerta.getAutomatic());
+					alerta.setFechaEnvio(this.alerta.getFechaEnvio());
+				}
+				alertaService.save(alerta);
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ERRORMENSAJE,
+						"Alerta/Comunicarea a fost salvată cu succes.");
+			}
+			else {
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+						"Nu se pot salva alerte sau comunicări fara destinatari.");
+			}
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"A apărut o eroare la salvarea Alertei/Comunicării ".concat(Constantes.DESCERRORMENSAJE));
+			// this.registroActividadService.guardarRegistroError(SeccionesEnum.ALERTAS.name(), Constantes.ALERTA, e);
+		}
+		return fechaEnvio;
+	}
+
+	/**
+	 * Trimiteți alerta unui anumit utilizator
 	 * @param usuario User
 	 */
 	public void enviarAlertaUsuario(final Users usuario) {
@@ -369,34 +405,36 @@ public class AlertaBean implements Serializable {
 			this.registroActividadService.guardarRegistroAltaModificacion(this.alerta.getId(),
 					this.alerta.getDescripcion(), SeccionesEnum.ALERTAS.name(), Constantes.DELAALERTA);
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ENVIOALERTA,
-					"La alerta se ha enviado correctamente.");
+					"Alerta/Comunicarea a fost trimisă corect.");
 			this.limpiarDatosCambiarPestana();
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"Se ha producido un error al enviar la alerta ".concat(Constantes.DESCERRORMENSAJE));
+					"A apărut o eroare la trimiterea Alertei/Comunicării ".concat(Constantes.DESCERRORMENSAJE));
 			this.registroActividadService.guardarRegistroError(SeccionesEnum.ALERTAS.name(), Constantes.ALERTA, e);
 		}
 	}
 
 	/**
-	 * Entra en la pantalla de enviar nueva alerta.
+	 * Intrarea în pagină pentru a trimite o nouă alertă.
 	 * @return String
 	 */
 	public String enviarAlertaUsuarios() {
 		this.alerta = new Alerta();
 		this.utilizatorExtern = Constantes.ESPACIO;
+		this.listaTeams = new ArrayList<>();
 		this.usuariosSeleccionados = new ArrayList<>();
+		this.listadoDocumentos = new ArrayList<>();
+		this.documentosCargados = new ArrayList<>();
 		this.usuariosSeleccionadosFinales = new ArrayList<>();
 		this.modelUser = new LazyDataUsers(this.usuarioService);
 		return "/alertas/nuevaAlerta?faces-redirect=true";
 	}
 
 	/**
-	 * Comprueba si un archivo se corresponde con alguno de los documentos solicitados tanto en nombre como en
-	 * extensión.
+	 * Verificați dacă un fișier corespunde oricărui document solicitat atât în nume, cât și în extensie.
 	 * @param archivo subido
-	 * @return booleano si o no
+	 * @return booleano da sau nu
 	 */
 	private boolean esDocumentacion(final UploadedFile archivo) {
 		final String nombreArchivo = archivo.getFileName();
@@ -406,12 +444,12 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
-	 * Método para establecer los usuarios en el listado general.
+	 * Metoda de stabilire a utilizatorilor în lista generală.
 	 */
 	public void establecerUsuariosFinales() {
 		final Users usua = new Users();
 		if (this.opcion == NumeroMagic.NUMBERTWO) {
-			for (final Users user : this.usuariosSeleccionadosFinales) {
+			for (final Users user : this.usuariosSeleccionados) {
 				user.getUsername();
 				if (!this.usuariosSeleccionadosFinales.contains(user)) {
 					this.usuariosSeleccionadosFinales.add(user);
@@ -420,9 +458,9 @@ public class AlertaBean implements Serializable {
 		}
 		else if (this.opcion == NumeroMagic.NUMBERTHREE) {
 			if (utilizatorExtern != null) {
-				String[] claves = utilizatorExtern.split(",");
-				for (int i = 0; i < claves.length; i++) {
-					String nombre = claves[i].trim();
+				final String[] claves = utilizatorExtern.split(Constantes.COMA);
+				for (final String clave : claves) {
+					final String nombre = clave.trim();
 					final Users usu = userService.fiindOne(nombre);
 					if (usu == null) {
 						usua.setUsername(nombre);
@@ -447,32 +485,46 @@ public class AlertaBean implements Serializable {
 						usua.setValidated(false);
 						usua.setWorkplace(null);
 						userService.save(usua);
-						this.usuariosSeleccionadosFinales.add(usua);
+						if (!this.usuariosSeleccionadosFinales.contains(usua)) {
+							this.usuariosSeleccionadosFinales.add(usua);
+						}
 					}
 
 					else {
-						this.usuariosSeleccionadosFinales.add(usu);
+						if (!this.usuariosSeleccionadosFinales.contains(usu)) {
+							this.usuariosSeleccionadosFinales.add(usu);
+						}
 					}
 				}
 			}
+		}
+		else {
+			for (final Users user : this.usuariosSeleccionados) {
+				user.getUsername();
+				if (!this.usuariosSeleccionadosFinales.contains(user)) {
+					this.usuariosSeleccionadosFinales.add(user);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Metoda de încărcare a documentelor.
+	 */
+	public void cargarDocumentos() {
+		for (final Documento doc : this.listadoDocumentos) {
+			this.documentosCargados.add(doc);
 		}
 
 	}
 
 	/**
-	 * Método para cargar ocumentos.
+	 * Salvați un fișier încărcat de utilizator ca document al cererii, după ce ați confirmat că nu este un fișier
+	 * corupt și că se potrivește cu oricare dintre cele solicitate.
+	 * @param event eveniment lansat din formular
+	 * @return ruta traseu
 	 */
-	public void cargarDocumentos(final Documento documento) {
-		this.documentosCargados.add(documento);
-	}
-
-	/**
-	 * Guarda un archivo subido por el usuario como documento de la solicitud, tras validar que no es un archivo
-	 * corrupto y que encaja con alguno de los solicitados.
-	 * @param event lanzado desde el formulario
-	 * @return ruta de la vista
-	 */
-	public String gestionarCargaDocumento(final FileUploadEvent event) {
+	public void gestionarCargaDocumento(final FileUploadEvent event) {
 		try {
 			final UploadedFile archivo = event.getFile();
 			// 19 es el id del tipodocumento para "template"
@@ -480,49 +532,47 @@ public class AlertaBean implements Serializable {
 			final Users usuario = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			if (this.esDocumentacion(archivo)) {
 				final Documento documento = this.documentoService.cargaDocumento(archivo, tipo, usuario);
-				this.documentosCargados.add(documento);
-				if (opcion == 3) {
-					alerta.setDestinatario(utilizatorExtern);
-				}
-				final List<Documento> documentos = new ArrayList<>();
-				documentos.add(documento);
-				final List<Users> users = usuariosSeleccionadosFinales;
-				final String destinatario = Constantes.ESPACIO;
-				for (final Users usu : users) {
-					destinatario.concat(usu.getUsername().concat(Constantes.COMA));
-				}
-				alerta.setDestinatario(destinatario);
-				alerta.setDocumentos(documentos);
-				alerta = alertaService.save(alerta);
+				this.listadoDocumentos.add(documento);
 				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO, Constantes.ALTA,
-						"Document/e încărcat cu succes", Constantes.MSGS);
+						"Documentul/ele încărcat/e cu succes", Constantes.MSGS);
 			}
 			else {
 				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, Constantes.CARGADOC,
-						"Fișierul " + archivo.getFileName()
+						"Fișierul încărcat " + archivo.getFileName()
 								+ " nu este valabil, numele sau extensia nu corespunde cu documentul încărcat.",
 						Constantes.MSGS);
 			}
 		}
 
-		catch (DataAccessException |
-
-				PerException e) {
+		catch (DataAccessException | PerException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, TipoRegistroEnum.EROARE.name(),
 					"A apărut o eroare la încărcarea documentului. ".concat(Constantes.DESCERRORMENSAJE));
 			final String descripcion = "A apărut o eroare la încărcarea documentului";
 			this.regActividadService.guardarRegistroError(descripcion, SeccionesEnum.GESTORDOCUMENTAL.getDescripcion(),
 					e);
 		}
-		return "/alertas/cargaDocumentos";
+		// final RequestContext context = RequestContext.getCurrentInstance();
+		// context.execute("PF('dlgCargaDoc').show();");
 	}
 
 	/**
-	 * Realiza la baja lógica del documento que podrá ser recuperado desde la papelera.
-	 *
-	 * @param document Documento al que se dará de baja lógica
+	 * Realizează eliminarea logică a documentului care poate fi recuperat din coșul de gunoi.
+	 * @param document Documentul care o sa fie eliminat logic.
 	 */
 	public void eliminarDocumento(final Documento document) {
+		try {
+			this.listadoDocumentos.remove(document);
+			this.documentoService.delete(document);
+		}
+		catch (final DataAccessException e) {
+		}
+	}
+
+	/**
+	 * Realizează eliminarea logică a documentului care poate fi recuperat din coșul de gunoi.
+	 * @param document Documentul care o sa fie eliminat logic.
+	 */
+	public void eliminarDocumentoFinal(final Documento document) {
 		try {
 			this.documentosCargados.remove(document);
 			this.documentoService.delete(document);
@@ -532,7 +582,7 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
-	 * Método init de AlertaBean.
+	 * Metoda Init a lui AlertaBean.
 	 */
 	@PostConstruct
 	public void init() {
@@ -540,6 +590,7 @@ public class AlertaBean implements Serializable {
 		this.alertaBusqueda = new AlertaBusqueda();
 		this.usuarioBusqueda = new UsuarioBusqueda();
 		this.usuariosExternosSeleccionados = usuarioService.findByName();
+		this.usuariosSeleccionadosFinales = new ArrayList<>();
 		this.team = new Team();
 		this.numarMembrii = 0;
 		this.provinces = new ArrayList<>();
@@ -554,62 +605,63 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
-	 * Limpia el buscador de usuarios por datos y el de por expedientes.
+	 * Acesta curăță utilizatorul de date și cel de fișiere.
 	 */
 	public void limpiarBuscadores() {
 		this.usuarioBusqueda = new UsuarioBusqueda();
 		this.usuariosSeleccionados = new ArrayList<>();
+		// this.usuariosSeleccionadosFinales = new ArrayList<>();
 		this.modelUser = new LazyDataUsers(this.usuarioService);
 	}
 
 	/**
-	 * Limpia la búsqueda del filtro.
+	 * Curățați filtre de căutarea.
 	 */
 	public void limpiarBusqueda() {
 		this.alertaBusqueda = new AlertaBusqueda();
 		this.model = new LazyDataAlertas(this.alertaService);
 	}
 
-	/**
-	 * Limpia los campos de usuarios seleccionados y la lista de usuarios.
-	 */
-	public void limpiarCamposNuevaAlerta() {
-		this.usuariosSeleccionados = new ArrayList<>();
-		this.alerta = new Alerta();
-		this.usuariosSeleccionadosFinales = new ArrayList<>();
-		this.modelUser = new LazyDataUsers(this.usuarioService);
-	}
+	// /**
+	// * Curăță câmpurile utilizatorilor selectați și lista de utilizatori..
+	// */
+	// public void limpiarCamposNuevaAlerta() {
+	// this.usuariosSeleccionados = new ArrayList<>();
+	// this.alerta = new Alerta();
+	// this.usuariosSeleccionadosFinales = new ArrayList<>();
+	// this.modelUser = new LazyDataUsers(this.usuarioService);
+	// }
 
 	/**
-	 * Limpia los datos de la pestaña de envio alertas.
+	 * Curăță datele din fila de trimitere a alertelor..
 	 */
 	private void limpiarDatosCambiarPestana() {
 		this.alerta.setAsunto(null);
 		this.alerta.setDescripcion(null);
 		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dialogMessage').hide()");
+		context.execute(Constantes.DIALOGMESGHIDE);
 	}
 
 	/**
-	 * Muestra el cuadro de dialogo de alertas con la alerta actual.
+	 * Afișează caseta de dialog Alertă cu alerta curentă.
 	 * @param a Alerta
 	 */
 	public void mostrarDialogoAlertaConDetalle(final Alerta alert) {
 		this.alertaActual = alert;
 		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dialogAlertas').show();");
+		context.execute(Constantes.DIALOGALERTAS);
 	}
 
 	/**
-	 * Muestra el cuadro de dialogo de alertas.
+	 * Afișează caseta de dialog Alertă.
 	 */
 	public void mostrarDialogoAlertas() {
 		final RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("PF('dialogAlertas').show();");
+		context.execute(Constantes.DIALOGALERTAS);
 	}
 
 	/**
-	 * Método para añadir nuevos usuarios a la lista de usuarios seleccionados.
+	 * Metoda de a adăuga noi utilizatori la lista de utilizatori selectați.
 	 */
 	public void onChangePageUsuarios() {
 		if ((this.usuariosSeleccionados != null) && !this.usuariosSeleccionados.isEmpty()) {
@@ -619,79 +671,96 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
-	 * Método que asocia un usuario al seleccionar su checkbox.
-	 * @param event evento lanzado que contiene la inspección
+	 * Metodă care asociază un utilizator când își selectează caseta de selectare pentru membrii.
+	 * @param event eveniment lansat care conține alerta
 	 */
 	public void onRowSelectedUser(final SelectEvent event) {
-		if (this.opcion == NumeroMagic.NUMBERONE) {
-			final Users usu = (Users) event.getObject();
-			this.usuariosSeleccionadosFinales.add(usu);
-			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
-		}
-		else if (this.opcion == NumeroMagic.NUMBERTWO) {
-			final Team team = (Team) event.getObject();
-			this.usuariosSeleccionadosFinales.add(team.getUser());
-			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
-		}
-
-	}
-
-	/**
-	 * Método que desasocia un usuario al deseleccionar su checkbox.
-	 * @param event evento lanzado que contiene la inspección.
-	 */
-	public void onRowUnSelectedUser(final UnselectEvent event) {
-		if (this.opcion == NumeroMagic.NUMBERONE) {
-			final Users us = (Users) event.getObject();
-			this.usuariosSeleccionadosFinales.remove(us);
-			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
-		}
-		else {
-			final Team team = (Team) event.getObject();
-			this.usuariosSeleccionadosFinales.remove(team.getUser());
-			this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
-		}
-	}
-
-	/**
-	 * Método que desasocia un usuario al deseleccionar su checkbox.
-	 * @param event evento lanzado que contiene usuario
-	 */
-	public void onRowUnSelectedUsu(final UnselectEvent event) {
 		final Users usu = (Users) event.getObject();
-		this.usuariosSeleccionadosFinales.remove(usu);
+		this.usuariosSeleccionadosFinales.add(usu);
 		this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
 	}
 
 	/**
-	 *
-	 * Controla las columnas visibles en la lista de resultados del buscador.
-	 *
+	 * Metodă care asociază un utilizator când își selectează caseta de selectare pentru echipa de conducere.
+	 * @param event eveniment lansat care conține alerta
+	 */
+	public void onRowSelectedTeam(final SelectEvent event) {
+		final Team team = (Team) event.getObject();
+		this.usuariosSeleccionadosFinales.add(team.getUser());
+		this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
+	}
+
+	/**
+	 * Metodă care dezasociază un utilizator când deselectează caseta de selectare pentru membrii.
+	 * @param event eveniment lansat care conține alerta
+	 */
+	public void onRowUnSelectedUser(final UnselectEvent event) {
+		final Users us = (Users) event.getObject();
+		this.usuariosSeleccionadosFinales.remove(us);
+		this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
+	}
+
+	/**
+	 * Metodă care dezasociază un utilizator când deselectează caseta de selectare pentru echipa de conducere.
+	 * @param event eveniment lansat care conține alerta
+	 */
+	public void onRowUnSelectedTeam(final UnselectEvent event) {
+		final Team team = (Team) event.getObject();
+		this.usuariosSeleccionadosFinales.remove(team.getUser());
+		this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
+	}
+
+	/**
+	 * Controlează coloanele vizibile în lista rezultatelor motorului de căutare.
 	 * @param e ToggleEvent
-	 *
 	 */
 	public void onToggle(final ToggleEvent e) {
 		this.list.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
 	}
 
 	/**
-	 * Método que capura el evento "Seleccionar todos" o "Deseleccionar todos" en la vista de alertas.
+	 * Metodă care captează evenimentul "Selectați toate" sau "Deselectați toate" membrii în vizualizarea Avertizări.
 	 * @param toogleEvent ToggleSelectEvent
 	 */
 	public void onToggleSelectUsers(final ToggleSelectEvent toogleEvent) {
 		if (toogleEvent.isSelected()) {
-			this.usuariosSeleccionadosFinales = new ArrayList<>(
+			this.usuariosSeleccionados = new ArrayList<>(
 					this.usuarioService.buscarUsuarioCriteria(this.usuarioBusqueda));
+			for (final Users user : this.usuariosSeleccionados) {
+				user.getUsername();
+				if (!this.usuariosSeleccionadosFinales.contains(user)) {
+					this.usuariosSeleccionadosFinales.add(user);
+				}
+			}
 		}
 		else {
-			this.usuariosSeleccionadosFinales = new ArrayList<>();
+			this.usuariosSeleccionados = new ArrayList<>();
 		}
 		this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
-		this.usuariosSeleccionados = new ArrayList<>(this.usuariosSeleccionadosFinales);
 	}
 
 	/**
-	 * Elimina a un usuario de la lista de usuarios seleccionados para recibir la alerta.
+	 * Metodă care captează evenimentul "Selectați toate" sau "Deselectați toate" membrii equipei în vizualizarea
+	 * Avertizări.
+	 * @param toogleEvent ToggleSelectEvent
+	 */
+	public void onToggleSelectTeam(final ToggleSelectEvent toogleEvent) {
+
+		if (toogleEvent.isSelected()) {
+			this.listaTeams = this.teamService.fiindByTeam();
+			for (final Team team : listaTeams) {
+				team.getUser();
+				this.usuariosSeleccionadosFinales.add(team.getUser());
+			}
+		}
+		else {
+			this.usuariosSeleccionados = new ArrayList<>();
+		}
+		this.modelUser.setDsource(this.usuariosSeleccionadosFinales);
+	}
+
+	/**
+	 * Eliminați un utilizator din lista utilizatorilor selectați pentru a primi alerta.
 	 * @param usuario User
 	 */
 	public void quitarUsuario(final Users usuario) {
@@ -703,5 +772,20 @@ public class AlertaBean implements Serializable {
 			}
 		}
 		this.usuariosSeleccionadosFinales.removeAll(usuariosBorrar);
+	}
+
+	/**
+	 * Descărcați un document încărcat de utilizator.
+	 * @param documento documentul selectat
+	 */
+	public void descargarFichero(final Documento documento) {
+		setFile(null);
+		try {
+			setFile(documentoService.descargaDocumento(documento));
+		}
+		catch (final PerException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"A apărut o eroare la descărcarea fișierului");
+		}
 	}
 }

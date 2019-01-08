@@ -46,7 +46,8 @@ import ro.per.online.persistence.entities.enums.SexEnum;
 @ToString
 @Getter
 @Setter
-@Entity@EntityListeners(AuditingEntityListener.class)
+@Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "USERS")
 public class Users extends AbstractEntity implements Serializable {
 
@@ -194,7 +195,7 @@ public class Users extends AbstractEntity implements Serializable {
 	private Boolean validated;
 
 	/**
-	 * Método que obtiene la imágen para previsualizar en caso de que el documento sea de tipo imágen.
+	 * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine..
 	 * @return StreamedContent
 	 */
 	public StreamedContent getImageUser() {

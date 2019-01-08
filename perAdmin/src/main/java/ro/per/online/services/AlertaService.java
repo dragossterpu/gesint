@@ -30,12 +30,12 @@ public interface AlertaService {
 	List<Alerta> buscarAlertaCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
 			AlertaBusqueda alertaBusqueda);
 
-	/**
-	 * Recupera las alertas del usuario que se esta modificando.
-	 * @param usuarioModificando User
-	 * @return List<Alerta>
-	 */
-	List<Alerta> buscarAlertasPorUsuario(Users usuarioModificando);
+	// /**
+	// * Recupera las alertas del usuario que se esta modificando.
+	// * @param usuarioModificando User
+	// * @return List<Alerta>
+	// */
+	// List<Alerta> buscarAlertasPorUsuario(Users usuarioModificando);
 
 	/**
 	 * Obtiene el conteo de criteria.
