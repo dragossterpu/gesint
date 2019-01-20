@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -16,8 +19,6 @@ import java.util.Random;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.ReadableInstant;
 import org.joda.time.Years;
 import org.primefaces.model.DefaultStreamedContent;
@@ -49,6 +50,7 @@ import ro.per.online.services.RegistroActividadService;
  */
 @Component
 public class Utilities {
+
 	/**
 	 * Servicio de actividad.
 	 */
@@ -289,22 +291,6 @@ public class Utilities {
 	}
 
 	/**
-	 * convierte un objeto Date a LocalDate.
-	 * @param date fecha en Date
-	 * @return fecha en localDate
-	 */
-	public LocalDate dateToLocalDate(final Date date) {
-		LocalDate out = null;
-
-		if (date != null) {
-			final DateTime dt = new DateTime(date);
-			out = dt.toLocalDate();
-		}
-
-		return out;
-	}
-
-	/**
 	 * Verificați dacă există un rol trecut prin parametru.
 	 * @param descripcion del enum
 	 * @throws PerException excepción propia de per
@@ -314,6 +300,7 @@ public class Utilities {
 			throw new PerException("Câmpul rol nu este un valid.");
 		}
 	}
+
 	/**
 	 * Verificați dacă există un rol trecut prin parametru.
 	 * @param descripcion del enum
@@ -324,6 +311,7 @@ public class Utilities {
 			throw new PerException("Câmpul rol nu este un valid.");
 		}
 	}
+
 	/**
 	 * Verificați dacă există un camp valabil pentru educatie trecut ca parametru.
 	 * @param descripcion del enum
@@ -444,5 +432,22 @@ public class Utilities {
 		facesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, operacion, mensaje);
 		registro.registrarActividad(seccion, operacion, apartado.concat(Constantes.OPERACION.concat(operacion)
 				.concat(Constantes.DE).concat(descripcion).concat(Constantes.SEHAREALEXITO)));
+	}
+
+	/**
+	 * Devuelve el número de días que han pasado desde una fecha introducida por parámetro hasta hoy.
+	 *
+	 * @param fecha usuario a consultar
+	 * @return dias número de días
+	 */
+	public static Long getDiasHastaHoy(final Date fecha) {
+		final LocalDate hoy = LocalDate.now();
+		long dias = 0;
+		LocalDate fechaDesde = null;
+		if (fecha != null) {
+			fechaDesde = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			dias = ChronoUnit.DAYS.between(fechaDesde, hoy);
+		}
+		return dias;
 	}
 }

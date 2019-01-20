@@ -2,23 +2,20 @@ package ro.per.online.persistence.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
@@ -63,12 +60,15 @@ public class Alerta extends AbstractEntity implements Serializable {
 	@Column(name = "TITLU", nullable = false, length = 256)
 	private String asunto;
 
-	/** The body. */
-	@Column(name = "BODY", nullable = false, length = 1024)
+	/**
+	 * Corpul mesajului
+	 */
+
+	@Column(name = "BODY", nullable = false, length = 4000)
 	private String descripcion;
 
 	/**
-	 * /** The channel.
+	 * The channel.
 	 */
 	@Column(name = "CHANNEL")
 	@Enumerated(EnumType.STRING)
@@ -81,16 +81,22 @@ public class Alerta extends AbstractEntity implements Serializable {
 	/**
 	 * Lista cu destinatarii alertei.
 	 */
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "alerta_users", joinColumns = @JoinColumn(name = "id_alerta"), inverseJoinColumns = @JoinColumn(name = "username"))
-	private List<Users> listDestinatarios;
+	@Lob
+	@Type(type = "org.hibernate.type.TextType")
+	@Column(name = "destinatarios")
+	private String destinatarios;
 
-	/**
-	 * Lista con los documentos asociados a la solicitud.
-	 */
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "alerta_docs", joinColumns = @JoinColumn(name = "id_alerta"), inverseJoinColumns = @JoinColumn(name = "id_documento"))
-	private List<Documento> documentos;
+	// /**
+	// * Lista con los documentos asociados a la solicitud.
+	// */
+	// @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE, CascadeType.MERGE })
+	// @JoinTable(name = "alerta_docs", joinColumns = @JoinColumn(name = "id_alerta"), inverseJoinColumns =
+	// @JoinColumn(name = "id_documento"))
+	// private List<Documento> documentos;
+
+	// /** The task instance list. */
+	// @OneToMany(mappedBy = "alerta", fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE, CascadeType.MERGE })
+	// private List<Documento> documentos;
 
 	/**
 	 * Trimitere automatica.

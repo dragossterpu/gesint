@@ -1,25 +1,25 @@
 package ro.per.online.persistence.entities;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
@@ -55,13 +55,6 @@ public class Documento extends AbstractEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DOCUMENTOS")
 	@Column(name = "id", nullable = false)
 	private Long id;
-
-	/**
-	 * Fișier legat de document.
-	 */
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "ID_FICHERO", foreignKey = @ForeignKey(name = "FK_D_FICHERO"))
-	private DocumentoBlob fichero;
 
 	/**
 	 * ContentType din fișierul atașat.
@@ -115,11 +108,24 @@ public class Documento extends AbstractEntity implements Serializable {
 			@JoinColumn(name = "id_proiect") })
 	private List<Proiecte> proiect;
 
-	/**
-	 * Alerta la care este atribuit documentul.
-	 */
+	/** The job instance. */
 	@ManyToOne
-	@JoinColumn(name = "alerta")
+	@JoinColumn(name = "alerta", nullable = true, unique = false)
 	private Alerta alerta;
+
+	/**
+	 * Array de byte cu conținutul fișierului.
+	 */
+	@Lob
+	@Column(name = "fichero")
+	private byte[] fichero;
+
+	/**
+	 * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine..
+	 * @return StreamedContent
+	 */
+	public StreamedContent getFile() {
+		return new DefaultStreamedContent(new ByteArrayInputStream(this.fichero));
+	}
 
 }

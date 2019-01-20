@@ -34,12 +34,22 @@ public class ProvinceServiceImpl implements ProvinceService {
 		return (ArrayList<PProvince>) provinceRepository.findAll();
 	}
 
+	/**
+	 * Cauta un judet
+	 * @param province Judetul
+	 * @return PProvince province
+	 */
 	@Override
 	public PProvince fiindOne(final PProvince province) {
 		provinceRepository.findOne(province.getIndicator());
 		return province;
 	}
 
+	/**
+	 * Cauta un judet dupa id
+	 * @param province Judetul
+	 * @return PProvince province
+	 */
 	@Override
 	public PProvince findById(final String province) {
 		return provinceRepository.findOne(province);

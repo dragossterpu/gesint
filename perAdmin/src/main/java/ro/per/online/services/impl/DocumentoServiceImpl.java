@@ -29,7 +29,6 @@ import ro.per.online.constantes.Constantes;
 import ro.per.online.exceptions.PerException;
 import ro.per.online.persistence.entities.Alerta;
 import ro.per.online.persistence.entities.Documento;
-import ro.per.online.persistence.entities.DocumentoBlob;
 import ro.per.online.persistence.entities.TipoDocumento;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.persistence.repositories.IDocumentoRepository;
@@ -46,6 +45,7 @@ import ro.per.online.web.beans.gd.DocumentoBusqueda;
  */
 
 @Service("documentoService")
+@Transactional
 public class DocumentoServiceImpl implements DocumentoService {
 
 	/**
@@ -201,46 +201,13 @@ public class DocumentoServiceImpl implements DocumentoService {
 	 * @throws DataAccessException Excepción SQL
 	 * @throws IOException Excepción entrada/salida
 	 */
-	private Documento crearDocumento(final UploadedFile file, final TipoDocumento tipo, final Alerta alerta)
-			throws IOException {
-		final Documento docu = new Documento();
-		docu.setNombre(file.getFileName());
-		docu.setTipoDocumento(tipo);
-		if (alerta != null) {
-			docu.setAlerta(alerta);
-		}
-		final byte[] fileBlob = StreamUtils.copyToByteArray(file.getInputstream());
-		final DocumentoBlob blob = new DocumentoBlob();
-		blob.setFichero(fileBlob);
-		blob.setNombreFichero(file.getFileName());
-		docu.setFichero(blob);
-		docu.setTipoContenido(file.getContentType());
-		return docu;
-	}
-
-	/**
-	 * Crea el documento.
-	 * @param file Fichero subido por el usuario.
-	 * @param tipo Tipo de documento.
-	 * @param inspeccion Inspección a la que se asocia.
-	 * @return Documento generado
-	 * @throws DataAccessException Excepción SQL
-	 * @throws IOException Excepción entrada/salida
-	 */
 	private Documento crearDocumento(final UploadedFile file, final TipoDocumento tipo, final Users usuario)
 			throws IOException {
 		final Documento docu = new Documento();
 		docu.setNombre(file.getFileName());
 		docu.setTipoDocumento(tipo);
-		docu.setDateCreate(new Date());
-		if (usuario != null) {
-			docu.setUsuario(usuario);
-		}
 		final byte[] fileBlob = StreamUtils.copyToByteArray(file.getInputstream());
-		final DocumentoBlob blob = new DocumentoBlob();
-		blob.setFichero(fileBlob);
-		blob.setNombreFichero(file.getFileName());
-		docu.setFichero(blob);
+		docu.setFichero(fileBlob);
 		docu.setTipoContenido(file.getContentType());
 		return docu;
 	}
@@ -283,9 +250,8 @@ public class DocumentoServiceImpl implements DocumentoService {
 		final Documento docu = documentoRepository.findOne(entity.getId());
 		DefaultStreamedContent streamDocumento;
 		if (docu != null) {
-			final DocumentoBlob doc = docu.getFichero();
-			final InputStream stream = new ByteArrayInputStream(doc.getFichero());
-			streamDocumento = new DefaultStreamedContent(stream, entity.getTipoContenido(), doc.getNombreFichero());
+			final InputStream stream = new ByteArrayInputStream(docu.getFichero());
+			streamDocumento = new DefaultStreamedContent(stream, entity.getTipoContenido(), docu.getNombre());
 		}
 		else {
 			throw new PerException(new Exception("A apărut o eroare la descărcarea documentului"));
@@ -304,9 +270,8 @@ public class DocumentoServiceImpl implements DocumentoService {
 		final Documento entity = documentoRepository.findById(id);
 		DefaultStreamedContent streamDocumento;
 		if (entity != null) {
-			final DocumentoBlob doc = entity.getFichero();
-			final InputStream stream = new ByteArrayInputStream(entity.getFichero().getFichero());
-			streamDocumento = new DefaultStreamedContent(stream, entity.getTipoContenido(), doc.getNombreFichero());
+			final InputStream stream = new ByteArrayInputStream(entity.getFichero());
+			streamDocumento = new DefaultStreamedContent(stream, entity.getTipoContenido(), entity.getNombre());
 		}
 		else {
 			throw new PerException(new Exception("A apărut o eroare la descărcarea documentului"));
@@ -376,8 +341,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 	@Override
 	public String obtieneNombreFichero(final Documento documento) {
 		final Documento docu = documentoRepository.findById(documento.getId());
-		final DocumentoBlob doc = docu.getFichero();
-		return doc.getNombreFichero();
+		return docu.getNombre();
 	}
 
 	/**
@@ -447,6 +411,18 @@ public class DocumentoServiceImpl implements DocumentoService {
 	@Override
 	public List<Documento> vaciarPapelera() {
 		final List<Documento> listaEliminar = documentoRepository.findByDateDeletedIsNotNull();
+		documentoRepository.delete(listaEliminar);
+		return listaEliminar;
+	}
+
+	/**
+	 * Returnează documentele care corespund alertei.
+	 * @param alerta Alerta
+	 * @return Lista documentelor
+	 */
+	@Override
+	public List<Documento> findByAlerta(final Alerta alerta) {
+		final List<Documento> listaEliminar = documentoRepository.findByAlerta(alerta);
 		documentoRepository.delete(listaEliminar);
 		return listaEliminar;
 	}

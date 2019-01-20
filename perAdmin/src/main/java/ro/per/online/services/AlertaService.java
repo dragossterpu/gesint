@@ -22,20 +22,19 @@ public interface AlertaService {
 	 * @param sortField String
 	 * @param pageSize int
 	 * @param first int
-	 * 
+	 *
 	 * @return List<Alerta>
 	 *
-	 * 
+	 *
 	 */
 	List<Alerta> buscarAlertaCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
 			AlertaBusqueda alertaBusqueda);
 
-	// /**
-	// * Recupera las alertas del usuario que se esta modificando.
-	// * @param usuarioModificando User
-	// * @return List<Alerta>
-	// */
-	// List<Alerta> buscarAlertasPorUsuario(Users usuarioModificando);
+	/**
+	 * Eliminación de un usuario.
+	 * @param usuario a eliminar
+	 */
+	void delete(Alerta alerta);
 
 	/**
 	 * Obtiene el conteo de criteria.
@@ -64,5 +63,12 @@ public interface AlertaService {
 	 * @param usuario User
 	 */
 	void sendAlertUsuario(Alerta alerta, Users usuario);
+
+	/**
+	 * Cauta o alerta
+	 * @param alerta Alerta
+	 * @return alerta Alerta
+	 */
+	Alerta fiindOne(Alerta alerta);
 
 }

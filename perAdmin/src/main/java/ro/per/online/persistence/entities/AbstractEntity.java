@@ -34,7 +34,8 @@ public abstract class AbstractEntity implements Serializable {
 	private static final long serialVersionUID = -5041785485043966367L;
 
 	/**
-	 * Utilizator de creatie.
+	 *
+	 * KMNBVCXZ1º
 	 */
 	@CreatedBy
 	@Column(name = "user_create", length = 250)

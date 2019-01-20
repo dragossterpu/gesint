@@ -8,6 +8,7 @@ import org.primefaces.model.SortOrder;
 import org.primefaces.model.UploadedFile;
 
 import ro.per.online.exceptions.PerException;
+import ro.per.online.persistence.entities.Alerta;
 import ro.per.online.persistence.entities.Documento;
 import ro.per.online.persistence.entities.TipoDocumento;
 import ro.per.online.persistence.entities.Users;
@@ -15,7 +16,7 @@ import ro.per.online.web.beans.gd.DocumentoBusqueda;
 
 /**
  * Interfața serviciului Documente.
- * 
+ *
  * @author STAD
  *
  */
@@ -29,6 +30,13 @@ public interface DocumentoService {
 	List<Documento> buscaNombreTipoDocumento(String tipoDocumento);
 
 	/**
+	 * Returnează documentele care corespund alertei.
+	 * @param alerta Alerta
+	 * @return Lista documentelor
+	 */
+	List<Documento> findByAlerta(Alerta alerta);
+
+	/**
 	 * Consulta en base de datos en base a los parámetros recibidos. La consulta se hace paginada. Cautare în baza de
 	 * date pe baza parametrilor primiți. Rezultatul este paginat.
 	 * @param first Primul element din căutare
@@ -37,7 +45,7 @@ public interface DocumentoService {
 	 * @param sortOrder ordine de sortare
 	 * @param busqueda Obiect care conține criteriile de căutare
 	 * @return Lista documentelor care corespund criteriilor primite
-	 * 
+	 *
 	 */
 	List<Documento> buscarDocumentoPorCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
 			DocumentoBusqueda busqueda);
@@ -57,7 +65,7 @@ public interface DocumentoService {
 	 * @param usuario utilizator asociat cu documentul
 	 * @return Documento documentul încărcat în baza de date
 	 * @throws PerException Excepție posibilă
-	 * 
+	 *
 	 */
 
 	Documento cargaDocumento(UploadedFile file, TipoDocumento tipo, Users usuario) throws PerException;
@@ -76,7 +84,7 @@ public interface DocumentoService {
 	/**
 	 * Eliminare de documente din baza de date. Documentul care trebuie eliminat este primit ca parametru.
 	 * @param entity Documento pentru eliminare
-	 * 
+	 *
 	 */
 
 	void delete(Documento entity);
@@ -141,7 +149,7 @@ public interface DocumentoService {
 	String obtieneNombreFichero(Documento documento);
 
 	/**
-	 * 
+	 *
 	 * @param criteria
 	 * @param first
 	 * @param pageSize
@@ -172,7 +180,7 @@ public interface DocumentoService {
 	 * documentele salvate.
 	 * @param entities Documente de salvat
 	 * @return Lista documentelor salvate
-	 * 
+	 *
 	 */
 
 	Iterable<Documento> save(Iterable<Documento> entities);

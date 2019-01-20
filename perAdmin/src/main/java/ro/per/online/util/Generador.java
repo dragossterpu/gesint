@@ -1,11 +1,13 @@
 package ro.per.online.util;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
 import ro.per.online.constantes.Constantes;
+import ro.per.online.persistence.entities.PProvince;
 
 /**
  * Métodos de utilidades.
@@ -15,7 +17,7 @@ public class Generador {
 	/**
 	 * Números.
 	 */
-	public static final String NUMBERS = "0123456789";
+	public static final String NUMBERS = "123456789";
 
 	/**
 	 * Números de cuerpos.
@@ -100,7 +102,7 @@ public class Generador {
 	 * @return apellido al azar
 	 */
 	public static String apellidoFinal3() {
-		final String[] apellidos = { "Niță", "Pop", "Popa", "Popescu", "Ionescu", "Samoilă", "Stan", "Dumitrescu",
+		final String[] apellidos = { "Popescu", "Pop", "Popa", "Popescu", "Ionescu", "Samoilă", "Stan", "Dumitrescu",
 				"Savu", "Sabău", "Ioniță", "Marin", "Tudor", "Săceanu", "Barbu", "Nistor", "Florea", "Săftoiu", "Dinu",
 				"Georgescu", "Stoica", "Diaconu", "Diaconescu", "Sălăgean", "Barbu", "Sălișteanu", "Nistor", "Sârbu",
 				"Oprea", "Voinea", "Sebeșanu", "Albu", "Secășanu", "Manole", "Cristea", "Silișteanu", "Stănescu",
@@ -116,8 +118,42 @@ public class Generador {
 				"Marinescu", "Matei", "Urleanu", "Ursu", "Urzică", "Urziceanu", "Uțescu", "Vamăș", "Neacșu", "Vanța",
 				"Nicolae", "Vasilache", "Vasilescu", "Vasiliu", "Vatamanu", "Văcariu", "Panait", "Vădean", "Vărzariu",
 				"Vânătoru", "Popa", "Popescu", "Velcean", "Preda", "Radu", "Vereștiuc", "Vermeșan", "Viașu", "Vidrașcu",
-				"Roșca", "Vlașcu", "Vințu" };
-		final String apellido = apellidos[1 + new Random().nextInt(150)];
+				"Roșca", "Vlașcu", "Vințu", "Niță", "Pop", "Popa", "Popescu", "Ionescu", "Acsinte", "Stan",
+				"Dumitrescu", "Băcan", "Gheorghiu", "Ioniță", "Marin", "Tudor", "Dobre", "Barbu", "Nistor", "Florea",
+				"Ene", "Dinu", "Georgescu", "Stoica", "Diaconu", "Diaconescu", "Bicescu", "Bârgoveanu", "Băiceanu",
+				"Nistor", "Căilnicean", "Oprea", "Voinea", "Cârciumăreasa", "Albu", "Călescu", "Manole", "Cristea",
+				"Călimăceanu", "Stănescu", "Cîșlariu", "Tomescu", "Dacian", "Ionescu", "Marinescu", "Georgescu",
+				"Vasilescu", "Daniilescu", "Dalaban", "Gheorghiu", "Vasiliu", "Davidescu", "Dășanu", "Stoicescu",
+				"Tomescu", "Deaconu", "Dedulescu", "Denciu", "Despinescu", "Dobriceanu", "Dodea", "Dogaru",
+				"Theodorescu", "Dițulescu", "Eftimie", "Enăceanu", "Fiertu", "Filipoiu", "Firescu", "Firuleasa",
+				"Fîntînaru", "Gabrea", "Gabrilescu", "Gafiței", "Garabagiu", "Ionescu", "Georgescu", "Vasilescu",
+				"Podaru", "Gălățeanu", "Geamănu", "Habageriu", "Hangiu", "Hedeșan", "Helgiu", "Henciu", "Herdeș",
+				"Hergehelegiu", "Iacob", "Ieftimie", "Ienășescu", "Ieremia", "Iftodi", "Deaconu", "Ignăteanu",
+				"Ignătescu", "Ilinca", "Ipătescu", "Iriminescu", "Isăceanu", "Ispir", "Istrătescu", "Ivănoiu", "Jderu",
+				"Jeleanu", "Jercălău", "Jidaru", "Jilăveanu", "Largu", "Lateș", "Lazariu", "Lăpușan", "Lefterescu",
+				"Leahă", "Licsandru", "Lișcă", "Lupșan", "Lunceanu", "Maftei", "Manea", "Manole", "Mareș", "Marinescu",
+				"Matei", "Măgureanu", "Medeleanu", "Micescu", "Miclea", "Miclescu", "Mîndrescu", "Neacșu", "Neaga",
+				"Nicolae", "Noica", "Nuțu", "Ogaru", "Ogăraru", "Paicu", "Panait", "Pârvu", "Pleșan", "Poenaru", "Popa",
+				"Popescu", "Popovici", "Preda", "Radu", "Robu", "Roceanu", "Romașcanu", "Rontea", "Roșca", "Roșianu",
+				"Rotaru", "Niță", "Pop", "Popa", "Popescu", "Ionescu", "Nemeș", "Stan", "Dumitrescu", "Dima",
+				"Gheorghiu", "Ioniță", "Marin", "Tudor", "Dobre", "Barbu", "Nistor", "Florea", "Ene", "Dinu",
+				"Georgescu", "Stoica", "Diaconu", "Diaconescu", "Mazilescu", "Ababei", "Aanei", "Nistor", "Mocanu",
+				"Oprea", "Voinea", "Dochioiu", "Albu", "Tabacu", "Manole", "Cristea", "Toma", "Stănescu", "Pușcașu",
+				"Tomescu", "Meceanu", "Ionescu", "Marinescu", "Georgescu", "Vasilescu", "Stoican", "Maican",
+				"Gheorghiu", "Vasiliu", "Pâclea", "Pecaru", "Stoicescu", "Tomescu", "Reaboiu", "Rîciu", "Roateș",
+				"Scafariu", "Sebeșanu", "Șdirea", "Șabac", "Theodorescu", "Acatrinei", "Babageanu", "Bâclea", "Bâgioi",
+				"Beceanu", "Bicăjan", "Bechir", "Băcean", "Becleanu", "Bedean", "Bidirean", "Bilcan", "Ionescu",
+				"Georgescu", "Vasilescu", "Balagiu", "Bâtrânu", "Bălăcean", "Cabariu", "Cîju", "Căciuleanu",
+				"Câmpureanu", "Chelarașu", "Calcea", "Cîrje", "Cherchez", "Cheregi", "Cimponeriu", "Cămui", "Cerbeanu",
+				"Deaconu", "Diamandescu", "Diceanu", "Dăncescu", "Delcescu", "Fabriș", "Ficior", "Federciuc", "Feișan",
+				"Feleacă", "Filimonescu", "Gâdinceanu", "Giblea", "Geană", "Ginculescu", "Găinariu", "Henciu",
+				"Hăncescu", "Herdean", "Idriceanu", "Ienășescu", "Iftimia", "Jeberean", "Jecan", "Jătăreanu", "Leacă",
+				"Laciu", "Lăceanu", "Logofătu", "Mecineanu", "Macavei", "Mândrescu", "Măgădan", "Miculeasa", "Meiroșu",
+				"Nădișan", "Năescu", "Nuță", "Nicoale", "Nanciu", "Nicolea", "Obăcescu", "Ogaru", "Odobeștianu",
+				"Ogrezeanu", "Pâcleanu", "Pârgaru", "Plăvănescu", "Pălean", "Pencescu", "Păltinișanu", "Rebegeanu",
+				"Robaciu", "Răcășanu", "Râșnoveanu", "Rudișteanu", "Săbiescu", "Secăleanu", "Secașu", "Săcășean",
+				"Scărlătescu" };
+		final String apellido = apellidos[1 + new Random().nextInt(450)];
 		return apellido.toUpperCase();
 	}
 
@@ -125,8 +161,8 @@ public class Generador {
 	 * Obtiene un cnp.
 	 * @return cnp al azar
 	 */
-	public static String generaCnp(final String sex, final Date fecha) {
-
+	public static String generaCnp(final String sex, final Date fecha, final PProvince prov) {
+		String cnp = Constantes.ESPACIO;
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 		final String anString = sdf.format(fecha);
 
@@ -135,11 +171,229 @@ public class Generador {
 
 		final SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
 		final String month = monthFormat.format(fecha);
+		final String judet = generaJudet(prov.getIndicator());
 
-		final String cnp = sex.concat(anString.substring(2)).concat(month).concat(day).concat("4")
-				.concat(getCodigoPostal());
+		return cnp = genereazaCnp(sex, anString.substring(2), month, day, judet);
+	}
 
-		return cnp;
+	/**
+	 * Obtiene una sector de la lista.
+	 * @return sectoral azar
+	 */
+	public static String genereazaCnp(String sex, String an, String luna, String ziua, String judet) {
+		int S = Integer.valueOf(sex) * 2;
+
+		int AA1 = (Integer.valueOf(an.substring(0, 1)) / 10) * 7;
+
+		int AA2 = (Integer.valueOf(an.substring(1, 2)) % 10) * 9;
+
+		int LL1 = (Integer.valueOf(luna.substring(0, 1)) / 10) * 1;
+
+		int LL2 = (Integer.valueOf(luna.substring(1, 2)) % 10) * 4;
+
+		int ZZ1 = (Integer.valueOf(ziua.substring(0, 1)) / 10) * 6;
+
+		int ZZ2 = (Integer.valueOf(ziua.substring(1, 2)) % 10) * 3;
+
+		int JJ1 = (Integer.valueOf(judet.substring(0, 1)) / 10) * 5;
+
+		int JJ2 = (Integer.valueOf(judet.substring(1, 2)) % 10) * 8;
+
+		String nrGenerat = nrGenerat();
+		int NNN1 = (Integer.valueOf(nrGenerat.substring(0, 1)) / 100) * 2;
+
+		int NNN2 = (Integer.valueOf(nrGenerat.substring(1, 2)) / 10) * 7;
+
+		int NNN3 = (Integer.valueOf(nrGenerat.substring(2, 3)) % 10) * 9;
+
+		int cifraControl = S + AA1 + AA2 + LL1 + LL2 + ZZ1 + ZZ2 + JJ1 + JJ2 + NNN1 + NNN2 + NNN3;
+
+		int cifraControlFinal;
+		int rest = cifraControl % 11;
+		if (rest == 10) {
+
+			cifraControlFinal = 1;
+
+		}
+		else {
+
+			cifraControlFinal = rest;
+
+		}
+		String controlFinal = Integer.toString(cifraControlFinal);
+
+		StringBuilder cnpValid = new StringBuilder("").append(sex)
+
+				.append(an).append(luna).append(ziua)
+
+				.append(judet).append(nrGenerat).append(controlFinal);
+
+		return cnpValid.toString();
+	}
+
+	/**
+	 * Obtiene una sector de la lista.
+	 * @return sectoral azar
+	 */
+	public static String nrGenerat() {
+		Random random = new Random();
+
+		int min = 1;
+
+		int max = 999;
+
+		int nrGenerat = random.nextInt(max - min) + min;
+
+		DecimalFormat formatare = new DecimalFormat("000");
+
+		String getNNN = formatare.format(nrGenerat);
+		return getNNN;
+	}
+
+	/**
+	 * Obtiene una sector de la lista.
+	 * @return sectoral azar
+	 */
+	public static String sector() {
+		final String[] sectoare = { "41", "41", "42", "43", "44", "45", "46" };
+		final String sector = sectoare[1 + new Random().nextInt(6)];
+		return sector;
+	}
+
+	/**
+	 * Obtiene un cnp.
+	 * @return cnp al azar
+	 */
+	public static String generaJudet(final String prov) {
+		String judet = Constantes.ESPACIO;
+		if (prov.equals("AB")) {
+			judet = "01";
+		}
+		else if (prov.equals("AR")) {
+			judet = "02";
+		}
+		else if (prov.equals("AG")) {
+			judet = "03";
+		}
+		else if (prov.equals("BC")) {
+			judet = "04";
+		}
+		else if (prov.equals("BH")) {
+			judet = "05";
+		}
+		else if (prov.equals("BN")) {
+			judet = "06";
+		}
+		else if (prov.equals("BT")) {
+			judet = "07";
+		}
+		else if (prov.equals("BV")) {
+			judet = "08";
+		}
+		else if (prov.equals("BR")) {
+			judet = "09";
+		}
+		else if (prov.equals("BZ")) {
+			judet = "10";
+		}
+		else if (prov.equals("CS")) {
+			judet = "11";
+		}
+		else if (prov.equals("CJ")) {
+			judet = "12";
+		}
+		else if (prov.equals("CT")) {
+			judet = "13";
+		}
+		else if (prov.equals("CV")) {
+			judet = "14";
+		}
+		else if (prov.equals("DB")) {
+			judet = "15";
+		}
+		else if (prov.equals("DJ")) {
+			judet = "16";
+		}
+		else if (prov.equals("GL")) {
+			judet = "17";
+		}
+		else if (prov.equals("GJ")) {
+			judet = "18";
+		}
+		else if (prov.equals("HR")) {
+			judet = "19";
+		}
+		else if (prov.equals("HD")) {
+			judet = "20";
+		}
+		else if (prov.equals("IL")) {
+			judet = "21";
+		}
+		else if (prov.equals("IS")) {
+			judet = "22";
+		}
+		else if (prov.equals("IF")) {
+			judet = "23";
+		}
+		else if (prov.equals("MM")) {
+			judet = "24";
+		}
+		else if (prov.equals("MH")) {
+			judet = "25";
+		}
+		else if (prov.equals("MS")) {
+			judet = "26";
+		}
+		else if (prov.equals("NT")) {
+			judet = "27";
+		}
+		else if (prov.equals("OT")) {
+			judet = "28";
+		}
+		else if (prov.equals("PH")) {
+			judet = "29";
+		}
+		else if (prov.equals("SM")) {
+			judet = "30";
+		}
+		else if (prov.equals("SJ")) {
+			judet = "31";
+		}
+		else if (prov.equals("SB")) {
+			judet = "32";
+		}
+		else if (prov.equals("SV")) {
+			judet = "33";
+		}
+		else if (prov.equals("TL")) {
+			judet = "34";
+		}
+		else if (prov.equals("TM")) {
+			judet = "35";
+		}
+		else if (prov.equals("TL")) {
+			judet = "36";
+		}
+		else if (prov.equals("VS")) {
+			judet = "37";
+		}
+		else if (prov.equals("VL")) {
+			judet = "38";
+		}
+		else if (prov.equals("VN")) {
+			judet = "39";
+		}
+		else if (prov.equals("CL")) {
+			judet = "51";
+		}
+		else if (prov.equals("GR")) {
+			judet = "52";
+		}
+		else {
+			judet = sector();
+
+		}
+		return judet;
 	}
 
 	/**
@@ -148,6 +402,14 @@ public class Generador {
 	 */
 	public static String getCodigoPostal() {
 		return getRandomChars(NUMBERS, 5);
+	}
+
+	/**
+	 * Obtiene el código postal.
+	 * @return codigo postal aleatorio
+	 */
+	public static String getNumeros() {
+		return getRandomChars(NUMBERS, 3);
 	}
 
 	/**
@@ -520,7 +782,7 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		fecha = Calendar.getInstance();
-		fecha.set(aleatorio.nextInt(40) + 1959, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
+		fecha.set(aleatorio.nextInt(41) + 1959, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat(Constantes.FORMFECHA);
 		return fecha.getTime();
 	}
@@ -548,7 +810,7 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		hora = Calendar.getInstance();
-		hora.set(aleatorio.nextInt(40) + 1959, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
+		hora.set(aleatorio.nextInt(41) + 1959, aleatorio.nextInt(12) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat("hh/mm");
 		return hora.getTime();
 	}

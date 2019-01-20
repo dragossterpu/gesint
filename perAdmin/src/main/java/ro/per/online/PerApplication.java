@@ -1,10 +1,14 @@
 package ro.per.online;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.EntityManagerFactory;
+import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.HandlesTypes;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
@@ -13,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.ErrorPageRegistrar;
 import org.springframework.boot.web.servlet.ErrorPageRegistry;
@@ -24,6 +30,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import com.sun.faces.config.FacesInitializer;
 
 import ro.per.online.constantes.Constantes;
 import ro.per.online.jsf.scope.FacesViewScope;
@@ -162,5 +170,53 @@ public class PerApplication {
 	@Bean
 	public SessionFactory sessionFactory(final HibernateEntityManagerFactory hemf) {
 		return hemf.getSessionFactory();
+	}
+
+	/**
+	 * This bean is only needed when running with embedded Tomcat.
+	 * @return tomcat Conexion con el servidor
+	 */
+	@Bean
+	public EmbeddedServletContainerFactory embeddedServletContainerFactory() {
+		final TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
+
+		tomcat.addContextCustomizers(context -> {
+			// register FacesInitializer
+			context.addServletContainerInitializer(new FacesInitializer(),
+					getServletContainerInitializerHandlesTypes(FacesInitializer.class));
+			context.addWelcomeFile("index.xhtml");
+			context.addMimeMapping("eot", "application/vnd.ms-fontobject");
+			context.addMimeMapping("ttf", "application/x-font-ttf");
+			context.addMimeMapping("woff", "application/x-font-woff");
+			context.addMimeMapping("woff2", "application/fontawesome-webfont.woff2");
+		});
+
+		return tomcat;
+	}
+
+	/**
+	 * Inicializa el contenedor getServletContainerInitializerHandlesTypes.
+	 * @param sciClass ServletContainerInitializer
+	 * @return classesSet
+	 */
+	@SuppressWarnings(Constantes.RAWTYPES)
+	private Set<Class<?>> getServletContainerInitializerHandlesTypes(
+			final Class<? extends ServletContainerInitializer> sciClass) {
+		Set<Class<?>> coleccion;
+
+		final HandlesTypes annotation = sciClass.getAnnotation(HandlesTypes.class);
+		if (annotation == null) {
+			coleccion = Collections.emptySet();
+		}
+		else {
+			final Class[] classesArray = annotation.value();
+			final Set<Class<?>> classesSet = new HashSet<>(classesArray.length);
+			for (final Class clazz : classesArray) {
+				classesSet.add(clazz);
+			}
+			coleccion = classesSet;
+		}
+
+		return coleccion;
 	}
 }

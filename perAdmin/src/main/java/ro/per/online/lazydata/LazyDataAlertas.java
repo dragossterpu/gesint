@@ -1,6 +1,7 @@
 package ro.per.online.lazydata;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ import ro.per.online.web.beans.AlertaBusqueda;
 public class LazyDataAlertas extends LazyDataModel<Alerta> implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -54,7 +55,7 @@ public class LazyDataAlertas extends LazyDataModel<Alerta> implements Serializab
 	 * Sobreescritura del método getRowData para que funcione con objetos de tipo Alerta.
 	 * @param rowKey Clave de la fila sobre la que se ha hecho click en la vista
 	 * @return Alerta que se corresponde con la clave recibida por parámetro
-	 * 
+	 *
 	 */
 	@Override
 	public Alerta getRowData(final String rowKey) {
@@ -88,22 +89,22 @@ public class LazyDataAlertas extends LazyDataModel<Alerta> implements Serializab
 	 * @param sortOrder orden por el que se desea ordenar los resultados
 	 * @param filters mapa de filtros. Este valor no se utiliza en esta sobreescritura.
 	 * @return lista de registros que corresponden a los criterios de búsqueda
-	 * 
+	 *
 	 */
 
 	@Override
 	public List<Alerta> load(final int first, final int pageSize, final String sortField, final SortOrder sortOrder,
 			final Map<String, Object> filters) {
-		List<Alerta> listado = null;
+		List<Alerta> lista = new ArrayList<>();
 		if (busqueda == null) {
 			this.setRowCount(0);
 		}
 		else {
 			this.setRowCount(alertaService.getCounCriteria(busqueda));
-			listado = alertaService.buscarAlertaCriteria(first, pageSize, sortField, sortOrder, busqueda);
-			this.datasource = listado;
+			lista = alertaService.buscarAlertaCriteria(first, pageSize, sortField, sortOrder, busqueda);
+			this.datasource = lista;
 		}
-		return listado;
+		return lista;
 
 	}
 

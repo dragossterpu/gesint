@@ -11,13 +11,13 @@
 		<h:form id="busquedaAlertaList">
 			<div class="filtro">
 				<div class="bloqueFormulario">
-					<div class="titleFormulario">Căutare alerte/comunicări</div>					
+					<div class="titleFormulario">Căutare corespondențe</div>					
 					<div class="ui-g campoBusqueda">
 						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<h:outputLabel for="asunto" styleClass="buscador"
 								value="Titlu:" />
 						</div>
-						<div class="ui-g-12 ui-md-6 ui-lg-6">destinatario
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
 							<p:inputText id="asunto"
 								value="#{alertaBean.alertaBusqueda.asunto}" />
 						</div>
@@ -60,7 +60,7 @@
 						onstart="PF('statusDialog').show()" class="right"
 						onsuccess="PF('statusDialog').hide()" />
 					<p:commandButton action="#{alertaBean.enviarAlertaUsuarios()}" icon="fa fa-plus" class="left"
-						value="Alertă nouă" />
+						value="Corespondența nouă" />
 				</div>
 				<p:separator />	
 				<div class="botonesFormulario">
@@ -101,7 +101,7 @@
 											fileName="listaAlertas" />
 									</h:commandLink>
 								</div>
-								<span class="titulo"> ALERTE/ COMUNICĂRI</span>
+								<span class="titulo">CORESPONDENȚE ELECTRONICE (EMAIL)</span>
 								 <div class="right">
 								 <p:commandButton id="toggler" type="button" value="Coloane" styleClass="botonToggler" icon="fa fa-th" />
 			                        <p:columnToggler datasource="tablaAlertas" trigger="toggler">
@@ -112,7 +112,7 @@
 							
 						</f:facet>                    	
 						<p:column headerText="Data creării"
-							sortBy="#{alerta.dateCreate}" style="width:8%;"
+							sortBy="#{alerta.dateCreate}" style="width:12%;"
 							visible="#{alertaBean.list[0]}"
 							exportable="#{alertaBean.list[0]}">
 							<h:outputText value="#{alerta.dateCreate}">
@@ -120,7 +120,7 @@
 							</h:outputText>
 						</p:column>
 						<p:column headerText="Data trimiterii"
-							sortBy="#{alerta.dateCreate}" style="width:8%;"
+							sortBy="#{alerta.dateCreate}" style="width:14%;"
 							visible="#{alertaBean.list[1]}"
 							exportable="#{alertaBean.list[1]}">
 							<h:outputText value="#{alerta.fechaEnvio}">
@@ -133,28 +133,34 @@
 							<h:outputText value="#{alerta.destinatarios}"/>
 						</p:column>
 
-						<p:column headerText="Canal de expediere" sortBy="#{alerta.usuario.alertChannel}"
-							style="width:15%;" visible="#{alertaBean.list[3]}"
+						<p:column headerText="Canal de expediere" sortBy="#{alerta.channel}"
+							style="width:17%;" visible="#{alertaBean.list[3]}"
 							exportable="#{alertaBean.list[3]}">
-							<h:outputText value="#{alerta.usuario.alertChannel.descripcion}" />
+							<h:outputText value="#{alerta.channel}" />
 						</p:column>
 						
-						<p:column headerText="Titlu" sortBy="#{alerta.asunto}" style="width:30%;"
+						<p:column headerText="Titlu" sortBy="#{alerta.asunto}" style="width:25%;"
 							visible="#{alertaBean.list[4]}"
 							exportable="#{alertaBean.list[4]}">
 							<h:outputText value="#{alerta.asunto}" />
 						</p:column>
 						<p:column  styleClass="botonTabla"
-							exportable="false" style="width:7%;" toggleable="false">
-							<p:commandButton title="Ver detalle alerta" icon="fa fa-fw fa-eye"
+							exportable="false" style="width:18%;" toggleable="false">
+							<p:commandButton title="Vizualizați/ Modificați corespondența" icon="fa fa-fw fa-eye"
 								styleClass="modBtn"
 								action="#{alertaBean.mostrarDialogoAlertaConDetalle(alerta)}" 
 								onstart="PF('statusDialog').show()" 
 								onsuccess="PF('statusDialog').hide()"
 								immediate="true"
 								update="busquedaAlertaList"/>
+							
+							<p:commandButton title="Eliminare corespondența" icon="fa fa-trash" styleClass="modBtn"  actionListener="#{alertaBean.eliminarAlerta(alerta)}" 
+							update=":busquedaAlertaList:panelAlertas tablaAlertas" oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">								
+								<p:confirm header="Eliminare corespondența" message="Sunteți sigur că doriți să eliminați DEFINITIV acestă corespondența?" icon="fa fa-warning-sign" />
+							</p:commandButton>
+							<h:commandLink title="Modificare corespondența"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
+								action="#{alertaBean.getFormModificarAlerta(alerta)}" update=":busquedaAlertaList:panelAlertas tablaAlertas" />
 						</p:column>
-
 						<f:facet name="footer" >
        				 		Total:
 							<h:outputText value="#{alertaBean.model.rowCount}">
@@ -165,24 +171,6 @@
 							registre
     					</f:facet>
 					</p:dataTable>
-<!-- 					<p:dataTable id="tablaDocumentos" var="documento" value="#{alertaBean.alerta.documentos}" editable="true" onkeypress="if (event.keyCode == 13) {return false; }" emptyMessage="Nu sunt încărcate documente."> -->
-<!-- 	                        <p:ajax event="rowEdit" listener="#{alertaBean.onRowEdit}" /> -->
-	
-<!-- 	                        <p:column headerText="Documentele încărcate"> -->
-<!-- 	                            <h:outputText value="#{documento.nombre}" /> -->
-<!-- 	                        </p:column> -->
-<!-- 	                        <p:column styleClass="botonTabla"> -->
-<!-- 	                            <p:commandButton icon="fa fa-fw fa-download" ajax="false" actionListener="#{alertaBean.descargarFichero(documento.id)}" title="Descărcați documentul"> -->
-<!-- 	                                <p:fileDownload value="#{alertaBean.file}" /> -->
-<!-- 	                            </p:commandButton> -->
-<!-- 	                        </p:column> -->
-<!-- 	                        <p:column styleClass="botonTabla" > -->
-<!-- 	                            <p:commandButton title="Elimină" icon="fa fa-trash" actionListener="#{alertaBean.eliminarDocumento(documento)}" update=":formAlta:panelAdjuntos tablaDocumentos"> -->
-<!-- 	                                <p:confirm header="Ștergeți documentul" message="Sigur doriți să ștergeți acest document?" icon="fa fa-warning-sign" /> -->
-<!-- 	                            </p:commandButton> -->
-<!-- 	                        </p:column> -->
-
-<!--                     	</p:dataTable> -->
 				</p:outputPanel>
 				<p:confirmDialog global="true">
 					<div class="centrarBotonesDialog">
@@ -199,7 +187,7 @@
 			</p:dialog>
 			
 			
-			<p:dialog header="Detalle Alerta" widgetVar="dialogAlertas" modal="true" resizable="false" showEffect="fade" hideEffect="fade" >
+			<p:dialog header="Detalle comunicare" widgetVar="dialogAlertas" modal="true" resizable="false" showEffect="fade" hideEffect="fade" >
 				<h:form id="formularioDetalleAlerta">
 				    <h:panelGrid columns="2" columnClasses="text-blod, label" >															
 						<h:outputLabel value="Titlu:" />
@@ -239,7 +227,7 @@
 
 
                 <p:outputPanel id="panelAdjuntos">
-                    <p:dataTable id="tablaDocumentos" var="documento" value="#{alertaBean.alerta.documentos}" editable="true" onkeypress="if (event.keyCode == 13) {return false; }" emptyMessage="Nu sunt încărcate documente.">
+                    <p:dataTable id="tablaDocumentos" var="documento" value="#{alertaBean.documentosCargados}" editable="true" onkeypress="if (event.keyCode == 13) {return false; }" emptyMessage="Nu sunt încărcate documente.">
                         <p:ajax event="rowEdit" listener="#{alertaBean.onRowEdit}" update=":formCargaDocumentos:formAlta:msgs" />
 
                         <p:column headerText="Documentele încărcate">

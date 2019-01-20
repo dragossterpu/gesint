@@ -3,7 +3,6 @@ package ro.per.online.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -11,18 +10,21 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
+import javax.mail.BodyPart;
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-
-import com.mitchellbosecke.pebble.error.PebbleException;
 
 import lombok.Getter;
 import ro.per.online.constantes.Constantes;
@@ -83,54 +85,46 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 	 * @param adjuntos Lista de ficheros adjuntos
 	 * @param plantilla ruta del archivo de la plantilla pebble
 	 * @param parametrosExtra parametros que se usan en la plantilla
+	 * @throws IOException
 	 * @throws CorreoException excepción al enviar el correo
 	 */
 	private Date enviarCorreo(final String destino, final String conCopia, final String asunto, final String cuerpo,
-			final List<File> adjuntos, final String plantilla, final Map<String, String> paramPlantilla) {
+			final List<File> adjuntos, final String plantilla, final Map<String, String> paramPlantilla)
+			throws IOException {
 		Date fechaEnvio = null;
 		try {
 
-			// Prepare message using a Spring helper
-			final MimeMessage message = mailSender.createMimeMessage();
-			final MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-			helper.setTo("dragossterpu@gmail.com");
-			// helper.setTo(destino.split(","));
-			if (conCopia != null) {
-				helper.setCc(conCopia.split(","));
-			}
-			helper.setSubject(asunto);
-
-			final Map<String, Object> parametros = new HashMap<>();
-			parametros.put("cuerpo", cuerpo);
-			if (paramPlantilla != null) {
-				parametros.putAll(paramPlantilla);
-			}
-			if ((plantilla != null) && (parametros != null)) {
-				final String htmlContent = Utilities.generarTextoConPlantilla(plantilla, parametros);
-				helper.setText(htmlContent, true);
-			}
-			final ClassPathResource imagen = new ClassPathResource(Constantes.IMGSISTEM);
-			helper.addInline("imagenfirma", imagen.getFile());
-
-			if (adjuntos != null) {
-				for (final File adj : adjuntos) {
-					helper.addAttachment(adj.getName(), adj);
+			Properties props = new Properties();
+			props.setProperty("mail.smtp.host", "mail.per.ro");
+			props.setProperty("mail.smtp.starttls.enable", "false");
+			props.setProperty("mail.transport.protocol", "smtp");
+			props.setProperty("mail.smtp.port", "26");
+			props.setProperty("mail.smtp.user", "dragos.sterpu@per.ro");
+			props.setProperty("mail.smtp.auth", "true");
+			props.put("mail.smtp.debug", "true");
+			Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+				@Override
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication("dragos.sterpu@per.ro", "Per20182018");
 				}
-			}
-			mailSender.setUsername("dragos@peradmin.org");
-			// Set gmail email password
-			mailSender.setPassword("malu2012");
-			final Properties prop = mailSender.getJavaMailProperties();
-			prop.put("mail.smtp.auth", true);
-			prop.put("mail.smtp.ssl.trust", "mocha6005.mochahost.com");
-			prop.put("mail.smtp.starttls.enable", true);
-			prop.put("mail.smtp.host", "mocha6005.mochahost.com");
-			prop.put("mail.smtp.port", "465");
-			prop.put("mail.smtp.ehlo", "false");
-			mailSender.send(message);
+			});
+
+			MimeMessage message = new MimeMessage(session);
+			final MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+			message.setFrom(new InternetAddress("secretariat@per.ro"));
+			message.addRecipients(Message.RecipientType.TO,
+					new InternetAddress[] { new InternetAddress("dragossterpu@gmail.com") });
+			message.setSubject(asunto);
+			message.setText("blabla");
+			BodyPart texto = new MimeBodyPart();
+			texto.setContent("text", "text/html");
+			Transport t = session.getTransport("smtp");
+			t.connect("dragos.sterpu@per.ro", "Per20182018");
+			t.sendMessage(message, message.getAllRecipients());
+			t.close();
 			fechaEnvio = new Date();
 		}
-		catch (MailException | MessagingException | IOException | PebbleException e) {
+		catch (MailException | MessagingException e) {
 			throw new CorreoException(e);
 		}
 		return fechaEnvio;
@@ -149,8 +143,14 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 	public Date envioCorreo(final String paramDestino, final Map<String, String> paramPlantilla,
 			final String paramAsunto, final String paramCuerpo, final List<File> paramAdjunto) {
 		final Date fechaEnvio = null;
-		enviarCorreo(paramDestino, null, paramAsunto, paramCuerpo, paramAdjunto, Constantes.TEMPLATECORREOBASE,
-				paramPlantilla);
+		try {
+			enviarCorreo(paramDestino, null, paramAsunto, paramCuerpo, paramAdjunto, Constantes.TEMPLATECORREOBASE,
+					paramPlantilla);
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return fechaEnvio;
 	}
 
@@ -164,7 +164,13 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 	@Override
 	public Date envioCorreo(final String paramDestino, final String paramAsunto, final String paramCuerpo) {
 		final Date fechaEnvio = null;
-		enviarCorreo(paramDestino, null, paramAsunto, paramCuerpo, null, Constantes.TEMPLATECORREOBASE, null);
+		try {
+			enviarCorreo(paramDestino, null, paramAsunto, paramCuerpo, null, Constantes.TEMPLATECORREOBASE, null);
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return fechaEnvio;
 	}
 
@@ -182,7 +188,13 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 	public Date envioCorreo(final String paramDestino, final String paramAsunto, final String plantilla,
 			final Map<String, String> paramPlantilla) {
 		final Date fechaEnvio = null;
-		enviarCorreo(paramDestino, null, paramAsunto, null, null, plantilla, paramPlantilla);
+		try {
+			enviarCorreo(paramDestino, null, paramAsunto, null, null, plantilla, paramPlantilla);
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return fechaEnvio;
 	}
 
@@ -202,8 +214,14 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 	public Date envioCorreo(final String paramDestino, final String paramCC, final String paramAsunto,
 			final String paramCuerpo, final List<File> paramAdjunto) {
 		final Date fechaEnvio = null;
-		enviarCorreo(paramDestino, paramCC, paramAsunto, paramCuerpo, paramAdjunto, Constantes.TEMPLATECORREOBASE,
-				null);
+		try {
+			enviarCorreo(paramDestino, paramCC, paramAsunto, paramCuerpo, paramAdjunto, Constantes.TEMPLATECORREOBASE,
+					null);
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return fechaEnvio;
 	}
 
@@ -219,7 +237,13 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 		final String asunto = alerta.getAsunto();
 		final String cuerpo = alerta.getDescripcion();
 		final Date fechaEnvio = null;
-		enviarCorreo(destino, null, asunto, cuerpo, null, null, null);
+		try {
+			enviarCorreo(destino, null, asunto, cuerpo, null, null, null);
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return fechaEnvio;
 	}
 }

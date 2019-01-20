@@ -7,11 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import ro.per.online.persistence.entities.Alerta;
 import ro.per.online.persistence.entities.Documento;
 
 /**
  * Repository de operațiuni de bază de date pentru entitatea documentului.
- * 
+ *
  * @author STAD
  *
  */
@@ -50,5 +51,13 @@ public interface IDocumentoRepository extends CrudRepository<Documento, Long> {
 	 */
 	@EntityGraph(value = "Documento.fichero", type = EntityGraph.EntityGraphType.LOAD)
 	Documento findById(Long id);
+
+	/**
+	 * Returneaza lista cu documentele anexate alertei
+	 * @param alerta
+	 * @return
+	 *
+	 */
+	List<Documento> findByAlerta(Alerta alerta);
 
 }

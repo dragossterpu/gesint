@@ -238,10 +238,14 @@ public class AlertaBean implements Serializable {
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
-	 *
 	 */
 	@Autowired
 	private UserService userService;
+
+	/**
+	 * Dias inactividad de un usuario.
+	 */
+	private long diasInactividad;
 
 	/**
 	 * Deschideți dialogul pentru căutarea utilizatorilor.
@@ -304,16 +308,6 @@ public class AlertaBean implements Serializable {
 		}
 	}
 
-	// /**
-	// * Returnează o listă de alerte cu e-mail-ul utilizatorului.
-	// * @param usuario User
-	// * @return List<Alerta>
-	// */
-	// public List<Alerta> cargarListaAlertas(final Users usuario) {
-	// this.lstAlertas = this.alertaService.buscarAlertasPorUsuario(usuario);
-	// return this.lstAlertas;
-	// }
-
 	/**
 	 * Șterge alerta curentă care este vizionată.
 	 */
@@ -348,13 +342,13 @@ public class AlertaBean implements Serializable {
 			this.registroActividadService.guardarRegistroAltaModificacion(this.alerta.getId(),
 					this.alerta.getDescripcion(), SeccionesEnum.ALERTAS.name(), Constantes.DELAALERTA);
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ENVIOALERTA,
-					"Alerta/Comunicarea a fost trimisă corect.");
+					"Corespondența electronică a fost trimisă corect.");
 			this.limpiarBuscadores();
 			fechaEnvio = new Date();
 		}
 		catch (final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la trimiterea Alertei/Comunicării ".concat(Constantes.DESCERRORMENSAJE));
+					"A apărut o eroare la trimiterea corespondenței electronice".concat(Constantes.DESCERRORMENSAJE));
 			this.registroActividadService.guardarRegistroError(SeccionesEnum.ALERTAS.name(), Constantes.ALERTA, e);
 		}
 		return fechaEnvio;
@@ -363,28 +357,48 @@ public class AlertaBean implements Serializable {
 	/**
 	 * Salvati alerta in baza de date.
 	 */
-	public Date guardarAlerta() {
-		final Date fechaEnvio = null;
+	public String guardarAlerta() {
 		try {
-			if (!this.usuariosSeleccionadosFinales.isEmpty()) {
-				alerta.setListDestinatarios(usuariosSeleccionadosFinales);
-				if (!this.documentosCargados.isEmpty()) {
-					alerta.setDocumentos(documentosCargados);
+			if (!this.usuariosSeleccionadosFinales.isEmpty() || alerta.getDestinatarios() != null) {
+
+				// Daca venim de modificare
+				if (alerta.getDestinatarios() == null) {
+					String destina = Constantes.ESPACIO;
+					final StringBuilder destinatarios = new StringBuilder();
+					for (final Users usu : usuariosSeleccionadosFinales) {
+						destinatarios.append(Constantes.COMA);
+						destinatarios.append(usu.getUsername());
+					}
+					destina = destinatarios.toString().substring(1);
+					alerta.setDestinatarios(destina);
 				}
+				// if (!this.documentosCargados.isEmpty()) {
+				// alerta.setDocumentos(documentosCargados);
+				// }
 				alerta.setAsunto(this.alerta.getAsunto());
 				alerta.setChannel(AlertChannelEnum.EMAIL);
 				alerta.setDescripcion(this.alerta.getDescripcion());
 				if (this.alerta.getAutomatic()) {
-					alerta.setAutomatic(this.alerta.getAutomatic());
+					alerta.setAutomatic(true);
 					alerta.setFechaEnvio(this.alerta.getFechaEnvio());
 				}
+				else {
+					alerta.setAutomatic(false);
+				}
 				alertaService.save(alerta);
-				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ERRORMENSAJE,
-						"Alerta/Comunicarea a fost salvată cu succes.");
+				if (!this.documentosCargados.isEmpty()) {
+					for (final Documento documento : documentosCargados) {
+						documento.setAlerta(alerta);
+						documento.setValidated(true);
+						documentoService.save(documento);
+					}
+				}
+				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ALTA,
+						"Comunicarea electonică a fost salvată cu succes.");
 			}
 			else {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-						"Nu se pot salva alerte sau comunicări fara destinatari.");
+						"Nu se pot salva comunicări fara destinatari.");
 			}
 		}
 		catch (final DataAccessException e) {
@@ -392,7 +406,7 @@ public class AlertaBean implements Serializable {
 					"A apărut o eroare la salvarea Alertei/Comunicării ".concat(Constantes.DESCERRORMENSAJE));
 			// this.registroActividadService.guardarRegistroError(SeccionesEnum.ALERTAS.name(), Constantes.ALERTA, e);
 		}
-		return fechaEnvio;
+		return "/alertas/alertas?faces-redirect=true";
 	}
 
 	/**
@@ -556,6 +570,44 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
+	 * Salvați un fișier încărcat de utilizator ca document al cererii, după ce ați confirmat că nu este un fișier
+	 * corupt și că se potrivește cu oricare dintre cele solicitate.
+	 * @param event eveniment lansat din formular
+	 * @return ruta traseu
+	 */
+	public void gestionarCargaDocumentoMod(final FileUploadEvent event) {
+		try {
+
+			final UploadedFile archivo = event.getFile();
+			// 19 es el id del tipodocumento para "template"
+			final TipoDocumento tipo = TipoDocumento.builder().id(19L).build();
+			final Users usuario = (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (this.esDocumentacion(archivo)) {
+				final Documento documento = this.documentoService.cargaDocumento(archivo, tipo, usuario);
+				this.listadoDocumentos.add(documento);
+				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO, Constantes.ALTA,
+						"Documentul/ele încărcat/e cu succes", Constantes.MSGS);
+			}
+			else {
+				FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, Constantes.CARGADOC,
+						"Fișierul încărcat " + archivo.getFileName()
+								+ " nu este valabil, numele sau extensia nu corespunde cu documentul încărcat.",
+						Constantes.MSGS);
+			}
+		}
+
+		catch (DataAccessException | PerException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, TipoRegistroEnum.EROARE.name(),
+					"A apărut o eroare la încărcarea documentului. ".concat(Constantes.DESCERRORMENSAJE));
+			final String descripcion = "A apărut o eroare la încărcarea documentului";
+			this.regActividadService.guardarRegistroError(descripcion, SeccionesEnum.GESTORDOCUMENTAL.getDescripcion(),
+					e);
+		}
+		// final RequestContext context = RequestContext.getCurrentInstance();
+		// context.execute("PF('dlgCargaDoc').show();");
+	}
+
+	/**
 	 * Realizează eliminarea logică a documentului care poate fi recuperat din coșul de gunoi.
 	 * @param document Documentul care o sa fie eliminat logic.
 	 */
@@ -565,6 +617,29 @@ public class AlertaBean implements Serializable {
 			this.documentoService.delete(document);
 		}
 		catch (final DataAccessException e) {
+		}
+	}
+
+	/**
+	 * Eliminarea unei alerte.
+	 * @param alerta aleasa pentru eliminare
+	 */
+	public void eliminarAlerta(final Alerta alert) {
+		try {
+			this.alerta = alert;
+			alertaService.delete(alerta);
+			final List<Documento> documents = documentoService.findByAlerta(alerta);
+			if (!documents.isEmpty()) {
+				for (final Documento doc : documents) {
+					documentoService.delete(doc);
+				}
+			}
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ELIMINAREMENSAJE,
+					Constantes.OKELIMINMENSAJE);
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					Constantes.DESCERRORMENSAJE);
 		}
 	}
 
@@ -600,7 +675,7 @@ public class AlertaBean implements Serializable {
 			this.list.add(Boolean.TRUE);
 		}
 		this.model = new LazyDataAlertas(this.alertaService);
-		this.buscarAlertas();
+		// this.buscarAlertas();
 		Utilities.limpiarSesion("alertaBean");
 	}
 
@@ -788,4 +863,38 @@ public class AlertaBean implements Serializable {
 					"A apărut o eroare la descărcarea fișierului");
 		}
 	}
+
+	/**
+	 * Guarda en una varible el número de días de inactividad de un usuario pasado por parámetro.
+	 * @param fecha usuario a consultar
+	 */
+	public void setDiasInactivo(final Date fecha) {
+		setDiasInactividad(Utilities.getDiasHastaHoy(fecha));
+	}
+
+	/**
+	 * Transmite datele utilizatorului pe care dorim să le modificăm în formular, astfel încât acestea să schimbe
+	 * valorile pe care le doresc.
+	 *
+	 * @param usuario Utilizator recuperat din formularul de căutare al utilizatorului
+	 * @return URL-ul paginii de modificare a utilizatorului
+	 */
+	public String getFormModificarAlerta(final Alerta aler) {
+
+		final Alerta acomun = alertaService.fiindOne(aler);
+		String redireccion = null;
+		this.listadoDocumentos = new ArrayList<>();
+		this.documentosCargados = new ArrayList<>();
+		this.documentosCargados = documentoService.findByAlerta(acomun);
+		if (acomun != null) {
+			this.alerta = acomun;
+			redireccion = "/alertas/modificarAlerta?faces-redirect=true";
+		}
+		else {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.MODIFICAREMENSAJE,
+					"A apărut o eroare la accesarea alertei. Alerta nu există.");
+		}
+		return redireccion;
+	}
+
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.Normalizer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,14 +81,22 @@ public class TeamBean implements Serializable {
 	 * @param nume
 	 * @return dni + letra
 	 */
-	public static String mail(final String nume, final String prenume) {
+	public static String mail(final String nume, final String prenume, final int numero) {
 		// final String limpioName = nume.toLowerCase();
 		final String limpioName = Normalizer.normalize(nume.toLowerCase(), Normalizer.Form.NFD);
 		final Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 		final String nombre = pattern.matcher(limpioName).replaceAll(Constantes.ESPACIO);
 		final String limpioPrenume = Normalizer.normalize(prenume.toLowerCase(), Normalizer.Form.NFD);
 		final String prenombre = pattern.matcher(limpioPrenume).replaceAll(Constantes.ESPACIO);
-		return nombre.concat(Constantes.PUNTO).concat(prenombre.concat(Generador.nombresMail()));
+		if (numero % 2 == 0) {
+			return nombre.concat(Constantes.PUNTO).concat(prenombre.concat(Generador.nombresMail()));
+		}
+		else {
+			if (numero % 17 == 0) {
+				return prenombre.substring(0, 1).concat(nombre.concat(Generador.nombresMail()));
+			}
+			return prenombre.concat(nombre.concat(Generador.nombresMail()));
+		}
 	}
 
 	/**
@@ -286,38 +295,78 @@ public class TeamBean implements Serializable {
 	public void alta() {
 		String sex = null;
 		Date fecha = null;
-		for (int i = 0; i < 1000; i++) {
+		int numero = 0;
+		for (int i = 0; i < 2000; i++) {
+			numero = i;
 			final Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
-			user.setName(Generador.apellidoFinal2().toUpperCase());
+			user.setName(Generador.apellidoFinal3().toUpperCase());
 
 			user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
 			fecha = Generador.obtenerFechaNastere();
 			user.setBirthDate(fecha);
 			user.setSex(SexEnum.randomLetter());
-
+			final PProvince pro = new PProvince();
+			pro.setIndicator(Generador.provinciasFinal());
+			user.setProvince(pro);
+			final SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+			final String anString = sdf.format(fecha);
 			if (user.getSex().getName().equals("MAN")) {
 				user.setLastName(Generador.nombreFinalHombre());
-				sex = "1";
+				if (Integer.valueOf(anString) >= 2000) {
+					sex = "5";
+				}
+				else {
+					sex = "1";
+				}
+
 			}
 			else {
 				user.setLastName(Generador.nombreFinal());
-				sex = "2";
+				if (Integer.valueOf(anString) >= 2000) {
+					sex = "6";
+				}
+				else {
+					sex = "2";
+				}
 			}
-			user.setEmail(mail(user.getName(), user.getLastName()));
-			user.setIdCard(Generador.generaCnp(sex, fecha));
+			user.setEmail(mail(user.getName(), user.getLastName(), numero));
+			user.setIdCard(Generador.generaCnp(sex, fecha, pro));
 			user.setAddress(Generador.nombresCalleFinal().concat("  Nr: ").concat(Generador.getNumeroCalle()));
 
 			user.setCivilStatus(CivilStatusEnum.randomLetter());
 			user.setEducation(EducationEnum.randomLetter());
-			final PProvince pro = new PProvince();
-			pro.setIndicator(Generador.provinciasFinal());
-			user.setProvince(pro);
+
 			List<PLocality> loc = new ArrayList<>();
 			loc = localityService.findByProvince(pro);
 			PLocality locality = new PLocality();
-			final Random rand = new Random();
-			locality = loc.get(rand.nextInt(loc.size()));
+			if (pro.getIndicator().equals("B")) {
+				Long id = null;
+				if (user.getIdCard().substring(6, 8).equals("41")) {
+					id = 72L;
+				}
+				else if (user.getIdCard().substring(6, 8).equals("42")) {
+					id = 73L;
+				}
+				else if (user.getIdCard().substring(6, 8).equals("43")) {
+					id = 74L;
+				}
+				else if (user.getIdCard().substring(6, 8).equals("44")) {
+					id = 75L;
+				}
+				else if (user.getIdCard().substring(6, 8).equals("45")) {
+					id = 75L;
+				}
+				else {
+					id = 76L;
+				}
+				locality = localityService.findById(Long.valueOf(id));
+			}
+			else {
+
+				final Random rand = new Random();
+				locality = loc.get(rand.nextInt(loc.size()));
+			}
 			user.setLocality(locality);
 			user.setNumberCard(Generador.getDni());
 			user.setPersonalEmail(user.getEmail());

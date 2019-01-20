@@ -36,6 +36,7 @@ import ro.per.online.web.beans.AlertaBusqueda;
  */
 @NoArgsConstructor
 @Service
+@Transactional
 public class AlertaServiceImpl implements AlertaService, Serializable {
 
 	/**
@@ -166,7 +167,7 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 
 		if (usuario.getAlertChannel().equals(AlertChannelEnum.EMAIL)) {
 			// alertaLocal.setDestinatario(usuario.getUsername());
-			// mailAlertaSender.send(alertaLocal, usuario);
+			mailAlertaSender.send(alertaLocal, usuario);
 		}
 		// ENVIAMOS SMS SI PROCEDE
 		if (usuario.getAlertChannel().equals(AlertChannelEnum.EMAIL_SMS)
@@ -189,6 +190,7 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 	 * @return int
 	 */
 	@Override
+
 	public int getCounCriteria(final AlertaBusqueda busqueda) {
 		try {
 			session = sessionFactory.openSession();
@@ -246,4 +248,24 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 		enviarAlertaUsuarioIndividual(alerta, usuario);
 	}
 
+	/**
+	 * Eliminarea unei alerte
+	 * @param alerta
+	 */
+	@Override
+	@Transactional(readOnly = false)
+	public void delete(final Alerta alerta) {
+		this.alertaRepository.delete(alerta);
+	}
+
+	/**
+	 * Cauta o alerta
+	 * @param alerta Alerta
+	 * @return alerta Alerta
+	 */
+	@Override
+	public Alerta fiindOne(final Alerta alerta) {
+		alertaRepository.findOne(alerta.getId());
+		return alerta;
+	}
 }

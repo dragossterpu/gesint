@@ -133,9 +133,9 @@
 						value="Trimiteți email" update="form" icon="fa fa-send"
 						onstart="PF('statusDialog').show()"
 						onsuccess="PF('statusDialog').hide()" />
-					<p:commandButton action="#{alertaBean.guardarAlerta}"
+					<p:commandButton action="#{alertaBean.guardarAlerta}" outcome="/alertas/alertas"
 						value="Salvați alerta" update="form" icon="fa fa-send"
-						onstart="PF('statusDialog').show()"
+						onstart="PF('statusDialog').show()" 
 						onsuccess="PF('statusDialog').hide()" />
 				</div>
 			</div>					
@@ -237,8 +237,8 @@
 				closable="false" resizable="false" modal="true">
 				<p:messages for="dialogMessage" autoUpdate="true"
 					showDetail="true" showSummary="true" />
-				<p:commandButton value="Acceptați"
-					onclick="PF('dialogMessage').hide()" styleClass="right" />
+				<p:commandButton value="Acceptați 2"
+					onclick="PF('dialogMessage').hide()" outcome="/alertas/alertas" styleClass="right" />
 			</p:dialog>
 		</h:form>
 				<h:form id="formCargaDocumentos">
