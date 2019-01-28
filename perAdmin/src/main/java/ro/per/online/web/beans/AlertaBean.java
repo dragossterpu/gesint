@@ -2,7 +2,9 @@ package ro.per.online.web.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +26,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+
+import com.mitchellbosecke.pebble.error.PebbleException;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -248,6 +252,11 @@ public class AlertaBean implements Serializable {
 	private long diasInactividad;
 
 	/**
+	 * Data actuala
+	 */
+	private Date currentDate;
+
+	/**
 	 * Deschideți dialogul pentru căutarea utilizatorilor.
 	 */
 	public void abrirDialogoBusquedaUsuarios() {
@@ -325,9 +334,12 @@ public class AlertaBean implements Serializable {
 
 	/**
 	 * Trimiteți alerte destinatarilor indicați.
+	 * @throws PebbleException
 	 */
-	public Date enviarAlerta() {
-		Date fechaEnvio = null;
+	public String enviarAlerta() throws PebbleException {
+		Map<String, String> paramPlantilla = new HashMap<>();
+		String destina = Constantes.ESPACIO;
+		final StringBuilder destinatarios = new StringBuilder();
 		try {
 			if (this.usuariosSeleccionadosFinales.isEmpty()) {
 				Users usuario = this.usuarioService.fiindOne(this.nombreUsuario);
@@ -337,21 +349,47 @@ public class AlertaBean implements Serializable {
 					usuario.setUsername(this.nombreUsuario);
 				}
 				this.usuariosSeleccionadosFinales.add(usuario);
+
 			}
-			this.alertaService.sendAlert(this.alerta, this.usuariosSeleccionadosFinales);
-			this.registroActividadService.guardarRegistroAltaModificacion(this.alerta.getId(),
-					this.alerta.getDescripcion(), SeccionesEnum.ALERTAS.name(), Constantes.DELAALERTA);
+
+			final String titlu = alerta.getTipAlerta().getDescription().concat(". ").concat(alerta.getAsunto());
+			paramPlantilla.put("titlu", titlu);
+			paramPlantilla.put("secretariat", "secretariat@per.ro");
+			paramPlantilla.put("telefon", "0733.061.651");
+			paramPlantilla.put("cuerpo", alerta.getDescripcion());
+
+			this.alertaService.sendAlert(this.alerta, this.usuariosSeleccionadosFinales, documentosCargados,
+					Constantes.TEMPLATECORREOBASE, paramPlantilla);
+			alerta.setAsunto(alerta.getTipAlerta().getDescription().concat(". ").concat(alerta.getAsunto()));
+			alerta.setFechaEnvio(new Date());
+			alerta.setChannel(AlertChannelEnum.EMAIL);
+			for (final Users usu : usuariosSeleccionadosFinales) {
+				destinatarios.append(Constantes.COMA);
+				destinatarios.append(usu.getUsername());
+			}
+			destina = destinatarios.toString().substring(1);
+			alerta.setDestinatarios(destina);
+			this.alertaService.save(alerta);
+			// Comprbar que la lista no es vacia
+			if (!documentosCargados.isEmpty()) {
+				for (final Documento doc : documentosCargados) {
+					doc.setAlerta(alerta);
+					doc.setValidated(true);
+					doc.setDescripcion("Document anexat la trimiterea e-mailului :".concat(alerta.getAsunto()));
+					documentoService.save(doc);
+				}
+			}
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ENVIOALERTA,
 					"Corespondența electronică a fost trimisă corect.");
 			this.limpiarBuscadores();
-			fechaEnvio = new Date();
 		}
-		catch (final DataAccessException e) {
+		catch (
+
+		final DataAccessException e) {
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 					"A apărut o eroare la trimiterea corespondenței electronice".concat(Constantes.DESCERRORMENSAJE));
-			this.registroActividadService.guardarRegistroError(SeccionesEnum.ALERTAS.name(), Constantes.ALERTA, e);
 		}
-		return fechaEnvio;
+		return "/alertas/alertas?faces-redirect=true";
 	}
 
 	/**
@@ -372,10 +410,7 @@ public class AlertaBean implements Serializable {
 					destina = destinatarios.toString().substring(1);
 					alerta.setDestinatarios(destina);
 				}
-				// if (!this.documentosCargados.isEmpty()) {
-				// alerta.setDocumentos(documentosCargados);
-				// }
-				alerta.setAsunto(this.alerta.getAsunto());
+				alerta.setAsunto(alerta.getTipAlerta().getDescription().concat(". ").concat(alerta.getAsunto()));
 				alerta.setChannel(AlertChannelEnum.EMAIL);
 				alerta.setDescripcion(this.alerta.getDescripcion());
 				if (this.alerta.getAutomatic()) {
@@ -410,30 +445,10 @@ public class AlertaBean implements Serializable {
 	}
 
 	/**
-	 * Trimiteți alerta unui anumit utilizator
-	 * @param usuario User
-	 */
-	public void enviarAlertaUsuario(final Users usuario) {
-		try {
-			this.alertaService.sendAlertUsuario(this.alerta, usuario);
-			this.registroActividadService.guardarRegistroAltaModificacion(this.alerta.getId(),
-					this.alerta.getDescripcion(), SeccionesEnum.ALERTAS.name(), Constantes.DELAALERTA);
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ENVIOALERTA,
-					"Alerta/Comunicarea a fost trimisă corect.");
-			this.limpiarDatosCambiarPestana();
-		}
-		catch (final DataAccessException e) {
-			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
-					"A apărut o eroare la trimiterea Alertei/Comunicării ".concat(Constantes.DESCERRORMENSAJE));
-			this.registroActividadService.guardarRegistroError(SeccionesEnum.ALERTAS.name(), Constantes.ALERTA, e);
-		}
-	}
-
-	/**
 	 * Intrarea în pagină pentru a trimite o nouă alertă.
 	 * @return String
 	 */
-	public String enviarAlertaUsuarios() {
+	public String getFormNouaCorespondenta() {
 		this.alerta = new Alerta();
 		this.utilizatorExtern = Constantes.ESPACIO;
 		this.listaTeams = new ArrayList<>();
@@ -442,6 +457,9 @@ public class AlertaBean implements Serializable {
 		this.documentosCargados = new ArrayList<>();
 		this.usuariosSeleccionadosFinales = new ArrayList<>();
 		this.modelUser = new LazyDataUsers(this.usuarioService);
+		final Calendar date = Calendar.getInstance();
+		date.add(Calendar.DAY_OF_YEAR, 1);
+		this.currentDate = date.getTime();
 		return "/alertas/nuevaAlerta?faces-redirect=true";
 	}
 
@@ -478,6 +496,7 @@ public class AlertaBean implements Serializable {
 					final Users usu = userService.fiindOne(nombre);
 					if (usu == null) {
 						usua.setUsername(nombre);
+						usua.setDestinatarExtern(true);
 						usua.setAddress(null);
 						usua.setAlertChannel(AlertChannelEnum.EMAIL);
 						usua.setBirthDate(new Date());
@@ -565,8 +584,7 @@ public class AlertaBean implements Serializable {
 			this.regActividadService.guardarRegistroError(descripcion, SeccionesEnum.GESTORDOCUMENTAL.getDescripcion(),
 					e);
 		}
-		// final RequestContext context = RequestContext.getCurrentInstance();
-		// context.execute("PF('dlgCargaDoc').show();");
+
 	}
 
 	/**
@@ -603,8 +621,7 @@ public class AlertaBean implements Serializable {
 			this.regActividadService.guardarRegistroError(descripcion, SeccionesEnum.GESTORDOCUMENTAL.getDescripcion(),
 					e);
 		}
-		// final RequestContext context = RequestContext.getCurrentInstance();
-		// context.execute("PF('dlgCargaDoc').show();");
+
 	}
 
 	/**
@@ -627,13 +644,14 @@ public class AlertaBean implements Serializable {
 	public void eliminarAlerta(final Alerta alert) {
 		try {
 			this.alerta = alert;
-			alertaService.delete(alerta);
 			final List<Documento> documents = documentoService.findByAlerta(alerta);
 			if (!documents.isEmpty()) {
 				for (final Documento doc : documents) {
 					documentoService.delete(doc);
 				}
 			}
+			alertaService.delete(alerta.getId());
+
 			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ELIMINAREMENSAJE,
 					Constantes.OKELIMINMENSAJE);
 		}
@@ -696,16 +714,6 @@ public class AlertaBean implements Serializable {
 		this.alertaBusqueda = new AlertaBusqueda();
 		this.model = new LazyDataAlertas(this.alertaService);
 	}
-
-	// /**
-	// * Curăță câmpurile utilizatorilor selectați și lista de utilizatori..
-	// */
-	// public void limpiarCamposNuevaAlerta() {
-	// this.usuariosSeleccionados = new ArrayList<>();
-	// this.alerta = new Alerta();
-	// this.usuariosSeleccionadosFinales = new ArrayList<>();
-	// this.modelUser = new LazyDataUsers(this.usuarioService);
-	// }
 
 	/**
 	 * Curăță datele din fila de trimitere a alertelor..

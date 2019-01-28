@@ -34,7 +34,22 @@ public enum CategoryEnum {
 	/**
 	 * Comunicat.
 	 */
-	COMUNICAT("Comunicat");
+	COMUNICAT("Comunicat"),
+
+	/**
+	 * Raport.
+	 */
+	RAPORT("Raport"),
+
+	/**
+	 * Informare.
+	 */
+	INFORMARE("Informare"),
+
+	/**
+	 * Rezolutie.
+	 */
+	REZOLUTIE("Rezoluție");
 
 	/**
 	 * @return Returnează o listă cu descrierile enum.

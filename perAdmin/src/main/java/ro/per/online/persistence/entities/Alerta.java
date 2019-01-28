@@ -27,6 +27,7 @@ import lombok.Setter;
 import lombok.ToString;
 import ro.per.online.constantes.Constantes;
 import ro.per.online.persistence.entities.enums.AlertChannelEnum;
+import ro.per.online.persistence.entities.enums.CategoryEnum;
 
 /**
  * Entitate pentru alerte.
@@ -86,22 +87,23 @@ public class Alerta extends AbstractEntity implements Serializable {
 	@Column(name = "destinatarios")
 	private String destinatarios;
 
-	// /**
-	// * Lista con los documentos asociados a la solicitud.
-	// */
-	// @OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE, CascadeType.MERGE })
-	// @JoinTable(name = "alerta_docs", joinColumns = @JoinColumn(name = "id_alerta"), inverseJoinColumns =
-	// @JoinColumn(name = "id_documento"))
-	// private List<Documento> documentos;
-
-	// /** The task instance list. */
-	// @OneToMany(mappedBy = "alerta", fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE, CascadeType.MERGE })
-	// private List<Documento> documentos;
-
 	/**
 	 * Trimitere automatica.
 	 */
 	@Column(name = "auto")
 	private Boolean automatic;
+
+	/**
+	 * Data planificata.
+	 */
+	@Column(name = "data_planificata")
+	private Date dataPlanificata;
+
+	/**
+	 * Tip alerta.
+	 */
+	@Column(name = "tip_alerta")
+	@Enumerated(EnumType.STRING)
+	private CategoryEnum tipAlerta;
 
 }

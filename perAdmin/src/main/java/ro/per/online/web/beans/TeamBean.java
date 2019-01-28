@@ -1,15 +1,12 @@
 package ro.per.online.web.beans;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 
@@ -445,34 +442,6 @@ public class TeamBean implements Serializable {
 							.concat(Constantes.DESCERRORMENSAJE));
 		}
 
-	}
-
-	/**
-	 * OJOOOO !!! A eliminar.. Proba envio correo simple.
-	 *
-	 */
-	public void enviarCorreo() {
-		correo.envioCorreo("dragossterpu@gmail.com", "Proba asunto", "Proba correo simple cuerpo, elypse.");
-	}
-
-	/**
-	 * OJOOOO !!! A eliminar..Proba envio correo con adjuntos.
-	 */
-	public void enviarCorreoAdjuntos() {
-		final Map<String, String> paramPlantilla = new HashMap<>();
-		final List<File> paramAdjunto = new ArrayList<>();
-		final File param = new File("C:\\Users\\Casa\\Desktop\\consultadenuncia.sql");
-		paramAdjunto.add(param);
-		paramPlantilla.put("cuerpo", "Cuerpo proba");
-		paramPlantilla.put("ApoyoCorreo", "ApoyoCorreo proba");
-		paramPlantilla.put("ApoyoTelefono", "ApoyoTelefono proba");
-		paramPlantilla.put("ApoyoSecretaria", "ApoyoSecretaria proba");
-		paramPlantilla.put("ApoyoPuesto", "ApoyoPuesto proba");
-		paramPlantilla.put("ApoyoDireccion", "ApoyoDireccion proba");
-		paramPlantilla.put("ApoyoTelefono", "ApoyoTelefono proba");
-		paramPlantilla.put("ApoyoFax", "ApoyoFax proba");
-		correo.envioCorreo("dragossterpu@gmail.com", paramPlantilla, "Proba correo con adjuntos, per Admin.",
-				"Cuerpo del mensaje", paramAdjunto);
 	}
 
 	/**

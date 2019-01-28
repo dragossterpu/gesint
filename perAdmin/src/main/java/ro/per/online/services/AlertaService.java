@@ -1,10 +1,14 @@
 package ro.per.online.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.primefaces.model.SortOrder;
 
+import com.mitchellbosecke.pebble.error.PebbleException;
+
 import ro.per.online.persistence.entities.Alerta;
+import ro.per.online.persistence.entities.Documento;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.web.beans.AlertaBusqueda;
 
@@ -34,7 +38,7 @@ public interface AlertaService {
 	 * Eliminación de un usuario.
 	 * @param usuario a eliminar
 	 */
-	void delete(Alerta alerta);
+	void delete(Long id);
 
 	/**
 	 * Obtiene el conteo de criteria.
@@ -55,14 +59,8 @@ public interface AlertaService {
 	 * @param alerta Alerta
 	 * @param usuariosSeleccionados List<User>
 	 */
-	void sendAlert(Alerta alerta, List<Users> usuariosSeleccionados);
-
-	/**
-	 * Envía una alerta pasando un destinatario.
-	 * @param alerta Alerta
-	 * @param usuario User
-	 */
-	void sendAlertUsuario(Alerta alerta, Users usuario);
+	void sendAlert(Alerta alerta, List<Users> usuariosSeleccionados, List<Documento> documentosCargados,
+			String plantilla, Map<String, String> paramPlantilla) throws PebbleException;
 
 	/**
 	 * Cauta o alerta

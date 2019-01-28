@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ro.per.online.constantes.Constantes;
+import ro.per.online.persistence.entities.enums.CategoryEnum;
 
 /**
  * Controlador de las operaciones relacionadas con la búsqueda de alertas. Reseteo de valores de búsqueda.
@@ -57,5 +58,20 @@ public class AlertaBusqueda implements Serializable {
 	 * Fecha hasta envio de la alerta.
 	 */
 	private Date fechaHastaEnvio;
+
+	/**
+	 * Fecha desde create de la alerta.
+	 */
+	private Date fechaDesdeCreate;
+
+	/**
+	 * Fecha hasta create de la alerta.
+	 */
+	private Date fechaHastaCreate;
+
+	/**
+	 * Filtru tip alerta.
+	 */
+	private CategoryEnum tipAlerta;
 
 }

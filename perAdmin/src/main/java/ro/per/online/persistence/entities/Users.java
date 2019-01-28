@@ -195,6 +195,11 @@ public class Users extends AbstractEntity implements Serializable {
 	private Boolean validated;
 
 	/**
+	 * Destinatar Extern.
+	 */
+	private Boolean destinatarExtern;
+
+	/**
 	 * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine..
 	 * @return StreamedContent
 	 */

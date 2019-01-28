@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ro.per.online.constantes.Constantes;
-import ro.per.online.persistence.entities.PersonalData;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.persistence.repositories.UserRepository;
 import ro.per.online.services.LocalityService;
@@ -197,6 +196,7 @@ public class UserServiceImpl implements UserService {
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getLastName(), criteria, "lastName");
 		UtilitiesCriteria.setCondicionCriteriaIgualdadBoolean(usuarioBusqueda.getValidated(), criteria,
 				Constantes.VALIDAT);
+		UtilitiesCriteria.setCondicionCriteriaIgualdadBoolean(false, criteria, "destinatarExtern");
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getIdCard(), criteria, "idCard");
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getEmail(), criteria, "email");
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getRole(), criteria, "role");
@@ -409,6 +409,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Users> findByName() {
 		String nume = Constantes.DESTINATAR;
-		return (List<Users>) userRepository.findByName(nume);
+		return userRepository.findByName(nume);
 	}
 }

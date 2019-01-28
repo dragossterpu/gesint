@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.faces.application.ProjectStage;
 import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
@@ -69,9 +70,11 @@ public class PerApplication {
 			servletContext.setInitParameter("facelets.DEVELOPMENT", Constantes.TRUE);
 			servletContext.setInitParameter("javax.faces.FACELETS_REFRESH_PERIOD", "1");
 			servletContext.setInitParameter("javax.faces.FACELETS_SKIP_COMMENTS", Constantes.TRUE);
-			servletContext.setInitParameter("primefaces.THEME", "blitzer");
+			servletContext.setInitParameter(Constants.ContextParams.THEME, "blitzer");
 			servletContext.setInitParameter("encoding", "UTF-8");
 			servletContext.setInitParameter(Constants.ContextParams.FONT_AWESOME, Constantes.TRUE);
+			servletContext.setInitParameter(ProjectStage.PROJECT_STAGE_PARAM_NAME, ProjectStage.Development.name());
+			servletContext.setInitParameter("javax.faces.FACELETS_LIBRARIES", "/WEB-INF/springsecurity.taglib.xml");
 		}
 	}
 
@@ -88,9 +91,11 @@ public class PerApplication {
 			servletContext.setInitParameter("facelets.DEVELOPMENT", "false");
 			servletContext.setInitParameter("javax.faces.FACELETS_REFRESH_PERIOD", "-1");
 			servletContext.setInitParameter("javax.faces.FACELETS_SKIP_COMMENTS", Constantes.TRUE);
-			servletContext.setInitParameter("primefaces.THEME", "blitzer");
+			servletContext.setInitParameter(Constants.ContextParams.THEME, "blitzer");
 			servletContext.setInitParameter("encoding", "UTF-8");
 			servletContext.setInitParameter(Constants.ContextParams.FONT_AWESOME, Constantes.TRUE);
+			servletContext.setInitParameter(ProjectStage.PROJECT_STAGE_PARAM_NAME, ProjectStage.Development.name());
+			servletContext.setInitParameter("javax.faces.FACELETS_LIBRARIES", "/WEB-INF/springsecurity.taglib.xml");
 		}
 	}
 

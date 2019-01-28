@@ -115,6 +115,11 @@ public class UsuarioBusqueda implements Serializable {
 	private Boolean validated;
 
 	/**
+	 * Filtru destinatar extern.
+	 */
+	private Boolean destinatarExtern;
+
+	/**
 	 * Filtru data inregistrarii incepand.
 	 */
 	private Date dateFrom;

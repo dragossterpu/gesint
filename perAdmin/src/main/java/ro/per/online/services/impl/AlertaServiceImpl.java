@@ -2,6 +2,7 @@ package ro.per.online.services.impl;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 
@@ -17,11 +18,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mitchellbosecke.pebble.error.PebbleException;
+
 import lombok.NoArgsConstructor;
 import ro.per.online.constantes.Constantes;
 import ro.per.online.persistence.entities.Alerta;
+import ro.per.online.persistence.entities.Documento;
 import ro.per.online.persistence.entities.Users;
-import ro.per.online.persistence.entities.enums.AlertChannelEnum;
 import ro.per.online.persistence.repositories.AlertaRepository;
 import ro.per.online.services.AlertaService;
 import ro.per.online.util.CorreoElectronico;
@@ -124,16 +127,6 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 
 	}
 
-	// /**
-	// * Returnează lista alertelor pentru un anumit utilizator.
-	// * @param usuarioModificando User
-	// * @return List<Alerta>
-	// */
-	// @Override
-	// public List<Alerta> buscarAlertasPorUsuario(final Users usuarioModificando) {
-	// return alertaRepository.findAllByDestinatarioOrUsuario(usuarioModificando.getUsername(), usuarioModificando);
-	// }
-
 	/**
 	 * Verificați criteriile pentru căutarea alertelor.
 	 *
@@ -141,14 +134,18 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 	 * @param alertaBusqueda Obiect care conține parametrii de căutare
 	 */
 	private void creaCriteria(final AlertaBusqueda alertaBusqueda, final Criteria criteria) {
-		UtilitiesCriteria.setCondicionCriteriaCadenaLike(alertaBusqueda.getDestinatario(), criteria,
-				Constantes.DESTINATARIO);
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(alertaBusqueda.getDestinatario(), criteria, "destinatarios");
 		UtilitiesCriteria.setCondicionCriteriaCadenaLike(alertaBusqueda.getAsunto(), criteria, Constantes.ASUNTO);
 		UtilitiesCriteria.setCondicionCriteriaIgualdadLong(alertaBusqueda.getId(), criteria, Constantes.ID);
 		UtilitiesCriteria.setCondicionCriteriaFechaMayor(alertaBusqueda.getFechaDesdeEnvio(), criteria,
 				Constantes.FECHAENVIO);
 		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(alertaBusqueda.getFechaHastaEnvio(), criteria,
 				Constantes.FECHAENVIO);
+		UtilitiesCriteria.setCondicionCriteriaFechaMayor(alertaBusqueda.getFechaDesdeCreate(), criteria,
+				Constantes.FECHACREACION);
+		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(alertaBusqueda.getFechaHastaCreate(), criteria,
+				Constantes.FECHACREACION);
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(alertaBusqueda.getTipAlerta(), criteria, "tipAlerta");
 
 	}
 
@@ -156,32 +153,15 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 	 * Trimiteți alertă sau comunicare în mod individual.
 	 * @param alerta Alerta
 	 * @param usuario User
+	 * @throws PebbleException
 	 */
-	private void enviarAlertaUsuarioIndividual(final Alerta alerta, final Users usuario) {
+	@Override
+	public void sendAlert(Alerta alerta, List<Users> usuariosSeleccionados, List<Documento> documentosCargados,
+			String plantilla, Map<String, String> paramPlantilla) throws PebbleException {
 		Alerta alertaLocal;
 		alertaLocal = new Alerta();
 		BeanUtils.copyProperties(alerta, alertaLocal);
-
-		// alertaLocal.setListDestinatarios(listDestinatarios);.setUsuario(usuario);
-		// ENVIAMOS MAIL SI PROCEDE
-
-		if (usuario.getAlertChannel().equals(AlertChannelEnum.EMAIL)) {
-			// alertaLocal.setDestinatario(usuario.getUsername());
-			mailAlertaSender.send(alertaLocal, usuario);
-		}
-		// ENVIAMOS SMS SI PROCEDE
-		if (usuario.getAlertChannel().equals(AlertChannelEnum.EMAIL_SMS)
-				|| usuario.getAlertChannel().equals(AlertChannelEnum.SMS)) {
-			// alertaLocal.setDestinatario(usuario.getPhone());
-		}
-
-		// if (usuario.getUsername() == null) {
-		// alertaLocal.setUsuario(null);
-		// }
-		// else {
-		// alertaLocal.setUsuario(usuario);
-		// }
-		alertaRepository.save(alertaLocal);
+		mailAlertaSender.send(alertaLocal, usuariosSeleccionados, documentosCargados, plantilla, paramPlantilla);
 	}
 
 	/**
@@ -227,35 +207,13 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 	}
 
 	/**
-	 * Trimiteți o alertă destinatarilor din lista atașată
-	 * @param alerta Alerta
-	 * @param usuariosSeleccionados List<User>
-	 */
-	@Override
-	public void sendAlert(final Alerta alerta, final List<Users> usuariosSeleccionados) {
-		for (final Users usuario : usuariosSeleccionados) {
-			enviarAlertaUsuarioIndividual(alerta, usuario);
-		}
-	}
-
-	/**
-	 * Trimiteți o alertă unui anumit utilizator.
-	 * @param alerta Alerta
-	 * @param usuario User
-	 */
-	@Override
-	public void sendAlertUsuario(final Alerta alerta, final Users usuario) {
-		enviarAlertaUsuarioIndividual(alerta, usuario);
-	}
-
-	/**
 	 * Eliminarea unei alerte
 	 * @param alerta
 	 */
 	@Override
 	@Transactional(readOnly = false)
-	public void delete(final Alerta alerta) {
-		this.alertaRepository.delete(alerta);
+	public void delete(final Long id) {
+		this.alertaRepository.delete(id);
 	}
 
 	/**
@@ -268,4 +226,5 @@ public class AlertaServiceImpl implements AlertaService, Serializable {
 		alertaRepository.findOne(alerta.getId());
 		return alerta;
 	}
+
 }

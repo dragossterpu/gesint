@@ -7,7 +7,7 @@
 	<ui:define name="content">
 		<h:form id="form">
 			<div class="bloqueFormulario">
-				<p:panel header="Creați o alertă nouă" styleClass="panelModCard">
+				<p:panel header="Creați o corespndență nouă" styleClass="panelModCard">
 					<div class="container-fluid">
 						<div class="bloqueFormulario">
 							<p:dataTable var="usuario" value="#{alertaBean.usuariosSeleccionadosFinales}" id="tablaUsueriosSeleccionados" rows="5" 
@@ -28,12 +28,12 @@
 										update="form" immediate="true" />
 								</p:column>
 								<f:facet name="footer">
-									Total:	#{alertaBean.usuariosSeleccionadosFinales.size()} destinatari ai alertei/comunicării via Email
+									Total:	#{alertaBean.usuariosSeleccionadosFinales.size()} destinatari ai comunicării via Email
    							</f:facet>
 							</p:dataTable>
 							<div class="ui-g">
 								<p:outputPanel rendered="#{empty alertaBean.usuariosSeleccionadosFinales}" class="ui-g-2">
-									<h:outputLabel for="destinatario" value="* Destinatar:" />
+									<b><h:outputLabel for="destinatario" value="* Destinatar:" /></b>
 								</p:outputPanel>
 								<p:outputPanel rendered="#{empty alertaBean.usuariosSeleccionadosFinales}" class="ui-g-6">
 									<p:inputText id="destinatario" ajax="true" value="#{alertaBean.nombreUsuario}"
@@ -52,10 +52,25 @@
 										onsuccess="PF('statusDialog').hide()" update="formBusquedaUsuarios"/>
 								</div>
 							</div>							
-							
 							<div class="ui-g">
 								<div class="ui-g-2">
-									<h:outputLabel for="asunto" value="*Subiect:" />
+									<b><h:outputLabel for="tipSelect" value="* Tipul corespondenței:" /></b>
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<p:importEnum type="ro.per.online.persistence.entities.enums.CategoryEnum"
+										var="tip" allSuffix="ALL_ENUM_VALUES" />
+									<p:selectOneMenu value="#{alertaBean.alerta.tipAlerta}"
+										id="tipSelect"
+										required="true" requiredMessage="Alegeți un tip de corespondență" styleClass="form-control form-select">
+										<f:selectItem itemLabel="Alege un un tip" itemValue="" />
+										<f:selectItems value="#{tip.ALL_ENUM_VALUES}" var="tip"
+											itemLabel="#{tip.description}" itemValue="#{tip}" />
+									</p:selectOneMenu>							
+								</div>
+							</div>
+							<div class="ui-g">
+								<div class="ui-g-2">
+									<b><h:outputLabel for="asunto" value="*Subiect:" /></b>
 								</div>
 								<div class="ui-g-10">
 									<p:inputText id="asunto" value="#{alertaBean.alerta.asunto}"
@@ -66,7 +81,7 @@
 							</div>
 							<div class="ui-g">
 								<div class="ui-g-2">
-									<h:outputLabel for="nombre" value="*Descriere:" />
+									<b><h:outputLabel for="nombre" value="*Descriere:" /></b>
 								</div>
 								<div class="ui-g-10">
 									<p:inputTextarea id="nombre" rows="6" cols="150"
@@ -82,7 +97,7 @@
 							</div>
 							<div class="ui-g">
 								<div class="ui-g-2">
-									<h:outputLabel for="auto" value="Trimitere automatică a corespondenței" />
+									<b><h:outputLabel for="auto" value="Trimitere automatică a corespondenței" /></b>
 								</div>
 								<div class="ui-g-10" id ="auto">
 									 <p:selectBooleanCheckbox value="#{alertaBean.alerta.automatic}"/>
@@ -91,11 +106,11 @@
 							</div>
 							<div class="ui-g">
 								<div class="ui-g-2">
-									<h:outputLabel for="fechaEnvio" value="Alegeți data trimiterii automatice a corespondenței:" />
+									<b><h:outputLabel for="fechaEnvio" value="Alegeți data trimiterii automatice a corespondenței:" /></b>
 								</div>
-								<div class="ui-g-10">
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<p:calendar id="fechaEnvio" pattern="dd/MM/yyyy" locale="es"
-										navigator="true" maxdate="#{currentDate}"
+										navigator="true"  mindate="#{alertaBean.currentDate}"
 										value="#{alertaBean.alerta.fechaEnvio}" />
 									<p:messages for="fechaEnvio" autoUpdate="true" closable="true" />
 								</div>
