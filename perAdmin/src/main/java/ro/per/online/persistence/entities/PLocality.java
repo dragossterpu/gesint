@@ -85,4 +85,17 @@ public class PLocality implements Serializable {
 	 */
 	@Column(name = "SECTOR", length = 10)
 	private String sector;
+
+	/**
+	 * Nivel.
+	 */
+	@Column(name = "nivel")
+	private Long nivel;
+
+	/**
+	 * Populatie.
+	 */
+	@Column(name = "locuitori")
+	private Long locuitori;
+
 }

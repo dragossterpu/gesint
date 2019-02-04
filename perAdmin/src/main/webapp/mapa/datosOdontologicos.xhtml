@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:c="http://java.sun.com/jsp/jstl/core" >
+    <script type="text/javascript" src="../js/loadDental.js"></script>
+       
+    <p:remoteCommand name="loadDelInterDental" actionListener="#{datosOdontologicosController.loadDlgDetailsInterdental}" style="opacity: 0;position:relative;top:-2000px;" />
+    <p:breadCrumb homeDisplay="false">
+        <p:menuitem disabled="true" value="Datos Odontológicos" />
+    </p:breadCrumb>
+
+    <p:panelGrid  id="listadoDientes">
+    
+        <h:outputScript>
+            //Función que sincroniza los datos con la imagen
+            var id = setInterval(loadImg(), 10);
+            function loadImg(){
+                if(document.getElementById('dentalImg')){
+                    cargarImg();
+                    clearInterval(id);
+                }
+            }
+            function sincronizarDatos(){
+                   map.cargarDatos(#{datosOdontologicosController.armarEstructuraJsonString()},window, window.document);
+            }
+            function pintando(){
+                habilitar();
+                comprobarItemSelected();
+            }
+        </h:outputScript>
+        
+        <p:row>
+            <a id="valorInterdental" style="display:none;">Interdental</a> 
+            <p:column class="mitad">
+                <p:panel header="Hemiarcada Superior Derecha" toggleable="true" collapsed="false">
+                    <p:repeat value="#{datosOdontologicosController.setListBySeccion('hsd')}" var="pieza"   >
+                        <div class="ui-g">
+                            <div class="ui-g-2">
+                                <p:outputLabel value="#{pieza.descripcion}:" />
+                            </div>
+                            <div class="ui-g-8 dienteValue" id="piezaDental_#{pieza.descripcion}">
+                                <p:inputText placeholder="#{datosOdontologicosController.loadDetails(pieza.descripcion, pieza.localizacion)}" class="overflowText" >
+                                    <p:ajax event="click" listener="#{datosOdontologicosController.loadDlgDetails(pieza.descripcion,pieza.id)}" />
+                                </p:inputText>
+                            </div>
+                            <div class="ui-g-2 uploadDiente">
+                                <!-- <p:button icon="fa fa-upload" style="margin:0;" for="upload"/> -->
+                                <div class="modViewFileUpload" id="#{pieza.id}">
+                                    <p:fileUpload  
+                                        class="fileUpload"
+                                        mode="simple"
+                                        fileUploadListener="#{datosOdontologicosController.fileUpload}" 
+                                        update="listadoDientes" 
+                                        multiple="true"
+                                        allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                                        auto="true" >
+                                    </p:fileUpload>
+                                </div>
+                                <p:commandButton icon="fa fa-eye" style="margin-left: 4px;" actionListener="#{datosOdontologicosController.loadDlgImg(pieza.id)}" rendered="#{datosOdontologicosController.showButton(pieza.id)}" />
+                            </div>
+                        </div>
+                       </p:repeat>
+                </p:panel>
+            </p:column>
+            <p:column class="mitad">
+                <p:panel header="Hemiarcada Superior Izquierda" toggleable="true" collapsed="false">
+                    <p:repeat value="#{datosOdontologicosController.setListBySeccion('hsi')}" var="pieza"   >
+                        <div class="ui-g">
+                            <div class="ui-g-2">
+                                <p:outputLabel value="#{pieza.descripcion}:" />
+                            </div>
+                            <div class="ui-g-8 dienteValue" id="piezaDental_#{pieza.descripcion}">
+                                <p:inputText placeholder="#{datosOdontologicosController.loadDetails(pieza.descripcion, pieza.localizacion)}" class="overflowText" >
+                                    <p:ajax event="click" listener="#{datosOdontologicosController.loadDlgDetails(pieza.descripcion,pieza.id)}" />
+                                </p:inputText>
+                            </div>
+                            <div class="ui-g-2 uploadDiente">
+                                <!-- <p:button icon="fa fa-upload" style="margin:0;" for="upload"/> -->
+                                <div class="modViewFileUpload" id="#{pieza.id}">
+                                    <p:fileUpload  
+                                        class="fileUpload"
+                                        mode="simple"
+                                        fileUploadListener="#{datosOdontologicosController.fileUpload}" 
+                                        update="listadoDientes" 
+                                        multiple="true"
+                                        allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                                        auto="true" >
+                                    </p:fileUpload>
+                                </div>
+                                <p:commandButton icon="fa fa-eye" style="margin-left: 4px;" actionListener="#{datosOdontologicosController.loadDlgImg(pieza.id)}" rendered="#{datosOdontologicosController.showButton(pieza.id)}" />
+                            </div>
+                        </div>
+                       </p:repeat>
+                </p:panel>
+            </p:column>
+        </p:row>
+        <p:row>
+            <p:column colspan="2" styleClass="centrado">
+                <object id="dentalImg"  width="80%"/>
+            </p:column>
+        </p:row>
+        <p:row>
+            <p:column class="mitad">
+                <p:panel header="Hemiarcada Inferior Derecha" toggleable="true" collapsed="false">
+                    <p:repeat value="#{datosOdontologicosController.setListBySeccion('hid')}" var="pieza"   >
+                        <div class="ui-g">
+                            <div class="ui-g-2">
+                                <p:outputLabel value="#{pieza.descripcion}:" />
+                            </div>
+                            <div class="ui-g-8 dienteValue" id="piezaDental_#{pieza.descripcion}">
+                                <p:inputText placeholder="#{datosOdontologicosController.loadDetails(pieza.descripcion, pieza.localizacion)}" class="overflowText" >
+                                    <p:ajax event="click" listener="#{datosOdontologicosController.loadDlgDetails(pieza.descripcion,pieza.id)}" />
+                                </p:inputText>
+                            </div>
+                            <div class="ui-g-2 uploadDiente">
+                                <!-- <p:button icon="fa fa-upload" style="margin:0;" for="upload"/> -->
+                                <div class="modViewFileUpload" id="#{pieza.id}">
+                                    <p:fileUpload  
+                                        class="fileUpload"
+                                        mode="simple"
+                                        fileUploadListener="#{datosOdontologicosController.fileUpload}" 
+                                        update="listadoDientes" 
+                                        multiple="true"
+                                        allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                                        auto="true" >
+                                    </p:fileUpload>
+                                </div>
+                                <p:commandButton icon="fa fa-eye" style="margin-left: 4px;" actionListener="#{datosOdontologicosController.loadDlgImg(pieza.id)}" rendered="#{datosOdontologicosController.showButton(pieza.id)}" />
+                            </div>
+                        </div>
+                       </p:repeat>
+                </p:panel>
+            </p:column>
+            <p:column class="mitad">
+                <p:panel header="Hemiarcada Inferior Izquierda" toggleable="true" collapsed="false">
+                    <p:repeat value="#{datosOdontologicosController.setListBySeccion('hii')}" var="pieza"   >
+                        <div class="ui-g">
+                            <div class="ui-g-2">
+                                <p:outputLabel value="#{pieza.descripcion}:" />
+                            </div>
+                            <div class="ui-g-8 dienteValue" id="piezaDental_#{pieza.descripcion}">
+                                <p:inputText placeholder="#{datosOdontologicosController.loadDetails(pieza.descripcion, pieza.localizacion)}" class="overflowText" >
+                                    <p:ajax event="click" listener="#{datosOdontologicosController.loadDlgDetails(pieza.descripcion,pieza.id)}" />
+                                </p:inputText>
+                            </div>
+                            <div class="ui-g-2 uploadDiente">
+                                <!-- <p:button icon="fa fa-upload" style="margin:0;" for="upload"/> -->
+                                <div class="modViewFileUpload" id="#{pieza.id}">
+                                    <p:fileUpload  
+                                        class="fileUpload"
+                                        mode="simple"
+                                        fileUploadListener="#{datosOdontologicosController.fileUpload}" 
+                                        update="listadoDientes" 
+                                        multiple="true"
+                                        allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                                        auto="true" >
+                                    </p:fileUpload>
+                                </div>
+                                <p:commandButton icon="fa fa-eye" style="margin-left: 4px;" actionListener="#{datosOdontologicosController.loadDlgImg(pieza.id)}" rendered="#{datosOdontologicosController.showButton(pieza.id)}" />
+                            </div>
+                        </div>
+                       </p:repeat>
+                </p:panel>
+            </p:column>
+        </p:row>
+        <p:row>
+            <p:column styleClass="centrado">
+                <p:graphicImage value="/img/atlasDental/caras.jpg" width="50%" styleClass="ui-panel" />
+            </p:column>
+            <p:column styleClass="centrado">
+                <p:graphicImage value="/img/atlasDental/hemiarcada.jpg" width="50%" styleClass="ui-panel" />
+            </p:column>
+        </p:row>
+        <p:row>
+            <p:column colspan="2">
+                <p:panel header="Ortodoncia" toggleable="false" collapsed="false">
+                    <div class="ui-g">
+                       <div class="ui-g-4" style="margin: 0;padding: 0;">
+                           <h:outputText value="Fijas: " />
+                            <p:selectBooleanCheckbox   styleClass="control_checkbox_action"     />
+                       </div>
+                       <div class="ui-g-4" style="margin: 0;padding: 0;">
+                           <h:outputText value="Removibles: " />
+                            <p:selectBooleanCheckbox   styleClass="control_checkbox_action"     />
+                       </div>
+                    </div>
+                </p:panel>
+            </p:column>
+        </p:row>
+        <p:row>
+            <p:column colspan="2">
+                <p:panel header="Odontograma" toggleable="false" collapsed="false">
+                    <div class="ui-g">
+                        <div class="ui-g-4" style="margin: 0;padding: 0;">
+                           <h:outputText value="No: " />
+                            <p:selectBooleanCheckbox   styleClass="control_checkbox_action"     />
+                        </div>
+                        <div class="ui-g-4" style="margin: 0;padding: 0;">
+                           <h:outputText value="Si: " />
+                            <p:selectBooleanCheckbox   styleClass="control_checkbox_action"     />
+                       </div>
+                    </div>
+                </p:panel>
+            </p:column>
+        </p:row>
+        <p:row>
+            <p:column colspan="2">
+                <p:panel header="Descripción general" toggleable="false" collapsed="false">
+                    <div class="ui-g">
+                       <div class="ui-g-12" style="margin: 0;padding: .3em;" >
+                            <p:inputTextarea rows="5" cols="30" counter="display" maxlength="250" counterTemplate="Quedan {0} caracteres." autoResize="false" value="#{datosOdontologicosController.datosOdontologicos.descripcionGeneral}"/>
+                            <p:outputLabel id="display"/>
+                       </div>
+                    </div>
+                </p:panel>
+            </p:column>
+        </p:row>
+        <p:row>
+            <p:column colspan="2">
+                <p:panel header="Otras comprobaciones" toggleable="false" collapsed="false">
+                    <div class="ui-g">
+                       <div class="ui-g-12" style="margin: 0;padding: .3em;" >
+                            <p:inputTextarea rows="5" cols="30" counter="displayotras" maxlength="250" counterTemplate="Quedan {0} caracteres." autoResize="false" value="#{datosOdontologicosController.datosOdontologicos.otrasComprobaciones}"/>
+                            <p:outputLabel id="displayotras"/>
+                       </div>
+                    </div>
+                </p:panel>
+            </p:column>
+        </p:row>
+        <p:row>
+            <p:column colspan="2">
+                <p:panel header="Información sobre odontólogos" toggleable="false" collapsed="false">
+                    <div class="ui-g">
+                       <div class="ui-g-12" style="margin: 0;padding: .3em;" >
+                            <p:inputTextarea rows="5" cols="30" counter="displayodonto" maxlength="250" counterTemplate="Quedan {0} caracteres." autoResize="false" value="#{datosOdontologicosController.datosOdontologicos.informacionOdontologos}" />
+                            <p:outputLabel id="displayodonto"/>
+                       </div>
+                    </div>
+                </p:panel>
+            </p:column>
+        </p:row>
+    </p:panelGrid>
+    <p:dialog header="Detalle de la pieza dental Nº: #{datosOdontologicosController.refDiente}" widgetVar="detalleDienteDlg" id="detalleDienteDlg" minHeight="40" modal="true" style="max-width:50%;" onShow="pintando()" onHide="sincronizarDatos();" >
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <b><p:outputLabel>Nivel de Pieza</p:outputLabel></b>
+            </div>
+            <div class="ui-g-12">
+                <p:repeat value="#{datosOdontologicosController.genericParametros}" var="parametro" varStatus="status"  >
+                   <div class="ui-g-6" style="margin: 0;padding: .3em;" >
+                       <div class="ui-g-10" style="margin: 0;padding: 0;">
+                           <p:outputLabel value="#{parametro.descripcion}:" />
+                       </div>
+                       <div class="ui-g-2 " id="parametro_#{parametro.ordenTipo}" data-dental="#{parametro.id}" style="margin: 0;padding: 0;">
+                            <p:selectBooleanCheckbox   styleClass="control_checkbox_action"  onchange="changeOfValue(this.name)" value="#{parametro.active}"  />
+                       </div>
+                   </div>
+                 </p:repeat>
+            </div>
+            <div class="ui-g-6">
+                <b><p:outputLabel>Prótesis Removibles</p:outputLabel></b>
+            </div>
+            <div class="ui-g-6">
+                <b><p:outputLabel>Prótesis Fijas</p:outputLabel></b>
+            </div>
+            <div class="ui-g-6">
+                <p:repeat value="#{datosOdontologicosController.genericParametrosPR}" var="parametro" varStatus="status"  >
+                   <div class="ui-g-12" style="margin: 0;padding: .3em;" >
+                       <div class="ui-g-10" style="margin: 0;padding: 0;">
+                           <p:outputLabel value="#{parametro.descripcion}:" />
+                       </div>
+                       <div class="ui-g-2 " id="parametro_#{parametro.ordenTipo}" data-dental="#{parametro.id}" style="margin: 0;padding: 0;">
+                            <p:selectBooleanCheckbox   styleClass="control_checkbox_action"  onchange="changeOfValue(this.name)" value="#{parametro.active}"  />
+                       </div>
+                   </div>
+                 </p:repeat>
+            </div>
+            <div class="ui-g-6">
+                <p:repeat value="#{datosOdontologicosController.genericParametrosPF}" var="parametro" varStatus="status"  >
+                   <div class="ui-g-12" style="margin: 0;padding: .3em;" >
+                       <div class="ui-g-10" style="margin: 0;padding: 0;">
+                           <p:outputLabel value="#{parametro.descripcion}:" />
+                       </div>
+                       <div class="ui-g-2 " id="parametro_#{parametro.ordenTipo}" data-dental="#{parametro.id}" style="margin: 0;padding: 0;">
+                            <p:selectBooleanCheckbox   styleClass="control_checkbox_action"  onchange="changeOfValue(this.name)" value="#{parametro.active}"  />
+                       </div>
+                   </div>
+                 </p:repeat>
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <b>Nivel de Cara</b>
+            </div>
+            <div class="ui-g-12">
+                <div class="flex-container">
+                    <div class="flex-item">
+                        <span><h:outputText value="Opción/Nivel" /></span>
+                        <span><h:outputText value="Caries" /></span>
+                        <span><h:outputText value="Obturación estética" /></span>
+                        <span><h:outputText value="Obturación amalgama" /></span>
+                        <span><h:outputText value="Carilla estética" /></span>
+                        <span><h:outputText value="Carilla oro metal" /></span>
+                    </div>
+                    <div class="flex-item">
+                        <span><h:outputText value="(O/I)" /></span>
+                        <p:repeat value="#{datosOdontologicosController.genericParametrosOI}" var="parametro" varStatus="status">
+                            <div id="parametro_#{status.index+21}" data-dental="#{parametro.id}">
+                                <p:selectBooleanCheckbox  styleClass="control_checkbox_action" onchange="changeOfValue(this.name)" value="#{parametro.active}" />
+                            </div>
+                        </p:repeat>
+                        <div class="relleno">--</div>
+                        <div class="relleno">--</div>
+                    </div>
+                    <div class="flex-item">
+                        <span><h:outputText value="(M)" /></span>
+                        <p:repeat value="#{datosOdontologicosController.genericParametrosM}" var="parametro" varStatus="status">
+                            <div id="parametro_#{status.index+24}" data-dental="#{parametro.id}">
+                                <p:selectBooleanCheckbox  styleClass="control_checkbox_action" onchange="changeOfValue(this.name)" value="#{parametro.active}" />
+                            </div>
+                        </p:repeat>
+                        <div class="relleno">--</div>
+                        <div class="relleno">--</div>
+                    </div>
+                    <div class="flex-item">
+                        <span><h:outputText value="(D)" /></span>
+                        <p:repeat value="#{datosOdontologicosController.genericParametrosD}" var="parametro" varStatus="status">
+                            <div id="parametro_#{status.index+27}" data-dental="#{parametro.id}">
+                                <p:selectBooleanCheckbox  styleClass="control_checkbox_action" onchange="changeOfValue(this.name)" value="#{parametro.active}" />
+                            </div>
+                        </p:repeat>
+                        <div class="relleno">--</div>
+                        <div class="relleno">--</div>
+                    </div>
+                    <div class="flex-item">
+                        <span><h:outputText value="(V)" /></span>
+                        <p:repeat value="#{datosOdontologicosController.genericParametrosV}" var="parametro" varStatus="status">
+                            <div id="parametro_#{status.index+30}" data-dental="#{parametro.id}">
+                                <p:selectBooleanCheckbox  styleClass="control_checkbox_action" onchange="changeOfValue(this.name)" value="#{parametro.active}" />
+                            </div>
+                        </p:repeat>
+                    </div>
+                    <div class="flex-item">
+                        <span><h:outputText value="(P/L)" /></span>
+                        <p:repeat value="#{datosOdontologicosController.genericParametrosPL}" var="parametro" varStatus="status">
+                            <div id="parametro_#{status.index+35}" data-dental="#{parametro.id}">
+                                <p:selectBooleanCheckbox  styleClass="control_checkbox_action" onchange="changeOfValue(this.name)" value="#{parametro.active}"/>
+                            </div>
+                        </p:repeat>
+                        <div class="relleno">--</div>
+                        <div class="relleno">--</div>
+                    </div>
+                    <div class="flex-item">
+                        <span><h:outputText value="(S/D)" /></span>
+                        <p:repeat value="#{datosOdontologicosController.genericParametrosSD}" var="parametro" varStatus="status">
+                            <div id="parametro_#{status.index+38}" data-dental="#{parametro.id}">
+                                <p:selectBooleanCheckbox  styleClass="control_checkbox_action" onchange="changeOfValue(this.name)" value="#{parametro.active}" />
+                            </div>
+                        </p:repeat>
+                        <div class="relleno">--</div>
+                        <div class="relleno">--</div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 legendFooter">
+                <b>Oclusal/Incisal (O/I), Mesial(M), Distal(D), Vestibular(V), Lingual/Palatina (P/L), Sin Determinar (S/D)</b>
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <p><h:outputText id="displayObs" /></p>
+            <p:inputTextarea rows="5" cols="30" counter="displayObs" maxlength="2000" counterTemplate="Descripción ({0} caracteres permitidos)." autoResize="true" value="#{datosOdontologicosController.descripcionActual.descripcion}" style="width:  100%;max-width:  100%;box-sizing: border-box;" rendered="#{datosOdontologicosController.descripcionActual != null}"/>
+        </div>
+        <f:facet name="footer">
+            <p:commandButton value="Guardar" actionListener="#{datosOdontologicosController.saveDescripcion()}" oncomplete="PF('detalleDienteDlg').hide();sincronizarDatos();" update="listadoDientes" />
+            <p:commandButton value="Cancelar" onclick="PF('detalleDienteDlg').hide()" immediate="true"/>
+         </f:facet>
+    </p:dialog>
+    <p:dialog header="Detalle del espacio interdental Nº: #{datosOdontologicosController.refInterdental}" widgetVar="detalleInterDentalDlg" id="detalleInterDentalDlg" minHeight="40" modal="true" style="max-width:50%;" onShow="pintando()" onHide="sincronizarDatos();">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <b><p:outputLabel>Sección interdental</p:outputLabel></b>
+            </div>
+            <div class="ui-g-12">
+                <p:repeat value="#{datosOdontologicosController.genericParametrosSI}" var="parametro" varStatus="status"  >
+                   <div class="ui-g-12" style="margin: 0;padding: .3em;" >
+                       <div class="ui-g-10" style="margin: 0;padding: 0;">
+                           <p:outputLabel value="#{parametro.descripcion}:" />
+                       </div>
+                       <div class="ui-g-2 " id="parametro_#{status.index+18}" data-dental="#{parametro.id}" style="margin: 0;padding: 0;">
+                            <p:selectBooleanCheckbox   styleClass="control_checkbox_action"  onchange="changeOfValue(this.name)" value="#{parametro.active}"  />
+                       </div>
+                   </div>
+                 </p:repeat>
+            </div>
+        </div>
+        <f:facet name="footer">
+            <p:commandButton value="Guardar" oncomplete="PF('detalleInterDentalDlg').hide();sincronizarDatos();" update="listadoDientes"/>
+            <p:commandButton value="Cancelar" onclick="PF('detalleInterDentalDlg').hide()" immediate="true"/>
+         </f:facet>
+    </p:dialog>
+    <p:dialog header="Detalle supernumeraria" widgetVar="detalleSuperNumerariaDlg" id="detalleSuperNumerariaDlg" minHeight="40" modal="true" style="max-width:50%;" onShow="pintando()" onHide="sincronizarDatos();">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <b><p:outputLabel>Supernumerario</p:outputLabel></b>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-12" style="margin: 0;padding: .3em;" >
+                       <div class="ui-g-10" style="margin: 0;padding: 0;">
+                           <p:outputLabel value="Activar supernumerario: " />
+                       </div>
+                       <div class="ui-g-2 " id="parametro_20" data-dental="#{datosOdontologicosController.nodoSuperNumeraria.id}" style="margin: 0;padding: 0;">
+                            <p:selectBooleanCheckbox id="parametro_20" styleClass="control_checkbox_action" onchange="changeOfValue(this.name)" value="#{datosOdontologicosController.nodoSuperNumeraria.active}" />
+                       </div>
+                   </div>
+            </div>
+        </div>
+        <f:facet name="footer">
+            <p:commandButton value="Guardar" oncomplete="PF('detalleSuperNumerariaDlg').hide();sincronizarDatos();" update="listadoDientes" />
+            <p:commandButton value="Cancelar" onclick="PF('detalleSuperNumerariaDlg').hide()" immediate="true"/>
+         </f:facet>
+    </p:dialog>
+        <p:dialog header="Imagenes" widgetVar="detalleImgDlg" id="detalleImgDlg" minHeight="40" modal="true" style="max-width:50%;" >
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <b><p:outputLabel>Carrusel</p:outputLabel></b>
+                <p:galleria value="#{datosOdontologicosController.images}" var="image" panelWidth="500" panelHeight="313" showCaption="true">
+                    <p:graphicImage name="#{image}" alt="" title=""/>
+                </p:galleria>
+            </div>
+        </div>
+        <f:facet name="footer">
+            <p:commandButton value="Cerrar" onclick="PF('detalleImgDlg').hide()"/>
+         </f:facet>
+    </p:dialog>
+</ui:composition>

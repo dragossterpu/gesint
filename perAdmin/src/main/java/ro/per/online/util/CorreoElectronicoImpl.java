@@ -35,9 +35,9 @@ import ro.per.online.persistence.entities.Users;
 
 /**
  * Implementación de la clase CorreoElectronico.
- * 
+ *
  * @author STAD
- * 
+ *
  */
 @Component("correoElectronico")
 @Getter
@@ -66,7 +66,7 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 			throws IOException, PebbleException {
 		try {
 
-			Properties props = new Properties();
+			final Properties props = new Properties();
 			props.setProperty("mail.smtp.host", "mail.per.ro");
 			props.setProperty("mail.smtp.starttls.enable", "false");
 			props.setProperty("mail.transport.protocol", "smtp");
@@ -74,29 +74,30 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 			props.setProperty("mail.smtp.user", "dragos.sterpu@per.ro");
 			props.setProperty("mail.smtp.auth", "true");
 			props.put("mail.smtp.debug", "true");
-			Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+			final Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+
 				@Override
 				protected PasswordAuthentication getPasswordAuthentication() {
 					return new PasswordAuthentication("dragos.sterpu@per.ro", "Per20182018");
 				}
 			});
-			Map<String, Object> parametros = new HashMap<>();
+			final Map<String, Object> parametros = new HashMap<>();
 			if (paramPlantilla != null) {
 				parametros.putAll(paramPlantilla);
 			}
-			MimeMessage message = new MimeMessage(session);
+			final MimeMessage message = new MimeMessage(session);
 			final MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 			final String htmlContent = Utilities.generarTextoConPlantilla(plantilla, parametros);
 			helper.setText(htmlContent, true);
-			List<File> listfila = new ArrayList<File>();
+			final List<File> listfila = new ArrayList<File>();
 			File tempFile = null;
 			if (!adjuntos.isEmpty()) {
-				for (Documento doc : adjuntos) {
+				for (final Documento doc : adjuntos) {
 					tempFile = File.createTempFile(doc.getNombre(), null);
 					listfila.add(tempFile);
 				}
 
-				for (File adj : listfila) {
+				for (final File adj : listfila) {
 					helper.addAttachment(adj.getName(), adj);
 				}
 			}
@@ -104,10 +105,11 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 			// message.setFrom(new InternetAddress("secretariat@per.ro"));
 			message.addRecipients(Message.RecipientType.TO, new InternetAddress[] { new InternetAddress(destino) });
 			message.setSubject(asunto);
+			message.setFrom(new InternetAddress("secretariat@per.ro"));
 			// message.setText("blabla");
-			BodyPart texto = new MimeBodyPart();
+			final BodyPart texto = new MimeBodyPart();
 			texto.setContent("text", "text/html");
-			Transport t = session.getTransport("smtp");
+			final Transport t = session.getTransport("smtp");
 			t.connect("dragos.sterpu@per.ro", "Per20182018");
 			t.sendMessage(message, message.getAllRecipients());
 			t.close();
@@ -142,7 +144,7 @@ public class CorreoElectronicoImpl implements CorreoElectronico {
 				try {
 					enviarCorreo(destino, asunto, cuerpo, documentosCargados, plantilla, paramPlantilla);
 				}
-				catch (IOException e) {
+				catch (final IOException e) {
 					FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
 							Constantes.DESCERRORMENSAJE);
 				}

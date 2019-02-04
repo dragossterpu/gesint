@@ -91,6 +91,7 @@ public class LocalityServiceImpl implements LocalityService {
 	public List<PLocality> fiindAll() {
 		return (ArrayList<PLocality>) localityRepository.findAll();
 	}
+
 	/**
 	 * Cauta o localitate dupa id acestuia
 	 * @param descripcion
@@ -101,6 +102,7 @@ public class LocalityServiceImpl implements LocalityService {
 	public PLocality findById(final Long localidadId) {
 		return localityRepository.findOne(localidadId);
 	}
+
 	/**
 	 * Cauta o localitate dupa numele acestuia
 	 * @param descripcion
@@ -121,5 +123,16 @@ public class LocalityServiceImpl implements LocalityService {
 	@Override
 	public List<PLocality> findByProvince(final PProvince province) {
 		return localityRepository.findAllByProvince(province);
+	}
+
+	/**
+	 * Cauta toate localitatile unei provincii
+	 * @param Long id identificator de judet
+	 * @return lista de localitati.
+	 * @see ro.mira.per.controller.AdminController.users(HttpServletRequest, Integer) (potential match)
+	 */
+	@Override
+	public List<PLocality> findByProvinceAndNivel(final PProvince province, Long nivel) {
+		return localityRepository.findAllByProvinceAndNivel(province, nivel);
 	}
 }

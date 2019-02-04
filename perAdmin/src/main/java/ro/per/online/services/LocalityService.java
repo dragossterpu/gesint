@@ -61,12 +61,14 @@ public interface LocalityService {
 	 * @return PLocality localitatea
 	 */
 	PLocality findById(Long localitiId);
+
 	/**
 	 * Cauta o localitate
 	 * @param Long localitiId
 	 * @return PLocality localitatea
 	 */
 	PLocality findByName(String local);
+
 	/**
 	 * Cauta toate localitatile unei provincii
 	 * @param Long id identificator de judet
@@ -74,5 +76,13 @@ public interface LocalityService {
 	 * @see ro.mira.per.controller.AdminController.users(HttpServletRequest, Integer) (potential match)
 	 */
 	List<PLocality> findByProvince(PProvince province);
+
+	/**
+	 * Cauta toate localitatile unei provincii
+	 * @param Long id identificator de judet
+	 * @return lista de localitati.
+	 * @see ro.mira.per.controller.AdminController.users(HttpServletRequest, Integer) (potential match)
+	 */
+	List<PLocality> findByProvinceAndNivel(PProvince province, Long nivel);
 
 }

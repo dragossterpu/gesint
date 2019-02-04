@@ -190,6 +190,10 @@ public class HomeBean implements Serializable {
 
 	}
 
+	private void buscarDatosJudet() {
+
+	}
+
 	/**
 	 * Busca los datos de la pestaña de usuarios.
 	 */
@@ -201,6 +205,8 @@ public class HomeBean implements Serializable {
 	 * Busca los datos de la pestaña de usuarios.
 	 */
 	private void buscarDatosRezultate() {
+		FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.ENVIOALERTA,
+				"Totul ok intram.");
 
 	}
 

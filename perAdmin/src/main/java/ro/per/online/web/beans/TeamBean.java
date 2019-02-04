@@ -293,7 +293,7 @@ public class TeamBean implements Serializable {
 		String sex = null;
 		Date fecha = null;
 		int numero = 0;
-		for (int i = 0; i < 2000; i++) {
+		for (int i = 0; i < 300; i++) {
 			numero = i;
 			final Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
@@ -304,7 +304,7 @@ public class TeamBean implements Serializable {
 			user.setBirthDate(fecha);
 			user.setSex(SexEnum.randomLetter());
 			final PProvince pro = new PProvince();
-			pro.setIndicator(Generador.provinciasFinal());
+			pro.setIndicator("TM");
 			user.setProvince(pro);
 			final SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 			final String anString = sdf.format(fecha);
@@ -332,10 +332,17 @@ public class TeamBean implements Serializable {
 			user.setAddress(Generador.nombresCalleFinal().concat("  Nr: ").concat(Generador.getNumeroCalle()));
 
 			user.setCivilStatus(CivilStatusEnum.randomLetter());
+			if (user.getCivilStatus().equals(CivilStatusEnum.WIDOWED)) {
+				user.setCivilStatus(CivilStatusEnum.MARRIED);
+			}
 			user.setEducation(EducationEnum.randomLetter());
 
 			List<PLocality> loc = new ArrayList<>();
-			loc = localityService.findByProvince(pro);
+			Long indice = Long.valueOf(Generador.getNumero());
+			if (pro.getIndicator().equals("IF")) {
+				indice = 3L;
+			}
+			loc = localityService.findByProvinceAndNivel(pro, 1L);
 			PLocality locality = new PLocality();
 			if (pro.getIndicator().equals("B")) {
 				Long id = null;
@@ -376,6 +383,7 @@ public class TeamBean implements Serializable {
 			user.setUserCreate("system");
 			userService.save(user);
 		}
+
 	}
 
 	/**

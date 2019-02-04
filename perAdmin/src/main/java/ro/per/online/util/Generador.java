@@ -14,6 +14,7 @@ import ro.per.online.persistence.entities.PProvince;
  * @author STAD
  */
 public class Generador {
+
 	/**
 	 * Números.
 	 */
@@ -43,6 +44,12 @@ public class Generador {
 	 * Letras.
 	 */
 	public static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	/**
+	 * Subtipos de denuncia.
+	 */
+	public static final String[] NUMEROS = { "1", "2", "3", "1", "2", "3", "1", "2", "1", "1", "3", "1", "1", "1", "2",
+			"2", "1", "1", "2", "3" };
 
 	/**
 	 * Obtiene un apellido final de la lista.
@@ -180,36 +187,37 @@ public class Generador {
 	 * Obtiene una sector de la lista.
 	 * @return sectoral azar
 	 */
-	public static String genereazaCnp(String sex, String an, String luna, String ziua, String judet) {
-		int S = Integer.valueOf(sex) * 2;
+	public static String genereazaCnp(final String sex, final String an, final String luna, final String ziua,
+			final String judet) {
+		final int S = Integer.valueOf(sex) * 2;
 
-		int AA1 = (Integer.valueOf(an.substring(0, 1)) / 10) * 7;
+		final int AA1 = (Integer.valueOf(an.substring(0, 1)) / 10) * 7;
 
-		int AA2 = (Integer.valueOf(an.substring(1, 2)) % 10) * 9;
+		final int AA2 = (Integer.valueOf(an.substring(1, 2)) % 10) * 9;
 
-		int LL1 = (Integer.valueOf(luna.substring(0, 1)) / 10) * 1;
+		final int LL1 = (Integer.valueOf(luna.substring(0, 1)) / 10) * 1;
 
-		int LL2 = (Integer.valueOf(luna.substring(1, 2)) % 10) * 4;
+		final int LL2 = (Integer.valueOf(luna.substring(1, 2)) % 10) * 4;
 
-		int ZZ1 = (Integer.valueOf(ziua.substring(0, 1)) / 10) * 6;
+		final int ZZ1 = (Integer.valueOf(ziua.substring(0, 1)) / 10) * 6;
 
-		int ZZ2 = (Integer.valueOf(ziua.substring(1, 2)) % 10) * 3;
+		final int ZZ2 = (Integer.valueOf(ziua.substring(1, 2)) % 10) * 3;
 
-		int JJ1 = (Integer.valueOf(judet.substring(0, 1)) / 10) * 5;
+		final int JJ1 = (Integer.valueOf(judet.substring(0, 1)) / 10) * 5;
 
-		int JJ2 = (Integer.valueOf(judet.substring(1, 2)) % 10) * 8;
+		final int JJ2 = (Integer.valueOf(judet.substring(1, 2)) % 10) * 8;
 
-		String nrGenerat = nrGenerat();
-		int NNN1 = (Integer.valueOf(nrGenerat.substring(0, 1)) / 100) * 2;
+		final String nrGenerat = nrGenerat();
+		final int NNN1 = (Integer.valueOf(nrGenerat.substring(0, 1)) / 100) * 2;
 
-		int NNN2 = (Integer.valueOf(nrGenerat.substring(1, 2)) / 10) * 7;
+		final int NNN2 = (Integer.valueOf(nrGenerat.substring(1, 2)) / 10) * 7;
 
-		int NNN3 = (Integer.valueOf(nrGenerat.substring(2, 3)) % 10) * 9;
+		final int NNN3 = (Integer.valueOf(nrGenerat.substring(2, 3)) % 10) * 9;
 
-		int cifraControl = S + AA1 + AA2 + LL1 + LL2 + ZZ1 + ZZ2 + JJ1 + JJ2 + NNN1 + NNN2 + NNN3;
+		final int cifraControl = S + AA1 + AA2 + LL1 + LL2 + ZZ1 + ZZ2 + JJ1 + JJ2 + NNN1 + NNN2 + NNN3;
 
 		int cifraControlFinal;
-		int rest = cifraControl % 11;
+		final int rest = cifraControl % 11;
 		if (rest == 10) {
 
 			cifraControlFinal = 1;
@@ -220,9 +228,9 @@ public class Generador {
 			cifraControlFinal = rest;
 
 		}
-		String controlFinal = Integer.toString(cifraControlFinal);
+		final String controlFinal = Integer.toString(cifraControlFinal);
 
-		StringBuilder cnpValid = new StringBuilder("").append(sex)
+		final StringBuilder cnpValid = new StringBuilder("").append(sex)
 
 				.append(an).append(luna).append(ziua)
 
@@ -236,17 +244,17 @@ public class Generador {
 	 * @return sectoral azar
 	 */
 	public static String nrGenerat() {
-		Random random = new Random();
+		final Random random = new Random();
 
-		int min = 1;
+		final int min = 1;
 
-		int max = 999;
+		final int max = 999;
 
-		int nrGenerat = random.nextInt(max - min) + min;
+		final int nrGenerat = random.nextInt(max - min) + min;
 
-		DecimalFormat formatare = new DecimalFormat("000");
+		final DecimalFormat formatare = new DecimalFormat("000");
 
-		String getNNN = formatare.format(nrGenerat);
+		final String getNNN = formatare.format(nrGenerat);
 		return getNNN;
 	}
 
@@ -408,6 +416,14 @@ public class Generador {
 	 * Obtiene el código postal.
 	 * @return codigo postal aleatorio
 	 */
+	public static String getOption() {
+		return getRandomChars(NUMBERS, 1);
+	}
+
+	/**
+	 * Obtiene el código postal.
+	 * @return codigo postal aleatorio
+	 */
 	public static String getNumeros() {
 		return getRandomChars(NUMBERS, 3);
 	}
@@ -482,6 +498,14 @@ public class Generador {
 	 */
 	public static String getPinNumber() {
 		return getRandomChars(NUMBERS, 6);
+	}
+
+	/**
+	 * Obtiene un subtipo de denuncia al azar.
+	 * @return subtipo de denuncia
+	 */
+	public static String getNumero() {
+		return NUMEROS[1 + new Random().nextInt(19)];
 	}
 
 	/**
@@ -796,7 +820,7 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		fecha = Calendar.getInstance();
-		fecha.set(aleatorio.nextInt(10) + 2008, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
+		fecha.set(aleatorio.nextInt(5) + 2013, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat(Constantes.FORMFECHA);
 		return fecha.getTime();
 	}
@@ -824,7 +848,7 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		hora = Calendar.getInstance();
-		hora.set(aleatorio.nextInt(10) + 2008, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
+		hora.set(aleatorio.nextInt(5) + 2013, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat("hh/mm");
 		return hora.getTime();
 	}
