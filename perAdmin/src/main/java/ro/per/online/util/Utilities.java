@@ -7,12 +7,16 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
+import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -449,5 +453,23 @@ public class Utilities {
 			dias = ChronoUnit.DAYS.between(fechaDesde, hoy);
 		}
 		return dias;
+	}
+
+	/**
+	 *
+	 * @return marca
+	 *
+	 */
+	public static String obtinemMarca() {
+		final String luna = Constantes.ESPACIO;
+		final Month mes = LocalDate.now().getMonth();
+		final String nombre = mes.getDisplayName(TextStyle.FULL, new Locale("ro", "RO"));
+		final String primeraLetra = nombre.substring(0, 1);
+		final String mayuscula = primeraLetra.toUpperCase();
+		final String demasLetras = nombre.substring(1, nombre.length());
+		final Calendar cal = Calendar.getInstance();
+		final int year = cal.get(Calendar.YEAR);
+		return mayuscula + demasLetras.concat(" ").concat(String.valueOf(year));
+
 	}
 }

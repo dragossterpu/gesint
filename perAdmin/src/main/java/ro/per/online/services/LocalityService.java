@@ -1,10 +1,14 @@
 package ro.per.online.services;
 
+import java.io.IOException;
 import java.util.List;
+
+import org.primefaces.model.SortOrder;
 
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.enums.TypeLocalityEnum;
+import ro.per.online.web.beans.admin.LocalitateBusqueda;
 
 /**
  * Interfață pentru serviciul de PLocality.
@@ -85,4 +89,45 @@ public interface LocalityService {
 	 */
 	List<PLocality> findByProvinceAndNivel(PProvince province, Long nivel);
 
+	/**
+	 * Inregistreaza o localitate.
+	 * @param localitate PLocality
+	 * @return localitate actualizata
+	 */
+	PLocality save(PLocality localitate);
+
+	/**
+	 * Incarcam fotografia unei localitati.
+	 * @param PLocality localitate
+	 * @throws IOException
+	 */
+
+	PLocality cargaImagenSinGuardar(byte[] bs, PLocality localitate) throws IOException;
+
+	/**
+	 * Método que devuelve el número de links en una consulta basada en criteria.
+	 *
+	 * @param linkBusqueda LinksBusqueda objeto con parámetros de búsqueda
+	 * @return devuelve el número de registros de una consulta criteria.
+	 */
+	int getCounCriteria(LocalitateBusqueda localitateBusqueda);
+
+	/**
+	 * Método que devuelve la lista de links en una consulta basada en criteria.
+	 *
+	 * @param linkBusqueda objeto con los criterios de búsqueda
+	 * @param first primer elemento
+	 * @param pageSize tamaño de cada página de resultados
+	 * @param sortField campo por el que se ordenan los resultados
+	 * @param sortOrder sentido de la ordenacion (ascendente/descendente)
+	 * @return la lista de links.
+	 */
+	List<PLocality> buscarLocalitateCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
+			LocalitateBusqueda localitateBusqueda);
+
+	/**
+	 * Elimina o localitate
+	 * @param PLocality localitate
+	 */
+	void delete(PLocality localitate);
 }

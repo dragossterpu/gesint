@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.annotation.CreatedDate;
 
 import lombok.AllArgsConstructor;
@@ -22,13 +24,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ro.per.online.persistence.entities.enums.RegistroEnum;
-import ro.per.online.persistence.entities.enums.SeccionesEnum;
+import ro.per.online.persistence.entities.enums.RezultatEnum;
+import ro.per.online.persistence.entities.enums.TipStatisticaEnum;
 
 /**
  * Entitate pentru stocarea înregistrărilor de statistica în baza de date.
  * @author STAD
  */
+@TypeDefs({ @TypeDef(name = "double precision", typeClass = java.lang.Float.class) })
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode()
@@ -39,6 +42,7 @@ import ro.per.online.persistence.entities.enums.SeccionesEnum;
 @Entity
 @Table(name = "STATISTICA")
 public class Statistica implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -48,17 +52,17 @@ public class Statistica implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_STATISTICA")
 	@SequenceGenerator(name = "SEQ_STATISTICA", sequenceName = "SEQ_STATISTICA", allocationSize = 1)
 	@Column(name = "id", length = 10, columnDefinition = "NUMERIC")
-	private Long idRegActividad;
+	private Long id;
 
 	/**
-	 * Nombre de la sección para la que se registra actividad.
+	 * Numele tipului de statistica.
 	 */
-	@Column(name = "NOMBRE_SECCION", length = 20)
+	@Column(name = "tip_statistica", length = 20)
 	@Enumerated(EnumType.STRING)
-	private SeccionesEnum nombreSeccion;
+	private TipStatisticaEnum tipStatistica;
 
 	/**
-	 * Descripción del registro que se almacena.
+	 * Descrierea registrului.
 	 */
 	@Column(name = "DESCRIPCION")
 	private String descripcion;
@@ -71,10 +75,57 @@ public class Statistica implements Serializable {
 	private Date fechaAlta;
 
 	/**
-	 * Tipo del registro.
+	 * Marca registrului ex: Ianuarie 2019.
 	 */
-	@Column(name = "TIPO_REG_ACTIVIDAD", length = 10)
-	@Enumerated(EnumType.STRING)
-	private RegistroEnum tipoRegActividad;
+	@Column(name = "marca")
+	private String marca;
 
+	/**
+	 * Numele registrului ex: Bacau.
+	 */
+	@Column(name = "nume")
+	private String nume;
+
+	/**
+	 * Numele registrului ex: BC.
+	 */
+	@Column(name = "code_province")
+	private String code_province;
+
+	/**
+	 * populatie totala.
+	 */
+	@Column(name = "populatie_totala")
+	private Long populatieTotala;
+
+	/**
+	 * populatie totala.
+	 */
+	@Column(name = "membrii")
+	private Long membrii;
+
+	/**
+	 * populatie cu drept de vot.
+	 */
+	@Column(name = "populatie_vot")
+	private Long populatieVot;
+
+	/**
+	 * populatie cu drept de vot.
+	 */
+	@Column(name = "procentaj")
+	private Float procentaj;
+
+	/**
+	 * Numele registrului ex: BC.
+	 */
+	@Column(name = "valoare")
+	@Enumerated(EnumType.STRING)
+	private RezultatEnum valoare;
+
+	/**
+	 * Judet boolean.
+	 */
+	@Column(name = "isjudet")
+	private Boolean isjudet;
 }

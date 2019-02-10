@@ -1,0 +1,124 @@
+<ui:composition template="../layouts/layoutInterior2.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:define name="content">
+		<h:form id="searchlistLocality">
+						<div class="filtro">
+				<div class="bloqueFormulario">
+					<div class="titleFormulario">Căutare localități</div>					
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="nombre" styleClass="buscador" value="Nume:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="nombre"
+								value="#{localitateBean.localitateBusqueda.nume}" />
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="url" styleClass="buscador" value="Județ:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+						 <p:selectOneMenu  value="#{localitateBean.localitateBusqueda.idProvincia}"  id="provinciasSelect"
+	                       class="selectFiltro" >
+	                        <f:selectItem itemLabel="Alege unul..." itemValue="" />
+	                        <f:selectItems  value="#{localitateBean.listaJudete}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.indicator}" />                       
+	                    </p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g campoBusqueda">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="role" value="Tipul localitații:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+		                    <p:importEnum type="ro.per.online.persistence.entities.enums.TypeLocalityEnum" var="tipuri" allSuffix="ALL_ENUM_VALUES" />
+		                    <p:selectOneMenu value="#{localitateBean.localitateBusqueda.tip}" id="tip" class="selectFiltro">
+		                        <f:selectItem itemLabel="Alege unul..." itemValue="" />
+		                        <f:selectItems value="#{tipuri.ALL_ENUM_VALUES}" var="tipuriLocalitate" itemLabel="#{tipuriLocalitate.description}" itemValue="#{tipuriLocalitate}" />
+		                    </p:selectOneMenu>
+						</div>
+					</div>
+					
+					
+				</div>
+				<div class="botonesFormulario">
+					<p:commandButton actionListener="#{localitateBean.cautareLocalitati}"
+						value="Căutare" update="panelLocalitati" icon="fa fa-search" class="right" oncomplete="$('.mensajeSinResultados').css('opacity', 1)" 
+						onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+					<p:commandButton actionListener="#{localitateBean.limpiarBusqueda}"
+						class="left" value="Curățare" update="searchlistLocality"
+						icon="fa fa-eraser" />
+						<p:commandButton value="Nouă localitate" styleClass="newActionTable"
+					 action="#{localitateBean.getFormAltaLocalitate}"  icon="fa fa-user-plus"/>
+				</div>
+			</div>
+			
+			
+			<div class="resultadosFiltro">
+				<p:outputPanel layout="block" id="panelLocalitati">
+					<p:dataTable var="localitate" value="#{localitateBean.model}"  rows="10" id="userTable"  draggableColumns="true" 
+					paginator="true" lazy="true" resizableColumns="true"  sortOrder="descending" styleClass="modHeaderTable"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+					rowKey="#{localitate.id}" rowsPerPageTemplate="10,25,50" pageLinks="4" paginatorPosition="bottom"
+					emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">
+						<f:facet name="header">
+							<p:outputPanel>
+								<div class="left">
+									<h:commandLink >
+										<p:graphicImage value="/images/xls.png" />
+										<p:dataExporter type="xls" target="tablaLocalitate"
+											fileName="judete" />
+									</h:commandLink>
+									<h:commandLink >
+										<p:graphicImage value="/images/pdf.png" />
+										<p:dataExporter type="pdf" target="tablaLocalitate"
+											fileName="judete" />
+									</h:commandLink>
+									<h:commandLink >
+										<p:graphicImage value="/images/csv.png" />
+										<p:dataExporter type="csv" target="tablaLocalitate"
+											fileName="judete" />
+									</h:commandLink>
+								</div>
+								<span class="titulo">LOCALITĂŢI</span>
+							</p:outputPanel>
+						</f:facet>						
+	      				 <p:column headerText="Tipul localității" style="width:35%;" sortBy="#{localitate.typelocality.description}">
+							<h:outputText value="#{localitate.typelocality.description}" />
+						</p:column>
+	      				 <p:column headerText="Codul județului" style="width:35%;" sortBy="#{localitate.province.indicator}">
+							<h:outputText value="#{localitate.province.indicator}" />
+						</p:column>
+						<p:column headerText="Nume" style="width:60%;" sortBy="#{localitate.name}">
+							<h:outputText value="#{localitate.name}" />
+						</p:column>
+						<p:column headerText="Populaţie" style="width:60%;" sortBy="#{localitate.locuitori}">
+							<h:outputText value="#{localitate.locuitori}" />
+						</p:column>
+						<p:column style="width:20%;"  >
+							<h:commandLink title="Modifică localitate" styleClass="fa fa-fw fa-pencil ui-button ui-state-default modBtn ui-CommandLink ui-CommandLink-icono"
+								action="#{localitateBean.getFormModificarLocalitate(localitate)}" />
+							
+							<p:commandButton title="Eliminare localitate" icon="fa fa-trash" styleClass="modBtn"  actionListener="#{localitateBean.eliminaLocalitate(localitate)}"  
+							update="searchlistLocality" oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">								
+								<p:confirm header="Eliminare localitate" message="Sunteți sigur că doriți să eliminați DEFINITIV acestă localitate?" icon="fa fa-warning-sign" />
+							</p:commandButton>						
+						</p:column>
+					</p:dataTable>
+					<p:messages globalOnly="true" autoUpdate="true" closable="true"
+						showDetail="true" />
+				</p:outputPanel>
+			</div>
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loading.gif" />
+			</p:dialog>                      
+                <p:messages globalOnly="true" autoUpdate="true" showSummary="true" showDetail="true" closable="true"/>
+		</h:form>
+	</ui:define>
+</ui:composition>

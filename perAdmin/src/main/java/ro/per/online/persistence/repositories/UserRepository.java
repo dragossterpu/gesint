@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.Users;
 
 /**
@@ -13,6 +14,7 @@ import ro.per.online.persistence.entities.Users;
  * @author STAD
  */
 public interface UserRepository extends CrudRepository<Users, String> {
+
 	/**
 	 * Căutați un utilizator cu CNP.
 	 * @param cnp String - cnp-ul utilizatorului
@@ -42,4 +44,19 @@ public interface UserRepository extends CrudRepository<Users, String> {
 	 */
 	List<Users> findByName(String nume);
 
+	/**
+	 * Devuelve las categorias a las que pertenece una evaluaciÃ³n.
+	 *
+	 * @param id de la evaluacion consultada
+	 * @return Listado de las categorias a las que pertenece.
+	 */
+	@Query(value = "select count(*) from users where sex=?1 date_create between date=?2 and date'=?3", nativeQuery = true)
+	Integer findUsersBySex(String sex, String desde, String hasta);
+
+	/**
+	 * Devuelve una lista con los usuarios que estan en una localidad
+	 * @param nume dupa care se face cautarea in baza de date
+	 * @return Lista de nombres de usuarios presentes en la BBDD
+	 */
+	List<Users> findByLocality(PLocality loca);
 }

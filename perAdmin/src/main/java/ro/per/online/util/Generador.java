@@ -820,7 +820,7 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		fecha = Calendar.getInstance();
-		fecha.set(aleatorio.nextInt(5) + 2013, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
+		fecha.set(2018, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat(Constantes.FORMFECHA);
 		return fecha.getTime();
 	}
@@ -848,7 +848,7 @@ public class Generador {
 		Random aleatorio;
 		aleatorio = new Random();
 		hora = Calendar.getInstance();
-		hora.set(aleatorio.nextInt(5) + 2013, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
+		hora.set(2018, aleatorio.nextInt(11) + 1, aleatorio.nextInt(30) + 1);
 		new SimpleDateFormat("hh/mm");
 		return hora.getTime();
 	}

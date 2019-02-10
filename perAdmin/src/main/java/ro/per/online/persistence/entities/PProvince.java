@@ -1,5 +1,6 @@
 package ro.per.online.persistence.entities;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -9,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -71,4 +75,16 @@ public class PProvince implements Serializable {
 	@JoinColumn(name = "code", foreignKey = @ForeignKey(name = "FK_COUNTRY"), nullable = false)
 	private PCountry code;
 
+	/**
+	 * Fotoografia judet.
+	 */
+	private byte[] photo;
+
+	/**
+	 * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine..
+	 * @return StreamedContent
+	 */
+	public StreamedContent getImageJudet() {
+		return new DefaultStreamedContent(new ByteArrayInputStream(this.photo));
+	}
 }

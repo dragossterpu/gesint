@@ -176,7 +176,16 @@ label:before {
 	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 }
-
+.filtro2 {
+	width: 39%;
+	float: left;
+	font-weight: bold;
+	font-size: 0.9em;
+	background: #ffffff;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
 .botonTabla {
 	width: 30px
 }
@@ -187,7 +196,12 @@ label:before {
 	float: right;
 
 }
+.resultadosFiltro2 {
+	width: 60%;
+	height: 100%;
+	float: right;
 
+}
 ul ul span {
 	font-size: 0.8em;
 }
@@ -529,7 +543,12 @@ ul ul span {
 .fa-check-circle:before {
 	color: #00cc00 !important;
 }
-
+.fa-plus-circle:before {
+	color: #0080ff!important;
+}
+.fa-minus-circle:before {
+	color:  #e60000 !important;
+}
 .fa-remove:before {
 	color: #800000 !important;
 }

@@ -1,5 +1,6 @@
 package ro.per.online.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import ro.per.online.persistence.entities.PProvince;
@@ -40,4 +41,18 @@ public interface ProvinceService {
 	 */
 	PProvince findByName(String descripcion);
 
+	/**
+	 * Inregistreaza un judet.
+	 * @param judetul PProvince
+	 * @return judetulul actualizat
+	 */
+	PProvince save(PProvince judetul);
+
+	/**
+	 * Incarcam fotografia unui judet.
+	 * @param PProvince judetul
+	 * @throws IOException
+	 */
+
+	PProvince cargaImagenSinGuardar(byte[] bs, PProvince judetul) throws IOException;
 }

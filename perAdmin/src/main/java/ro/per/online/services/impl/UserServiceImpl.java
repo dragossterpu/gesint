@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ro.per.online.constantes.Constantes;
+import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.pojo.AnNumarPojo;
 import ro.per.online.persistence.repositories.UserRepository;
 import ro.per.online.services.LocalityService;
 import ro.per.online.services.ProvinceService;
@@ -80,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * Busca usuarios con los parametros de búsqueda.
-	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @param usuarioBusqueda AnNumarPojo
 	 * @param sortOrder SortOrder
 	 * @param sortField String
 	 * @param pageSize int
@@ -125,7 +127,7 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * Busca usuarios utilizando criteria.
 	 *
-	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @param usuarioBusqueda AnNumarPojo
 	 * @return List<User>
 	 */
 	@Override
@@ -292,7 +294,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * Obitne el listado de usuario en base a las condiciones de Criteria.
-	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @param usuarioBusqueda AnNumarPojo
 	 * @param criteria Criteria
 	 * @return List<User>
 	 */
@@ -306,7 +308,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * Obtiene el conteo de criteria.
-	 * @param busqueda UsuarioBusqueda
+	 * @param busqueda AnNumarPojo
 	 * @return int
 	 */
 	@Override
@@ -390,7 +392,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * Busca el usuario por criteria sin paginar.
-	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @param usuarioBusqueda AnNumarPojo
 	 * @return lista de usuarios
 	 */
 	@Override
@@ -406,9 +408,51 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public List<Users> findByName() {
-		String nume = Constantes.DESTINATAR;
+		final String nume = Constantes.DESTINATAR;
 		return userRepository.findByName(nume);
+	}
+
+	/**
+	 * 
+	 */
+
+	@Override
+	public Long findCount() {
+		return userRepository.count();
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public int findUsersBySex(final AnNumarPojo membru) {
+		try {
+			this.session = this.sessionFactory.openSession();
+			final Criteria critteria = this.session.createCriteria(Users.class, "user");
+			critteria.add(Restrictions.ge("dateCreate", membru.getDesde()));
+			critteria.add(Restrictions.le("dateCreate", membru.getHasta()));
+			UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(membru.getSex(), critteria, "sex");
+			critteria.setProjection(Projections.rowCount());
+			final Long cnt = (Long) critteria.uniqueResult();
+			return Math.toIntExact(cnt);
+		}
+		finally {
+			closeSession();
+		}
+
+	}
+
+	/**
+	 * 
+	 */
+
+	@Override
+	public List<Users> findByLocality(final PLocality loca) {
+		return userRepository.findByLocality(loca);
 	}
 }

@@ -1,5 +1,6 @@
 package ro.per.online.persistence.entities;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -14,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -98,4 +102,16 @@ public class PLocality implements Serializable {
 	@Column(name = "locuitori")
 	private Long locuitori;
 
+	/**
+	 * Fotoografia localitate.
+	 */
+	private byte[] photo;
+
+	/**
+	 * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine..
+	 * @return StreamedContent
+	 */
+	public StreamedContent getImageLocalitate() {
+		return new DefaultStreamedContent(new ByteArrayInputStream(this.photo));
+	}
 }

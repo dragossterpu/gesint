@@ -57,7 +57,7 @@ public class ProiectServiceImpl implements ProiectService {
 
 	/**
 	 * Busca usuarios con los parametros de búsqueda.
-	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @param usuarioBusqueda AnNumarPojo
 	 * @param sortOrder SortOrder
 	 * @param sortField String
 	 * @param pageSize int

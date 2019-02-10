@@ -25,10 +25,7 @@ public enum TypeLocalityEnum {
 	 * Municipiu.
 	 */
 	MUNICIPALITY("Municipiu"),
-	/**
-	 * Sat.
-	 */
-	VILLAGE("Sat"),
+
 	/**
 	 * Sat.
 	 */
@@ -37,16 +34,7 @@ public enum TypeLocalityEnum {
 	/**
 	 * Sector.
 	 */
-	SECTOR("Sector"),
-	/**
-	 * Altul.
-	 */
-	OTHER("Altul"),
-
-	/**
-	 * Nespecificat.
-	 */
-	UNSPECIFIED("Nespecificat");
+	SECTOR("Sector");
 
 	/**
 	 * @return Returnează o listă cu descrierile enum.

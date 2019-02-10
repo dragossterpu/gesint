@@ -477,6 +477,31 @@ public final class Constantes {
 	 */
 	public static final String DIALOGBUSQUEDASHOW = "PF('dlgBusqueda').show();";
 
+	/**
+	 * Ruta del logo de calidad.
+	 */
+	public static final String LOGO = "static/images/footer_solicitud_1.png";
+
+	/**
+	 * Logo del Ministerio del Interior para los documentos generados por la aplicación.
+	 */
+	public static final String LOGOPER = "static/images/logo_per.png";
+
+	/**
+	 * Logo de IPSS para los documentos generados por la aplicación.
+	 */
+	public static final String LOGOIPSS = "static/images/logo_ipss.png";
+
+	/**
+	 * Ruta de la imagen que aparece en el header de la solicitud en la página 1 del pdf generado.
+	 */
+	public static final String HEADERSOLDOCPAG1 = "static/images/header_sol_doc_pag_1.png";
+
+	/**
+	 * Factor de escala para las imágenes de cabecera de los documentos Word y PDF.
+	 */
+	public static final float ESCALA = 0.6f;
+
 	/***********************
 	 * Anotaciones
 	 ***********************/

@@ -293,7 +293,7 @@ public class TeamBean implements Serializable {
 		String sex = null;
 		Date fecha = null;
 		int numero = 0;
-		for (int i = 0; i < 300; i++) {
+		for (int i = 0; i < 1000; i++) {
 			numero = i;
 			final Users user = new Users();
 			user.setDateCreate(Generador.obtenerFechaRegistru());
@@ -304,7 +304,7 @@ public class TeamBean implements Serializable {
 			user.setBirthDate(fecha);
 			user.setSex(SexEnum.randomLetter());
 			final PProvince pro = new PProvince();
-			pro.setIndicator("TM");
+			pro.setIndicator(Generador.provinciasFinal());
 			user.setProvince(pro);
 			final SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 			final String anString = sdf.format(fecha);
@@ -340,9 +340,9 @@ public class TeamBean implements Serializable {
 			List<PLocality> loc = new ArrayList<>();
 			Long indice = Long.valueOf(Generador.getNumero());
 			if (pro.getIndicator().equals("IF")) {
-				indice = 3L;
+				indice = 2L;
 			}
-			loc = localityService.findByProvinceAndNivel(pro, 1L);
+			loc = localityService.findByProvinceAndNivel(pro, indice);
 			PLocality locality = new PLocality();
 			if (pro.getIndicator().equals("B")) {
 				Long id = null;

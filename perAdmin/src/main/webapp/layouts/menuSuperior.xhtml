@@ -14,7 +14,11 @@
 			</p:submenu>
 			<p:menuitem value="Corespondență electronică (EMAIL)" icon="fa fa-fw fa-envelope-square" outcome="/alertas/alertas" styleClass="itemInicio" />
 			<p:submenu label="Administrație generală" icon="fa fa-fw fa-cogs" styleClass="itemAdministracion" >								
-				<p:menuitem value="Activități" outcome="/enConstruccion" />																
+				<p:menuitem value="Activități" outcome="/enConstruccion" />	
+				<p:submenu label="Administraţie" icon="fa fa-fw fa-cog">
+	                    <p:menuitem value="Judeţe" outcome="/judete/judete" />
+	                    <p:menuitem value="Localitaţi" outcome="/localitati/localitati" />
+                	</p:submenu>															
 			</p:submenu>
 			
 			<p:submenu label="Publicații/Proiecte/Comunicate" icon="fa fa-fw fa-graduation-cap" styleClass="itemFormacion" >
@@ -25,7 +29,7 @@
 			<p:submenu label="Statistică" icon="fa fa-fw fa-bar-chart" styleClass="itemEstadisticas" >
 				<p:menuitem value="MicroStrategy"  outcome="/enConstruccion"/>
 				<p:menuitem value="Organizații" outcome="/enConstruccion" />
-				<p:menuitem value="Statistică membrii" outcome="/estadisticas/evaluacionesStats" />															
+				<p:menuitem value="Statistică membrii" outcome="/estadisticas/statistica" />															
 			</p:submenu>
 			<p:submenu label="Portal" icon="fa fa-fw fa-globe" styleClass="itemGestorDocumental">
 				<p:submenu label="Document Management" outcome="/enConstruccion">
@@ -39,7 +43,7 @@
 				<p:submenu label="Informații despre portal">
 					<p:menuitem value="Informații despre portal"  outcome="/enConstruccion" />
 					<p:menuitem value="Panou administrativ" outcome="/enConstruccion" />
-					<p:menuitem value="Administrare" outcome="/enConstruccion" />
+					
 				</p:submenu>
 				<p:separator />
 				<p:menuitem value="Link-uri"  outcome="/enConstruccion"/>

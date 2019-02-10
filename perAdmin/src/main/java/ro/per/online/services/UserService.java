@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.primefaces.model.SortOrder;
 
+import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.pojo.AnNumarPojo;
 import ro.per.online.web.beans.UsuarioBusqueda;
 
 /**
@@ -18,7 +20,7 @@ public interface UserService {
 
 	/**
 	 * Busca usuarios con los parametros de búsqueda.
-	 * @param searchUser UsuarioBusqueda
+	 * @param searchUser AnNumarPojo
 	 * @param sortOrder SortOrder
 	 * @param sortField String
 	 * @param pageSize int
@@ -30,7 +32,7 @@ public interface UserService {
 
 	/**
 	 * Busca usuarios utilizando criteria.
-	 * @param usuarioBusqueda UsuarioBusqueda
+	 * @param usuarioBusqueda AnNumarPojo
 	 * @return List<User>
 	 */
 	List<Users> buscarUsuarioCriteria(UsuarioBusqueda usuarioBusqueda);
@@ -69,8 +71,15 @@ public interface UserService {
 	Users findByIdCard(String cnp);
 
 	/**
+	 * Căutați un utilizator dupa localitate.
+	 * @param Long id
+	 * @return List<Users>
+	 */
+	List<Users> findByLocality(PLocality loca);
+
+	/**
 	 * Obtiene el conteo de criteria.
-	 * @param searchUser UsuarioBusqueda
+	 * @param searchUser AnNumarPojo
 	 * @return int
 	 */
 	int getCounCriteria(UsuarioBusqueda searchUser);
@@ -117,9 +126,24 @@ public interface UserService {
 	 * @return Listado resultante de la búsqueda
 	 */
 	List<Users> buscarUsuario(UsuarioBusqueda usuarioBusqueda);
+
 	/**
 	 * Devuelve una lista de destinatari externi de PER.
 	 * @return Listado resultante de la búsqueda
 	 */
 	List<Users> findByName();
+
+	/**
+	 * @return
+	 *
+	 */
+	Long findCount();
+
+	/**
+	 * @param sex
+	 * @param desde
+	 * @param hasta
+	 * @return long count
+	 */
+	int findUsersBySex(AnNumarPojo membru);
 }
