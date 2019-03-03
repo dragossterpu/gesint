@@ -3,35 +3,47 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-		<p:chart type="pie" id="grafica" model="#{homeBean.graficaUserUltimMembru}" style="width:400px;height:300px" />
-		            	<p:chart type="bar" model="#{homeBean.horizontalBarModel}" style="width:600px;height:300px"/>      
-		               	<p:dataTable id="tablaTiposUsuarios" class = "tabActividades" value="#{homeBean.listaUsuarios.entrySet().toArray()}" var="entry">				
-								<f:facet name="header">
-									<p:outputPanel>	
-										<div >
-										<h:commandLink rendered="#{not empty homeBean.listaUsuarios}">
-											<p:graphicImage value="/images/xls.png" />
-											<p:dataExporter type="xls" target="tablaTiposUsuarios" fileName="datosUsuarios" />
-										</h:commandLink>
-										<h:commandLink rendered="#{not empty homeBean.listaUsuarios}">
-											<p:graphicImage value="/images/pdf.png" />
-											<p:dataExporter type="pdf" target="tablaTiposUsuarios" fileName="datosUsuarios" />
-										</h:commandLink>
-										<h:commandLink rendered="#{not empty homeBean.listaUsuarios}">
-											<p:graphicImage value="/images/csv.png" />
-											<p:dataExporter type="csv" target="tablaTiposUsuarios" fileName="datosUsuarios" />
-										</h:commandLink>
-										</div>																																						
-										<span class="subtitulo">MEMBRII NOI ÎNREGISTRAȚI ÎN ULTIMUL AN</span>														
-								</p:outputPanel>
-								</f:facet>												
-								<p:column headerText="Perioada">													
-									 <strong><h:outputText value="#{entry.key}"/></strong>																																																					
-								</p:column>
-								<p:column headerText="Număr">
-									<strong><h:outputText value="#{entry.value}" /></strong>
-								</p:column>
-						</p:dataTable> 
-		              <p:chart type="bar" model="#{homeBean.barModel}" style="width:600px;height:300px"/>
-									
+		
+		
+		 <div class="resultadosFiltro2">
+<!-- 		 <p:chart type="bar" model="#{homeBean.horizontalBarModel}" />       -->
+		  </div>             	
+		  <div class="filtro2">
+		          <p:chart type="bar" model="#{homeBean.barModel}" />
+		       </div>
+		   <div class="resultadosFiltro">            	
+		   <p:dataTable id="tablaTiposUsuarios" class ="tabActividades" value="#{homeBean.listaUsuarios.entrySet().toArray()}" var="entry">				
+				<f:facet name="header">																																											
+				<span class="subtitulo">MEMBRII NOI ÎNREGISTRAȚI ÎN ULTIMUL AN</span>														
+				</f:facet>												
+				<p:column headerText="Perioada">													
+					 <strong><h:outputText value="#{entry.key}"/></strong>																																																					
+				</p:column>
+				<p:column headerText="Număr">
+					<strong><h:outputText value="#{entry.value}" /></strong>
+				</p:column>
+			</p:dataTable> 
+			 </div>  
+		      
+			<div class="filtro">
+						  aici vine descrierea
+			 </div>
+		             <div class="resultadosFiltro">
+<!-- 		              <p:chart type="pie" id="graficaSex" model="#{homeBean.graficaUserSex}"/> -->
+		               </div>
+						<div class="filtro">
+						  aici vine descriere
+						 </div>
+		              <div class="resultadosFiltro">
+		              <p:chart type="pie" id="graficaZona" model="#{homeBean.graficaUserZona}"  />
+						 </div>
+						<div class="filtro">
+						  aici vine descrierea
+						 </div>
+						 <div class="resultadosFiltro">
+		<p:chart type="pie" id="grafica" model="#{homeBean.graficaUserUltimMembru}" />
+		 </div>
+		<div class="filtro">
+		  aici vine descrierea
+		 </div>			
 </ui:composition>

@@ -10,6 +10,7 @@ import ro.per.online.persistence.entities.Users;
  * @author STAD
  */
 public interface TeamRepository extends CrudRepository<Team, Long> {
+
 	/**
 	 * Elimina un membru al echipei primit ca parametru.
 	 * @param user

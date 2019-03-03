@@ -73,4 +73,9 @@ public class Mapa implements Serializable {
 	@Column(name = "COORDONATE", length = 1000)
 	private String coordonate;
 
+	/**
+	 * eticheta registrului.
+	 */
+	@Column(name = "eticheta", length = 10)
+	private String eticheta;
 }

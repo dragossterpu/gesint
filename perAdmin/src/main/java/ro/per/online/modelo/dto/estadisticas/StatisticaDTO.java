@@ -20,6 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StatisticaDTO implements Serializable {
+
 	/**
 	 *
 	 */
@@ -259,4 +260,57 @@ public class StatisticaDTO implements Serializable {
 	 */
 	int locuitoriTotalUrban;
 
+	/**
+	 * totalLuna12
+	 *
+	 */
+	int totalLuna12;
+
+	/**
+	 * totalPana25
+	 *
+	 */
+	int totalPana25;
+
+	/**
+	 * totalPanaBarbati25
+	 *
+	 */
+	int totalPanaBarbati25;
+
+	/**
+	 * totalPana40
+	 *
+	 */
+	int totalPana40;
+
+	/**
+	 * totalPanaBarbati40
+	 *
+	 */
+	int totalPanaBarbati40;
+
+	/**
+	 * totalPana60
+	 *
+	 */
+	int totalPana60;
+
+	/**
+	 * totalPanaBarbati60
+	 *
+	 */
+	int totalPanaBarbati60;
+
+	/**
+	 * otalPanaMayor60
+	 *
+	 */
+	int totalPanaMayor60;
+
+	/**
+	 * otalPanaMayor60
+	 *
+	 */
+	int totalAntCinciAni;
 }

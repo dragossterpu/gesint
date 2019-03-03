@@ -20,7 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ro.per.online.constantes.Constantes;
 import ro.per.online.persistence.entities.PLocality;
+import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.enums.RoleEnum;
 import ro.per.online.persistence.entities.pojo.AnNumarPojo;
 import ro.per.online.persistence.repositories.UserRepository;
 import ro.per.online.services.LocalityService;
@@ -79,6 +81,50 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Autowired
 	private Utilities utilities;
+
+	/**
+	 * Establece una lista de usuarios como dados de baja lógica.
+	 * @param listaUsuarios Lista de usuarios a modificar
+	 * @return lista de usuarios modificada
+	 */
+	@Override
+	public List<Users> bajaLogica(final List<String> listaUsuarios) {
+		final Date fecha = new Date();
+		final List<Users> listaGuardar = userRepository.findByUsernameIn(listaUsuarios);
+		for (final Users usuario : listaGuardar) {
+			usuario.setDateDeleted(fecha);
+			usuario.setUserDeleted(utilities.getUsuarioLogado().getUsername());
+		}
+		return (List<Users>) userRepository.save(listaGuardar);
+	}
+
+	/**
+	 * Devuelve una lista con nombres de los usuarios que estén presentes en la lista y en BBDD.
+	 * @param listaNombres lista de nombres que se buscarán en bbdd
+	 * @return Lista de nombres de usuarios presentes en la BBDD
+	 */
+	@Override
+	public List<String> buscarListaDeUsernames(final List<String> listaNombres) {
+		return userRepository.findUsernamesByUsername(listaNombres);
+	}
+
+	/**
+	 * Busca el usuario por criteria sin paginar.
+	 * @param usuarioBusqueda AnNumarPojo
+	 * @return lista de usuarios
+	 */
+	@Override
+	public List<Users> buscarUsuario(final UsuarioBusqueda usuarioBusqueda) {
+		try {
+			session = sessionFactory.openSession();
+			final Criteria criteria = session.createCriteria(Users.class);
+			creaCriteria(usuarioBusqueda, criteria);
+			return criteria.list();
+		}
+		finally {
+			session.close();
+		}
+	}
 
 	/**
 	 * Busca usuarios con los parametros de búsqueda.
@@ -221,22 +267,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * @param usuarioBusqueda
-	 * @param criteria
-	 *
-	 */
-	private void extractUserEliminado(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
-		if (!usuarioBusqueda.getEliminado().equals(Constantes.ESPACIO)) {
-			if (usuarioBusqueda.getEliminado().equals("NO")) {
-				criteria.add(Restrictions.isNull(Constantes.FECHABAJA));
-			}
-			else {
-				criteria.add(Restrictions.isNotNull(Constantes.FECHABAJA));
-			}
-		}
-	}
-
-	/**
 	 * Crea el documento.
 	 *
 	 * @param file Fichero subido por el usuario.
@@ -259,6 +289,37 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = false)
 	public void delete(final Users username) {
 		this.userRepository.delete(username);
+	}
+
+	/**
+	 * Establece una lista de usuarios como inactivos.
+	 * @param listaUsuarios Lista de usuarios a modificar
+	 * @return lista de usuarios modificada
+	 */
+	@Override
+	public List<Users> desactivar(final List<String> listaUsuarios) {
+		final List<Users> listaGuardar = userRepository.findByUsernameIn(listaUsuarios);
+		for (final Users usuario : listaGuardar) {
+			usuario.setValidated(false);
+			usuario.setUserUpdated(utilities.getUsuarioLogado().getUsername());
+		}
+		return (List<Users>) userRepository.save(listaGuardar);
+	}
+
+	/**
+	 * @param usuarioBusqueda
+	 * @param criteria
+	 *
+	 */
+	private void extractUserEliminado(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
+		if (!usuarioBusqueda.getEliminado().equals(Constantes.ESPACIO)) {
+			if (usuarioBusqueda.getEliminado().equals("NO")) {
+				criteria.add(Restrictions.isNull(Constantes.FECHABAJA));
+			}
+			else {
+				criteria.add(Restrictions.isNotNull(Constantes.FECHABAJA));
+			}
+		}
 	}
 
 	/**
@@ -290,6 +351,65 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Users findByIdCard(final String cnp) {
 		return this.userRepository.findByIdCard(cnp);
+	}
+
+	/**
+	 *
+	 */
+
+	@Override
+	public List<Users> findByLocality(final PLocality loca) {
+		return userRepository.findByLocality(loca);
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public List<Users> findByName() {
+		final String nume = Constantes.DESTINATAR;
+		return userRepository.findByName(nume);
+	}
+
+	/**
+	 * Cauta un utilizator cu rolul si judetul.
+	 * @param rol RoleEnum
+	 * @param prov PProvince
+	 * @return User
+	 */
+	@Override
+	public Users findByRolAndProvince(final RoleEnum rol, final PProvince prov) {
+		return userRepository.findByRoleAndProvince(rol, prov);
+	}
+
+	/**
+	 *
+	 */
+
+	@Override
+	public Long findCount() {
+		return userRepository.count();
+	}
+
+	/**
+	 *
+	 */
+	@Override
+	public int findUsersBySex(final AnNumarPojo membru) {
+		try {
+			this.session = this.sessionFactory.openSession();
+			final Criteria critteria = this.session.createCriteria(Users.class, "user");
+			critteria.add(Restrictions.ge("dateCreate", membru.getDesde()));
+			critteria.add(Restrictions.le("dateCreate", membru.getHasta()));
+			UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(membru.getSex(), critteria, "sex");
+			critteria.setProjection(Projections.rowCount());
+			final Long cnt = (Long) critteria.uniqueResult();
+			return Math.toIntExact(cnt);
+		}
+		finally {
+			closeSession();
+		}
+
 	}
 
 	/**
@@ -329,17 +449,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Metoda care genereaza automat 100 de utilizatori
-	 *
-	 * @see ro.per.online.services.UserService#save(ro.per.online.persistence.entities.Users)
-	 */
-	@Override
-	@Transactional(readOnly = false)
-	public Users save(final Users entity) {
-		return userRepository.save(entity);
-	}
-
-	/**
 	 * Guarda una lista de usuarios.
 	 * @param usuarios lista
 	 * @return lista de usuarios
@@ -350,109 +459,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Establece una lista de usuarios como dados de baja lógica.
-	 * @param listaUsuarios Lista de usuarios a modificar
-	 * @return lista de usuarios modificada
+	 * Metoda care genereaza automat 100 de utilizatori
+	 *
+	 * @see ro.per.online.services.UserService#save(ro.per.online.persistence.entities.Users)
 	 */
 	@Override
-	public List<Users> bajaLogica(final List<String> listaUsuarios) {
-		final Date fecha = new Date();
-		final List<Users> listaGuardar = userRepository.findByUsernameIn(listaUsuarios);
-		for (final Users usuario : listaGuardar) {
-			usuario.setDateDeleted(fecha);
-			usuario.setUserDeleted(utilities.getUsuarioLogado().getUsername());
-		}
-		return (List<Users>) userRepository.save(listaGuardar);
-	}
-
-	/**
-	 * Establece una lista de usuarios como inactivos.
-	 * @param listaUsuarios Lista de usuarios a modificar
-	 * @return lista de usuarios modificada
-	 */
-	@Override
-	public List<Users> desactivar(final List<String> listaUsuarios) {
-		final List<Users> listaGuardar = userRepository.findByUsernameIn(listaUsuarios);
-		for (final Users usuario : listaGuardar) {
-			usuario.setValidated(false);
-			usuario.setUserUpdated(utilities.getUsuarioLogado().getUsername());
-		}
-		return (List<Users>) userRepository.save(listaGuardar);
-	}
-
-	/**
-	 * Devuelve una lista con nombres de los usuarios que estén presentes en la lista y en BBDD.
-	 * @param listaNombres lista de nombres que se buscarán en bbdd
-	 * @return Lista de nombres de usuarios presentes en la BBDD
-	 */
-	@Override
-	public List<String> buscarListaDeUsernames(final List<String> listaNombres) {
-		return userRepository.findUsernamesByUsername(listaNombres);
-	}
-
-	/**
-	 * Busca el usuario por criteria sin paginar.
-	 * @param usuarioBusqueda AnNumarPojo
-	 * @return lista de usuarios
-	 */
-	@Override
-	public List<Users> buscarUsuario(final UsuarioBusqueda usuarioBusqueda) {
-		try {
-			session = sessionFactory.openSession();
-			final Criteria criteria = session.createCriteria(Users.class);
-			creaCriteria(usuarioBusqueda, criteria);
-			return criteria.list();
-		}
-		finally {
-			session.close();
-		}
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public List<Users> findByName() {
-		final String nume = Constantes.DESTINATAR;
-		return userRepository.findByName(nume);
-	}
-
-	/**
-	 * 
-	 */
-
-	@Override
-	public Long findCount() {
-		return userRepository.count();
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public int findUsersBySex(final AnNumarPojo membru) {
-		try {
-			this.session = this.sessionFactory.openSession();
-			final Criteria critteria = this.session.createCriteria(Users.class, "user");
-			critteria.add(Restrictions.ge("dateCreate", membru.getDesde()));
-			critteria.add(Restrictions.le("dateCreate", membru.getHasta()));
-			UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(membru.getSex(), critteria, "sex");
-			critteria.setProjection(Projections.rowCount());
-			final Long cnt = (Long) critteria.uniqueResult();
-			return Math.toIntExact(cnt);
-		}
-		finally {
-			closeSession();
-		}
-
-	}
-
-	/**
-	 * 
-	 */
-
-	@Override
-	public List<Users> findByLocality(final PLocality loca) {
-		return userRepository.findByLocality(loca);
+	@Transactional(readOnly = false)
+	public Users save(final Users entity) {
+		return userRepository.save(entity);
 	}
 }

@@ -6,7 +6,9 @@ import java.util.List;
 import org.primefaces.model.SortOrder;
 
 import ro.per.online.persistence.entities.PLocality;
+import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.enums.RoleEnum;
 import ro.per.online.persistence.entities.pojo.AnNumarPojo;
 import ro.per.online.web.beans.UsuarioBusqueda;
 
@@ -16,7 +18,29 @@ import ro.per.online.web.beans.UsuarioBusqueda;
  * @author STAD
  *
  */
-public interface UserService {
+public interface UserService
+{
+
+	/**
+	 * Elimina de manera lógica a una lista de usuarios.
+	 * @param listaUsuarios Lista de usuarios a modificar
+	 * @return lista de usuarios modificada
+	 */
+	List<Users> bajaLogica(List<String> listaUsuarios);
+
+	/**
+	 * Devuelve una lista con nombres de los usuarios que estén presentes en la lista y en BBDD.
+	 * @param listaNombres lista de nombres que se buscarán en bbdd
+	 * @return Lista de nombres de usuarios presentes en la BBDD
+	 */
+	List<String> buscarListaDeUsernames(List<String> listaNombres);
+
+	/**
+	 * Devuelve una lista de usuarios.
+	 * @param usuarioBusqueda Objeto que contiene los parámetros de búsqueda
+	 * @return Listado resultante de la búsqueda
+	 */
+	List<Users> buscarUsuario(UsuarioBusqueda usuarioBusqueda);
 
 	/**
 	 * Busca usuarios con los parametros de búsqueda.
@@ -27,8 +51,9 @@ public interface UserService {
 	 * @param first int
 	 * @return List<User>
 	 */
-	List<Users> buscarUsuarioCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
-			UsuarioBusqueda searchUser);
+	List<Users> buscarUsuarioCriteria(
+			int first, int pageSize, String sortField, SortOrder sortOrder, UsuarioBusqueda searchUser
+	);
 
 	/**
 	 * Busca usuarios utilizando criteria.
@@ -50,6 +75,13 @@ public interface UserService {
 	 * @param usuario a eliminar
 	 */
 	void delete(Users usuario);
+
+	/**
+	 * Establece una lista de usuarios como inactivo.
+	 * @param listaUsuarios Lista de usuarios a modificar
+	 * @return lista de usuarios modificada
+	 */
+	List<Users> desactivar(List<String> listaUsuarios);
 
 	/**
 	 * Cauta totii utilizatorii
@@ -78,60 +110,18 @@ public interface UserService {
 	List<Users> findByLocality(PLocality loca);
 
 	/**
-	 * Obtiene el conteo de criteria.
-	 * @param searchUser AnNumarPojo
-	 * @return int
-	 */
-	int getCounCriteria(UsuarioBusqueda searchUser);
-
-	/**
-	 * Guarda en base de datos el usuario.
-	 * @param entity Usuario a guardar.
-	 * @return Usuario guardado.
-	 */
-	Users save(Users entity);
-
-	/**
-	 * Guarda una lista de usuarios.
-	 *
-	 * @param usuarios lista
-	 * @return lista de usuarios
-	 */
-	List<Users> guardado(List<Users> usuarios);
-
-	/**
-	 * Elimina de manera lógica a una lista de usuarios.
-	 * @param listaUsuarios Lista de usuarios a modificar
-	 * @return lista de usuarios modificada
-	 */
-	List<Users> bajaLogica(List<String> listaUsuarios);
-
-	/**
-	 * Establece una lista de usuarios como inactivo.
-	 * @param listaUsuarios Lista de usuarios a modificar
-	 * @return lista de usuarios modificada
-	 */
-	List<Users> desactivar(List<String> listaUsuarios);
-
-	/**
-	 * Devuelve una lista con nombres de los usuarios que estén presentes en la lista y en BBDD.
-	 * @param listaNombres lista de nombres que se buscarán en bbdd
-	 * @return Lista de nombres de usuarios presentes en la BBDD
-	 */
-	List<String> buscarListaDeUsernames(List<String> listaNombres);
-
-	/**
-	 * Devuelve una lista de usuarios.
-	 * @param usuarioBusqueda Objeto que contiene los parámetros de búsqueda
-	 * @return Listado resultante de la búsqueda
-	 */
-	List<Users> buscarUsuario(UsuarioBusqueda usuarioBusqueda);
-
-	/**
 	 * Devuelve una lista de destinatari externi de PER.
 	 * @return Listado resultante de la búsqueda
 	 */
 	List<Users> findByName();
+
+	/**
+	 * Cauta un utilizator cu rolul si judetul.
+	 * @param rol RoleEnum
+	 * @param prov PProvince
+	 * @return User
+	 */
+	Users findByRolAndProvince(RoleEnum rol, PProvince prov);
 
 	/**
 	 * @return
@@ -146,4 +136,26 @@ public interface UserService {
 	 * @return long count
 	 */
 	int findUsersBySex(AnNumarPojo membru);
+
+	/**
+	 * Obtiene el conteo de criteria.
+	 * @param searchUser AnNumarPojo
+	 * @return int
+	 */
+	int getCounCriteria(UsuarioBusqueda searchUser);
+
+	/**
+	 * Guarda una lista de usuarios.
+	 *
+	 * @param usuarios lista
+	 * @return lista de usuarios
+	 */
+	List<Users> guardado(List<Users> usuarios);
+
+	/**
+	 * Guarda en base de datos el usuario.
+	 * @param entity Usuario a guardar.
+	 * @return Usuario guardado.
+	 */
+	Users save(Users entity);
 }

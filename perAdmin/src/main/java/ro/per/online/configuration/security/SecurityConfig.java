@@ -125,6 +125,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 * @return SessionRegistry
 	 */
 	public SessionRegistry sessionRegistry() {
-		return new SessionRegistryImpl();
-	}
+		return new SessionRegistryImpl();}
+
 }

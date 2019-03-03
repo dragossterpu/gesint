@@ -17,4 +17,12 @@
     <extension>eot</extension>
     <mime-type>application/x-font-eot</mime-type>
   </mime-mapping>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>    
+        <location>/error/401.xhtml</location>
+    </error-page>
+    <mime-mapping>
+    <extension>svg</extension>
+    <mime-type>image/svg+xml</mime-type>
+</mime-mapping>
 </web-app>

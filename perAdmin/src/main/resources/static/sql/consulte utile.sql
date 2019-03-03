@@ -152,8 +152,40 @@ select count(*) as numarTotal,
 (select count(*)  from users where date_create between date '2016-02-10' and date '2017-02-10') as totalUltimiiTreiAni,
 (select count(*)  from users where date_create between date '2015-02-10' and date '2016-02-10') as totalUltimiiPatruAni,
 (select count(*)  from users where date_create between date '2014-02-10' and date '2015-02-10') as totalUltimiiCinciAni,
+(select count(*)  from users where birth_date between date '1994-02-10' and date '2019-02-12') as total25,
+(select count(*)  from users where birth_date between date '1994-02-10' and date '2019-02-12' and sex= 'MAN') as totalBarbati25,
+(select count(*)  from users where birth_date between date '1979-02-10' and date '1994-02-10') as total40,
+(select count(*)  from users where birth_date between date '1979-02-10' and date '1994-02-10' and sex= 'MAN') as totalBarbati40,
+(select count(*)  from users where birth_date between date '1959-02-10' and date '1979-02-10') as total60,
+(select count(*)  from users where birth_date between date '1959-02-10' and date '1979-02-10' and sex= 'MAN') as totalBarbati60,
+(select count(*)  from users where birth_date ::date <= '1959-02-10') as totalMayor60,
 (select count(*) from users u, plocality l where  u.LOCALITY_ID = l.id and l.nivel =3)as mediuRural,
 (select count(*) from users u, plocality l where  u.LOCALITY_ID = l.id and l.nivel in(2,3))as mediuUrban,
 (select SUM(locuitori) from plocality where nivel =3) as locuitoriTotalRural, 
 (select SUM(locuitori) from plocality where nivel in(2,3)) as locuitoriTotalUrban 
 from users 
+
+--primele
+SELECT ss.name, ss.numero FROM ( SELECT COUNT(*) as numero, P.NAME FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province group by u.code_province,p.name  ORDER BY numero DESC) as SS  limit 7 offset 0
+
+--ultimele
+SELECT ss.name, ss.numero FROM ( SELECT COUNT(*) as numero, P.NAME FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province group by u.code_province,p.name  ORDER BY numero asc) as SS  limit 7 offset 0
+
+--primele calcul dupa procentaj
+
+select name, numero, population, procentaj from (SELECT ss.name, ss.numero,ss.population,ROUND((ss.numero*100.0)/(ss.population),2) AS procentaj FROM ( SELECT COUNT(*) as numero, P.NAME, p.population FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province 
+group by u.code_province,p.name,p.population  ORDER BY numero desc) as SS  limit 7 offset 0) as dd order by dd.procentaj desc
+
+--ultimele calcul dupa procentaj
+select name, numero, population, procentaj from (SELECT ss.name, ss.numero,ss.population,ROUND((ss.numero*100.0)/(ss.population),2) AS procentaj FROM ( SELECT COUNT(*) as numero, P.NAME, p.population FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province 
+group by u.code_province,p.name,p.population  ORDER BY numero desc) as SS  limit 7 offset 0) as dd order by dd.procentaj asc
+
+
+select name, numero, population, procentaj, code_province from (SELECT ss.name, ss.code_province,ss.numero,ss.population,ROUND((ss.numero*100.0)/(ss.population),2) AS procentaj FROM ( SELECT COUNT(*) as numero, P.NAME, p.population,p.code_province FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province 
+group by u.code_province,p.name,p.population,p.code_province  ORDER BY numero desc) as SS ) as dd order by dd.procentaj desc limit 7 offset 0
+
+
+SELECT totalMembrii,numeprovincie, code_province,name,sector, numero, locuitori, procentaj, locuitoriVot  FROM (SELECT (select count(*) from users where code_province='BT')as totalMembrii,(select name from pprovince where code_province='BT') as numeprovincie, 'BT' as code_province,  ss.name, ss.sector, ss.numero,ss.locuitori,ROUND((ss.numero*100.0)/(ss.locuitori),2) AS procentaj,
+ (select ROUND(ss.locuitori-(ss.locuitori*0.21)) as locuitori) as locuitoriVot  FROM ( SELECT COUNT(*) as numero, l.name,l.locuitori,l.sector FROM USERS U, PLOCALITY l  WHERE u.locality_id = l.id AND U.code_province=  'BT'  
+GROUP BY u.locality_id, l.name, l.locuitori,l.sector ORDER BY numero desc) as SS ) as dd ORDER BY dd.procentaj DESC
+

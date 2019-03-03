@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<ui:include src="../layouts/include/head.xhtml" />
+<h:body id="body">
+       <div id="wrapper">
+                     <ui:include src="../layouts/include/logos.xhtml" />			
+        </div>
+    <!-- End holderheader -->
+
+    <div id="contenido">
+        <div class="cuerpo">
+            <!-- contentcolumn -->
+            <p:outputPanel id="print">
+	             <div id="content">
+	             	<ui:insert name="body2" />
+	             </div>
+	         </p:outputPanel>
+        </div>
+    </div>
+    
+</h:body>
+</html>

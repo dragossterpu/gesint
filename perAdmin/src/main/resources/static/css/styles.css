@@ -4,17 +4,17 @@
 }
 
 
-html, body, .ui-widget {
+html,  .ui-widget {
 	font-family: 'Open Sans', sans-serif;
 	box-sizing: border-box;
 }
 
-body {
-	background: #f6f6f6;
-	font-size: 16px;
-	margin: 0;
-	padding: 0;
-}
+/* body { */
+/* 	background: #f6f6f6; */
+/* 	font-size: 16px; */
+/* 	margin: 0; */
+/* 	padding: 0; */
+/* } */
 
 label:before {
 	font: normal normal normal 14px/1 FontAwesome;
@@ -28,8 +28,21 @@ label:before {
 .aclaraciones2 {
     padding: 10px;
     font-style: italic;
-    color: #008080;
+    color: #004a4a;
 }
+.aclaraciones3 {
+    padding-top: 10px; 
+    padding: 5px;
+    font: 16px/27px Roboto,RobotoDraft,Arial,sans-serif;
+    color: #004a4a;
+}
+.aclaraciones4 {
+    padding-left: 40px;
+	padding-right: 100px;
+    font: 16px/27px Roboto,RobotoDraft,Arial,sans-serif;
+    color: #004a4a;
+}
+
 .bloqueVista {
     width: 100%;
     height: auto;
@@ -177,6 +190,18 @@ label:before {
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 }
 .filtro2 {
+	padding-top: 20px;
+	width: 59%;
+	float: left;
+	font-weight: bold;
+	font-size: 0.9em;
+	background: #ffffff;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+.filtro3 {
+	padding-top: 20px;
 	width: 39%;
 	float: left;
 	font-weight: bold;
@@ -197,10 +222,46 @@ label:before {
 
 }
 .resultadosFiltro2 {
+	width: 40%;
+	height: 100%;
+	float: right;
+}
+.resultadosFiltro5 {
+	width: 50%;
+	height: 100%;
+	float: right;
+text-align: center;
+}
+.filtro5 {
+	width: 49%;
+	height: 100%;
+	float: left;
+}
+.resultadosFiltro3 {
 	width: 60%;
 	height: 100%;
 	float: right;
 
+}
+.resultadosFiltro4 {
+	width: 50%;
+	height: 100%;
+	margin-right: auto;
+    margin-left: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+}
+.filtro3 {
+	    padding-top: 20px;
+	width: 39%;
+	float: right;
+	font-weight: bold;
+	font-size: 0.9em;
+	background: #ffffff;
+	border-radius: 4px;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
 }
 ul ul span {
 	font-size: 0.8em;
@@ -381,7 +442,6 @@ ul ul span {
 	left: 0;
 	width: 5px;
 	height: 100%;
-	background: #056033;
 }
 
 .tabPuestos {
@@ -1529,6 +1589,7 @@ inline-block
 	margin: auto;
 }
 
+
 .btnModalAcept {
 	text-align: center;
 }
@@ -1798,3 +1859,111 @@ div#menuSuperior>form {
     float: left;
     padding: 10px;
 }
+.nombreInforme {
+	padding-top: 40px;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+    clear:both;
+    text-align: center;
+    max-width:80%;
+    margin: 20px auto;
+}
+.bloqueFormulario2 {
+    width: 90%;
+    height: auto;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.p-col {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    padding: 0.5em;
+}
+.p-grid {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -0.5em;
+    margin-left: -0.5em;
+    margin-top: -0.5em;
+} 
+.p-col-fixed {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    padding: 0.5em;
+}
+.box {
+
+/*     text-align: center; */
+    padding-left: 1.5em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-radius: 4px;
+    color: #30383c;
+}
+
+/*** Tabla de LOGIN ***/
+table.ui-panelgrid,
+table.ui-panelgrid tbody2,
+table.ui-panelgrid td.ui-panelgrid-cell{width:100%; display:inline-block;}
+.login #panel_content{border:none; background-color:#b7ecd2 !important; padding:0;}
+.login table *{background-color:#b7ecd2!important; border:none;}
+.login table.ui-panelgrid td.ui-panelgrid-cell{border:none !important; padding:0; color:#606060;font-weight: bold;}
+.login table input{border:1px solid #999; background-color:#fff !important; width:100%; font-family:Roboto, sans-serif; font-size:15px; font-size:1.5rem; padding:5px; color:black; margin:5px 0;}
+/*** FinTabla de LOGIN ***/
+/*** Tabla de BODY ***/
+#contexto{margin:0px 15px; width:calc(100% - 30px);}
+#body2 > .container-fluid{max-width:960px; padding-left:0; padding-right:0;}
+#body2 div:not(#wrapper) .claim{display:none;}
+#body2 #wrapper .box-logos{display:none;}
+/*** FIN BODY ***/
+
+:focus{box-shadow:none !important;}
+:active{border-color:transparent !important;}
+.box-logos{display:inline-block; margin:0px 15px; margin:40px 0px 0px 0px; width:100%; vertical-align:bottom; max-width:calc(100% - 463px); text-align:right;} 
+.logo-elypse{display:inline-block; margin:0px 15px; float:left;padding-bottom: 15px;}
+#logo-ely img, .logo-telefonica img{max-width:100%; height:auto;}
+.claim{display:inline-block;  width:calc(100% - 463px); height:10px; float:left; margin-top:40px; font-family:'Roboto', sans-serif; font-size:1.7rem;}
+.logo-telefonica{float:right; display:inline-block; margin:0px 34px 0 10px;}
+.user-mobile{display:none; width:100%;}
+
+/** Estilos DE CONTENEDORES GENERALES **/
+#wrapper{max-width:1000px; margin:14px auto 0 auto; padding-bottom:10px; border-bottom:15px solid #177247; height:120px;}
+.wrapper{max-width:1000px; margin:0 auto;}
+#holder{background-color:#b7ecd2; margin-left:15px;}
+ 
+ .listInfo {
+    max-width: calc(75% - 15px);
+    padding-top: 60px;
+    padding-left: 60px;
+}
+:active {
+    border-color: transparent !important;
+}
+.svg{
+    padding-top: 40px;
+    float: left;
+     max-width: 55%;
+}
+.svgRight{
+    padding-top: 40px;
+    float: right;
+     max-width: 45%;
+}
+#body2{font-family:Verdana, Helvetica, Tahoma, sans;font-size:12px;line-height:13.5pt;color:black;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;-o-box-sizing: border-box;}
+
+.bloqueVistaTitulo{padding:20px 0 10px 0; color:#02b5c9; text-transform:uppercase;}
+
+.grafica
+	{
+		text-align:center;
+padding-right: 200px;
+	}

@@ -36,7 +36,7 @@ public class StatisticaDAOImpl implements StatisticaDAO {
 	 */
 	@Override
 	@Autowired
-	public void setDataSource(DataSource ds) {
+	public void setDataSource(final DataSource ds) {
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
 	}
 
@@ -46,7 +46,7 @@ public class StatisticaDAOImpl implements StatisticaDAO {
 	 * @return
 	 */
 	@Override
-	public List<StatisticaDTO> filterGeneraleStatistica(StatisticaBusqueda filter) {
+	public List<StatisticaDTO> filterGeneraleStatistica(final StatisticaBusqueda filter) {
 
 		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		final StringBuilder sql = new StringBuilder();
@@ -64,35 +64,38 @@ public class StatisticaDAOImpl implements StatisticaDAO {
 				+ sdf.format(filter.getFechaUltimaLuna()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
 				+ "') AS totalUltimaLuna,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimDouaLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
+				+ sdf.format(filter.getFechaUltimDouaLuni()) + "' AND DATE '" + sdf.format(filter.getFechaUltimaLuna())
 				+ "') AS totalUltimDouaLuni,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimTreiLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
-				+ "') AS totalUltimTreiLuni,");
+				+ sdf.format(filter.getFechaUltimTreiLuni()) + "' AND DATE '"
+				+ sdf.format(filter.getFechaUltimDouaLuni()) + "') AS totalUltimTreiLuni,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimPatruLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
-				+ "') AS totalUltimPatruLuni,");
+				+ sdf.format(filter.getFechaUltimPatruLuni()) + "' AND DATE '"
+				+ sdf.format(filter.getFechaUltimTreiLuni()) + "') AS totalUltimPatruLuni,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimCinciLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
-				+ "') AS totalUltimCinciLuni,");
+				+ sdf.format(filter.getFechaUltimCinciLuni()) + "' AND DATE '"
+				+ sdf.format(filter.getFechaUltimPatruLuni()) + "') AS totalUltimCinciLuni,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimSaseLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
-				+ "') AS totalUltimSaseLuni,");
+				+ sdf.format(filter.getFechaUltimSaseLuni()) + "' AND DATE '"
+				+ sdf.format(filter.getFechaUltimCinciLuni()) + "') AS totalUltimSaseLuni,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimSapteLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
-				+ "') AS totalUltimSapteLuni,");
+				+ sdf.format(filter.getFechaUltimSapteLuni()) + "' AND DATE '"
+				+ sdf.format(filter.getFechaUltimSaseLuni()) + "') AS totalUltimSapteLuni,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimOptLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
-				+ "') AS totalUltimOptLuni,");
+				+ sdf.format(filter.getFechaUltimOptLuni()) + "' AND DATE '"
+				+ sdf.format(filter.getFechaUltimSapteLuni()) + "') AS totalUltimOptLuni,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimNouaLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
-				+ "') AS totalUltimNouaLuni,");
+				+ sdf.format(filter.getFechaUltimNouaLuni()) + "' AND DATE '"
+				+ sdf.format(filter.getFechaUltimOptLuni()) + "') AS totalUltimNouaLuni,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimZeceLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
-				+ "') AS totalUltimZeceLuni,");
+				+ sdf.format(filter.getFechaUltimZeceLuni()) + "' AND DATE '"
+				+ sdf.format(filter.getFechaUltimNouaLuni()) + "') AS totalUltimZeceLuni,");
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
-				+ sdf.format(filter.getFechaUltimUnspeLuni()) + "' AND DATE '" + sdf.format(filter.getFechaDesde())
-				+ "') AS totalUltimUnspeLuni,");
+				+ sdf.format(filter.getFechaUltimUnspeLuni()) + "' AND DATE '"
+				+ sdf.format(filter.getFechaUltimZeceLuni()) + "') AS totalUltimUnspeLuni,");
+		sql.append(
+				"(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '" + sdf.format(filter.getFechaUltimAn())
+						+ "' AND DATE '" + sdf.format(filter.getFechaUltimUnspeLuni()) + "') AS totalLuna12,");
 		sql.append(
 				"(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '" + sdf.format(filter.getFechaUltimAn())
 						+ "' AND DATE '" + sdf.format(filter.getFechaDesde()) + "') AS totalUltimAn,");
@@ -141,10 +144,27 @@ public class StatisticaDAOImpl implements StatisticaDAO {
 		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create BETWEEN DATE '"
 				+ sdf.format(filter.getFechaUltimiCinciAni()) + "' AND DATE '"
 				+ sdf.format(filter.getFechaUltimiPatruAni()) + "') AS totalUltimiiCinciAni,");
+		sql.append("(SELECT COUNT(*)  FROM users WHERE DATE_create <= '" + sdf.format(filter.getFechaUltimiCinciAni())
+				+ "') AS totalAntCinciAni,");
+
+		sql.append("(SELECT COUNT(*)  FROM users WHERE birth_date BETWEEN DATE '" + sdf.format(filter.getFechaPana25())
+				+ "' AND DATE '" + sdf.format(filter.getFechaDesde()) + "') AS totalPana25,");
+		sql.append("(SELECT COUNT(*)  FROM users WHERE  birth_date BETWEEN DATE '" + sdf.format(filter.getFechaPana25())
+				+ "' AND DATE '" + sdf.format(filter.getFechaDesde()) + "' and sex= 'MAN') AS totalBarbati25,");
+		sql.append("(SELECT COUNT(*)  FROM users WHERE  birth_date BETWEEN DATE '" + sdf.format(filter.getFechaPana40())
+				+ "' AND DATE '" + sdf.format(filter.getFechaPana25()) + "') AS totalPana40,");
+		sql.append("(SELECT COUNT(*)  FROM users WHERE  birth_date BETWEEN DATE '" + sdf.format(filter.getFechaPana40())
+				+ "' AND DATE '" + sdf.format(filter.getFechaPana25()) + "' and sex= 'MAN') AS totalBarbati40,");
+		sql.append("(SELECT COUNT(*)  FROM users WHERE birth_date BETWEEN DATE '" + sdf.format(filter.getFechaPana60())
+				+ "' AND DATE '" + sdf.format(filter.getFechaPana40()) + "') AS totalPana60,");
+		sql.append("(SELECT COUNT(*)  FROM users WHERE  birth_date BETWEEN DATE '" + sdf.format(filter.getFechaPana60())
+				+ "' AND DATE '" + sdf.format(filter.getFechaPana40()) + "' and sex= 'MAN') AS totalBarbati60,");
+		sql.append("(SELECT COUNT(*)  FROM users WHERE birth_date <= '" + sdf.format(filter.getFechaPana60())
+				+ "') AS totalMayor60,");
 		sql.append(
 				"(SELECT COUNT(*) FROM users u, plocality l WHERE  u.LOCALITY_ID = l.id AND l.nivel =3)AS mediuRural,");
 		sql.append(
-				"(SELECT COUNT(*) FROM users u, plocality l WHERE  u.LOCALITY_ID = l.id AND l.nivel in(2,3))AS mediuUrban,");
+				"(SELECT COUNT(*) FROM users u, plocality l WHERE  u.LOCALITY_ID = l.id AND l.nivel in(2,1))AS mediuUrban,");
 		sql.append("(SELECT SUM(locuitori) FROM plocality WHERE nivel =3) AS locuitoriTotalRural, ");
 		sql.append("(SELECT SUM(locuitori) FROM plocality WHERE nivel in(2,3)) AS locuitoriTotalUrban ");
 		sql.append("FROM users ");

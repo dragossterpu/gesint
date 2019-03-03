@@ -27,6 +27,8 @@ import org.joda.time.ReadableInstant;
 import org.joda.time.Years;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,11 +57,7 @@ import ro.per.online.services.RegistroActividadService;
 @Component
 public class Utilities {
 
-	/**
-	 * Servicio de actividad.
-	 */
-	@Autowired
-	private RegistroActividadService registro;
+	private static final Logger LOG = LoggerFactory.getLogger(Utilities.class.getSimpleName());
 
 	/**
 	 * Elimina los bean de la sesión que no contienen ese nombre.
@@ -114,6 +112,23 @@ public class Utilities {
 		final String textoCompilado = writer.toString();
 
 		return textoCompilado;
+	}
+
+	/**
+	 * Devuelve el número de días que han pasado desde una fecha introducida por parámetro hasta hoy.
+	 *
+	 * @param fecha usuario a consultar
+	 * @return dias número de días
+	 */
+	public static Long getDiasHastaHoy(final Date fecha) {
+		final LocalDate hoy = LocalDate.now();
+		long dias = 0;
+		LocalDate fechaDesde = null;
+		if (fecha != null) {
+			fechaDesde = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			dias = ChronoUnit.DAYS.between(fechaDesde, hoy);
+		}
+		return dias;
 	}
 
 	/**
@@ -211,6 +226,60 @@ public class Utilities {
 		}
 	}
 
+	public static String luna(final String param) {
+		String mes = Constantes.ESPACIO;
+		if (param.equals("January") || param.equals("enero")) {
+			// if (param.equals("enero")) {
+			mes = "Ianuarie";
+		}
+
+		else if (param.equals("February") || param.equals("febrero")) {
+			// else if (param.equals("febrero")) {
+			mes = "Februarie";
+		}
+		else if (param.equals("March") || param.equals("marzo")) {
+			// else if (param.equals("marzo")) {
+			mes = "Martie";
+		}
+		else if (param.equals("April") || param.equals("mayo")) {
+			// else if (param.equals("mayo")) {
+			mes = "Aprilie";
+		}
+		else if (param.equals("May") || param.equals("abril")) {
+			// else if (param.equals("abril")) {
+			mes = "Mai";
+		}
+		else if (param.equals("June") || param.equals("junio")) {
+			// else if (param.equals("junio")) {
+			mes = "Iunie";
+		}
+		else if (param.equals("July") || param.equals("julio")) {
+			// else if (param.equals("julio")) {
+			mes = "Iulie";
+		}
+		else if (param.equals("August") || param.equals("agosto")) {
+			// else if (param.equals("agosto")) {
+			mes = "August";
+		}
+		else if (param.equals("September") || param.equals("septiembre")) {
+			// else if (param.equals("septiembre")) {
+			mes = "Septembrie";
+		}
+		else if (param.equals("October") || param.equals("octubre")) {
+			// else if (param.equals("octubre")) {
+			mes = "Octombrie";
+		}
+		else if (param.equals("November") || param.equals("noviembre")) {
+			// else if (param.equals("noviembre")) {
+			mes = "Noiembrie";
+		}
+		else {
+			mes = "Decembrie";
+		}
+		return mes;
+
+	}
+
 	/**
 	 * Converts a Map to a List filled with its entries. This is needed since very few if any JSF iteration components
 	 * are able to iterate over a map.
@@ -221,7 +290,7 @@ public class Utilities {
 			return null;
 		}
 
-		final List<Map.Entry<T, S>> list = new ArrayList<Map.Entry<T, S>>();
+		final List<Map.Entry<T, S>> list = new ArrayList<>();
 		list.addAll(map.entrySet());
 
 		return list;
@@ -255,6 +324,40 @@ public class Utilities {
 	}
 
 	/**
+	 *
+	 * @return marca
+	 *
+	 */
+	public static String obtinemMarca() {
+		final Month mes = LocalDate.now().getMonth();
+		final String nombre = mes.getDisplayName(TextStyle.FULL, new Locale("ro", "RO"));
+		final String primeraLetra = nombre.substring(0, 1);
+		final String mayuscula = primeraLetra.toUpperCase();
+		final String demasLetras = nombre.substring(1, nombre.length());
+		final Calendar cal = Calendar.getInstance();
+		final int year = cal.get(Calendar.YEAR);
+		return mayuscula + demasLetras.concat(" ").concat(String.valueOf(year));
+
+	}
+
+	/**
+	 *
+	 * @return marca
+	 *
+	 */
+	public static String obtinemNumeLuna(final Date fecha) {
+		fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		final Month mes = LocalDate.now().getMonth();
+		final String nombre = mes.getDisplayName(TextStyle.FULL, new Locale("ro", "RO"));
+		final String primeraLetra = nombre.substring(0, 1);
+		final String mayuscula = primeraLetra.toUpperCase();
+		final String demasLetras = nombre.substring(1, nombre.length());
+		Calendar.getInstance();
+		return mayuscula + demasLetras;
+
+	}
+
+	/**
 	 * Indica qué tipo de operación se va a guardar en el registro.
 	 * @param idObjeto Long
 	 * @param borrado boolean
@@ -277,6 +380,12 @@ public class Utilities {
 	}
 
 	/**
+	 * Servicio de actividad.
+	 */
+	@Autowired
+	private RegistroActividadService registro;
+
+	/**
 	 * Las clases de utilidad no deben tener constructor publico
 	 *
 	 */
@@ -292,6 +401,55 @@ public class Utilities {
 	 */
 	public int calcularYearsBetween(final ReadableInstant start, final ReadableInstant end) {
 		return Years.yearsBetween(start, end).getYears();
+	}
+
+	/**
+	 * Método para descargar un archivo de la carpeta resources.
+	 * @param rutaResource ruta del fichero
+	 * @param contenType tipo documento
+	 * @param nombre nombre del fichero
+	 * @return contenido del flujo
+	 * @throws IOException excepción entrada/salida
+	 */
+	public StreamedContent descargarFichero(final String rutaResource, final String contenType, final String nombre)
+			throws IOException {
+		final InputStream inputStream = new ClassPathResource(rutaResource).getInputStream();
+		// No cerrar el stream. Da error al descargar si se cierra
+		return new DefaultStreamedContent(inputStream, contenType, nombre);
+	}
+
+	/**
+	 * Verificați dacă un șir introdus de parametru este un număr.
+	 * @param numero cadena número
+	 * @throws PerException excepción propia de per
+	 */
+	public void esEntero(final String numero) throws PerException {
+		final String regex = "\\d+";
+		if (!numero.matches(regex)) {
+			throw new PerException("Valoarea trebuie să fie un număr întreg.");
+		}
+	}
+
+	/**
+	 * Verificați dacă există un camp valabil pentru stare civila trecut ca parametru.
+	 * @param descripcion del enum
+	 * @throws PerException excepción propia de per
+	 */
+	public void existeCivilStatus(final CivilStatusEnum descripcion) throws PerException {
+		if (!CivilStatusEnum.getStatus().contains(descripcion)) {
+			throw new PerException("Câmpul stare civila nu este un valid.");
+		}
+	}
+
+	/**
+	 * Verificați dacă există un camp valabil pentru educatie trecut ca parametru.
+	 * @param descripcion del enum
+	 * @throws PerException excepción propia de per
+	 */
+	public void existeEducatie(final EducationEnum descripcion) throws PerException {
+		if (!EducationEnum.getEducation().contains(descripcion)) {
+			throw new PerException("Câmpul educație nu este un valid.");
+		}
 	}
 
 	/**
@@ -317,17 +475,6 @@ public class Utilities {
 	}
 
 	/**
-	 * Verificați dacă există un camp valabil pentru educatie trecut ca parametru.
-	 * @param descripcion del enum
-	 * @throws PerException excepción propia de per
-	 */
-	public void existeEducatie(final EducationEnum descripcion) throws PerException {
-		if (!EducationEnum.getEducation().contains(descripcion)) {
-			throw new PerException("Câmpul educație nu este un valid.");
-		}
-	}
-
-	/**
 	 * Verificați dacă există un camp valabil pentru sex trecut ca parametru.
 	 * @param descripcion del enum
 	 * @throws PerException excepción propia de per
@@ -343,32 +490,9 @@ public class Utilities {
 	 * @param descripcion del enum
 	 * @throws PerException excepción propia de per
 	 */
-	public void existeCivilStatus(final CivilStatusEnum descripcion) throws PerException {
-		if (!CivilStatusEnum.getStatus().contains(descripcion)) {
-			throw new PerException("Câmpul stare civila nu este un valid.");
-		}
-	}
-
-	/**
-	 * Verificați dacă există un camp valabil pentru stare civila trecut ca parametru.
-	 * @param descripcion del enum
-	 * @throws PerException excepción propia de per
-	 */
 	public void existeTypeLocality(final TypeLocalityEnum descripcion) throws PerException {
 		if (!TypeLocalityEnum.getTypeLocality().contains(descripcion)) {
 			throw new PerException("Câmpul tipul localității nu este un valid.");
-		}
-	}
-
-	/**
-	 * Verificați dacă un șir introdus de parametru este un număr.
-	 * @param numero cadena número
-	 * @throws PerException excepción propia de per
-	 */
-	public void esEntero(final String numero) throws PerException {
-		final String regex = "\\d+";
-		if (!numero.matches(regex)) {
-			throw new PerException("Valoarea trebuie să fie un număr întreg.");
 		}
 	}
 
@@ -378,19 +502,6 @@ public class Utilities {
 	 */
 	public Users getUsuarioLogado() {
 		return (Users) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	}
-
-	/**
-	 * Método que procesa la excepción para lanzar un mensaje de error y guardar registro.
-	 * @param excepcion Excepción capturada.
-	 * @param accion Acción que ha disparado la excepción.
-	 * @param facesUtilities para establecer el mensaje que se mostrará.
-	 * @param seccion Sección donde se produce la excepción
-	 */
-	public void procesarExcepcion(final Exception excepcion, final SeccionesEnum seccion, final String accion,
-			final FacesUtilities facesUtilities) {
-		facesUtilities.setMensajeError("A apărut o eroare ".concat(accion), Constantes.IDMENSAJEGLOBAL);
-		registro.registrarError(seccion, excepcion);
 	}
 
 	/**
@@ -407,18 +518,16 @@ public class Utilities {
 	}
 
 	/**
-	 * Método para descargar un archivo de la carpeta resources.
-	 * @param rutaResource ruta del fichero
-	 * @param contenType tipo documento
-	 * @param nombre nombre del fichero
-	 * @return contenido del flujo
-	 * @throws IOException excepción entrada/salida
+	 * Método que procesa la excepción para lanzar un mensaje de error y guardar registro.
+	 * @param excepcion Excepción capturada.
+	 * @param accion Acción que ha disparado la excepción.
+	 * @param facesUtilities para establecer el mensaje que se mostrará.
+	 * @param seccion Sección donde se produce la excepción
 	 */
-	public StreamedContent descargarFichero(final String rutaResource, final String contenType, final String nombre)
-			throws IOException {
-		final InputStream inputStream = new ClassPathResource(rutaResource).getInputStream();
-		// No cerrar el stream. Da error al descargar si se cierra
-		return new DefaultStreamedContent(inputStream, contenType, nombre);
+	public void procesarExcepcion(final Exception excepcion, final SeccionesEnum seccion, final String accion,
+			final FacesUtilities facesUtilities) {
+		facesUtilities.setMensajeError("A apărut o eroare ".concat(accion), Constantes.IDMENSAJEGLOBAL);
+		registro.registrarError(seccion, excepcion);
 	}
 
 	/**
@@ -436,40 +545,5 @@ public class Utilities {
 		facesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, operacion, mensaje);
 		registro.registrarActividad(seccion, operacion, apartado.concat(Constantes.OPERACION.concat(operacion)
 				.concat(Constantes.DE).concat(descripcion).concat(Constantes.SEHAREALEXITO)));
-	}
-
-	/**
-	 * Devuelve el número de días que han pasado desde una fecha introducida por parámetro hasta hoy.
-	 *
-	 * @param fecha usuario a consultar
-	 * @return dias número de días
-	 */
-	public static Long getDiasHastaHoy(final Date fecha) {
-		final LocalDate hoy = LocalDate.now();
-		long dias = 0;
-		LocalDate fechaDesde = null;
-		if (fecha != null) {
-			fechaDesde = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-			dias = ChronoUnit.DAYS.between(fechaDesde, hoy);
-		}
-		return dias;
-	}
-
-	/**
-	 *
-	 * @return marca
-	 *
-	 */
-	public static String obtinemMarca() {
-		final String luna = Constantes.ESPACIO;
-		final Month mes = LocalDate.now().getMonth();
-		final String nombre = mes.getDisplayName(TextStyle.FULL, new Locale("ro", "RO"));
-		final String primeraLetra = nombre.substring(0, 1);
-		final String mayuscula = primeraLetra.toUpperCase();
-		final String demasLetras = nombre.substring(1, nombre.length());
-		final Calendar cal = Calendar.getInstance();
-		final int year = cal.get(Calendar.YEAR);
-		return mayuscula + demasLetras.concat(" ").concat(String.valueOf(year));
-
 	}
 }

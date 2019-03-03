@@ -21,7 +21,7 @@ public final class StatisticaMapper implements RowMapper<StatisticaDTO> {
 	 * @return fila stadistica
 	 */
 	@Override
-	public StatisticaDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public StatisticaDTO mapRow(final ResultSet rs, final int rowNum) throws SQLException {
 		final StatisticaDTO dto = new StatisticaDTO();
 
 		dto.setNumarTotal(rs.getInt("numarTotal"));
@@ -63,6 +63,15 @@ public final class StatisticaMapper implements RowMapper<StatisticaDTO> {
 		dto.setMediuUrban(rs.getInt("mediuUrban"));
 		dto.setLocuitoriTotalRural(rs.getInt("locuitoriTotalRural"));
 		dto.setLocuitoriTotalUrban(rs.getInt("locuitoriTotalUrban"));
+		dto.setTotalLuna12(rs.getInt("totalLuna12"));
+		dto.setTotalPana25(rs.getInt("totalPana25"));
+		dto.setTotalPanaBarbati25(rs.getInt("totalBarbati25"));
+		dto.setTotalPana40(rs.getInt("totalPana40"));
+		dto.setTotalPanaBarbati40(rs.getInt("totalBarbati40"));
+		dto.setTotalPana60(rs.getInt("totalPana60"));
+		dto.setTotalPanaBarbati60(rs.getInt("totalBarbati60"));
+		dto.setTotalPanaMayor60(rs.getInt("totalMayor60"));
+		dto.setTotalAntCinciAni(rs.getInt("totalAntCinciAni"));
 
 		return dto;
 	}

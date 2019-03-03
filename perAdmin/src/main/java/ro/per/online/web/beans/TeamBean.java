@@ -761,12 +761,12 @@ public class TeamBean implements Serializable {
 
 		if (!validarUsername()) {
 			this.mensajeError = "Membrul există deja în sistem";
-			validado = false;
+			validado = true;
 		}
-		if (!validarNifUnico()) {
-			this.mensajeError = "CNP-ul există deja în sistem";
-			validado = false;
-		}
+		// if (!validarNifUnico()) {
+		// this.mensajeError = "CNP-ul există deja în sistem";
+		// validado = true;
+		// }
 		return validado;
 	}
 

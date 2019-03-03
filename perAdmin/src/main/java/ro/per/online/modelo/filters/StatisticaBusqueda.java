@@ -165,4 +165,19 @@ public class StatisticaBusqueda implements Serializable {
 	 * Fecha fechaUltimUnspeLuniAnTrecut.
 	 */
 	private Date fechaUltimUnspeLuniAnTrecut;
+
+	/**
+	 * Fecha fechaPana25.
+	 */
+	private Date fechaPana25;
+
+	/**
+	 * Fecha fechaPana40.
+	 */
+	private Date fechaPana40;
+
+	/**
+	 * Fecha fechaPana60.
+	 */
+	private Date fechaPana60;
 }
