@@ -21,7 +21,13 @@ import ro.per.online.modelo.dao.StatisticaLocalitateDAO;
 import ro.per.online.modelo.dto.estadisticas.StatisticaJudetDTO;
 import ro.per.online.modelo.dto.estadisticas.StatisticaLocalitateDTO;
 import ro.per.online.modelo.filters.StatisticaJudeteBusqueda;
+import ro.per.online.persistence.entities.Optiune;
+import ro.per.online.persistence.entities.PProvince;
 import ro.per.online.persistence.entities.Statistica;
+import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.entities.enums.RoleEnum;
+import ro.per.online.services.OptiuneService;
+import ro.per.online.services.ProvinceService;
 import ro.per.online.services.StatisticaService;
 import ro.per.online.services.UserService;
 
@@ -48,10 +54,21 @@ public class StatisticaBean implements Serializable {
 	private List<Statistica> listaJudete;
 
 	/**
+	 * Lista registrelor de optiuni.
+	 */
+	private List<Optiune> listaOptiuni;
+
+	/**
 	 * Service de Statistica.
 	 */
 	@Autowired
 	private transient StatisticaService statisticaService;
+
+	/**
+	 * Service de Optiune.
+	 */
+	@Autowired
+	private transient OptiuneService optiuneService;
 
 	/**
 	 * Variabila pentru numarul total de membrii
@@ -111,183 +128,484 @@ public class StatisticaBean implements Serializable {
 	 */
 	private StatisticaJudeteBusqueda statisticaJudeteBusqueda;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaAB;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaAG;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaB;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaIF;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaAR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaBC;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaBH;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaBN;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaBR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaBV;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaBZ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaCJ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaCL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaCT;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaCS;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaCV;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaDB;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaDJ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaGJ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaGL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaGR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaHD;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaHR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaIL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaIS;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaMH;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaMM;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaMS;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaNT;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaOT;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaPH;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaSB;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaSJ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaSM;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaSV;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaTL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaTM;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaTR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaVL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaVN;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaVS;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaBT;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLAB;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLAG;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLB;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLIF;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLAR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLBC;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLBH;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLBN;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLBR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLBV;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLBZ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLCJ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLCL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLCT;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLCS;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLCV;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLDB;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLDJ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLGJ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLGL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLGR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLHD;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLHR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLIL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLIS;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLMH;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLMM;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLMS;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLNT;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLOT;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLPH;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLSB;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLSJ;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLSM;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLSV;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLTL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLTM;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLTR;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLVL;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLVN;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLVS;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String etichetaLBT;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private String numeOrganizatie;
 
+	/**
+	 * Variabila pentru culoarea etichetei judetului
+	 */
 	private Integer totalMembrii;
+
+	/**
+	 * Presedinte Filiala.
+	 */
+	private Users presedinteFiliala;
+
+	/**
+	 * Conducere Filiala.
+	 */
+	private List<Users> conducereFiliala;
+
+	/**
+	 * Variabila utilizata pentru a injecta serviciul provinciei.
+	 *
+	 */
+	@Autowired
+	private ProvinceService provinceService;
+
+	/**
+	 * Variabila pentru a vizualiza stema judetului
+	 */
+	private String codulProvinciei;
+
+	/**
+	 * Variabila pentru judet
+	 */
+	private PProvince judet;
 
 	/**
 	 * Metoda care obtine cele mai bune si slabe localitati
 	 */
 	public String buttonAction(final String code) {
+		codulProvinciei = Constantes.ESPACIO;
+		presedinteFiliala = new Users();
+		conducereFiliala = new ArrayList<>();
+		listaOptiuni = new ArrayList<>();
+
+		userBusqueda = new UsuarioBusqueda();
+		judet = new PProvince();
+		final List<RoleEnum> rolesJudet = new ArrayList<>();
+		rolesJudet.add(RoleEnum.ROLE_VICE_PRESEDINTE_ORG);
+		rolesJudet.add(RoleEnum.ROLE_SEF_LOCAL);
 		obtenerLocalitateSuperiorProcentaj(code);
+		final PProvince prov = provinceService.findById(code);
+		listaOptiuni = optiuneService.findByCodeProvince(prov);
+		judet = prov;
+		presedinteFiliala = userService.findByRolAndProvince(RoleEnum.ROLE_PRESEDINTE_ORG, prov);
+		conducereFiliala = userService.findByProvinceAndRol(prov, rolesJudet);
+		codulProvinciei = code;
 		return "/estadisticas/statisticaJudete.xhtml?faces-redirect=true";
 	}
 
@@ -796,12 +1114,11 @@ public class StatisticaBean implements Serializable {
 			judet.setValoare(obtenerValoare(judet.getProcentaj()));
 			if (judet.getValoare().equals("EXCELENT")) {
 				judet.setEticheta("albastru");
-				mapa.put(judet.getCode_province(), "fill:blue;");
-
+				mapa.put(judet.getCode_province(), "fill:green;");
 			}
 			else if (judet.getValoare().equals("BUN")) {
 				judet.setEticheta("verde");
-				mapa.put(judet.getCode_province(), "fill:green;");
+				mapa.put(judet.getCode_province(), "fill:blue;");
 			}
 			else if (judet.getValoare().equals("ACCEPTABIL")) {
 				judet.setEticheta("galben");
@@ -834,10 +1151,10 @@ public class StatisticaBean implements Serializable {
 			}
 			localitate.setValoare(obtenerValoare(localitate.getProcentaj()));
 			if (localitate.getValoare().equals("EXCELENT")) {
-				localitate.setEticheta("albastru");
+				localitate.setEticheta("verde");
 			}
 			else if (localitate.getValoare().equals("BUN")) {
-				localitate.setEticheta("verde");
+				localitate.setEticheta("albastru");
 			}
 			else if (localitate.getValoare().equals("ACCEPTABIL")) {
 				localitate.setEticheta("galben");

@@ -1,0 +1,104 @@
+<ui:composition template="/layouts/layoutInterior2.xhtml"
+xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://xmlns.jcp.org/jsf/html" 
+xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+xmlns:f="http://xmlns.jcp.org/jsf/core" 
+xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+
+            <h:form id="form">
+				<div class="resultados">
+                <p:outputPanel layout="block" id="panelFunctii">
+                <p:dataTable  var="functie" rowIndexVar="rowIndex" value="#{functieBean.listaFunctii}" editable="true" onkeypress="if (event.keyCode == 13) {return false; }"
+                rowsPerPageTemplate="10,25,50" rows="10"
+						lazy="true" pageLinks="4" paginatorPosition="bottom" styleClass="modHeaderTable"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						id="tablaFunctii" draggableColumns="true" paginator="true"
+						resizableColumns="true" paginatorAlwaysVisible="false">
+                    <p:ajax event="rowEdit" listener="#{functieBean.onRowEdit}" update="tablaFunctii" />
+						<f:facet name="header">
+							<p:outputPanel>
+								<div class="left">
+									<h:commandLink >
+										<p:graphicImage value="/images/xls.png" />
+										<p:dataExporter type="xls" target="tablaFunctii"
+											fileName="functii" />
+									</h:commandLink>
+									<h:commandLink >
+										<p:graphicImage value="/images/pdf.png" />
+										<p:dataExporter type="pdf" target="tablaFunctii"
+											fileName="functii" />
+									</h:commandLink>
+									<h:commandLink >
+										<p:graphicImage value="/images/csv.png" />
+										<p:dataExporter type="csv" target="tablaFunctii"
+											fileName="functii" />
+									</h:commandLink>
+								</div>
+								<span class="titulo">FUNCŢII</span>
+							</p:outputPanel>
+						</f:facet>
+                    <p:column headerText="Numele funcției" style="width:22%;" sortBy="#{functie.name}">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <b><h:outputText value="#{functie.name}" /></b>
+                            </f:facet>
+
+                            <f:facet name="input">
+                                <b><p:inputText id="nameInput" value="#{functie.name}" converter="#{trimConverter}" required="true" requiredMessage="Numele funcției este obligatoriu">
+                                </p:inputText></b>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Descriere" style="width:28%;" sortBy="#{functie.description}">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{functie.description}" />
+                            </f:facet>
+
+                            <f:facet name="input">
+                               <b>  <p:inputText id="descriptionInput" value="#{functie.description}" converter="#{trimConverter}" /></b>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+ 						<p:column headerText="Organizația" style="width:40%;" sortBy="#{functie.organization}">                           
+								<div class="ui-g-12 ui-md-6 ui-lg-6">
+                                <p:selectOneMenu class="selectFiltro" id="validated" value="#{functie.organization}">
+									<b><f:selectItem itemLabel="Conducerea Centrală" itemValue="Conducerea Centrală" /></b>
+									<b><f:selectItem itemLabel="Conducerea Locală" itemValue="Conducerea Locală" /></b>
+									<b><f:selectItem itemLabel="Comisie" itemValue="Comisie" /></b>
+									<b><f:selectItem itemLabel="Comisia Națională De Arbitraj și Integritate" itemValue="Comisia Națională De Arbitraj și Integritate" /></b>									
+								</p:selectOneMenu>
+							</div>
+                   		 </p:column>
+                    <p:column styleClass="botonTabla" style="width:5%;">
+                        <p:rowEditor editTitle="Modifică" saveTitle="Salvează" cancelTitle="Renunță" />
+                    </p:column>
+                    <p:column styleClass="botonTabla" style="width:5%;">
+                        <p:commandButton title="Elimină" icon="fa fa-trash" actionListener="#{functieBean.eliminaFunctia(functie)}" update="tablaFunctii">
+                            <p:confirm header="Elimină funcția" message="Ești sigur că dorești eliminarea funcției?" icon="fa fa-warning-sign" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+
+                <div class="botonesFormulario">
+                    <p:button value="Funcție nouă" outcome="/administratie/functie/nouaFunctie" icon="fa fa-fw fa-user-plus" />
+                </div>
+
+
+                <p:confirmDialog global="true">
+                    <div class="centrarBotonesDialog">
+                        <p:commandButton value="Acceptă" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                        <p:commandButton value="Renunță" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-remove" />
+                    </div>
+                </p:confirmDialog>
+
+                <p:messages globalOnly="true" autoUpdate="true" closable="true" />
+            	</p:outputPanel>
+             </div>
+           </h:form>
+       
+
+    </ui:define>
+</ui:composition>

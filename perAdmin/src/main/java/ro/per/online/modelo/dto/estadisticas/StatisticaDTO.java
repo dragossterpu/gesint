@@ -313,4 +313,5 @@ public class StatisticaDTO implements Serializable {
 	 *
 	 */
 	int totalAntCinciAni;
+
 }

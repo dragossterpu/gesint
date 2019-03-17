@@ -103,6 +103,18 @@ public class PLocality implements Serializable {
 	private Long locuitori;
 
 	/**
+	 * Voturi minim.
+	 */
+	@Column(name = "voturi_minim")
+	private Long voturiMinim;
+
+	/**
+	 * Membrii minim.
+	 */
+	@Column(name = "membrii_minim")
+	private Long membriiMinim;
+
+	/**
 	 * Fotoografia localitate.
 	 */
 	private byte[] photo;

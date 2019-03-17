@@ -29,8 +29,11 @@ public enum TipAlegeriEnum {
 	/**
 	 * Locale.
 	 */
-	LOCALE("Locale"),
-
+	LOCALE_PRIMAR("Locale Primar"),
+	/**
+	 * Locale.
+	 */
+	LOCALE_CONSILIU("Locale Consiliu"),
 	/**
 	 * Referendum.
 	 */

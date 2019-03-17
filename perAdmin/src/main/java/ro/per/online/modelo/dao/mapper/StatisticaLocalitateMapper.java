@@ -32,6 +32,8 @@ public final class StatisticaLocalitateMapper implements RowMapper<StatisticaLoc
 		dto.setProcentaj(rs.getFloat("procentaj"));
 		dto.setLocuitoriVot(rs.getInt("locuitoriVot"));
 		dto.setTotalMembrii(rs.getInt("totalMembrii"));
+		dto.setMembriiMinim(rs.getInt("membrii_minim"));
+		dto.setVoturiMinim(rs.getInt("voturi_minim"));
 		return dto;
 	}
 

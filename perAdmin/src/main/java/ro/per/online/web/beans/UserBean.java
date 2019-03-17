@@ -60,6 +60,7 @@ import ro.per.online.util.Utilities;
 @Scope(Constantes.SESSION)
 
 public class UserBean implements Serializable {
+
 	/**
 	 *
 	 */
@@ -376,11 +377,14 @@ public class UserBean implements Serializable {
 		Boolean validaPresedinte = true;
 		final PProvince prov = usu.getProvince();
 		final RoleEnum rol = usu.getRole();
-		final Users presedinte = userService.findByRolAndProvince(rol, prov);
-		if (presedinte != usu) {
-			validaPresedinte = false;
-			mesaje = "Există un președinte al organizației. Întâi modificați membrul " + presedinte.getName() + " "
-					+ presedinte.getLastName() + "  și după, încercați din nou.";
+		// Verificam ca persoana care se doreste a modifica nu este presedinte de filiala
+		if (!usu.getRole().equals(RoleEnum.ROLE_VICE_PRESEDINTE_ORG)) {
+			final Users presedinte = userService.findByRolAndProvince(rol, prov);
+			if (presedinte != usu && presedinte != null) {
+				validaPresedinte = false;
+				mesaje = "Există un președinte al organizației. Întâi modificați membrul " + presedinte.getName() + " "
+						+ presedinte.getLastName() + "  și după, încercați iar.";
+			}
 		}
 		return validaPresedinte;
 	}

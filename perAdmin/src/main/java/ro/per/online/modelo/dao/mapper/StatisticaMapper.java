@@ -72,7 +72,6 @@ public final class StatisticaMapper implements RowMapper<StatisticaDTO> {
 		dto.setTotalPanaBarbati60(rs.getInt("totalBarbati60"));
 		dto.setTotalPanaMayor60(rs.getInt("totalMayor60"));
 		dto.setTotalAntCinciAni(rs.getInt("totalAntCinciAni"));
-
 		return dto;
 	}
 

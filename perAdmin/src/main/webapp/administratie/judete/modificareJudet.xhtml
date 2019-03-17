@@ -1,71 +1,61 @@
-<ui:composition template="../layouts/layoutInterior.xhtml"
+<ui:composition template="/layouts/layoutInterior2.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
 	<ui:define name="content">
-		<p:importConstants type="es.mira.insht.constantes.Constantes"
-			var="Constantes" />
 			<h:form id="form" enctype="multipart/form-data">
 				<div class="bloqueFormulario">
-					<p:panel header="Link" styleClass="panelModCard">
+					<p:panel header="Județ" styleClass="panelModCard">
 						<p:panelGrid>
 							<p:row>
 								<p:column>
-									<h:outputLabel for="nombre" value="*Nombre:" />
+									<h:outputLabel for="nombre" value="*Nume:" />
 								</p:column>
 								<p:column>
-									<p:inputText id="nombre" value="#{linksBean.link.nombre}"
+									<p:inputText id="nombre" value="#{provinceBean.judetul.name}"
 										required="true"
-										requiredMessage="Introduzca un nombre para el link" />
+										requiredMessage="Introduce un nume pentru județ" />
 									<p:message for="nombre" />
 								</p:column>
 							</p:row>
 							<p:row>
 								<p:column>
-									<h:outputLabel for="url" value="Url:" />
+									<h:outputLabel for="locuitori" value="Populație:" />
 								</p:column>
 								<p:column>
-									<p:inputText id="url" value="#{linksBean.link.url}" required="true"
-										requiredMessage="Introduzca una url para el link" />
+									<p:inputText id="locuitori" value="#{provinceBean.judetul.population}" required="true"
+										requiredMessage="Introduce populația județului" />
 									<p:message for="nombre" />
 								</p:column>
 							</p:row>
 							<p:row>
 								<p:column>
-									<h:outputLabel for="validado" value="Validado:" />
+									<h:outputLabel for="indicator" value="Codul județului:" />
 								</p:column>
 								<p:column>
-									<p:selectOneMenu id="validado" value="#{linksBean.link.validado}">
-										<f:selectItem itemLabel="SI" itemValue="1" />
-										<f:selectItem itemLabel="NO" itemValue="0" />
-									</p:selectOneMenu>
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column>
-									<h:outputLabel for="validado" value="Tipo de link:" />
-								</p:column>
-								<p:column>
-									<p:selectOneMenu id="tipo" value="#{linksBean.link.seccion}">
-										<f:selectItem itemLabel="MUTUA"
-											itemValue="#{Constantes.MUTUAS}" />
-										<f:selectItem itemLabel="COMUNIDAD"
-											itemValue="#{Constantes.COMUNIDADES}" />
-									</p:selectOneMenu>
+									<p:inputText id="indicator" value="#{provinceBean.judetul.indicator}" required="true"
+										requiredMessage="Introduce codul județului" />
+									<p:message for="nombre" />
 								</p:column>
 							</p:row>
 							<p:row>
 								<p:column>
-									<p:commandButton value="Seleccionar imágen"
-										update="formDocumento:panelDocumento" immediate="true"
-										action="#{linksBean.mostrarDialogoNuevaImagen()}" />
-								</p:column>
-								<p:column>
-									<p:graphicImage id="imagen" height="250" width="auto"
-										value="#{linksBean.link.imagen.imagenMuestra}" stream="false" />
+									<b><h:outputLabel for="imagenG" value="Fotografia :" /></b>
+									<p:separator />
+									<h:graphicImage  rendered="#{empty provinceBean.judetul.photo}" value="/images/judete/#{provinceBean.judetul.indicator}.png" alt="#{provinceBean.judetul.name}" />
+									<p:graphicImage rendered="#{not empty provinceBean.judetul.photo}" id="imagenG" value="#{provinceBean.judetul.imageJudet}" cache="false" stream="false">
+									<f:param name="id" value="#{provinceBean.judetul.indicator}" />
+									 </p:graphicImage>
+									<b><h:outputLabel for="imagenNueva" value="Încarcă noua imagine:" /></b>
+									<p:separator />
+									<p:fileUpload fileUploadListener="#{provinceBean.cargaImagen}" mode="advanced" dragDropSupport="false" id="imagenNueva"
+									   sizeLimit="204800" invalidSizeMessage=" Dimensiunea maximă permisă este de 20MB" required="true" 
+									   fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+									      uploadLabel="Salvează noua stemă" cancelLabel="Renunțare" label="Încarcă/Caută stema" update="imagenG" /> 
 								</p:column>
 							</p:row>
 						</p:panelGrid>
@@ -83,16 +73,16 @@
 							<p:messages for="dialogMessage" autoUpdate="true"
 								showDetail="true" showSummary="true" />
 							<div class="centrarBotonesDialog">
-								<p:button value="Cerrar" outcome="/gestorLinks/links" />
+								<p:button value=" Închide" outcome="/judete/judete" />
 							</div>
 						</p:dialog>
 					</p:panel>
 					<div class="botonesFormulario">
-						<p:commandButton value="Volver" icon="fa fa-fw fa-undo"
-							action="/gestorLinks/links?faces-redirect=true" immediate="true">
+						<p:commandButton value="Întoarcere" icon="fa fa-fw fa-undo"
+							action="/judete/judete?faces-redirect=true" immediate="true">
 						</p:commandButton>
-						<p:commandButton actionListener="#{linksBean.guardarLink}"
-							value="Aceptar" icon="fa fa-fw fa-check" ajax="false" />
+						<p:commandButton actionListener="#{provinceBean.modificaJudet(provinceBean.judetul)}"
+							value="Salvează" icon="fa fa-fw fa-check" ajax="false" />
 					</div>
 				</div>
 				
@@ -103,89 +93,6 @@
 			</h:form>
 			
 			
-			<p:dialog header="Buscar documentos" widgetVar="dlg" dynamic="true"
-					width="700" height="600">
-					<h:form id="formDocumento">
-					<p:panelGrid columns="1" id="panelDocumento">
-						<p:panelGrid columns="2">
-							<h:outputLabel for="tituloDocumento" styleClass="dialogLabel"
-								value="Título:" />
-							<p:inputText id="tituloDocumento"
-								value="#{linksBean.documentoBusqueda.titulo}" />
-
-							<h:outputLabel for="nombreFichero" styleClass="dialogLabel"
-								value="Nombre de fichero:" />
-							<p:inputText id="nombreFichero"
-								value="#{linksBean.documentoBusqueda.nombreArchivo}" />
-
-							<h:outputLabel for="descripcionDocumento"
-								styleClass="dialogLabel" value="Descripción:" />
-							<p:inputText id="descripcionDocumento"
-								value="#{linksBean.documentoBusqueda.descripcion}" />
-
-							<h:outputLabel for="listaEtiquetas" styleClass="dialogLabel"
-								value="Etiquetas:" />
-							<p:selectCheckboxMenu id="listaEtiquetas"
-								panelStyleClass="hideDisabled"
-								value="#{linksBean.documentoBusqueda.etiquetasSeleccionadas}"
-								multiple="true" filter="true" filterMatchMode="startsWith"
-								label="Etiquetas" class="selectFiltro" converter="#{etiquetaConverter}">
-								
-								<f:attribute name="collectionType" value="java.util.ArrayList" />
-								
-								<f:selectItems value="#{linksBean.listaEtiquetas}"
-									var="etiqueta" itemLabel="#{etiqueta.nombre}"
-									itemValue="#{etiqueta}" />
-							</p:selectCheckboxMenu>
-							<p:commandButton actionListener="#{linksBean.buscarDocumento}"
-								value="Buscar" icon="fa fa-search" 
-								class="botonExpedienteTab left" update="formDocumento:tablaDocumentos"
-								oncomplete="$('.mensajeSinResultados').css('opacity', 1)"
-								onstart="PF('statusDialog').show()"
-								onsuccess="PF('statusDialog').hide()" />
-						</p:panelGrid>
-						<p:dataTable class="tabActividad" id="tablaDocumentos"
-							var="documento" rowIndexVar="rowIndex"
-							value="#{linksBean.modelDocumento}" editable="true"
-							rows="#{Constantes.TAMPAGINA}" rowsPerPageTemplate="5,10,15,20"
-							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-							paginator="true" rowKey="#{documento.id}" lazy="true"
-							onkeypress="if (event.keyCode == 13) {return false; }"
-							emptyMessage="No existe ningún resultado que cumpla los parámetros de su búsqueda.">
-
-							<p:column headerText="Título" width="80">
-								<h:outputText id="titulo_index" value="#{documento.titulo}" />
-								<p:tooltip id="tp_titulo_index" for="titulo_index"
-									value="#{documento.nombreFichero}" position="top" />
-							</p:column>
-
-							<p:column headerText="Nombre fichero" width="80">
-								<h:outputText id="nombre_index"
-									value="#{documento.nombreFichero}" />
-								<p:tooltip id="tp_nombre_index" for="nombre_index"
-									value="#{documento.nombreFichero}" position="top" />
-							</p:column>
-
-							<p:column headerText="Imágen" width="60">
-								<center>
-									<p:graphicImage value="#{documento.imagenMuestra}"
-										stream="false" height="60" width="60"
-										rendered="#{fn:contains(documento.nombreFichero, '.jpg') || fn:contains(documento.nombreFichero, '.png') || fn:contains(documento.nombreFichero, '.gif')}" />
-								</center>
-							</p:column>
-
-							<p:column width="25">
-								<p:commandButton value="Elegir" class="botonExpedienteTab"
-									update="formDocumento"
-									action="#{linksBean.asignarNuevaImagen(documento,true)}" />
-							</p:column>
-
-							<f:facet name="footer">
-       				 			Resultado de la búsqueda: #{linksBean.modelDocumento.rowCount} registros.
-							</f:facet>
-						</p:dataTable>
-					</p:panelGrid>
-					</h:form>
-				</p:dialog>
+			
 	</ui:define>
 </ui:composition>

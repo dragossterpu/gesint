@@ -21,7 +21,10 @@ public enum RoleEnum {
 	 * Rol administrator.
 	 */
 	ROLE_ADMIN("Administrator"),
-
+	/**
+	 * Rol administrator.
+	 */
+	ROLE_ADMINLOCAL("Administrator local"),
 	/**
 	 * Rol pentru utilizatorii care se conecteaza la aplicatie.
 	 */

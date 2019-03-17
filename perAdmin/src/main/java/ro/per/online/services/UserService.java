@@ -18,8 +18,7 @@ import ro.per.online.web.beans.UsuarioBusqueda;
  * @author STAD
  *
  */
-public interface UserService
-{
+public interface UserService {
 
 	/**
 	 * Elimina de manera lógica a una lista de usuarios.
@@ -51,9 +50,8 @@ public interface UserService
 	 * @param first int
 	 * @return List<User>
 	 */
-	List<Users> buscarUsuarioCriteria(
-			int first, int pageSize, String sortField, SortOrder sortOrder, UsuarioBusqueda searchUser
-	);
+	List<Users> buscarUsuarioCriteria(int first, int pageSize, String sortField, SortOrder sortOrder,
+			UsuarioBusqueda searchUser);
 
 	/**
 	 * Busca usuarios utilizando criteria.
@@ -122,6 +120,14 @@ public interface UserService
 	 * @return User
 	 */
 	Users findByRolAndProvince(RoleEnum rol, PProvince prov);
+
+	/**
+	 * Cauta un utilizator cu rolul si judetul.
+	 * @param rol RoleEnum
+	 * @param prov PProvince
+	 * @return User
+	 */
+	List<Users> findByProvinceAndRol(PProvince prov, List<RoleEnum> roles);
 
 	/**
 	 * @return

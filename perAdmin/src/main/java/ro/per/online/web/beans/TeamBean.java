@@ -359,10 +359,10 @@ public class TeamBean implements Serializable {
 					id = 75L;
 				}
 				else if (user.getIdCard().substring(6, 8).equals("45")) {
-					id = 75L;
+					id = 76L;
 				}
 				else {
-					id = 76L;
+					id = 77L;
 				}
 				locality = localityService.findById(Long.valueOf(id));
 			}

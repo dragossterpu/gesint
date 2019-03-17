@@ -383,6 +383,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * Cauta un utilizator cu rolul si judetul.
+	 * @param rol RoleEnum
+	 * @param prov PProvince
+	 * @return User
+	 */
+	@Override
+	public List<Users> findByProvinceAndRol(final PProvince prov, final List<RoleEnum> rolesProv) {
+		return userRepository.findByProvinceAndRoleIn(prov, rolesProv);
+	}
+
+	/**
 	 *
 	 */
 

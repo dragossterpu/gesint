@@ -1,6 +1,7 @@
 package ro.per.online.persistence.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -94,4 +95,15 @@ public class Partid implements Serializable {
 	@OneToMany(mappedBy = "partid", fetch = FetchType.LAZY)
 	private List<PartidRezultateJudete> rezultatJudeteList;
 
+	/**
+	 * Utilizator care elimina un registru
+	 */
+	@Column(name = "user_deleted", length = 250)
+	private String userDeleted;
+
+	/**
+	 * Data eliminarii.
+	 */
+	@Column(name = "date_deleted")
+	private Date dateDeleted;
 }

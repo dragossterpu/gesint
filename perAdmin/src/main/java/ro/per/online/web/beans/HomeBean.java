@@ -31,6 +31,7 @@ import ro.per.online.modelo.dao.StatisticaDAO;
 import ro.per.online.modelo.dao.StatisticaJudetDAO;
 import ro.per.online.modelo.dto.estadisticas.StatisticaDTO;
 import ro.per.online.modelo.dto.estadisticas.StatisticaJudetDTO;
+import ro.per.online.modelo.dto.estadisticas.StatisticaJudetMinimDTO;
 import ro.per.online.modelo.filters.StatisticaBusqueda;
 import ro.per.online.modelo.filters.StatisticaJudeteBusqueda;
 import ro.per.online.persistence.entities.pojo.PersoaneAn;
@@ -57,6 +58,14 @@ public class HomeBean implements Serializable {
 	 * Constante para las trazas de login
 	 */
 	private static final Logger LOG = LoggerFactory.getLogger(HomeBean.class.getSimpleName());
+
+	public static String getFecha(Date date) {
+		final Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		final SimpleDateFormat df = new SimpleDateFormat("MMMMM");
+		date = cal.getTime();
+		return df.format(date);
+	}
 
 	/**
 	 * Variabila pentru datele de cautare ale statisticii.
@@ -211,182 +220,133 @@ public class HomeBean implements Serializable {
 	private List<StatisticaJudetDTO> listaJudeteInferiorProcentaj;
 
 	/**
-	 * Método inicializador del bean.
+	 * Variabila date
 	 */
-	@PostConstruct
-	public void init() {
-		crearStatisticaGeneral();
-
-	}
+	private StatisticaJudetMinimDTO date;
 
 	/**
+	 * Variabila date
+	 */
+	private List<StatisticaJudetMinimDTO> listDdate;
+
+	/**
+	 * Metoda care calculeaza numarul maxim
 	 *
 	 */
-	private void crearStatisticaGeneral() {
-		statisticaBusqueda = new StatisticaBusqueda();
-		statisticaJudeteBusqueda = new StatisticaJudeteBusqueda();
-		initListas();
-		statistica = new StatisticaDTO();
-		cautareDateFiltru();
-		obtinemDate();
-		obtenerProcentajTotal();
-		dataString();
-		obtenerText();
-		obtenerTextMediu();
-		cargaLista(statistica);
-		obtenemosValoareaProcentajului();
-		obtenerProcentajTotalUltimulAn();
-		createBarModel();
-		createPieModels();
-		createHorizontalBarModel();
-		cargaDatosListaAnual();
-		calcularMediaProcentaj();
-		obtenerTextProcentaj();
-		obtenerStatisticaSupInf();
-	}
-
-	/**
-	 *
-	 */
-	private void initListas() {
-		statisticaDTO = new ArrayList<>();
-		listaJudeteSuperior = new ArrayList<>();
-		listaJudeteInferior = new ArrayList<>();
-		listaJudeteSuperiorProcentaj = new ArrayList<>();
-		listaJudeteInferiorProcentaj = new ArrayList<>();
-	}
-
-	/**
-	 * Metoda care obtine cele mai bune si slabe judete
-	 */
-	private void obtenerStatisticaSupInf() {
-		obtenerJudetSuperior();
-		obtenerJudetInferior();
-		obtenerJudetSuperiorProcentaj();
-		obtenerJudetInferiorProcentaj();
-	}
-
-	/**
-	 * Metoda care obtine cele mai bune judete
-	 */
-	private void obtenerJudetSuperior() {
-		statisticaJudeteBusqueda.setDescendent("DESC");
-		listaJudeteSuperior = statisticaJudetService.filterStatisticaJudet(statisticaJudeteBusqueda);
-	}
-
-	/**
-	 * Metoda care obtine cele mai slabe judete
-	 */
-	private void obtenerJudetInferior() {
-		statisticaJudeteBusqueda.setDescendent("ASC");
-		listaJudeteInferior = statisticaJudetService.filterStatisticaJudet(statisticaJudeteBusqueda);
-	}
-
-	/**
-	 * Metoda care obtine cele mai bune judete
-	 */
-	private void obtenerJudetSuperiorProcentaj() {
-		statisticaJudeteBusqueda.setDescendent("DESC");
-		statisticaJudeteBusqueda.setGeneralJudetProcentaj("NO");
-		listaJudeteSuperiorProcentaj = statisticaJudetService.filterStatisticaJudetProcentaj(statisticaJudeteBusqueda);
-	}
-
-	/**
-	 * Metoda care obtine cele mai slabe judete
-	 */
-	private void obtenerJudetInferiorProcentaj() {
-		statisticaJudeteBusqueda.setDescendent("ASC");
-		statisticaJudeteBusqueda.setGeneralJudetProcentaj("NO");
-		listaJudeteInferiorProcentaj = statisticaJudetService.filterStatisticaJudetProcentaj(statisticaJudeteBusqueda);
-	}
-
-	/**
-	 *
-	 * Metoda care selecteaza textul
-	 */
-	private void obtenerText() {
-		textMaiMare = Constantes.ESPACIO;
-		if (statistica.getTotalBarbati() > statistica.getTotalFemei()) {
-			textMaiMare = "este mai mare";
+	private void calculaNumMax() {
+		if (numarMaxim < 100) {
+			numarMaxim = 50 + numarMaxim;
+		}
+		else if (numarMaxim >= 100 && numarMaxim < 500) {
+			numarMaxim = 300 + numarMaxim;
+		}
+		else if (numarMaxim >= 500 && numarMaxim < 3000) {
+			numarMaxim = 800 + numarMaxim;
 		}
 		else {
-			textMaiMare = "este mai mic";
+			numarMaxim = 2500 + numarMaxim;
 		}
 	}
 
 	/**
-	 *
-	 * Metoda care selecteaza textul
+	 * Cargar datos estadísticos.
 	 */
-	private void obtenerTextMediu() {
-		textMaiMareMediu = Constantes.ESPACIO;
-		if (statistica.getMediuRural() > statistica.getMediuUrban()) {
-			textMaiMareMediu = "este mai mare";
-		}
-		else {
-			textMaiMareMediu = "este mai mic";
-		}
+	private Date calculaRestarFechaAn(final Date fecha, final int numarAn) {
+		final Date newDate = fecha;
+		final Calendar calDesde = Calendar.getInstance();
+		calDesde.setTime(newDate);
+		final Calendar calHasta = Calendar.getInstance();
+		final int anulProv = calDesde.get(Calendar.YEAR);
+		final int luna = calDesde.get(Calendar.MONTH);
+		final int zi = calDesde.get(Calendar.DAY_OF_MONTH);
+		final int anFinal = anulProv - numarAn;
+		calHasta.set(anFinal, luna, zi);
+		final Date fechaHasta = calHasta.getTime();
+		return fechaHasta;
+	}
+
+	/**
+	 * Cargar datos estadísticos.
+	 */
+	private Date calculaRestarFechaLuna(final Date fecha, final int numarLuna) {
+		final Date newDate = fecha;
+		final Calendar calDesde = Calendar.getInstance();
+		calDesde.setTime(newDate);
+		final Calendar calHasta = Calendar.getInstance();
+		final int anFinal = calDesde.get(Calendar.YEAR);
+		final int lunaProv = calDesde.get(Calendar.MONTH);
+		final int zi = calDesde.get(Calendar.DAY_OF_MONTH);
+		final int luna = lunaProv - numarLuna;
+		calHasta.set(anFinal, luna, zi);
+		final Date fechaHasta = calHasta.getTime();
+		return fechaHasta;
+	}
+
+	private Float calcularMediaProcentaj() {
+		mediaProcentaj = (listaUsuariosAn.get(1).getProcentaj() + listaUsuariosAn.get(2).getProcentaj()
+				+ listaUsuariosAn.get(3).getProcentaj() + listaUsuariosAn.get(4).getProcentaj()
+				+ listaUsuariosAn.get(5).getProcentaj()) / 5;
+		return mediaProcentaj;
+
 	}
 
 	/**
 	 *
 	 *
 	 */
-	private void obtenemosValoareaProcentajului() {
-		valoare = Constantes.ESPACIO;
-		if (procentajTotalMembrii >= 0.40) {
-			valoare = "EXCELENT";
-		}
-		else if (procentajTotalMembrii < 0.40 && procentajTotalMembrii >= 0.25) {
-			valoare = "BUN";
-		}
-		else if (procentajTotalMembrii < 0.25 && procentajTotalMembrii >= 0.10) {
-			valoare = "ACCEPTABIL";
-		}
-		else {
-			valoare = "NECONVINGATOR";
-		}
+	private void cargaDatosListaAnual() {
+		listaUsuariosAn = new ArrayList<>();
+		final Calendar calHasta = Calendar.getInstance();
+		final int anul = calHasta.get(Calendar.YEAR);
+		final Date data = new Date();
+		final String numeLuna = (Utilities.obtinemNumeLuna(data)).substring(0, 3);
+		final PersoaneAn persoane = new PersoaneAn();
+		persoane.setAn(numeLuna + " " + String.valueOf(anul) + " --> " + numeLuna + " " + String.valueOf(anul - 1));
+		persoane.setNumar(statistica.getTotalUltimAn());
+		persoane.setProcentaj(procentajTotalMembriiUltimAn);
+		listaUsuariosAn.add(persoane);
+		final PersoaneAn persoane2 = new PersoaneAn();
+		persoane2
+				.setAn(numeLuna + " " + String.valueOf(anul - 1) + " --> " + numeLuna + " " + String.valueOf(anul - 2));
+		persoane2.setNumar(statistica.getTotalUltimiDoiAni());
+		persoane2.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalUltimiDoiAni()));
+		listaUsuariosAn.add(persoane2);
+		final PersoaneAn persoane3 = new PersoaneAn();
+		persoane3
+				.setAn(numeLuna + " " + String.valueOf(anul - 2) + " --> " + numeLuna + " " + String.valueOf(anul - 3));
+		persoane3.setNumar(statistica.getTotalUltimiiTreiAni());
+		persoane3.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalUltimiiTreiAni()));
+		listaUsuariosAn.add(persoane3);
+		final PersoaneAn persoane4 = new PersoaneAn();
+		persoane4
+				.setAn(numeLuna + " " + String.valueOf(anul - 3) + " --> " + numeLuna + " " + String.valueOf(anul - 4));
+		persoane4.setNumar(statistica.getTotalUltimiiPatruAni());
+		persoane4.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalUltimiiPatruAni()));
+		listaUsuariosAn.add(persoane4);
+		final PersoaneAn persoane5 = new PersoaneAn();
+		persoane5
+				.setAn(numeLuna + " " + String.valueOf(anul - 4) + " --> " + numeLuna + " " + String.valueOf(anul - 5));
+		persoane5.setNumar(statistica.getTotalUltimiiCinciAni());
+		persoane5.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalUltimiiCinciAni()));
+		listaUsuariosAn.add(persoane5);
+		final PersoaneAn persoane6 = new PersoaneAn();
+		persoane6.setAn("Anterior " + (anul - 5));
+		persoane6.setNumar(statistica.getTotalAntCinciAni());
+		persoane6.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalAntCinciAni()));
+		listaUsuariosAn.add(persoane6);
 	}
 
 	/**
 	 *
-	 * Metoda care calculeaza procentajul total de membrii
-	 */
-	private void obtenerProcentajTotal() {
-		final int num = statistica.getNumarTotal() * 100;
-		final float div = ((float) num / statistica.getTotalVot());
-		final float divFinal = Math.round(div * 100) / 100f;
-		procentajTotalMembrii = divFinal;
-	}
-
-	/**
-	 *
-	 * Metoda care calculeaza procentajul total de membrii ultimul an
-	 */
-	private void obtenerProcentajTotalUltimulAn() {
-		final int num = statistica.getTotalUltimAn() * 100;
-		final float div = ((float) num / statistica.getNumarTotal());
-		final float divFinal = Math.round(div * 100) / 100f;
-		procentajTotalMembriiUltimAn = divFinal;
-	}
-
-	/**
-	 * Transformar date in String
+	 * Incarcam datele.
 	 *
 	 */
-	private void dataString() {
-		final SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-		current_date = df.format(statisticaBusqueda.getFechaDesde());
-	}
-
-	/**
-	 *
-	 */
-	private void obtinemDate() {
-		statisticaDTO = statisticaService.filterGeneraleStatistica(statisticaBusqueda);
-		if (!statisticaDTO.isEmpty()) {
-			statistica = statisticaDTO.get(0);
-		}
+	private void cargaLista(final StatisticaDTO statistica) {
+		listaUsuarios = new HashMap<>();
+		listaUsuarios.put("Înregistrați în ultima lună:", statistica.getTotalUltimaLuna());
+		listaUsuarios.put("Înregistrați în ultimele trei luni:", statistica.getTotalUltimTreiLuni());
+		listaUsuarios.put("Înregistrați în ultimele sase luni:", statistica.getTotalUltimSaseLuni());
+		listaUsuarios.put("Înregistrați în ultimul an:", statistica.getTotalUltimAn());
 	}
 
 	/**
@@ -438,37 +398,29 @@ public class HomeBean implements Serializable {
 	}
 
 	/**
-	 * Cargar datos estadísticos.
+	 *
 	 */
-	private Date calculaRestarFechaAn(final Date fecha, final int numarAn) {
-		final Date newDate = fecha;
-		final Calendar calDesde = Calendar.getInstance();
-		calDesde.setTime(newDate);
-		final Calendar calHasta = Calendar.getInstance();
-		final int anulProv = calDesde.get(Calendar.YEAR);
-		final int luna = calDesde.get(Calendar.MONTH);
-		final int zi = calDesde.get(Calendar.DAY_OF_MONTH);
-		final int anFinal = anulProv - numarAn;
-		calHasta.set(anFinal, luna, zi);
-		final Date fechaHasta = calHasta.getTime();
-		return fechaHasta;
-	}
-
-	/**
-	 * Cargar datos estadísticos.
-	 */
-	private Date calculaRestarFechaLuna(final Date fecha, final int numarLuna) {
-		final Date newDate = fecha;
-		final Calendar calDesde = Calendar.getInstance();
-		calDesde.setTime(newDate);
-		final Calendar calHasta = Calendar.getInstance();
-		final int anFinal = calDesde.get(Calendar.YEAR);
-		final int lunaProv = calDesde.get(Calendar.MONTH);
-		final int zi = calDesde.get(Calendar.DAY_OF_MONTH);
-		final int luna = lunaProv - numarLuna;
-		calHasta.set(anFinal, luna, zi);
-		final Date fechaHasta = calHasta.getTime();
-		return fechaHasta;
+	private void crearStatisticaGeneral() {
+		statisticaBusqueda = new StatisticaBusqueda();
+		statisticaJudeteBusqueda = new StatisticaJudeteBusqueda();
+		initListas();
+		statistica = new StatisticaDTO();
+		cautareDateFiltru();
+		obtinemDate();
+		obtenerProcentajTotal();
+		dataString();
+		obtenerText();
+		obtenerTextMediu();
+		cargaLista(statistica);
+		obtenemosValoareaProcentajului();
+		obtenerProcentajTotalUltimulAn();
+		createBarModel();
+		createPieModels();
+		createHorizontalBarModel();
+		cargaDatosListaAnual();
+		calcularMediaProcentaj();
+		obtenerTextProcentaj();
+		obtenerStatisticaSupInf();
 	}
 
 	/**
@@ -495,152 +447,6 @@ public class HomeBean implements Serializable {
 		}
 		calculaNumMax();
 		yAxis.setMax(numarMaxim);
-	}
-
-	/**
-	 * Metoda care calculeaza numarul maxim
-	 *
-	 */
-	private void calculaNumMax() {
-		if (numarMaxim < 100) {
-			numarMaxim = 50 + numarMaxim;
-		}
-		else if (numarMaxim >= 100 && numarMaxim < 500) {
-			numarMaxim = 300 + numarMaxim;
-		}
-		else if (numarMaxim >= 500 && numarMaxim < 3000) {
-			numarMaxim = 800 + numarMaxim;
-		}
-		else {
-			numarMaxim = 2500 + numarMaxim;
-		}
-	}
-
-	/**
-	 * Model de chart statistica
-	 * @return
-	 *
-	 */
-	private BarChartModel initBarModel() {
-		final BarChartModel model = new BarChartModel();
-		final ChartSeries boys = new ChartSeries();
-		boys.setLabel("Membri anul în curs");
-		boys.set("Ultima lună", statistica.getTotalUltimaLuna());
-		boys.set("Ultimele trei luni", statistica.getTotalUltimTreiLuni());
-		boys.set("Ultimele șase luni", statistica.getTotalUltimSaseLuni());
-		boys.set("Ultimul an", statistica.getTotalUltimAn());
-		final ChartSeries girls = new ChartSeries();
-		girls.setLabel("Membri anul trecut");
-		girls.set("Luna corespondiente a anului trecut", statistica.getTotalUltimaLunaAnAtras());
-		girls.set("Ultimele trei luni ale anului trecut", statistica.getTotalUltimTreiLuniAnAtras());
-		girls.set("Ultimele șase luni ale anului trecut", statistica.getTotalUltimSaseLuniAnAtras());
-		girls.set("Anul trecut", statistica.getTotalUltimiDoiAni());
-		model.addSeries(boys);
-		model.addSeries(girls);
-		return model;
-	}
-
-	/**
-	 * Metoda de incarcare date in chart de tipul pie
-	 *
-	 *
-	 */
-	private void createPieModels() {
-		createPieModelSex();
-		createPieModelZona();
-		createPieModel2();
-		createPieModel3();
-		createPieModel4();
-	}
-
-	/**
-	 * Incarcam datele in modelul pie
-	 *
-	 *
-	 */
-	private void createPieModel2() {
-		graficaUserUltimMembru = new PieChartModel();
-		graficaUserUltimMembru.set("Înregistrați în ultima lună:  " + statistica.getTotalUltimaLuna(),
-				statistica.getTotalUltimaLuna());
-		graficaUserUltimMembru.set("Înregistrați în ultimele trei luni:  " + statistica.getTotalUltimTreiLuni(),
-				statistica.getTotalUltimTreiLuni() - statistica.getTotalUltimaLuna());
-		graficaUserUltimMembru.set("Înregistrați în ultimele sase luni:  " + statistica.getTotalUltimSaseLuni(),
-				statistica.getTotalUltimSaseLuni() - statistica.getTotalUltimTreiLuni());
-		graficaUserUltimMembru.set("Înregistrați în ultimul an: " + statistica.getTotalUltimAn(),
-				statistica.getTotalUltimAn() - statistica.getTotalUltimSaseLuni());
-		graficaUserUltimMembru.setTitle("Membrii noi înregistrați");
-		graficaUserUltimMembru.setLegendPosition("e");
-		graficaUserUltimMembru.setFill(false);
-		graficaUserUltimMembru.setShowDataLabels(true);
-		graficaUserUltimMembru.setDiameter(150);
-		graficaUserUltimMembru.setShadow(false);
-	}
-
-	/**
-	 * Incarcam datele in modelul pie
-	 *
-	 *
-	 */
-	private void createPieModel3() {
-		graficaUserVarsta = new PieChartModel();
-		graficaUserVarsta.set("Până în 25 de ani: ", statistica.getTotalPana25());
-		graficaUserVarsta.set("Între 25 și 40 de ani: ", statistica.getTotalPana40());
-		graficaUserVarsta.set("Între 40 și 60 de ani: ", statistica.getTotalPana60());
-		graficaUserVarsta.set("Peste 60 de ani: ", statistica.getTotalPanaMayor60());
-		graficaUserVarsta.setLegendPosition("ne");
-		graficaUserVarsta.setFill(false);
-		graficaUserVarsta.setShowDataLabels(true);
-		graficaUserVarsta.setDiameter(150);
-		graficaUserVarsta.setShadow(false);
-	}
-
-	/**
-	 * Incarcam datele in modelul pie
-	 *
-	 *
-	 */
-	private void createPieModel4() {
-		graficaUserEducatie = new PieChartModel();
-		graficaUserEducatie.set("Studii bazice: ", statistica.getTotalBazice());
-		graficaUserEducatie.set("Studii medii: ", statistica.getTotalcuLiceu());
-		graficaUserEducatie.set("Studii superioare: ", statistica.getTotalStudiiSup());
-		graficaUserEducatie.setLegendPosition("ne");
-		graficaUserEducatie.setFill(false);
-		graficaUserEducatie.setShowDataLabels(true);
-		graficaUserEducatie.setDiameter(150);
-		graficaUserEducatie.setShadow(false);
-	}
-
-	/**
-	 * Incarcam datele in modelul pie
-	 *
-	 *
-	 */
-	private void createPieModelSex() {
-		graficaUserSex = new PieChartModel();
-		graficaUserSex.set("Femei:  " + statistica.getTotalFemei(), statistica.getTotalFemei());
-		graficaUserSex.set("Bărbați:  " + statistica.getTotalBarbati(), statistica.getTotalBarbati());
-		graficaUserSex.setLegendPosition("ne");
-		graficaUserSex.setFill(false);
-		graficaUserSex.setShowDataLabels(true);
-		graficaUserSex.setDiameter(150);
-		graficaUserSex.setShadow(false);
-	}
-
-	/**
-	 * Incarcam datele in modelul pie
-	 *
-	 *
-	 */
-	private void createPieModelZona() {
-		graficaUserZona = new PieChartModel();
-		graficaUserZona.set("Rural:  " + statistica.getMediuRural(), statistica.getMediuRural());
-		graficaUserZona.set("Urban:  " + statistica.getMediuUrban(), statistica.getMediuUrban());
-		graficaUserZona.setLegendPosition("ne");
-		graficaUserZona.setFill(false);
-		graficaUserZona.setShowDataLabels(true);
-		graficaUserZona.setDiameter(150);
-		graficaUserZona.setShadow(false);
 	}
 
 	/**
@@ -721,90 +527,292 @@ public class HomeBean implements Serializable {
 		LOG.info("Orixontal bar: " + String.valueOf(boys));
 	}
 
-	public static String getFecha(Date date) {
-		final Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		final SimpleDateFormat df = new SimpleDateFormat("MMMMM");
-		date = cal.getTime();
-		return df.format(date);
+	/**
+	 * Incarcam datele in modelul pie
+	 *
+	 *
+	 */
+	private void createPieModel2() {
+		graficaUserUltimMembru = new PieChartModel();
+		graficaUserUltimMembru.set("Înregistrați în ultima lună:  " + statistica.getTotalUltimaLuna(),
+				statistica.getTotalUltimaLuna());
+		graficaUserUltimMembru.set("Înregistrați în ultimele trei luni:  " + statistica.getTotalUltimTreiLuni(),
+				statistica.getTotalUltimTreiLuni() - statistica.getTotalUltimaLuna());
+		graficaUserUltimMembru.set("Înregistrați în ultimele sase luni:  " + statistica.getTotalUltimSaseLuni(),
+				statistica.getTotalUltimSaseLuni() - statistica.getTotalUltimTreiLuni());
+		graficaUserUltimMembru.set("Înregistrați în ultimul an: " + statistica.getTotalUltimAn(),
+				statistica.getTotalUltimAn() - statistica.getTotalUltimSaseLuni());
+		graficaUserUltimMembru.setTitle("Membrii noi înregistrați");
+		graficaUserUltimMembru.setLegendPosition("e");
+		graficaUserUltimMembru.setFill(false);
+		graficaUserUltimMembru.setShowDataLabels(true);
+		graficaUserUltimMembru.setDiameter(150);
+		graficaUserUltimMembru.setShadow(false);
+	}
+
+	/**
+	 * Incarcam datele in modelul pie
+	 *
+	 *
+	 */
+	private void createPieModel3() {
+		graficaUserVarsta = new PieChartModel();
+		graficaUserVarsta.set("Până în 25 de ani: ", statistica.getTotalPana25());
+		graficaUserVarsta.set("Între 25 și 40 de ani: ", statistica.getTotalPana40());
+		graficaUserVarsta.set("Între 40 și 60 de ani: ", statistica.getTotalPana60());
+		graficaUserVarsta.set("Peste 60 de ani: ", statistica.getTotalPanaMayor60());
+		graficaUserVarsta.setLegendPosition("ne");
+		graficaUserVarsta.setFill(false);
+		graficaUserVarsta.setShowDataLabels(true);
+		graficaUserVarsta.setDiameter(150);
+		graficaUserVarsta.setShadow(false);
+	}
+
+	/**
+	 * Incarcam datele in modelul pie
+	 *
+	 *
+	 */
+	private void createPieModel4() {
+		graficaUserEducatie = new PieChartModel();
+		graficaUserEducatie.set("Studii bazice: ", statistica.getTotalBazice());
+		graficaUserEducatie.set("Studii medii: ", statistica.getTotalcuLiceu());
+		graficaUserEducatie.set("Studii superioare: ", statistica.getTotalStudiiSup());
+		graficaUserEducatie.setLegendPosition("ne");
+		graficaUserEducatie.setFill(false);
+		graficaUserEducatie.setShowDataLabels(true);
+		graficaUserEducatie.setDiameter(150);
+		graficaUserEducatie.setShadow(false);
+	}
+
+	/**
+	 * Metoda de incarcare date in chart de tipul pie
+	 *
+	 *
+	 */
+	private void createPieModels() {
+		createPieModelSex();
+		createPieModelZona();
+		createPieModel2();
+		createPieModel3();
+		createPieModel4();
+	}
+
+	/**
+	 * Incarcam datele in modelul pie
+	 *
+	 *
+	 */
+	private void createPieModelSex() {
+		graficaUserSex = new PieChartModel();
+		graficaUserSex.set("Femei:  " + statistica.getTotalFemei(), statistica.getTotalFemei());
+		graficaUserSex.set("Bărbați:  " + statistica.getTotalBarbati(), statistica.getTotalBarbati());
+		graficaUserSex.setLegendPosition("ne");
+		graficaUserSex.setFill(false);
+		graficaUserSex.setShowDataLabels(true);
+		graficaUserSex.setDiameter(150);
+		graficaUserSex.setShadow(false);
+	}
+
+	/**
+	 * Incarcam datele in modelul pie
+	 *
+	 *
+	 */
+	private void createPieModelZona() {
+		graficaUserZona = new PieChartModel();
+		graficaUserZona.set("Rural:  " + statistica.getMediuRural(), statistica.getMediuRural());
+		graficaUserZona.set("Urban:  " + statistica.getMediuUrban(), statistica.getMediuUrban());
+		graficaUserZona.setLegendPosition("ne");
+		graficaUserZona.setFill(false);
+		graficaUserZona.setShowDataLabels(true);
+		graficaUserZona.setDiameter(150);
+		graficaUserZona.setShadow(false);
+	}
+
+	/**
+	 * Transformar date in String
+	 *
+	 */
+	private void dataString() {
+		final SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		current_date = df.format(statisticaBusqueda.getFechaDesde());
+	}
+
+	/**
+	 * Método inicializador del bean.
+	 */
+	@PostConstruct
+	public void init() {
+		crearStatisticaGeneral();
+
+	}
+
+	/**
+	 * Model de chart statistica
+	 * @return
+	 *
+	 */
+	private BarChartModel initBarModel() {
+		final BarChartModel model = new BarChartModel();
+		final ChartSeries boys = new ChartSeries();
+		boys.setLabel("Membri anul în curs");
+		boys.set("Ultima lună", statistica.getTotalUltimaLuna());
+		boys.set("Ultimele trei luni", statistica.getTotalUltimTreiLuni());
+		boys.set("Ultimele șase luni", statistica.getTotalUltimSaseLuni());
+		boys.set("Ultimul an", statistica.getTotalUltimAn());
+		final ChartSeries girls = new ChartSeries();
+		girls.setLabel("Membri anul trecut");
+		girls.set("Luna corespondiente a anului trecut", statistica.getTotalUltimaLunaAnAtras());
+		girls.set("Ultimele trei luni ale anului trecut", statistica.getTotalUltimTreiLuniAnAtras());
+		girls.set("Ultimele șase luni ale anului trecut", statistica.getTotalUltimSaseLuniAnAtras());
+		girls.set("Anul trecut", statistica.getTotalUltimiDoiAni());
+		model.addSeries(boys);
+		model.addSeries(girls);
+		return model;
 	}
 
 	/**
 	 *
-	 * Incarcam datele.
-	 *
 	 */
-	private void cargaLista(final StatisticaDTO statistica) {
-		listaUsuarios = new HashMap<String, Integer>();
-		listaUsuarios.put("Înregistrați în ultima lună:", statistica.getTotalUltimaLuna());
-		listaUsuarios.put("Înregistrați în ultimele trei luni:", statistica.getTotalUltimTreiLuni());
-		listaUsuarios.put("Înregistrați în ultimele sase luni:", statistica.getTotalUltimSaseLuni());
-		listaUsuarios.put("Înregistrați în ultimul an:", statistica.getTotalUltimAn());
+	private void initListas() {
+		statisticaDTO = new ArrayList<>();
+		listaJudeteSuperior = new ArrayList<>();
+		listaJudeteInferior = new ArrayList<>();
+		listaJudeteSuperiorProcentaj = new ArrayList<>();
+		listaJudeteInferiorProcentaj = new ArrayList<>();
 	}
 
 	/**
 	 *
 	 *
 	 */
-	private void cargaDatosListaAnual() {
-		listaUsuariosAn = new ArrayList<>();
-		final Calendar calHasta = Calendar.getInstance();
-		int anul = calHasta.get(Calendar.YEAR);
-		Date data = new Date();
-		String numeLuna = (Utilities.obtinemNumeLuna(data)).substring(0, 3);
-		PersoaneAn persoane = new PersoaneAn();
-		persoane.setAn(numeLuna + " " + String.valueOf(anul) + " --> " + numeLuna + " " + String.valueOf(anul - 1));
-		persoane.setNumar(statistica.getTotalUltimAn());
-		persoane.setProcentaj(procentajTotalMembriiUltimAn);
-		listaUsuariosAn.add(persoane);
-		PersoaneAn persoane2 = new PersoaneAn();
-		persoane2
-				.setAn(numeLuna + " " + String.valueOf(anul - 1) + " --> " + numeLuna + " " + String.valueOf(anul - 2));
-		persoane2.setNumar(statistica.getTotalUltimiDoiAni());
-		persoane2.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalUltimiDoiAni()));
-		listaUsuariosAn.add(persoane2);
-		PersoaneAn persoane3 = new PersoaneAn();
-		persoane3
-				.setAn(numeLuna + " " + String.valueOf(anul - 2) + " --> " + numeLuna + " " + String.valueOf(anul - 3));
-		persoane3.setNumar(statistica.getTotalUltimiiTreiAni());
-		persoane3.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalUltimiiTreiAni()));
-		listaUsuariosAn.add(persoane3);
-		PersoaneAn persoane4 = new PersoaneAn();
-		persoane4
-				.setAn(numeLuna + " " + String.valueOf(anul - 3) + " --> " + numeLuna + " " + String.valueOf(anul - 4));
-		persoane4.setNumar(statistica.getTotalUltimiiPatruAni());
-		persoane4.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalUltimiiPatruAni()));
-		listaUsuariosAn.add(persoane4);
-		PersoaneAn persoane5 = new PersoaneAn();
-		persoane5
-				.setAn(numeLuna + " " + String.valueOf(anul - 4) + " --> " + numeLuna + " " + String.valueOf(anul - 5));
-		persoane5.setNumar(statistica.getTotalUltimiiCinciAni());
-		persoane5.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalUltimiiCinciAni()));
-		listaUsuariosAn.add(persoane5);
-		PersoaneAn persoane6 = new PersoaneAn();
-		persoane6.setAn("Anterior " + (anul - 5));
-		persoane6.setNumar(statistica.getTotalAntCinciAni());
-		persoane6.setProcentaj(obtenerProcentajTotalAn(statistica.getTotalAntCinciAni()));
-		listaUsuariosAn.add(persoane6);
+	private void obtenemosValoareaProcentajului() {
+		valoare = Constantes.ESPACIO;
+		if (procentajTotalMembrii >= 0.40) {
+			valoare = "EXCELENT";
+		}
+		else if (procentajTotalMembrii < 0.40 && procentajTotalMembrii >= 0.25) {
+			valoare = "BUN";
+		}
+		else if (procentajTotalMembrii < 0.25 && procentajTotalMembrii >= 0.10) {
+			valoare = "ACCEPTABIL";
+		}
+		else {
+			valoare = "NECONVINGATOR";
+		}
+	}
+
+	/**
+	 * Metoda care obtine cele mai slabe judete
+	 */
+	private void obtenerJudetInferior() {
+		statisticaJudeteBusqueda.setDescendent("ASC");
+		listaJudeteInferior = statisticaJudetService.filterStatisticaJudet(statisticaJudeteBusqueda);
+	}
+
+	/**
+	 * Metoda care obtine cele mai slabe judete
+	 */
+	private void obtenerJudetInferiorProcentaj() {
+		statisticaJudeteBusqueda.setDescendent("ASC");
+		statisticaJudeteBusqueda.setGeneralJudetProcentaj("NO");
+		listaJudeteInferiorProcentaj = statisticaJudetService.filterStatisticaJudetProcentaj(statisticaJudeteBusqueda);
+	}
+
+	/**
+	 * Metoda care obtine cele mai bune judete
+	 */
+	private void obtenerJudetSuperior() {
+		statisticaJudeteBusqueda.setDescendent("DESC");
+		listaJudeteSuperior = statisticaJudetService.filterStatisticaJudet(statisticaJudeteBusqueda);
+	}
+
+	/**
+	 * Metoda care obtine cele mai bune judete
+	 */
+	private void obtenerJudetSuperiorProcentaj() {
+		statisticaJudeteBusqueda.setDescendent("DESC");
+		statisticaJudeteBusqueda.setGeneralJudetProcentaj("NO");
+		listaJudeteSuperiorProcentaj = statisticaJudetService.filterStatisticaJudetProcentaj(statisticaJudeteBusqueda);
+	}
+
+	private void obtenerMinime() {
+		listDdate = new ArrayList<>();
+		listDdate = statisticaJudetService.dateMinime();
+		date = listDdate.get(0);
+	}
+
+	/**
+	 *
+	 * Metoda care calculeaza procentajul total de membrii
+	 */
+	private void obtenerProcentajTotal() {
+		final int num = statistica.getNumarTotal() * 100;
+		final float div = ((float) num / statistica.getTotalVot());
+		final float divFinal = Math.round(div * 100) / 100f;
+		procentajTotalMembrii = divFinal;
 	}
 
 	/**
 	 *
 	 * Metoda care calculeaza procentajul total de membrii ultimul an
 	 */
-	private Float obtenerProcentajTotalAn(int an) {
+	private Float obtenerProcentajTotalAn(final int an) {
 		final int num = an * 100;
 		final float div = ((float) num / statistica.getNumarTotal());
 		final float divFinal = Math.round(div * 100) / 100f;
 		return divFinal;
 	}
 
-	private Float calcularMediaProcentaj() {
-		mediaProcentaj = (listaUsuariosAn.get(1).getProcentaj() + listaUsuariosAn.get(2).getProcentaj()
-				+ listaUsuariosAn.get(3).getProcentaj() + listaUsuariosAn.get(4).getProcentaj()
-				+ listaUsuariosAn.get(5).getProcentaj()) / 5;
-		return mediaProcentaj;
+	/**
+	 *
+	 * Metoda care calculeaza procentajul total de membrii ultimul an
+	 */
+	private void obtenerProcentajTotalUltimulAn() {
+		final int num = statistica.getTotalUltimAn() * 100;
+		final float div = ((float) num / statistica.getNumarTotal());
+		final float divFinal = Math.round(div * 100) / 100f;
+		procentajTotalMembriiUltimAn = divFinal;
+	}
 
+	/**
+	 * Metoda care obtine cele mai bune si slabe judete
+	 */
+	private void obtenerStatisticaSupInf() {
+		obtenerJudetSuperior();
+		obtenerJudetInferior();
+		obtenerMinime();
+		obtenerJudetSuperiorProcentaj();
+		obtenerJudetInferiorProcentaj();
+	}
+
+	/**
+	 *
+	 * Metoda care selecteaza textul
+	 */
+	private void obtenerText() {
+		textMaiMare = Constantes.ESPACIO;
+		if (statistica.getTotalBarbati() > statistica.getTotalFemei()) {
+			textMaiMare = "este mai mare";
+		}
+		else {
+			textMaiMare = "este mai mic";
+		}
+	}
+
+	/**
+	 *
+	 * Metoda care selecteaza textul
+	 */
+	private void obtenerTextMediu() {
+		textMaiMareMediu = Constantes.ESPACIO;
+		if (statistica.getMediuRural() > statistica.getMediuUrban()) {
+			textMaiMareMediu = "este mai mare";
+		}
+		else {
+			textMaiMareMediu = "este mai mic";
+		}
 	}
 
 	private void obtenerTextProcentaj() {
@@ -819,6 +827,16 @@ public class HomeBean implements Serializable {
 			if ((procentajTotalMembriiUltimAn - mediaProcentaj) > 3) {
 				textValorarProcentaj = "CREȘTERE IMPORTANTĂ";
 			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	private void obtinemDate() {
+		statisticaDTO = statisticaService.filterGeneraleStatistica(statisticaBusqueda);
+		if (!statisticaDTO.isEmpty()) {
+			statistica = statisticaDTO.get(0);
 		}
 	}
 }

@@ -65,4 +65,14 @@ public class StatisticaJudetDTO implements Serializable {
 	 * eticheta.
 	 */
 	private String eticheta;
+
+	/**
+	 * membriiMinim.
+	 */
+	private Integer membriiMinim;
+
+	/**
+	 * voturiMinim.
+	 */
+	private Integer voturiMinim;
 }

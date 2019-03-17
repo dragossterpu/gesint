@@ -221,6 +221,7 @@ label:before {
 	float: right;
 
 }
+
 .resultadosFiltro2 {
 	width: 40%;
 	height: 100%;
@@ -601,10 +602,10 @@ ul ul span {
 }
 
 .fa-check-circle:before {
-	color: #00cc00 !important;
+	color: #0080ff !important;
 }
 .fa-plus-circle:before {
-	color: #0080ff!important;
+	color: #00cc00 !important;
 }
 .fa-minus-circle:before {
 	color:  #e60000 !important;
@@ -1949,14 +1950,15 @@ table.ui-panelgrid td.ui-panelgrid-cell{width:100%; display:inline-block;}
     border-color: transparent !important;
 }
 .svg{
-    padding-top: 40px;
+    padding-top: 20px;
     float: left;
-     max-width: 55%;
+     max-width: 44%;
 }
 .svgRight{
-    padding-top: 40px;
+/*     padding-top: 40px; */
     float: right;
-     max-width: 45%;
+     max-width: 55%;
+     padding-right: 20px;
 }
 #body2{font-family:Verdana, Helvetica, Tahoma, sans;font-size:12px;line-height:13.5pt;color:black;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;-o-box-sizing: border-box;}
 
@@ -1965,5 +1967,4 @@ table.ui-panelgrid td.ui-panelgrid-cell{width:100%; display:inline-block;}
 .grafica
 	{
 		text-align:center;
-padding-right: 200px;
 	}

@@ -20,14 +20,38 @@
 					<p:outputPanel>	           		            															
 					<div class="filtro5">
   					 <div class="svg">
-  					 <ui:include src="../layouts/include/svgMapaJudete.xhtml" />	
-					
+  					 <ui:include src="../layouts/include/svgMapaJudete.xhtml" />						
 					 <div class="grafica">
 						<H6>Rezultatele organizației #{statisticaBean.numeOrganizatie}</H6>
 					</div>
+					<div class="logo-elypse">    
+           				  		<h:graphicImage  rendered="#{empty statisticaBean.judet.photo}" value="/images/judete/#{statisticaBean.codulProvinciei}.png" alt="#{statisticaBean.numeOrganizatie}" />
+           				  		<p:graphicImage  rendered="#{not empty statisticaBean.judet.photo}" id="imagenG" value="#{statisticaBean.judet.imageJudet}" cache="false" stream="false" alt="#{statisticaBean.numeOrganizatie}" />
+   					 </div>
 					</div>
 					<div class="svgRight">
-					#{statisticaBean.numeOrganizatie}
+					<h:panelGrid column="2" columnClasses="label,value" >
+						<h:panelGroup rendered="#{statisticaBean.presedinteFiliala ne null}">
+						<H3> Echipa de conducere a organizației #{statisticaBean.numeOrganizatie}</H3>
+							<H4> Președintele organizației <B>#{statisticaBean.numeOrganizatie}</B></H4>
+							<H5><B>#{statisticaBean.presedinteFiliala.name} #{statisticaBean.presedinteFiliala.lastName}</B></H5>
+							<H5>Telefon : <B>#{statisticaBean.presedinteFiliala.phone}</B></H5>
+							<H5>E-mail :<B> #{statisticaBean.presedinteFiliala.email}</B></H5>
+							<H5>Adresa : <B>#{statisticaBean.presedinteFiliala.address}</B></H5>
+						</h:panelGroup>
+						<h:panelGroup rendered="#{statisticaBean.presedinteFiliala eq null}">
+						<H4>Această organizație nu are președinte</H4>
+						</h:panelGroup>
+						<h:panelGroup rendered="#{not empty statisticaBean.conducereFiliala}">
+						 <p:dataList value="#{statisticaBean.conducereFiliala}" var="pers" type="ordered">
+						 	<H4>#{pers.role.description}: #{pers.name} #{pers.lastName}</H4>
+						 </p:dataList>
+						</h:panelGroup>
+						<h:panelGroup rendered="#{empty statisticaBean.conducereFiliala}">
+						<H4>Această organizație nu are alți reprezentanți</H4>
+						</h:panelGroup>
+					</h:panelGrid>	
+					
 					</div>
 					</div>
 					
@@ -49,29 +73,33 @@
 								</p:columnToggler>
 							</p:outputPanel>
 						</f:facet>
-						<p:column headerText="Nume" style="width:18%;"
+						<p:column headerText="Nume" style="width:15%;"
 							sortBy="#{localitate.numeLocalitate}" >
 							<b><h:outputText value="#{localitate.numeLocalitate}" /></b>
 						</p:column>				
-						<p:column headerText="Populație totală" style="width:17%;"
-							sortBy="#{localitate.populatieTotala}">
-							<b><h:outputText value="#{localitate.totalLocuitori}" /></b>
-						</p:column>
-
-						<p:column headerText="Drept de vot" style="width:19%;"
+						
+						<p:column headerText="Cu drept de vot" style="width:22%;"
 							sortBy="#{localitate.populatieVot}">
 							<b><h:outputText value="#{localitate.locuitoriVot}" /></b>
 						</p:column>	
-						<p:column headerText="Membrii" style="width:15%;"
+						<p:column headerText="Membri" style="width:19%;"
 							sortBy="#{localitate.numarMembrii}">
 							<b><h:outputText value="#{localitate.numarMembrii}" /></b>
 						</p:column>	
-						<p:column headerText="Procentaj" style="width:12%;"
+						<p:column headerText="Minim 2020" style="width:17%;"
+							sortBy="#{localitate.membriiMinim}">
+							<b><h:outputText value="#{localitate.membriiMinim}" /></b>
+						</p:column>	
+						<p:column headerText="Target voturi 2020" style="width:23%;"
+							sortBy="#{localitate.voturiMinim}">
+							<b><h:outputText value="#{localitate.voturiMinim}" /></b>
+						</p:column>	
+						<p:column headerText="%" style="width:10%;"
 							sortBy="#{localitate.procentaj}" >
 							<b><h:outputText value="#{localitate.procentaj}" />%</b>
 						</p:column>		
 									
-						<p:column headerText=" Situație" style="width:20%;" styleClass="text-center"
+						<p:column headerText="Situație" style="width:20%;" styleClass="text-center"
 							sortBy="#{localitate.valoare}">
 							<b><h:outputText styleClass="fa fa-plus-circle" value=" EXCELENT"
 								rendered="#{localitate.valoare eq 'EXCELENT'}" /></b>
@@ -89,16 +117,66 @@
                                  maxIntegerDigits="9"
                                  maxFractionDigits="0"/>
 							</h:outputText>
-       				 membrii
+							membrii
+       				   <div class="centrarBotonesDialog">
+					<p:button value="Închideţi" outcome="/estadisticas/statistica" />
+				</div>
     			</f:facet>
+    			
 					</p:dataTable>
 				</p:outputPanel>
 					</div>
+				<!-- Optiuni -->
+				
+					<div class="resultadosFiltro">
+					<h3>Posibile opțiuni, persoane sau partide locale ale ORGANIZAȚIEI #{statisticaBean.numeOrganizatie}</h3>	 
+					<p:outputPanel layout="block" id="panelOptiuni">
+					<p:dataTable var="optiune"
+						value="#{statisticaBean.listaOptiuni}" rows="10" styleClass="modHeaderTable"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" pageLinks="4" 
+						paginatorPosition="bottom" id="tablaOptiuni" paginator="true" resizableColumns="true"
+						lazy="true" rowsPerPageTemplate="5,10,15" rowIndexVar="rowIndex"
+						 paginatorAlwaysVisible="false">
+						<f:facet name="header">
+							<p:outputPanel>
+								<span class="titulo">OPȚIUNI/ ȚINTE PENTRU ALEGERI ALE ORGANIZAȚIEI #{statisticaBean.numeOrganizatie}</span>
+								<p:commandButton id="toggler" type="button" value="Coloane"
+									class="botonColumnas" icon="fa fa-th"/>
+								<p:columnToggler datasource="tablaOptiuni" trigger="toggler">
+									<p:ajax event="toggle" listener="#{statisticaBean.onToggle}" />
+								</p:columnToggler>
+							</p:outputPanel>
+						</f:facet>
+						<p:column headerText="Nume" style="width:30%;"
+							sortBy="#{optiune.nume}" >
+							<b><h:outputText value="#{optiune.nume}" /></b>
+						</p:column>				
+						<p:column headerText="Voturi obținute" style="width:17%;"
+							sortBy="#{optiune.voturiOptinute}">
+							<b><h:outputText value="#{optiune.voturiOptinute}" /></b>
+						</p:column>
+
+						<p:column headerText="Localitatea" style="width:19%;"
+							sortBy="#{optiune.localitate.name}">
+							<b><h:outputText value="#{optiune.localitate.name}" /></b>
+						</p:column>	
+						
+						
+       				   <div class="centrarBotonesDialog">
+					<p:button value="Închideţi" outcome="/estadisticas/statistica" />
+				</div>
+   
+    			
+					</p:dataTable>
+				</p:outputPanel>
+					</div>
+					<!-- FIN Optiuni -->
 					</p:outputPanel>
 				</h:panelGrid>		    
 		       </p:tab>
 		    </p:tabView>
 		    </p:outputPanel>
+		   
 		</h:form>		
 		</ui:define>
 	</ui:composition>

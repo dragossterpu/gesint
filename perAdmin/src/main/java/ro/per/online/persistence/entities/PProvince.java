@@ -69,6 +69,18 @@ public class PProvince implements Serializable {
 	private Long population;
 
 	/**
+	 * Voturi minim.
+	 */
+	@Column(name = "voturi_minim")
+	private Long voturiMinim;
+
+	/**
+	 * Membrii minim.
+	 */
+	@Column(name = "membrii_minim")
+	private Long membriiMinim;
+
+	/**
 	 * Tari.
 	 */
 	@ManyToOne

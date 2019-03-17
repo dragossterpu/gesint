@@ -44,29 +44,33 @@
 								</p:columnToggler>
 							</p:outputPanel>
 						</f:facet>
-						<p:column headerText="Nume" style="width:18%;"
+						<p:column headerText="NUME" style="width:18%;"
 							sortBy="#{judet.nume}" >
 							<b><h:outputText value="#{judet.nume}" /></b>
 						</p:column>				
-						<p:column headerText="Populație totală" style="width:17%;"
-							sortBy="#{judet.populatieTotala}">
-							<b><h:outputText value="#{judet.totalLocuitori}" /></b>
-						</p:column>
-
-						<p:column headerText="Cu drept de vot" style="width:19%;"
+						
+						<p:column headerText="VOTANTI" style="width:15%;"
 							sortBy="#{judet.populatieVot}">
 							<b><h:outputText value="#{judet.locuitoriVot}" /></b>
 						</p:column>	
-						<p:column headerText="Membrii" style="width:15%;"
+						<p:column headerText="MEMBRII" style="width:15%;"
 							sortBy="#{judet.numarMembrii}">
 							<b><h:outputText value="#{judet.numarMembrii}" /></b>
 						</p:column>	
-						<p:column headerText="Procentaj" style="width:12%;"
+						<p:column headerText="Minim 2020" style="width:19%;"
+							sortBy="#{localitate.membriiMinim}">
+							<b><h:outputText value="#{judet.membriiMinim}" /></b>
+						</p:column>	
+						<p:column headerText="Target voturi 2020" style="width:19%;"
+							sortBy="#{localitate.voturiMinim}">
+							<b><h:outputText value="#{judet.voturiMinim}" /></b>
+						</p:column>	
+						<p:column headerText="%" style="width:10%;"
 							sortBy="#{judet.procentaj}" >
 							<b><h:outputText value="#{judet.procentaj}" />%</b>
 						</p:column>		
 									
-						<p:column headerText=" Situație" style="width:20%;" styleClass="text-center"
+						<p:column headerText=" Situație" style="width:18%;" styleClass="text-center"
 							sortBy="#{judet.valoare}">
 							<b><h:outputText styleClass="fa fa-plus-circle" value=" EXCELENT"
 								rendered="#{judet.valoare eq 'EXCELENT'}" /></b>

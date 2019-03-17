@@ -185,7 +185,22 @@ select name, numero, population, procentaj, code_province from (SELECT ss.name, 
 group by u.code_province,p.name,p.population,p.code_province  ORDER BY numero desc) as SS ) as dd order by dd.procentaj desc limit 7 offset 0
 
 
-SELECT totalMembrii,numeprovincie, code_province,name,sector, numero, locuitori, procentaj, locuitoriVot  FROM (SELECT (select count(*) from users where code_province='BT')as totalMembrii,(select name from pprovince where code_province='BT') as numeprovincie, 'BT' as code_province,  ss.name, ss.sector, ss.numero,ss.locuitori,ROUND((ss.numero*100.0)/(ss.locuitori),2) AS procentaj,
- (select ROUND(ss.locuitori-(ss.locuitori*0.21)) as locuitori) as locuitoriVot  FROM ( SELECT COUNT(*) as numero, l.name,l.locuitori,l.sector FROM USERS U, PLOCALITY l  WHERE u.locality_id = l.id AND U.code_province=  'BT'  
-GROUP BY u.locality_id, l.name, l.locuitori,l.sector ORDER BY numero desc) as SS ) as dd ORDER BY dd.procentaj DESC
+SELECT  totalMembrii,numeprovincie, code_province,name,sector, numero, locuitori,membrii_minim,voturi_minim, procentaj, locuitoriVot  
+FROM (SELECT (select count(*) from users where code_province='AG')as totalMembrii,
+(select name from pprovince where code_province='AG') as numeprovincie, 
+'AG' as code_province,  
+ss.name, 
+ss.sector, 
+ss.numero,
+ss.locuitori,
+ss.membrii_minim,
+ss.voturi_minim,
+ROUND((ss.numero*100.0)/(ss.locuitori),2) AS procentaj,
+ (select ROUND(ss.locuitori-(ss.locuitori*0.21)) as locuitori) as locuitoriVot  
+ FROM ( SELECT COUNT(*) as numero, l.name,l.locuitori,l.sector, l.membrii_minim, l.voturi_minim FROM USERS U, PLOCALITY l  WHERE u.locality_id = l.id AND U.code_province=  'AG'  
+GROUP BY u.locality_id, l.name, l.locuitori,l.sector , l.membrii_minim, l.voturi_minim ORDER BY numero desc) as SS ) as dd ORDER BY dd.procentaj DESC
 
+SELECT DISTINCT NUME, SUM(VOTURI_OBTINUTE) FROM optiuni_alegeri WHERE CODE_PROVINCE= 'AG' GROUP BY NUME 
+
+
+select sum(membrii_minim), sum (voturi_minim) from pprovince

@@ -15,13 +15,20 @@ public interface TeamService {
 
 	/**
 	 * Elimina un membru al echipei de conducere
-	 * 
+	 *
 	 * @param team membru al echipei de conducere
 	 */
 	void delete(Team team);
 
 	/**
-	 * 
+	 *
+	 * @param functie PTeam
+	 * @return boolean
+	 */
+	int existsByTeam(Long functieId);
+
+	/**
+	 *
 	 * @param user Users
 	 * @return boolean
 	 */
@@ -36,7 +43,7 @@ public interface TeamService {
 
 	/**
 	 * Obtinem nivelul cel mai mare
-	 * 
+	 *
 	 * @param team
 	 * @return Team actualizat
 	 */
@@ -51,7 +58,7 @@ public interface TeamService {
 
 	/**
 	 * Salvați sau actualizați un team.
-	 * 
+	 *
 	 * @param team
 	 * @return Team actualizat
 	 */

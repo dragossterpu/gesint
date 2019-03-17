@@ -38,6 +38,16 @@ public class TeamServiceImpl implements TeamService {
 
 	/**
 	 * Verifica existența utilizatorilor care au atribuit o echipa primit ca parametru.
+	 * @param functie
+	 * @return resultatul comprobarii
+	 */
+	@Override
+	public int existsByTeam(final Long functieId) {
+		return teamRepository.existsByTeam(functieId);
+	}
+
+	/**
+	 * Verifica existența utilizatorilor care au atribuit o echipa primit ca parametru.
 	 * @param user
 	 * @return resultatul comprobarii
 	 */

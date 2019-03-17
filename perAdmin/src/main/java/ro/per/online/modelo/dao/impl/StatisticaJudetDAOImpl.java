@@ -11,7 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import ro.per.online.modelo.dao.StatisticaJudetDAO;
 import ro.per.online.modelo.dao.mapper.StatisticaJudetMapper;
+import ro.per.online.modelo.dao.mapper.StatisticaJudetMinimMapper;
+import ro.per.online.modelo.dao.mapper.StatisticaUserJudetMapper;
 import ro.per.online.modelo.dto.estadisticas.StatisticaJudetDTO;
+import ro.per.online.modelo.dto.estadisticas.StatisticaJudetMinimDTO;
 import ro.per.online.modelo.filters.StatisticaJudeteBusqueda;
 
 /**
@@ -30,13 +33,17 @@ public class StatisticaJudetDAOImpl implements StatisticaJudetDAO {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	/**
-	 * Sursa de date.
-	 *
+	 * Metoda de obtinere a datelor minim
+	 * @return StatisticaJudetMinimDTO
 	 */
 	@Override
-	@Autowired
-	public void setDataSource(final DataSource ds) {
-		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
+	public List<StatisticaJudetMinimDTO> dateMinime() {
+		final StringBuilder sql = new StringBuilder();
+
+		sql.append("select sum(membrii_minim) as membrii_minim, sum (voturi_minim)as voturi_minim from pprovince");
+
+		final MapSqlParameterSource parameters = new MapSqlParameterSource();
+		return namedParameterJdbcTemplate.query(sql.toString(), parameters, new StatisticaJudetMinimMapper());
 	}
 
 	/**
@@ -57,7 +64,7 @@ public class StatisticaJudetDAOImpl implements StatisticaJudetDAO {
 
 		parameters.addValue("fechaDesde", filter.getFechaDesde());
 
-		return namedParameterJdbcTemplate.query(sql.toString(), parameters, new StatisticaJudetMapper());
+		return namedParameterJdbcTemplate.query(sql.toString(), parameters, new StatisticaUserJudetMapper());
 	}
 
 	/**
@@ -70,9 +77,9 @@ public class StatisticaJudetDAOImpl implements StatisticaJudetDAO {
 		final StringBuilder sql = new StringBuilder();
 
 		sql.append(
-				"SELECT name, numero, population, procentaj, code_province,locuitoriVot from (SELECT ss.name, ss.code_province,ss.numero,ss.population,ROUND((ss.numero*100.0)/(ss.population),2) "
-						+ "AS procentaj, (select ROUND(ss.population-(ss.population*0.21)) as locuitori) as locuitoriVot FROM ( SELECT COUNT(*) as numero, P.NAME, p.population,p.code_province FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province "
-						+ " group by u.code_province,p.name,p.population,p.code_province  ORDER BY numero "
+				"SELECT name,membrii_minim,voturi_minim, numero, population, procentaj, code_province,locuitoriVot from (SELECT ss.name,ss.membrii_minim,ss.voturi_minim, ss.code_province,ss.numero,ss.population,ROUND((ss.numero*100.0)/(ss.population),2) "
+						+ "AS procentaj, (select ROUND(ss.population-(ss.population*0.21)) as locuitori) as locuitoriVot FROM ( SELECT COUNT(*) as numero, P.NAME, p.population,p.code_province ,p.membrii_minim,p.voturi_minim FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province "
+						+ " group by u.code_province,p.name,p.population,p.code_province,p.membrii_minim,p.voturi_minim  ORDER BY numero "
 						+ filter.getDescendent() + ") as SS  ) as dd order by dd.procentaj " + filter.getDescendent());
 
 		final MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -84,6 +91,16 @@ public class StatisticaJudetDAOImpl implements StatisticaJudetDAO {
 		parameters.addValue("fechaDesde", filter.getFechaDesde());
 
 		return namedParameterJdbcTemplate.query(sql.toString(), parameters, new StatisticaJudetMapper());
+	}
+
+	/**
+	 * Sursa de date.
+	 *
+	 */
+	@Override
+	@Autowired
+	public void setDataSource(final DataSource ds) {
+		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
 	}
 
 }
