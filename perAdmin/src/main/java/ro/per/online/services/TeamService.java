@@ -2,6 +2,7 @@ package ro.per.online.services;
 
 import java.util.List;
 
+import ro.per.online.persistence.entities.PTeam;
 import ro.per.online.persistence.entities.Team;
 import ro.per.online.persistence.entities.Users;
 
@@ -63,5 +64,12 @@ public interface TeamService {
 	 * @return Team actualizat
 	 */
 	Team save(Team team);
+
+	/**
+	 * @param idTeam
+	 * @return
+	 *
+	 */
+	PTeam findOne(Long idTeam);
 
 }

@@ -141,12 +141,25 @@
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="provinciaSelect" value="* Județul/Organizația:" /></b>
 									 <p:selectOneMenu  value="#{userBean.idProvincia}"  id="provinciaSelect" 
-				                       class="selectFiltro" required="true" requiredMessage="Selectați județul/ organizația">
+				                       class="selectFiltro" required="true" requiredMessage="Selectați județul/ organizația" filter="true" 
+										filterMatchMode="startsWith">
 				                        <f:selectItem itemLabel="Alege una..." itemValue="" />
 				                        <f:selectItems  value="#{userBean.provinces}"  var="provincia" itemLabel="#{provincia.name}"  itemValue="#{provincia.indicator}" />
 				                          <p:ajax event="change" update="locality"
 												listener="#{userBean.actualizarLocalidades(userBean.idProvincia)}" />                        
 				                    </p:selectOneMenu>	
+								</div>
+								<div class="ui-g-12 ui-md-6 ui-lg-4">
+									<b><h:outputLabel for="teamSelect" value="Funcție:" /></b>
+									<p:selectOneMenu value="#{userBean.usuario.team}" converter="#{selectConverter}"
+										id="teamSelect" class="selectFiltro" style="min-width:initial;" filter="true" 
+										filterMatchMode="startsWith">
+										 <f:selectItem itemLabel="Alege una..." itemValue="" />
+										<f:selectItems value="#{userBean.listaFunctii}"
+											var="team"
+											itemLabel="#{team.name}"
+											itemValue="#{team}" />
+									</p:selectOneMenu>								
 								</div>							
 							</div>						
 							<div class="ui-g">							

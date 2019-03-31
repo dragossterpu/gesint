@@ -9,12 +9,12 @@ html,  .ui-widget {
 	box-sizing: border-box;
 }
 
-/* body { */
+body {
 /* 	background: #f6f6f6; */
-/* 	font-size: 16px; */
-/* 	margin: 0; */
-/* 	padding: 0; */
-/* } */
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
+}
 
 label:before {
 	font: normal normal normal 14px/1 FontAwesome;
@@ -221,7 +221,13 @@ label:before {
 	float: right;
 
 }
+.resultadosFiltroOptiuni {
+	width: 73%;
+	height: 100%;
+	float: right;
+	padding-right: 150px;
 
+}
 .resultadosFiltro2 {
 	width: 40%;
 	height: 100%;
@@ -231,7 +237,7 @@ label:before {
 	width: 50%;
 	height: 100%;
 	float: right;
-text-align: center;
+
 }
 .filtro5 {
 	width: 49%;
@@ -620,7 +626,7 @@ ul ul span {
 }
 
 .titulo {
-	font-size: 1.7em;
+	font-size: 1.4em;
 }
 
 .subtitulo {
@@ -671,6 +677,9 @@ ul ul span {
 
 .left {
 	float: left;
+	position: relative;
+	top: 0px;
+	height: 30px;
 }
 
 .botonExpedienteTab {
@@ -1160,6 +1169,7 @@ ul ul span {
 	border: 1px solid #dcdcdc;
 	color: #000;
 	    border-color: #056033;
+	
 }
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button
@@ -1930,9 +1940,9 @@ table.ui-panelgrid td.ui-panelgrid-cell{width:100%; display:inline-block;}
 :focus{box-shadow:none !important;}
 :active{border-color:transparent !important;}
 .box-logos{display:inline-block; margin:0px 15px; margin:40px 0px 0px 0px; width:100%; vertical-align:bottom; max-width:calc(100% - 463px); text-align:right;} 
-.logo-elypse{display:inline-block; margin:0px 15px; float:left;padding-bottom: 15px;}
+.logo-elypse{display:inline-block; margin:0px 15px; padding-left: 20px;float:left;padding-bottom: 25px;}
 #logo-ely img, .logo-telefonica img{max-width:100%; height:auto;}
-.claim{display:inline-block;  width:calc(100% - 463px); height:10px; float:left; margin-top:40px; font-family:'Roboto', sans-serif; font-size:1.7rem;}
+.claim{display:inline-block;  width:calc(100% - 463px); height:10px; float:left; margin-top:40px; font-family:'Roboto', sans-serif; font-size:1.6rem;}
 .logo-telefonica{float:right; display:inline-block; margin:0px 34px 0 10px;}
 .user-mobile{display:none; width:100%;}
 
@@ -1955,12 +1965,12 @@ table.ui-panelgrid td.ui-panelgrid-cell{width:100%; display:inline-block;}
      max-width: 44%;
 }
 .svgRight{
-/*     padding-top: 40px; */
+    padding-top: 40px;
     float: right;
-     max-width: 55%;
+     max-width: 50%;
      padding-right: 20px;
 }
-#body2{font-family:Verdana, Helvetica, Tahoma, sans;font-size:12px;line-height:13.5pt;color:black;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;-o-box-sizing: border-box;}
+#body2{font-family:Verdana, Helvetica, Tahoma, sans;font-size:10px;line-height:13.5pt;color:black;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;-o-box-sizing: border-box;}
 
 .bloqueVistaTitulo{padding:20px 0 10px 0; color:#02b5c9; text-transform:uppercase;}
 
@@ -1968,3 +1978,6 @@ table.ui-panelgrid td.ui-panelgrid-cell{width:100%; display:inline-block;}
 	{
 		text-align:center;
 	}
+.ui-datatable .ui-datatable-header {
+    border-bottom: 0 none;
+    padding-bottom: 10px;

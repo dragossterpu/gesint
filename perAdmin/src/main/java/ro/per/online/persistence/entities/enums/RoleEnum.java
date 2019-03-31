@@ -25,6 +25,11 @@ public enum RoleEnum {
 	 * Rol administrator.
 	 */
 	ROLE_ADMINLOCAL("Administrator local"),
+
+	/**
+	 * Rol administrator.
+	 */
+	ROLE_LOCAL("Administrator local secundar"),
 	/**
 	 * Rol pentru utilizatorii care se conecteaza la aplicatie.
 	 */
@@ -36,22 +41,19 @@ public enum RoleEnum {
 	ROLE_MEMBRU("Membru"),
 
 	/**
-	 * Rol pentru simpatizanti.
+	 * Rol pentru utilizatorii membrii cu drepturi depline.
 	 */
-	ROLE_SIMPATIZANT("Simpatizant"),
-	/**
-	 * Rol pentru presedintele de filiala.
-	 */
-	ROLE_PRESEDINTE_ORG("Președinte filială"),
-	/**
-	 * Rol pentru presedintele de filiala.
-	 */
-	ROLE_VICE_PRESEDINTE_ORG("VicePreședinte filială"),
+	ROLE_COMISIE("Comisie"),
 
 	/**
-	 * Rol pentru presedintele de filiala.
+	 * Rol pentru utilizatorii membrii cu drepturi depline.
 	 */
-	ROLE_SEF_LOCAL("Șef organizație locală");
+	ROLE_ALTUL("Altul"),
+
+	/**
+	 * Rol pentru simpatizanti.
+	 */
+	ROLE_SIMPATIZANT("Simpatizant");
 
 	/**
 	 * @return Returnează o listă cu descrierile enum.
@@ -63,6 +65,20 @@ public enum RoleEnum {
 			roles.add(rol);
 		}
 		return roles;
+	}
+
+	/**
+	 * @return Returnează o listă cu descrierile enum pentru utilizatorii locali.
+	 *
+	 */
+	public static List<RoleEnum> getRolesLocal() {
+		final List<RoleEnum> rolesLocal = new ArrayList<>();
+		for (final RoleEnum rol : RoleEnum.values()) {
+			if (!rol.equals("ROLE_ADMIN")) {
+				rolesLocal.add(rol);
+			}
+		}
+		return rolesLocal;
 	}
 
 	/**

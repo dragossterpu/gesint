@@ -29,6 +29,7 @@ import ro.per.online.persistence.entities.enums.TypeLocalityEnum;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UsuarioBusqueda implements Serializable {
+
 	/**
 	 *
 	 */
@@ -144,4 +145,9 @@ public class UsuarioBusqueda implements Serializable {
 	 * Variable para personas eliminadas
 	 */
 	private String eliminado = "";
+
+	/**
+	 * Variable para functie
+	 */
+	private Long idFunctia;
 }

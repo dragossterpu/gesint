@@ -56,9 +56,10 @@ public class StatisticaJudetDAOImpl implements StatisticaJudetDAO {
 		final StringBuilder sql = new StringBuilder();
 
 		sql.append(
-				" SELECT ss.name, ss.numero,ss.population,ss.code_province, ROUND((ss.numero*100.0)/(ss.population),2) AS procentaj , (select ROUND(ss.population-(ss.population*0.21)) as locuitori) as locuitoriVot FROM ( SELECT COUNT(*) as numero, P.NAME, P.code_province,p.population FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province"
-						+ " group by u.code_province,p.name,p.population ,P.code_province ORDER BY numero "
-						+ filter.getDescendent() + ") as SS  limit 7 offset 0 ");
+				" SELECT ss.name, ss.numero,ss.membrii_minim, ss.population,ss.code_province, ROUND((ss.numero*100.0)/(ss.membrii_minim),2) AS procentaj , (select ROUND(ss.population-(ss.population*0.21)) as locuitori) as locuitoriVot FROM ( SELECT COUNT(*) as numero, P.NAME, P.code_province,p.population,p.membrii_minim  FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province"
+						+ " group by u.code_province,p.name,p.population ,p.code_province,p.membrii_minim  ORDER BY numero "
+						+ filter.getDescendent() + ") as SS order by procentaj " + filter.getDescendent()
+						+ " limit 7 offset 0 ");
 
 		final MapSqlParameterSource parameters = new MapSqlParameterSource();
 
@@ -77,7 +78,7 @@ public class StatisticaJudetDAOImpl implements StatisticaJudetDAO {
 		final StringBuilder sql = new StringBuilder();
 
 		sql.append(
-				"SELECT name,membrii_minim,voturi_minim, numero, population, procentaj, code_province,locuitoriVot from (SELECT ss.name,ss.membrii_minim,ss.voturi_minim, ss.code_province,ss.numero,ss.population,ROUND((ss.numero*100.0)/(ss.population),2) "
+				"SELECT name,membrii_minim,voturi_minim, numero, population, procentaj, code_province,locuitoriVot from (SELECT ss.name,ss.membrii_minim,ss.voturi_minim, ss.code_province,ss.numero,ss.population,ROUND((ss.numero*100.0)/(ss.membrii_minim),2) "
 						+ "AS procentaj, (select ROUND(ss.population-(ss.population*0.21)) as locuitori) as locuitoriVot FROM ( SELECT COUNT(*) as numero, P.NAME, p.population,p.code_province ,p.membrii_minim,p.voturi_minim FROM USERS U, PPROVINCE P WHERE u.code_province = p.code_province "
 						+ " group by u.code_province,p.name,p.population,p.code_province,p.membrii_minim,p.voturi_minim  ORDER BY numero "
 						+ filter.getDescendent() + ") as SS  ) as dd order by dd.procentaj " + filter.getDescendent());

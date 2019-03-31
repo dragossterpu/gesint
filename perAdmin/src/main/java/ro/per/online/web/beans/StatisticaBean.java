@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -23,12 +25,14 @@ import ro.per.online.modelo.dto.estadisticas.StatisticaLocalitateDTO;
 import ro.per.online.modelo.filters.StatisticaJudeteBusqueda;
 import ro.per.online.persistence.entities.Optiune;
 import ro.per.online.persistence.entities.PProvince;
+import ro.per.online.persistence.entities.PTeam;
 import ro.per.online.persistence.entities.Statistica;
 import ro.per.online.persistence.entities.Users;
-import ro.per.online.persistence.entities.enums.RoleEnum;
 import ro.per.online.services.OptiuneService;
+import ro.per.online.services.PTeamService;
 import ro.per.online.services.ProvinceService;
 import ro.per.online.services.StatisticaService;
+import ro.per.online.services.TeamService;
 import ro.per.online.services.UserService;
 
 /**
@@ -44,8 +48,19 @@ import ro.per.online.services.UserService;
 @Scope(Constantes.SESSION)
 public class StatisticaBean implements Serializable {
 
+	/**
+	 * Constante log
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(StatisticaBean.class.getSimpleName());
+
+	/**
+	 *
+	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Vatiable map
+	 */
 	public static Map<String, String> mapa;
 
 	/**
@@ -549,6 +564,36 @@ public class StatisticaBean implements Serializable {
 	private String etichetaLBT;
 
 	/**
+	 * Variabila pentru culoarea etichetei sectorului
+	 */
+	private String etichetaLS1;
+
+	/**
+	 * Variabila pentru culoarea etichetei sectorului
+	 */
+	private String etichetaLS2;
+
+	/**
+	 * Variabila pentru culoarea etichetei sectorului
+	 */
+	private String etichetaLS3;
+
+	/**
+	 * Variabila pentru culoarea etichetei sectorului
+	 */
+	private String etichetaLS4;
+
+	/**
+	 * Variabila pentru culoarea etichetei sectorului
+	 */
+	private String etichetaLS5;
+
+	/**
+	 * Variabila pentru culoarea etichetei sectorului
+	 */
+	private String etichetaLS6;
+
+	/**
 	 * Variabila pentru culoarea etichetei judetului
 	 */
 	private String numeOrganizatie;
@@ -569,6 +614,13 @@ public class StatisticaBean implements Serializable {
 	private List<Users> conducereFiliala;
 
 	/**
+	 * Variabila utilizata pentru a injecta serviciul functilor
+	 *
+	 */
+	@Autowired
+	private PTeamService pteamService;
+
+	/**
 	 * Variabila utilizata pentru a injecta serviciul provinciei.
 	 *
 	 */
@@ -586,9 +638,25 @@ public class StatisticaBean implements Serializable {
 	private PProvince judet;
 
 	/**
+	 * Variabila pentru a verifica daca prezentam svg-ul Bucurestiului
+	 */
+	private String esteBucuresti;
+
+	/**
+	 * Service de functii.
+	 */
+	@Autowired
+	private TeamService teamService;
+
+	/**
 	 * Metoda care obtine cele mai bune si slabe localitati
 	 */
 	public String buttonAction(final String code) {
+		LOG.info("buttonAction.String code: " + code);
+		esteBucuresti = "NU";
+		if (code.equals("B")) {
+			esteBucuresti = "DA";
+		}
 		codulProvinciei = Constantes.ESPACIO;
 		presedinteFiliala = new Users();
 		conducereFiliala = new ArrayList<>();
@@ -596,15 +664,17 @@ public class StatisticaBean implements Serializable {
 
 		userBusqueda = new UsuarioBusqueda();
 		judet = new PProvince();
-		final List<RoleEnum> rolesJudet = new ArrayList<>();
-		rolesJudet.add(RoleEnum.ROLE_VICE_PRESEDINTE_ORG);
-		rolesJudet.add(RoleEnum.ROLE_SEF_LOCAL);
+		PTeam team = new PTeam();
+		final Long idTeam = 21L;
+		team = teamService.findOne(idTeam);
 		obtenerLocalitateSuperiorProcentaj(code);
 		final PProvince prov = provinceService.findById(code);
 		listaOptiuni = optiuneService.findByCodeProvince(prov);
 		judet = prov;
-		presedinteFiliala = userService.findByRolAndProvince(RoleEnum.ROLE_PRESEDINTE_ORG, prov);
-		conducereFiliala = userService.findByProvinceAndRol(prov, rolesJudet);
+		presedinteFiliala = userService.findByTeamAndProvince(team, prov);
+		final List<PTeam> lista = new ArrayList<>();
+		incarcamToateFunctileLocale(lista);
+		conducereFiliala = userService.findByProvinceAndTeam(prov, lista);
 		codulProvinciei = code;
 		return "/estadisticas/statisticaJudete.xhtml?faces-redirect=true";
 	}
@@ -1088,6 +1158,81 @@ public class StatisticaBean implements Serializable {
 	}
 
 	/**
+	 * @param localitate
+	 */
+	private void incarcareEticheteSectoare(final StatisticaLocalitateDTO localitate) {
+		if (localitate.getSector() != null && localitate.getCodeProvincie().equals("B")) {
+
+			if (localitate.getSector().equals("Sector 5")) {
+				if (localitate.getEticheta().equals("verde")) {
+					etichetaLS5 = "fill:green;";
+				}
+				else if (localitate.getEticheta().equals("galben")) {
+					etichetaLS5 = "fill:yellow;";
+				}
+				else {
+					etichetaLS5 = "fill:red;";
+				}
+			}
+			if (localitate.getSector().equals("Sector 4")) {
+				if (localitate.getEticheta().equals("verde")) {
+					etichetaLS4 = "fill:green;";
+				}
+				else if (localitate.getEticheta().equals("galben")) {
+					etichetaLS4 = "fill:yellow;";
+				}
+				else {
+					etichetaLS4 = "fill:red;";
+				}
+			}
+			if (localitate.getSector().equals("Sector 3")) {
+				if (localitate.getEticheta().equals("verde")) {
+					etichetaLS3 = "fill:green;";
+				}
+				else if (localitate.getEticheta().equals("galben")) {
+					etichetaLS3 = "fill:yellow;";
+				}
+				else {
+					etichetaLS3 = "fill:red;";
+				}
+			}
+			if (localitate.getSector().equals("Sector 2")) {
+				if (localitate.getEticheta().equals("verde")) {
+					etichetaLS2 = "fill:green;";
+				}
+				else if (localitate.getEticheta().equals("galben")) {
+					etichetaLS2 = "fill:yellow;";
+				}
+				else {
+					etichetaLS2 = "fill:red;";
+				}
+			}
+			if (localitate.getSector().equals("Sector 1")) {
+				if (localitate.getEticheta().equals("verde")) {
+					etichetaLS1 = "fill:green;";
+				}
+				else if (localitate.getEticheta().equals("galben")) {
+					etichetaLS1 = "fill:yellow;";
+				}
+				else {
+					etichetaLS1 = "fill:red;";
+				}
+			}
+			if (localitate.getSector().equals("Sector 6")) {
+				if (localitate.getEticheta().equals("verde")) {
+					etichetaLS6 = "fill:green;";
+				}
+				else if (localitate.getEticheta().equals("galben")) {
+					etichetaLS6 = "fill:yellow;";
+				}
+				else {
+					etichetaLS6 = "fill:red;";
+				}
+			}
+		}
+	}
+
+	/**
 	 * Inițializarea datelor.
 	 */
 	@PostConstruct
@@ -1098,7 +1243,7 @@ public class StatisticaBean implements Serializable {
 		numeOrganizatie = Constantes.ESPACIO;
 		obtenerStatisticaSupInf();
 		rowCount = userService.findCount();
-
+		esteBucuresti = "NU";
 	}
 
 	/**
@@ -1110,15 +1255,12 @@ public class StatisticaBean implements Serializable {
 		statisticaJudeteBusqueda.setDescendent("DESC");
 		statisticaJudeteBusqueda.setGeneralJudetProcentaj("SI");
 		listaJudSuprProCautare = statisticaJudetService.filterStatisticaJudetProcentaj(statisticaJudeteBusqueda);
+		LOG.info("obtenerJudetSuperiorProcentaj.listaJudSuprProCautare.size: " + listaJudSuprProCautare.size());
 		for (final StatisticaJudetDTO judet : listaJudSuprProCautare) {
 			judet.setValoare(obtenerValoare(judet.getProcentaj()));
-			if (judet.getValoare().equals("EXCELENT")) {
-				judet.setEticheta("albastru");
-				mapa.put(judet.getCode_province(), "fill:green;");
-			}
-			else if (judet.getValoare().equals("BUN")) {
+			if (judet.getValoare().equals("BUN")) {
 				judet.setEticheta("verde");
-				mapa.put(judet.getCode_province(), "fill:blue;");
+				mapa.put(judet.getCode_province(), "fill:green;");
 			}
 			else if (judet.getValoare().equals("ACCEPTABIL")) {
 				judet.setEticheta("galben");
@@ -1143,18 +1285,17 @@ public class StatisticaBean implements Serializable {
 		statisticaJudeteBusqueda.setCode_province(code);
 		listaLocSuprProCautare = statisticaLocalitateService
 				.filterStatisticaLocalitateProcentaj(statisticaJudeteBusqueda);
+		LOG.info("obtenerLocalitateSuperiorProcentaj.listaLocSuprProCautare.size: " + listaLocSuprProCautare.size());
 		numeOrganizatie = listaLocSuprProCautare.get(0).getNumeProvincie();
 		totalMembrii = listaLocSuprProCautare.get(0).getTotalMembrii();
 		for (final StatisticaLocalitateDTO localitate : listaLocSuprProCautare) {
+
 			if (localitate.getSector() != null) {
 				localitate.setNumeLocalitate(localitate.getSector());
 			}
 			localitate.setValoare(obtenerValoare(localitate.getProcentaj()));
-			if (localitate.getValoare().equals("EXCELENT")) {
+			if (localitate.getValoare().equals("BUN")) {
 				localitate.setEticheta("verde");
-			}
-			else if (localitate.getValoare().equals("BUN")) {
-				localitate.setEticheta("albastru");
 			}
 			else if (localitate.getValoare().equals("ACCEPTABIL")) {
 				localitate.setEticheta("galben");
@@ -1163,7 +1304,11 @@ public class StatisticaBean implements Serializable {
 				localitate.setEticheta("rosu");
 
 			}
-			listaLocalitatiSuperiorProcentaj.add(localitate);
+			incarcareEticheteSectoare(localitate);
+
+			if (localitate.getSector() != null || !localitate.getCodeProvincie().equals("B")) {
+				listaLocalitatiSuperiorProcentaj.add(localitate);
+			}
 		}
 		cargarEtichetasJudet(mapa, code);
 	}
@@ -1180,13 +1325,10 @@ public class StatisticaBean implements Serializable {
 	 */
 	private String obtenerValoare(final Float procentaj) {
 		String valoare = Constantes.ESPACIO;
-		if (procentaj >= 0.35) {
-			valoare = "EXCELENT";
-		}
-		else if (procentaj < 0.35 && procentaj >= 0.20) {
+		if (procentaj >= 50) {
 			valoare = "BUN";
 		}
-		else if (procentaj < 0.20 && procentaj >= 0.10) {
+		else if (procentaj < 50 && procentaj >= 30) {
 			valoare = "ACCEPTABIL";
 		}
 		else {
@@ -1195,4 +1337,16 @@ public class StatisticaBean implements Serializable {
 		return valoare;
 	}
 
+	/**
+	 * @param lista
+	 *
+	 */
+	private void incarcamToateFunctileLocale(final List<PTeam> lista) {
+		final PTeam functia = pteamService.findById(21L);
+		lista.add(functia);
+		final PTeam functia2 = pteamService.findById(29L);
+		lista.add(functia2);
+		final PTeam functia3 = pteamService.findById(28L);
+		lista.add(functia3);
+	}
 }

@@ -95,19 +95,6 @@ public class Users extends AbstractEntity implements Serializable {
 	private String email;
 
 	/**
-	 * Devuelve el nombre completo del usuario.
-	 *
-	 * @return Cadena formada por la concatenación de nombre y apellidos del usuario
-	 */
-	public String getNombreCompleto() {
-		final StringBuilder nombreCompleto = new StringBuilder();
-		nombreCompleto.append(name);
-		nombreCompleto.append(' ');
-		nombreCompleto.append(lastName);
-		return nombreCompleto.toString();
-	}
-
-	/**
 	 * Email personal.
 	 */
 	private String personalEmail;
@@ -195,9 +182,22 @@ public class Users extends AbstractEntity implements Serializable {
 	private Boolean validated;
 
 	/**
+	 * Functia
+	 */
+	@ManyToOne
+	@JoinColumn(name = "TEAM_ID", foreignKey = @ForeignKey(name = "FK_U_PTEAM"))
+	private PTeam team;
+
+	/**
 	 * Destinatar Extern.
 	 */
 	private Boolean destinatarExtern;
+
+	/**
+	 * Ordinea de aparitie.
+	 */
+	@Column(name = "RANK", length = 2)
+	private Long rank;
 
 	/**
 	 * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine..
@@ -205,5 +205,18 @@ public class Users extends AbstractEntity implements Serializable {
 	 */
 	public StreamedContent getImageUser() {
 		return new DefaultStreamedContent(new ByteArrayInputStream(this.photo));
+	}
+
+	/**
+	 * Devuelve el nombre completo del usuario.
+	 *
+	 * @return Cadena formada por la concatenación de nombre y apellidos del usuario
+	 */
+	public String getNombreCompleto() {
+		final StringBuilder nombreCompleto = new StringBuilder();
+		nombreCompleto.append(name);
+		nombreCompleto.append(' ');
+		nombreCompleto.append(lastName);
+		return nombreCompleto.toString();
 	}
 }

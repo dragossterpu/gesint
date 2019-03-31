@@ -19,4 +19,31 @@ public interface PTeamService {
 	 */
 	List<PTeam> fiindAll();
 
+	/**
+	 * Metoda care cauta toate functile din conducerea locala
+	 * @return list
+	 *
+	 */
+	List<PTeam> fiindAllByParam();
+
+	/**
+	 * Cauta o functie
+	 * @param Long idTeam
+	 * @return PTeam localitatea
+	 */
+	PTeam findById(Long idTeam);
+
+	/**
+	 * Metoda care cauta functia din conducerea locala
+	 * @return list
+	 *
+	 */
+	PTeam findByIdAndOrganization(Long id, String organizatia);
+
+	/**
+	 * Metoda care cauta functia din conducerea locala
+	 * @return list
+	 *
+	 */
+	List<PTeam> findByOrganization(String organizatia);
 }

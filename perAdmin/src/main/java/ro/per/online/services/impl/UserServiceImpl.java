@@ -21,16 +21,18 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.per.online.constantes.Constantes;
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
+import ro.per.online.persistence.entities.PTeam;
 import ro.per.online.persistence.entities.Users;
-import ro.per.online.persistence.entities.enums.RoleEnum;
 import ro.per.online.persistence.entities.pojo.AnNumarPojo;
 import ro.per.online.persistence.repositories.UserRepository;
 import ro.per.online.services.LocalityService;
+import ro.per.online.services.PTeamService;
 import ro.per.online.services.ProvinceService;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
 import ro.per.online.util.Utilities;
 import ro.per.online.util.UtilitiesCriteria;
+import ro.per.online.web.beans.TeamBusqueda;
 import ro.per.online.web.beans.UsuarioBusqueda;
 
 /**
@@ -68,6 +70,13 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Autowired
 	private ProvinceService provinceService;
+
+	/**
+	 * Variabila utilizata pentru a injecta serviciul functilor.
+	 *
+	 */
+	@Autowired
+	private PTeamService pTeamService;
 
 	/**
 	 * Variabila utilizata pentru a injecta serviciul localitatilor.
@@ -190,6 +199,26 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
+	 * Busca usuarios utilizando criteria.
+	 *
+	 * @param usuarioBusqueda AnNumarPojo
+	 * @return List<User>
+	 */
+	@Override
+	public List<Users> buscarUsuarioCriteriaLocal(final TeamBusqueda teamBusqueda) {
+		try {
+			this.session = this.sessionFactory.openSession();
+			final Criteria criteria = this.session.createCriteria(Users.class);
+			criteria.addOrder(Order.asc("rank"));
+			final List<Users> usuariosList = gestionarCriteriaUsuariosLocal(teamBusqueda, criteria);
+			return usuariosList;
+		}
+		finally {
+			closeSession();
+		}
+	}
+
+	/**
 	 * Recibe un archivo UploadedFile y los datos necesarios para general un Documento pero no lo almacena en base de
 	 * datos. Sólo deja el objeto preparado para guardarlo.
 	 *
@@ -259,11 +288,43 @@ public class UserServiceImpl implements UserService {
 		if (usuarioBusqueda.getIdProvincia() != null && !usuarioBusqueda.getIdProvincia().equals("")) {
 			criteria.add(Restrictions.eq("province", provinceService.findById(usuarioBusqueda.getIdProvincia())));
 		}
+		if (usuarioBusqueda.getIdFunctia() != null) {
+			criteria.add(Restrictions.eq("team", pTeamService.findById(usuarioBusqueda.getIdFunctia())));
+		}
 		if (usuarioBusqueda.getIdLocalidad() != null) {
 			criteria.add(Restrictions.eq("locality", localityService.findById(usuarioBusqueda.getIdLocalidad())));
 		}
+		final PTeam functia = pTeamService.findById(30L);
+		criteria.add(Restrictions.eq("team", functia));
 		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getEducation(), criteria, "education");
-		extractUserEliminado(usuarioBusqueda, criteria);
+		// extractUserEliminado(usuarioBusqueda, criteria);
+	}
+
+	/**
+	 * @param usuarioBusqueda
+	 * @param criteria
+	 */
+	private void creaCriteriaLocal(final TeamBusqueda usuarioBusqueda, final Criteria criteria) {
+		UtilitiesCriteria.setCondicionCriteriaFechaMayor(usuarioBusqueda.getDateFrom(), criteria,
+				Constantes.FECHACREACION);
+		UtilitiesCriteria.setCondicionCriteriaFechaMenorIgual(usuarioBusqueda.getDateUntil(), criteria,
+				Constantes.FECHACREACION);
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getName(), criteria, "name");
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getLastName(), criteria, "lastName");
+		UtilitiesCriteria.setCondicionCriteriaCadenaLike(usuarioBusqueda.getEmail(), criteria, "email");
+		UtilitiesCriteria.setCondicionCriteriaIgualdadEnum(usuarioBusqueda.getRole(), criteria, "role");
+
+		if (usuarioBusqueda.getIdProvincia() != null && !usuarioBusqueda.getIdProvincia().equals(Constantes.ESPACIO)) {
+			criteria.add(Restrictions.eq("province", provinceService.findById(usuarioBusqueda.getIdProvincia())));
+		}
+		if (usuarioBusqueda.getIdFunctia() != null) {
+			criteria.add(Restrictions.eq("team", pTeamService.findById(usuarioBusqueda.getIdFunctia())));
+		}
+		// Daca nu sa ales o functie le cautam pe toate din conducerea locala
+		if (!usuarioBusqueda.getListTeam().isEmpty()) {
+			criteria.add(Restrictions.in("team", usuarioBusqueda.getListTeam()));
+		}
+
 	}
 
 	/**
@@ -372,14 +433,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Cauta un utilizator cu rolul si judetul.
-	 * @param rol RoleEnum
-	 * @param prov PProvince
-	 * @return User
+	 * (non-Javadoc)
+	 *
+	 * @see ro.per.online.services.UserService#findByProvinceAndTeam(ro.per.online.persistence.entities.PProvince,
+	 * java.util.List)
 	 */
 	@Override
-	public Users findByRolAndProvince(final RoleEnum rol, final PProvince prov) {
-		return userRepository.findByRoleAndProvince(rol, prov);
+	public List<Users> findByProvinceAndTeam(final PProvince prov, final List<PTeam> listaTeam) {
+		return userRepository.findByProvinceAndTeamIn(prov, listaTeam);
 	}
 
 	/**
@@ -389,8 +450,8 @@ public class UserServiceImpl implements UserService {
 	 * @return User
 	 */
 	@Override
-	public List<Users> findByProvinceAndRol(final PProvince prov, final List<RoleEnum> rolesProv) {
-		return userRepository.findByProvinceAndRoleIn(prov, rolesProv);
+	public Users findByTeamAndProvince(final PTeam team, final PProvince prov) {
+		return userRepository.findByTeamAndProvince(team, prov);
 	}
 
 	/**
@@ -431,6 +492,20 @@ public class UserServiceImpl implements UserService {
 	 */
 	private List<Users> gestionarCriteriaUsuarios(final UsuarioBusqueda usuarioBusqueda, final Criteria criteria) {
 		creaCriteria(usuarioBusqueda, criteria);
+		@SuppressWarnings(Constantes.UNCHECKED)
+		final List<Users> usuariosList = criteria.list();
+		this.session.close();
+		return usuariosList;
+	}
+
+	/**
+	 * Obitne el listado de usuario en base a las condiciones de Criteria.
+	 * @param usuarioBusqueda AnNumarPojo
+	 * @param criteria Criteria
+	 * @return List<User>
+	 */
+	private List<Users> gestionarCriteriaUsuariosLocal(final TeamBusqueda teamBusqueda, final Criteria criteria) {
+		creaCriteriaLocal(teamBusqueda, criteria);
 		@SuppressWarnings(Constantes.UNCHECKED)
 		final List<Users> usuariosList = criteria.list();
 		this.session.close();
@@ -479,4 +554,5 @@ public class UserServiceImpl implements UserService {
 	public Users save(final Users entity) {
 		return userRepository.save(entity);
 	}
+
 }

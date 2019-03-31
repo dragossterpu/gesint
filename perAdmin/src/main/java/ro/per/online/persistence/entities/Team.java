@@ -62,7 +62,7 @@ public class Team implements Serializable {
 	 * Departamento al que pertenece el documento
 	 */
 	@ManyToOne
-	@JoinColumn(name = "TEAM_ID")
+	@JoinColumn(name = "TEAM")
 	private PTeam team;
 
 	/**

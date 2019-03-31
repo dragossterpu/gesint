@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
+import ro.per.online.persistence.entities.PTeam;
 import ro.per.online.persistence.entities.Users;
-import ro.per.online.persistence.entities.enums.RoleEnum;
 
 /**
  * Repositoriu pentru entitatea Users.
@@ -40,21 +40,21 @@ public interface UserRepository extends CrudRepository<Users, String> {
 
 	/**
 	 * Cauta un utilizator cu rolul si judetul.
-	 * @param rol RoleEnum
-	 * @param prov PProvince
-	 * @return User
-	 */
-	// @Query(value = "select * from users where role=?1 and code_province=?2", nativeQuery = true)
-	Users findByRoleAndProvince(RoleEnum rol, PProvince prov);
-
-	/**
-	 * Cauta un utilizator cu rolul si judetul.
 	 * @param rolesProv RoleEnum
 	 * @param prov PProvince
 	 * @return User
 	 */
-	// @Query(value = "select * from users where code_province=?1 and role in (:rolesProv)", nativeQuery = true)
-	List<Users> findByProvinceAndRoleIn(PProvince prov, List<RoleEnum> rolesProv);
+
+	List<Users> findByProvinceAndTeamIn(PProvince prov, List<PTeam> listaTeam);
+
+	/**
+	 * Cauta un utilizator cu rolul si judetul.
+	 * @param rol RoleEnum
+	 * @param prov PProvince
+	 * @return User
+	 */
+//	@Query(value = "select *from users where team_id =?1 and code_province==?2", nativeQuery = true)
+	Users findByTeamAndProvince(PTeam team, PProvince prov);
 
 	/**
 	 * Devuelve una lista de usuarios que coincidan con los nombres de usuarios proporcionados.

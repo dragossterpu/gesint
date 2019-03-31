@@ -25,7 +25,7 @@ public interface TeamRepository extends CrudRepository<Team, Long> {
 	 * @param functie
 	 * @return resultatul comprobarii
 	 */
-	@Query(value = "select count(*) from team where team_id =1", nativeQuery = true)
+	@Query(value = "select count(*) from team where team =1", nativeQuery = true)
 	int existsByTeam(Long functieId);
 
 	/**

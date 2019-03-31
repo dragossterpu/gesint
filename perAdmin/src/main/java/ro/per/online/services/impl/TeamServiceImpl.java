@@ -6,8 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ro.per.online.persistence.entities.PTeam;
 import ro.per.online.persistence.entities.Team;
 import ro.per.online.persistence.entities.Users;
+import ro.per.online.persistence.repositories.PTeamRepository;
 import ro.per.online.persistence.repositories.TeamRepository;
 import ro.per.online.services.TeamService;
 
@@ -25,6 +27,12 @@ public class TeamServiceImpl implements TeamService {
 	 */
 	@Autowired
 	private TeamRepository teamRepository;
+
+	/**
+	 * Repositoriu de Team.
+	 */
+	@Autowired
+	private PTeamRepository pteamRepository;
 
 	/**
 	 * Elimina un membru al echipei de conducere
@@ -94,5 +102,15 @@ public class TeamServiceImpl implements TeamService {
 		final Team teamActualizado = teamRepository.save(team);
 		return teamActualizado;
 
+	}
+
+	/**
+	 * Cauta o functie
+	 * @param alerta Alerta
+	 * @return alerta Alerta
+	 */
+	@Override
+	public PTeam findOne(final Long idTeam) {
+		return pteamRepository.findOne(idTeam);
 	}
 }

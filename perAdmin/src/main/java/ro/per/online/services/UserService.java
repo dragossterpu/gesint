@@ -7,9 +7,10 @@ import org.primefaces.model.SortOrder;
 
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
+import ro.per.online.persistence.entities.PTeam;
 import ro.per.online.persistence.entities.Users;
-import ro.per.online.persistence.entities.enums.RoleEnum;
 import ro.per.online.persistence.entities.pojo.AnNumarPojo;
+import ro.per.online.web.beans.TeamBusqueda;
 import ro.per.online.web.beans.UsuarioBusqueda;
 
 /**
@@ -59,6 +60,13 @@ public interface UserService {
 	 * @return List<User>
 	 */
 	List<Users> buscarUsuarioCriteria(UsuarioBusqueda usuarioBusqueda);
+
+	/**
+	 * Busca usuarios utilizando criteria.
+	 * @param usuarioBusqueda AnNumarPojo
+	 * @return List<User>
+	 */
+	List<Users> buscarUsuarioCriteriaLocal(TeamBusqueda teamBusqueda);
 
 	/**
 	 * Incarcam fotografia unui utilizator.
@@ -114,12 +122,12 @@ public interface UserService {
 	List<Users> findByName();
 
 	/**
-	 * Cauta un utilizator cu rolul si judetul.
-	 * @param rol RoleEnum
-	 * @param prov PProvince
-	 * @return User
+	 * @param prov
+	 * @param listaTeam
+	 * @return lista
+	 *
 	 */
-	Users findByRolAndProvince(RoleEnum rol, PProvince prov);
+	List<Users> findByProvinceAndTeam(PProvince prov, List<PTeam> listaTeam);
 
 	/**
 	 * Cauta un utilizator cu rolul si judetul.
@@ -127,7 +135,15 @@ public interface UserService {
 	 * @param prov PProvince
 	 * @return User
 	 */
-	List<Users> findByProvinceAndRol(PProvince prov, List<RoleEnum> roles);
+	// List<Users> findByProvinceAndRol(PProvince prov, List<RoleEnum> roles);
+
+	/**
+	 * Cauta un utilizator cu rolul si judetul.
+	 * @param rol RoleEnum
+	 * @param prov PProvince
+	 * @return User
+	 */
+	Users findByTeamAndProvince(PTeam team, PProvince prov);
 
 	/**
 	 * @return

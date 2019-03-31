@@ -30,6 +30,8 @@ public final class StatisticaUserJudetMapper implements RowMapper<StatisticaJude
 		dto.setNumarMembrii(rs.getInt("numero"));
 		dto.setProcentaj(rs.getFloat("procentaj"));
 		dto.setLocuitoriVot(rs.getInt("locuitoriVot"));
+		dto.setMembriiMinim(rs.getInt("membrii_minim"));
+
 		return dto;
 	}
 

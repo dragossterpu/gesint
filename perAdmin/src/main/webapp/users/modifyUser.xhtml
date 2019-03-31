@@ -14,7 +14,7 @@
 			<h:form id="formModific" class="tabsInvert">
 				<p:growl id="msgs" showDetail="true" />
 				<p:accordionPanel multiple="true" activeIndex="0,1,2,3">
-					<p:tab title="Informații personale / comunicare">
+					<p:tab title="Informații personale / comunicare  membru: #{userBean.usuario.nombreCompleto}">
 						<div class="tabAccordion">
 							<div class="ui-g">
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
@@ -36,13 +36,17 @@
 							</div>
 							<div class="ui-g">
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
-									<b><h:outputLabel for="dateCreate"
-											value="Data înscrierii:" /></b>
-									<p:calendar id="dateCreate" pattern="dd/MM/yyyy" locale="es"
-										navigator="true" maxdate="#{currentDate}"
-										value="#{userBean.usuario.dateCreate}"
-										disabled="true" />
+									<b><h:outputLabel for="teamSelect" value="Funcție:" /></b>
+									<p:selectOneMenu value="#{userBean.usuario.team.id}" 
+										id="teamSelect" class="selectFiltro" style="min-width:initial;" >
+										<f:selectItem itemLabel="Alege una..." itemValue="" />
+										<f:selectItems value="#{userBean.listaFunctii}"
+											var="team"
+											itemLabel="#{team.name}"
+											itemValue="#{team.id}" />
+									</p:selectOneMenu>								
 								</div>
+								
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 									<b><h:outputLabel for="username" value="Utilizator:" /></b>
 									<p:inputText id="username"
@@ -150,21 +154,20 @@
 								</div>
 								<div class="ui-g-12 ui-md-6 ui-lg-4">
 								<b><h:outputLabel for="provinciaSelect" value="Județul/Organizația (*):" /></b>
-									<p:selectOneMenu value="#{userBean.usuario.province.name}" id="provinciasSelect" styleClass="form-control form-select"
-										filter="true" filterMatchMode="startsWith"  effect="fold">
+									<p:selectOneMenu value="#{userBean.provincia.name}"  id="provinciasSelect" styleClass="form-control form-select" filter="true" filterMatchMode="startsWith" >
 										<f:selectItem itemLabel="Toate" itemValue="" />
-										<f:selectItems value="#{userBean.provinces}" var="provincia" itemLabel="#{provincia.name}" itemValue="#{provincia.name}" />
+										<f:selectItems value="#{userBean.provinces}" var="province" itemLabel="#{province.name}" itemValue="#{province.name}" />
 										 <p:ajax event="change" update="municipiosSelect"
-											listener="#{userBean.actualLocalidades(userBean.usuario.province.name)}" />   
+											listener="#{userBean.actualLocalidades(userBean.provincia.name)}" />   
 									</p:selectOneMenu> 								
 								</div>
 							</div>
 							<p:separator />
 							<div class="ui-g">
 								<div class="ui-g-12 ui-md-6 ui-lg-4">								
+								<b><h:outputLabel for="municipiosSelect" value="Localitatea/Sector (*):" /></b>
 								<p:selectOneMenu value="#{userBean.usuario.locality.name}" id="municipiosSelect" filter="true" 
 									filterMatchMode="startsWith" styleClass="form-control form-select" >															
-									<f:selectItem itemLabel="#{userBean.usuario.locality.name}" itemValue="#{userBean.usuario.locality.name}"/>
 									<f:selectItems value="#{userBean.localidades}" var="municipio" itemLabel="#{municipio.name}" itemValue="#{municipio.name}" />
 								</p:selectOneMenu>
 								<p:messages for="municipiosSelect" autoUpdate="true"  closable="true"/>
@@ -199,7 +202,7 @@
 								<p:commandButton actionListener="#{userBean.restaurarClave}"
 									value="Resetați parola" />
 								<p:commandButton
-									actionListener="#{userBean.modificarUsuario(userBean.usuario, userBean.usuario.province.name, userBean.usuario.locality.name)}"
+									actionListener="#{userBean.modificarUsuario(userBean.usuario,userBean.provincia.name,userBean.usuario.locality.name)}"
 									value="Salvare" update ="@form"/>
 							</div>
 						</div>
@@ -219,7 +222,7 @@
 			<p:inputText id="inputNombre" binding="#{nombreMunicipio}"
 				required="#{param['form:guardar']!=null}" requiredMessage="Numele orașului nu poate fi gol" converter="#{trimConverter}" />
 			
-			<h:outputLabel for="inputTipLocalitate" value="Alegeți tipul localității (*):" />
+			<h:outputLabel for="typeLocality" value="Alegeți tipul localității (*):" />
 			<p:importEnum type="ro.per.online.persistence.entities.enums.TypeLocalityEnum"
 				var="typeLocalitys" allSuffix="ALL_ENUM_VALUES" />
 				<p:selectOneMenu value="#{userBean.tipLocalidadSelected}" id="typeLocality" class="selectFiltro" style="min-width:initial;" 
@@ -229,16 +232,16 @@
 				itemValue="#{tipLocalidadSelected}" />
 				</p:selectOneMenu>
 			<b><h:outputLabel for="provinciaSelect" value="Județul/Organizația:" /></b>
-									<p:selectOneMenu value="#{userBean.usuario.province.name}" 
+									<p:selectOneMenu value="#{userBean.usuario.province}" 
 										id="provinciaSelect" filter="true" filterMatchMode="startsWith"
-										 styleClass="form-control form-select">
-										<f:selectItem itemLabel="#{userBean.usuario.province.name}" />
+										 styleClass="form-control form-select" converter="#{selectConverter}">
+										<f:selectItem itemLabel="#{userBean.usuario.province}" />
 										<f:selectItems value="#{userBean.provinces}"  var="provincia"
-											itemLabel="#{provincia.name}" itemValue="#{provincia.name}" />
+											itemLabel="#{provincia.name}" itemValue="#{provincia}" />
 									</p:selectOneMenu>		
 			
 			<div class="centrarBotonesDialog">
-				<p:commandButton id="guardar" value="Înregistrează" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, userBean.usuario.province.name,userBean.tipLocalidadSelected, userBean.usuario)}" 
+				<p:commandButton id="guardar" value="Înregistrează" actionListener="#{userBean.nuevoMunicipio(nombreMunicipio.value, userBean.usuario.province,userBean.tipLocalidadSelected, userBean.usuario)}" 
 				update ="@form"  oncomplete="PF('dialogMunicipio').hide()"/>
 				<p:commandButton value="Închidere" onclick="PF('dialogMunicipio').hide()"/>
 			</div>

@@ -502,6 +502,21 @@ public final class Constantes {
 	 */
 	public static final float ESCALA = 0.6f;
 
+	/**
+	 * Constante para el grupo de datos evaluat de estadísticas.
+	 */
+	public static final String TABMEMBRI = "membriSimpatizanti";
+
+	/**
+	 * Constante para el grupo de datos evaluat de estadísticas.
+	 */
+	public static final String TABLOCAL = "conducereaLocala";
+
+	/**
+	 * Constante para el grupo de datos evaluat de estadísticas.
+	 */
+	public static final String TABCONDUCERE = "conducereaCentrala";
+
 	/***********************
 	 * Anotaciones
 	 ***********************/

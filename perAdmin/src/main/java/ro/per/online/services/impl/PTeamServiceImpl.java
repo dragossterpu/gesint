@@ -34,4 +34,43 @@ public class PTeamServiceImpl implements PTeamService {
 		return (ArrayList<PTeam>) pteamRepository.findAll();
 	}
 
+	/**
+	 * Devuelve todas las unidades de base de datos.
+	 * @return lista de unidades
+	 */
+	@Override
+	public List<PTeam> fiindAllByParam() {
+		final String organization = "Conducerea Locală";
+		return pteamRepository.findByOrganization(organization);
+	}
+
+	/**
+	 * Cauta o functie
+	 * @param Long idTeam
+	 * @return PTeam functia
+	 */
+	@Override
+	public PTeam findById(final Long idTeam) {
+		return pteamRepository.findOne(idTeam);
+	}
+
+	/**
+	 * Cauta o functie
+	 * @param Long idTeam
+	 * @return PTeam functia
+	 */
+	@Override
+	public PTeam findByIdAndOrganization(final Long idTeam, final String organizatie) {
+		return pteamRepository.findByIdAndOrganization(idTeam, organizatie);
+	}
+
+	/**
+	 * Cauta o functie
+	 * @param Long idTeam
+	 * @return PTeam functia
+	 */
+	@Override
+	public List<PTeam> findByOrganization(final String organizatie) {
+		return pteamRepository.findByOrganization(organizatie);
+	}
 }

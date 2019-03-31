@@ -19,11 +19,13 @@
 		        <h:panelGrid >
 					<p:outputPanel>	           		            															
 					<div class="filtro5">
-  					 <div class="svg">
-  					 <ui:include src="../layouts/include/svgMapaJudete.xhtml" />						
-					 <div class="grafica">
-						<H6>Rezultatele organizației #{statisticaBean.numeOrganizatie}</H6>
-					</div>
+  					<div class="svg"  >
+ 					 <p:outputPanel layout="block" id="svgMapaJudete" rendered="#{statisticaBean.esteBucuresti == 'NU'}">
+  					 <ui:include src="../layouts/include/svgMapaJudete.xhtml" />											
+					</p:outputPanel>
+					 <p:outputPanel layout="block" id="svgMapaBucuresti" rendered="#{statisticaBean.esteBucuresti != 'NU'}">
+					<ui:include src="../layouts/include/svgMapaBucuresti.xhtml" />		
+					</p:outputPanel>
 					<div class="logo-elypse">    
            				  		<h:graphicImage  rendered="#{empty statisticaBean.judet.photo}" value="/images/judete/#{statisticaBean.codulProvinciei}.png" alt="#{statisticaBean.numeOrganizatie}" />
            				  		<p:graphicImage  rendered="#{not empty statisticaBean.judet.photo}" id="imagenG" value="#{statisticaBean.judet.imageJudet}" cache="false" stream="false" alt="#{statisticaBean.numeOrganizatie}" />
@@ -73,12 +75,16 @@
 								</p:columnToggler>
 							</p:outputPanel>
 						</f:facet>
-						<p:column headerText="Nume" style="width:15%;"
-							sortBy="#{localitate.numeLocalitate}" >
-							<b><h:outputText value="#{localitate.numeLocalitate}" /></b>
-						</p:column>				
-						
-						<p:column headerText="Cu drept de vot" style="width:22%;"
+						<p:column headerText="Nume" style="width:20%;" sortBy="#{localitate.numeLocalitate}">
+							<b><h:outputText styleClass="fa fa-plus-circle" value=" #{localitate.numeLocalitate}"
+								rendered="#{localitate.valoare eq 'BUN'}" /></b>
+							<b><h:outputText styleClass="fa fa-warning modColor" value=" #{localitate.numeLocalitate}"
+								rendered="#{localitate.valoare eq 'ACCEPTABIL'}" /></b>
+							<b><h:outputText styleClass="fa fa-minus-circle" value=" #{localitate.numeLocalitate}"
+								rendered="#{localitate.valoare eq 'NECONVINGATOR'}" /></b>										
+						</p:column>
+		
+						<p:column headerText="Votanți" style="width:22%;"
 							sortBy="#{localitate.populatieVot}">
 							<b><h:outputText value="#{localitate.locuitoriVot}" /></b>
 						</p:column>	
@@ -90,26 +96,16 @@
 							sortBy="#{localitate.membriiMinim}">
 							<b><h:outputText value="#{localitate.membriiMinim}" /></b>
 						</p:column>	
-						<p:column headerText="Target voturi 2020" style="width:23%;"
+						<p:column headerText="Voturi 2020" style="width:23%;"
 							sortBy="#{localitate.voturiMinim}">
 							<b><h:outputText value="#{localitate.voturiMinim}" /></b>
 						</p:column>	
-						<p:column headerText="%" style="width:10%;"
+						<p:column headerText="%" style="width:12%;"
 							sortBy="#{localitate.procentaj}" >
 							<b><h:outputText value="#{localitate.procentaj}" />%</b>
 						</p:column>		
 									
-						<p:column headerText="Situație" style="width:20%;" styleClass="text-center"
-							sortBy="#{localitate.valoare}">
-							<b><h:outputText styleClass="fa fa-plus-circle" value=" EXCELENT"
-								rendered="#{localitate.valoare eq 'EXCELENT'}" /></b>
-							<b><h:outputText styleClass="fa fa-check-circle" value=" BUN"
-								rendered="#{localitate.valoare eq 'BUN'}" /></b>
-							<b><h:outputText styleClass="fa fa-warning modColor" value=" ACCEPTABIL"
-								rendered="#{localitate.valoare eq 'ACCEPTABIL'}" /></b>
-							<b><h:outputText styleClass="fa fa-minus-circle" value=" INACCEPTABIL"
-								rendered="#{localitate.valoare eq 'NECONVINGATOR'}" /></b>										
-						</p:column>
+						
 						<f:facet name="footer">
        				 Total: 
 						<h:outputText value="#{statisticaBean.totalMembrii}">
@@ -121,14 +117,21 @@
        				   <div class="centrarBotonesDialog">
 					<p:button value="Închideţi" outcome="/estadisticas/statistica" />
 				</div>
-    			</f:facet>
-    			
+    			</f:facet>    			
 					</p:dataTable>
+					<div class="aclaraciones2">
+					<strong>Nume:</strong> Numele localității <br/>
+					<strong>Votanți:</strong> Populație cu drept de vot în localitate<br/>
+					<strong>Membri:</strong> Membri sau simpatizanți înregistrați în GESINT<br/>
+					<strong>Minim 2020:</strong> Numărul minim de membri/simpatizanți pentru alegerile din 2020<br/>
+					<strong>Voturi 2020:</strong> Nivel minim de voturi de realizat la alegerile din 2020<br/>
+					<strong>%:</strong> Procentul dintre membrii/simpatizanții înregistrați cu numărul minim.
+					</div>
 				</p:outputPanel>
 					</div>
 				<!-- Optiuni -->
 				
-					<div class="resultadosFiltro">
+					<div class="resultadosFiltroOptiuni">
 					<h3>Posibile opțiuni, persoane sau partide locale ale ORGANIZAȚIEI #{statisticaBean.numeOrganizatie}</h3>	 
 					<p:outputPanel layout="block" id="panelOptiuni">
 					<p:dataTable var="optiune"

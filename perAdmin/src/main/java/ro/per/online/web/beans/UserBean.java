@@ -11,10 +11,13 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 import org.apache.poi.util.IOUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.SortOrder;
@@ -36,12 +39,13 @@ import ro.per.online.constantes.NumeroMagic;
 import ro.per.online.lazydata.LazyDataUsers;
 import ro.per.online.persistence.entities.PLocality;
 import ro.per.online.persistence.entities.PProvince;
+import ro.per.online.persistence.entities.PTeam;
 import ro.per.online.persistence.entities.Users;
 import ro.per.online.persistence.entities.enums.AlertChannelEnum;
 import ro.per.online.persistence.entities.enums.EducationEnum;
-import ro.per.online.persistence.entities.enums.RoleEnum;
 import ro.per.online.persistence.entities.enums.TypeLocalityEnum;
 import ro.per.online.services.LocalityService;
+import ro.per.online.services.PTeamService;
 import ro.per.online.services.ProvinceService;
 import ro.per.online.services.UserService;
 import ro.per.online.util.FacesUtilities;
@@ -77,9 +81,19 @@ public class UserBean implements Serializable {
 	private UsuarioBusqueda userBusqueda;
 
 	/**
+	 * Objeto de búsqueda de usuario.
+	 */
+	private TeamBusqueda teamBusqueda;
+
+	/**
 	 * Lista de judete.
 	 */
 	private List<PProvince> provinces;
+
+	/**
+	 * Lista de utilizatori locali.
+	 */
+	private List<Users> listUsersLocal;
 
 	/**
 	 * Judet.
@@ -99,7 +113,7 @@ public class UserBean implements Serializable {
 	/**
 	 * Número máximo de columnas visibles en la vista.
 	 */
-	private int numeroColumnasListadoUsarios = NumeroMagic.NUMBERSEVENTEEN;
+	private int numeroColumnasListadoUsarios = NumeroMagic.NUMBERSEVEN;
 
 	/**
 	 * LazyModel para la paginación desde servidor de los datos de la búsqueda de usuarios.
@@ -125,6 +139,13 @@ public class UserBean implements Serializable {
 	 */
 	@Autowired
 	private LocalityService localityService;
+
+	/**
+	 * Variabila utilizata pentru a injecta serviciul functilor
+	 *
+	 */
+	@Autowired
+	private PTeamService pteamService;
 
 	/**
 	 * Lista de localitati.
@@ -210,17 +231,75 @@ public class UserBean implements Serializable {
 	private String mesaje;
 
 	/**
+	 * Variabila pentru lista de functii existente in bbdd
+	 */
+	private List<PTeam> listaFunctii;
+
+	/**
+	 * Variabila pentru lista de functii existente in bbdd
+	 */
+	private List<PTeam> listaFunctiiLocal;
+
+	/**
+	 * Variabila pentru o functie existente in bbdd
+	 */
+	private PTeam pteam;
+
+	/**
+	 * Cadena que identifica la pestaña activa del formulario de estadísticas.
+	 */
+	private String pestaniaActiva;
+
+	/**
+	 * Cadena que identifica el grupo de datos activo del formulario de estadísticas.
+	 */
+	private String grupoDatosActivo;
+
+	/**
+	 * Numar de membri in conducerea locala.
+	 */
+	private int rowCountLocal;
+
+	/**
+	 * Variabila pentru lista de functii existente in bbdd
+	 */
+	private List<PTeam> listaFunctiiCentral;
+
+	/**
+	 * Variabila pentru lista de functii existente in bbdd
+	 */
+	private List<Users> listUsersCentral;
+
+	/**
+	 * Deschide dialogul pentru pozitionarea membrilor.
+	 */
+	public void abrirDialogoOrdenaMembru(final List<Users> lista, final String provin) {
+
+		if (provin.equals(Constantes.ESPACIO)) {
+			listUsersLocal = new ArrayList<>();
+			teamBusqueda = new TeamBusqueda();
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					"Pentru a putea poziționa membrii din conducerea unei organizații locale, trebuie să alegeți una!");
+		}
+		else {
+			listUsersLocal = lista;
+			final RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('dlgOrdena').show();");
+		}
+	}
+
+	/**
 	 * Returnează o listă a localităților care aparțin unui judet. Acesta este folosit pentru a reîncărca lista
 	 * localităților în funcție de judetul selectat.
 	 * @param List<PLocality> lista de localitati
 	 */
 	public List<PLocality> actualizarLocalidades(final String prov) {
-		setLocalidades(null);
+		localidades = new ArrayList<>();
 
 		this.provincia = provinceService.findById(prov);
 		if (this.provincia != null) {
 			try {
-				setLocalidades(localityService.findByProvince(provincia));
+				localidades = localityService.findByProvince(provincia);
 			}
 			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
@@ -236,12 +315,11 @@ public class UserBean implements Serializable {
 	 * @param List<PLocality> lista de localitati
 	 */
 	public List<PLocality> actualLocalidades(final String prov) {
-		setLocalidades(null);
-
+		localidades = new ArrayList<>();
 		this.provincia = provinceService.findByName(prov);
 		if (this.provincia != null) {
 			try {
-				setLocalidades(localityService.findByProvince(provincia));
+				localidades = localityService.findByProvince(provincia);
 			}
 			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
@@ -289,6 +367,21 @@ public class UserBean implements Serializable {
 	public void buscarUsuario() {
 		model.setUserBusqueda(userBusqueda);
 		model.load(0, NumeroMagic.NUMBERFIFTEEN, Constantes.FECHACREACION, SortOrder.DESCENDING, null);
+
+	}
+
+	/**
+	 * Caută utilizatori în funcție de filtrele introduse în formularul de căutare.
+	 */
+	public void buscarUsuarioLocal() {
+		rowCountLocal = 0;
+		if (teamBusqueda.getIdFunctia() == null) {
+			List<PTeam> lista = new ArrayList<>();
+			lista = incarcamToateFunctileLocale();
+			teamBusqueda.setListTeam(lista);
+		}
+		listUsersLocal = userService.buscarUsuarioCriteriaLocal(teamBusqueda);
+		rowCountLocal = listUsersLocal.size();
 	}
 
 	/**
@@ -373,13 +466,16 @@ public class UserBean implements Serializable {
 	 * @param usu
 	 * @return
 	 */
-	private boolean existPresedinte(final Users usu) {
+	private boolean existPresedinte(final Users usu, final PProvince prov) {
 		Boolean validaPresedinte = true;
-		final PProvince prov = usu.getProvince();
-		final RoleEnum rol = usu.getRole();
 		// Verificam ca persoana care se doreste a modifica nu este presedinte de filiala
-		if (!usu.getRole().equals(RoleEnum.ROLE_VICE_PRESEDINTE_ORG)) {
-			final Users presedinte = userService.findByRolAndProvince(rol, prov);
+		if (usu.getTeam() == null) {
+			final PTeam functia = pteamService.findById(30L);
+			usu.setTeam(functia);
+		}
+		if (usu.getTeam().getId() == 21L) {
+			final PTeam functia = pteamService.findById(21L);
+			final Users presedinte = userService.findByTeamAndProvince(functia, prov);
 			if (presedinte != usu && presedinte != null) {
 				validaPresedinte = false;
 				mesaje = "Există un președinte al organizației. Întâi modificați membrul " + presedinte.getName() + " "
@@ -396,7 +492,7 @@ public class UserBean implements Serializable {
 	private void extractLocalitati() {
 		if (this.userBusqueda.getProvinciaSelected() != null) {
 			try {
-				setLocalidades(localityService.findByProvince(grupoLocalidadesSelected));
+				localidades = localityService.findByProvince(grupoLocalidadesSelected);
 			}
 			catch (final DataAccessException e) {
 				FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
@@ -415,10 +511,12 @@ public class UserBean implements Serializable {
 	public String getFormAltaUsuario() {
 		this.usuario = new Users();
 		this.photoSelected = null;
-		setProvinciSelec(null);
-		setLocalidades(null);
+		provinciSelec = new PProvince();
+		localidades = new ArrayList<>();
 		this.idLocalidad = null;
 		this.idProvincia = null;
+		listaFunctii = new ArrayList<>();
+		listaFunctii = pteamService.fiindAll();
 		try {
 			setProvinces(provinceService.fiindAll());
 		}
@@ -442,10 +540,12 @@ public class UserBean implements Serializable {
 	 */
 	public String getFormModificarUsuario(final Users usua) {
 		final Users usu = userService.fiindOne(usua.getUsername());
+		listaFunctii = new ArrayList<>();
+		listaFunctii = pteamService.fiindAll();
 		String redireccion = null;
 		if (usu != null) {
 			this.usuario = usua;
-			setProvinciSelec(usuario.getProvince());
+			provinciSelec = usuario.getProvince();
 			setLocalidades(localityService.findByProvince(usuario.getProvince()));
 			if (usuario.getLocality() == null) {
 				for (final PLocality lacal : localidades) {
@@ -503,6 +603,16 @@ public class UserBean implements Serializable {
 	}
 
 	/**
+	 * @param lista
+	 * @return
+	 *
+	 */
+	private List<PTeam> incarcamToateFunctileLocale() {
+		new ArrayList<>();
+		return pteamService.findByOrganization("Conducerea Locală");
+	}
+
+	/**
 	 * Inicializeaza bean-ul.
 	 */
 	@PostConstruct
@@ -512,18 +622,42 @@ public class UserBean implements Serializable {
 		eliminado = false;
 		provinces = new ArrayList<>();
 		this.provinces = provinceService.fiindAll();
+		listUsersLocal = new ArrayList<>();
 		localidades = new ArrayList<>();
 		provincia = new PProvince();
-		setProvinciSelec(null);
+		provinciSelec = new PProvince();
 		userBusqueda = new UsuarioBusqueda();
+		teamBusqueda = new TeamBusqueda();
+		rowCountLocal = 0;
 		limpiarBusqueda();
 		list = new ArrayList<>();
 		for (int i = 0; i <= numeroColumnasListadoUsarios; i++) {
 			list.add(Boolean.TRUE);
 		}
 		this.model = new LazyDataUsers(userService);
+
 		extractLocalitati();
+		listaFunctii = new ArrayList<>();
+		listaFunctii = pteamService.fiindAll();
+		listaFunctiiLocal = new ArrayList<>();
+		listaFunctiiLocal = pteamService.fiindAllByParam();
+		listUsersCentral = new ArrayList<>();
 		Utilities.limpiarSesion("userBean");
+	}
+
+	/**
+	 * Muestra el diálogo de nueva imágen.
+	 * @param relacion ActividadPuesto
+	 * @param tipoImg int
+	 */
+	public Boolean isLocal(final Users usu) {
+		Boolean isuserLocal = false;
+		final PTeam functie = pteamService.findByIdAndOrganization(usu.getTeam().getId(), "Conducerea Locală");
+		if (functie != null) {
+			isuserLocal = true;
+		}
+
+		return isuserLocal;
 	}
 
 	/**
@@ -532,6 +666,10 @@ public class UserBean implements Serializable {
 	 */
 	public void limpiarBusqueda() {
 		userBusqueda = new UsuarioBusqueda();
+		teamBusqueda = new TeamBusqueda();
+		listUsersLocal = new ArrayList<>();
+		listUsersCentral = new ArrayList<>();
+		rowCountLocal = 0;
 		this.model = new LazyDataUsers(this.userService);
 		model.setRowCount(0);
 	}
@@ -544,11 +682,11 @@ public class UserBean implements Serializable {
 
 		mesaje = Constantes.ESPACIO;
 		final String valida = Constantes.MODIFICAREMENSAJE;
-		this.provincia = provinceService.findByName(prov);
-		this.localidadSelected = localityService.findByName(local);
+		provincia = provinceService.findByName(prov);
+		localidadSelected = localityService.localidadByNameIgnoreCaseAndProvincia(local, provincia);
 		try {
 			this.usuario = usu;
-			if (existPresedinte(usu)) {
+			if (existPresedinte(usu, provincia)) {
 				if (validar(valida)) {
 					if (eliminado == false) {
 						usuario.setDateDeleted(null);
@@ -559,6 +697,20 @@ public class UserBean implements Serializable {
 					}
 					usuario.setLocality(localidadSelected);
 					usuario.setProvince(provincia);
+					final Boolean esteLocal = isLocal(usuario);
+					if (usuario.getRank() == null && usuario.getTeam().getId() != 30L) {
+						if (esteLocal) {
+							List<PTeam> lista = new ArrayList<>();
+							lista = incarcamToateFunctileLocale();
+							teamBusqueda.setListTeam(lista);
+							listUsersLocal = userService.findByProvinceAndTeam(provincia, lista);
+							usuario.setRank(Long.valueOf(listUsersLocal.size() + 1));
+						}
+						else {
+							usuario.setRank(Long.valueOf(listUsersCentral.size() + 1));
+						}
+
+					}
 					userService.save(usuario);
 					FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.CAMBIODATOS,
 							Constantes.REGMODOK);
@@ -634,12 +786,59 @@ public class UserBean implements Serializable {
 	}
 
 	/**
+	 * Metoda care execută pozitionarea.
+	 * @param event SelectEvent
+	 */
+	public void onReorder() {
+		try {
+			reordenarMembru();
+			limpiarBusqueda();
+			FacesContext.getCurrentInstance();
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_INFO, Constantes.OKMODMENSAJE,
+					"Modificarea ordinii în listă a fost realizată cu succes!");
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					Constantes.DESCERRORMENSAJE);
+		}
+	}
+
+	/**
+	 * Metoda care se execută la selectare.
+	 * @param event SelectEvent
+	 */
+	public void onSelect(final SelectEvent event) {
+		usuario = (Users) event.getObject();
+	}
+
+	/**
 	 * Activați / dezactivați vizibilitatea coloanelor din tabelul cu rezultate.
 	 *
 	 * @param e checkbox al coloanei selectate
 	 */
 	public void onToggle(final ToggleEvent e) {
 		list.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
+	}
+
+	/**
+	 * Funcție care reorientează pozitia
+	 * @throws DataAccessException excepție de acces la date
+	 */
+	private void reordenarMembru() {
+		try {
+			Users user = new Users();
+			for (int i = 0; i < this.listUsersLocal.size(); i++) {
+				user = listUsersLocal.get(i);
+				user.setRank(i + 1L);
+				userService.save(user);
+				final RequestContext context = RequestContext.getCurrentInstance();
+				context.execute("PF('dlgOrdena').hide();");
+			}
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMensajeConfirmacionDialog(FacesMessage.SEVERITY_ERROR, Constantes.ERRORMENSAJE,
+					Constantes.DESCERRORMENSAJE);
+		}
 	}
 
 	/**
@@ -662,6 +861,28 @@ public class UserBean implements Serializable {
 					"A apărut o eroare în regenerarea sau trimiterea parolei. ".concat(Constantes.DESCERRORMENSAJE));
 		}
 		return "/users/modifyUser?faces-redirect=true";
+	}
+
+	/**
+	 * Evento para el control de cambio de pestaña de grupo de datos(Evaluat, Autoprevent o Usuarios).
+	 * @param event TabChangeEvent
+	 */
+	public void schimbTipMembri(final TabChangeEvent event) {
+		if ("membriSimpatizanti".equals(event.getTab().getId())) {
+			userBusqueda = new UsuarioBusqueda();
+			pestaniaActiva = Constantes.TABMEMBRI;
+			limpiarBusqueda();
+		}
+		else if ("conducereaLocala".equals(event.getTab().getId())) {
+			userBusqueda = new UsuarioBusqueda();
+			pestaniaActiva = Constantes.TABLOCAL;
+			limpiarBusqueda();
+		}
+		else {
+			userBusqueda = new UsuarioBusqueda();
+			pestaniaActiva = Constantes.TABCONDUCERE;
+			limpiarBusqueda();
+		}
 	}
 
 	/**
@@ -777,5 +998,4 @@ public class UserBean implements Serializable {
 		}
 		return resultado;
 	}
-
 }
