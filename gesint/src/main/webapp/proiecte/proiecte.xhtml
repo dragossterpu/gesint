@@ -1,0 +1,219 @@
+<ui:composition template="../layouts/layoutInterior2.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+
+
+	<ui:define name="content">
+		<h:form id="cautareProiecte">
+						<div class="filtru">
+				<div class="blocFormular">
+					<div class="titluFormular">Căutare proiecte </div>
+
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="text" styleClass="cautator" value="Titlu:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="text" converter="#{trimConverter}" value="#{proiectBean.filtruProiect.nume}" />
+						</div>
+					</div>					
+						<h:outputText value="Pentru a căuta mai mult de un cuvânt, separați prin virgule" styleClass="aclaratii2" />
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+						
+							<h:outputLabel for="materiaIndexada" value="Cuvinte cheie: " />
+							
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="materiaIndexada" value="#{proiectBean.filtruProiect.materiaIndexata}" converter="#{trimConverter}" />
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="validated" styleClass="cautator" value="Aprobat:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:selectOneMenu class="selectFiltru" id="validated"
+								value="#{proiectBean.filtruProiect.validated}">
+								<f:selectItem itemLabel="TOATE" itemValue="" />
+								<f:selectItem itemLabel="VALIDATE" itemValue="true" />
+								<f:selectItem itemLabel="NEVALIDATE" itemValue="false" />
+							</p:selectOneMenu>
+						</div>
+					</div>					
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="dateFrom" value="Data înregistrării începând:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:calendar id="dateFrom" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{proiectBean.filtruProiect.dateFrom}" />
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="dateUntil" value="Data înregistrării până :" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:calendar id="dateUntil" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{proiectBean.filtruProiect.dateUntil}" />
+						</div>
+					</div>
+				</div>
+				<div class="butoaneFormular">
+					<p:commandButton action="#{proiectBean.cautareCautare}" 
+					class="left" value="Curățare filtre" 
+					update="cautareProiecte" icon="fa fa-eraser" />
+					<p:commandButton id="cautareButon" value="Căutare"
+                        actionListener="#{proiectBean.cautareProiecte}"
+                        update="panelProiecte" icon="fa fa-search"
+						oncomplete="$('.mesajeFaraRezultate').css('opacity', 1)"
+						onstart="PF('statusDialog').show()" class="right"
+						onsuccess="PF('statusDialog').hide()"/>
+						<p:commandButton value="Proiect nou" action="#{proiectBean.proiectNou}"  icon="fa fa-user-plus"/>
+				</div>
+			</div>
+			
+			
+			<div class="rezultateFiltru">
+				<p:outputPanel layout="block" id="panelProiecte">
+				 <p:dataTable id="tablaProiecte" var="proiect" rowIndexVar="rowIndex" value="#{proiectBean.modelProiect}" 
+				  rows="10"  draggableColumns="true" paginator="true" lazy="true"
+				  resizableColumns="true"  sortOrder="descending" styleClass="modHeaderTable"
+				  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+				  rowKey="#{proiect.id}" rowsPerPageTemplate="5,10,15" pageLinks="4" paginatorPosition="bottom"
+				  emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">
+                    <p:ajax event="rowEdit" listener="#{proiectBean.onRowEdit}" />				
+						<f:facet name="header">
+							<p:outputPanel>
+								<div class="left">
+									<h:commandLink
+										rendered="#{proiectBean.modelProiect.rowCount ne 0}">
+										<p:graphicImage value="/images/xls.png" />
+										<p:dataExporter type="xls" target="tablaProiecte"
+											fileName="listaProiecte" />
+									</h:commandLink>
+									<h:commandLink
+										rendered="#{proiectBean.modelProiect.rowCount ne 0}">
+										<p:graphicImage value="/images/pdf.png" />
+										<p:dataExporter type="pdf" target="tablaProiecte"
+											fileName="listaProiecte" />
+									</h:commandLink>
+									<h:commandLink
+										rendered="#{proiectBean.modelProiect.rowCount ne 0}">
+										<p:graphicImage value="/images/csv.png" />
+										<p:dataExporter type="csv" target="tablaProiecte"
+											fileName="listaProiecte" />
+									</h:commandLink>
+								</div>
+								<span class="titlu">Proiecte</span>
+								<p:menuButton value="Opțiuni proiecte" styleClass="newActionSelectTable" icon="fa fa-plus">
+							        <p:menuitem value="Nou proiect"  icon="fa fa-plus" action="#{proiectBean.proiectNou()}"  styleClass="sentenceText" />
+							        <p:menuitem value="Pozitie proiect" action="#{proiectBean.deschideDialogOrdoneazaProiecte()}"   icon="fa fa-file-archive-o" styleClass="sentenceText"/>
+							    </p:menuButton>
+							    <p:commandButton id="toggler" type="button" 
+							 		value="Columnas" styleClass="butonColoane" icon="fa fa-th"
+									rendered="#{proiectBean.modelProiect.rowCount ne 0}" />
+			                     <p:columnToggler datasource="tablaProiecte" trigger="toggler">
+			                            <p:ajax event="toggle" listener="#{proiectBean.onToggle}" />
+			                     </p:columnToggler>
+							</p:outputPanel>
+						</f:facet>	
+						<p:ajax event="rowSelect" oncomplete="PF('dlg').show()" update=":cautareProiecte:dialog" />	
+										
+						<p:column headerText="Nume" style="width:18%;" sortBy="#{proiect.titlu}" visible="#{proiectBean.list[0]}" exportable="#{proiectBean.list[0]}">
+							<h:outputText value="#{proiect.titlu}" />
+						</p:column>						
+						<p:column headerText="Categoria proiect" style="width:15%;" sortBy="#{proiect.categoria}" visible="#{proiectBean.list[1]}" exportable="#{proiectBean.list[1]}">
+							<h:outputText value="#{proiect.categoria}" />
+						</p:column>
+						<p:column headerText="Text proiect" style="width:50%;" sortBy="#{proiect.text}" visible="#{proiectBean.list[2]}" exportable="#{proiectBean.list[2]}">
+							<h:outputText value="#{proiect.text}" />
+							<h:outputText escape="false" id="descriereText" value="#{proiect.text.length() gt 20 ? fn:substring(proiect.text,0,20).concat('...') : proiect.text}"></h:outputText>
+							<p:tooltip id="toolTipText" for="descriereText" value="Pulsează pentru a vedea tot textul" position="top" />						
+						</p:column>
+						<p:column headerText="Validat/Invalidat" style="width:15%;" sortBy="#{proiect.validated}"
+							visible="#{proiectBean.list[2]}" exportable="#{proiectBean.list[2]}">
+							<h:outputText styleClass="fa fa-check-circle"
+									rendered="#{proiect.validated}" />
+							<h:outputText styleClass="fa fa-times-circle"
+									rendered="#{not proiect.validated}" />
+						</p:column>								
+					 <p:column styleClass="butonTabla" headerText="Administrare" style="width:15%;">
+                       			<h:commandLink title="Modificare proiect" 
+								styleClass="fa fa-fw fa-align-left  ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
+								actionListener="#{proiectBean.deschideDialogoModificareMembru(proiect)}"  update="cautareProiecte"  />
+								<p:commandButton title="Eliminare" icon="fa fa-trash" styleClass="modBtn"
+								actionListener="#{proiectBean.eliminarProiect(proiect)}"
+								update=":cautareProiecte:panelProiecte">
+								<p:confirm header="Eliminare proiect"
+									message="Sigur doriți să eliminați acest proiect?"
+									icon="fa fa-warning-sign" />
+								</p:commandButton>
+						</p:column>  																
+						<f:facet name="footer">
+       				 	Total:
+						<h:outputText value="#{proiectBean.modelProiect.rowCount}">
+	    						<f:convertNumber type="number"
+                                 maxIntegerDigits="5"
+                                 maxFractionDigits="0"/>
+							</h:outputText>
+       				 	 proiecte
+    				</f:facet>
+					</p:dataTable>
+					 <p:dialog id="dialog" header="Descrierea continutului" widgetVar="dlg" modal="true" height="500" width="800" resizable="false">
+	                    <h:outputText id="textoContinut" escape="false" value="#{proiectBean.proiect.text}" styleClass="saltoLinea"/>
+	                </p:dialog>
+				</p:outputPanel>
+				<p:confirmDialog global="true">
+					<div class="centrareButoaneDialog">
+						<p:commandButton value="Acceptați" type="button"
+							styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+						<p:commandButton value="Anulare" type="button"
+							styleClass="ui-confirmdialog-no" icon="fa fa-remove" />
+					</div>
+				</p:confirmDialog>
+<!-- 				<p:messages id="msgs" autoUpdate="true" closable="true" showSummary="true" showDetail="true"/> -->
+			</div>
+			
+			<h:form id="formOrdenaProiecte">
+			<p:dialog header="Modifică poziția proiectului" widgetVar="dlgOrdena" dynamic="true" width="800" height="800">
+				<p:outputPanel layout="block" id="panelProiecte" styleClass="containerMargin">
+				<p:orderList
+					value="#{proiectBean.listaProiecte}"
+					var="proiect" itemValue="#{proiect}"
+					converter="#{teamConverter}" controlsLocation="none"
+					responsive="true" styleClass="modListView">
+			        <p:ajax event="select" listener="#{proiectBean.onSelect}"  />
+			        <p:ajax event="reorder" listener="#{proiectBean.onReorder}" />
+					<f:facet name="caption">Proiecte</f:facet>
+					<p:column style="width:10%">
+			            <h:outputText value="#{proiect.titlu}" />
+			        </p:column>
+
+	   		  </p:orderList>
+	   		  </p:outputPanel>
+			 <p:commandButton  value="Finalizează modificarea" title="Finalizează modificarea" icon="fa fa-trash" styleClass="modBtn"
+							immediate="true"
+							update="cautareProiecte" id="modifica">
+							<p:confirm header="Finalizează modificarea"
+								message="Ești sigur că dorești modificarea poziției proiectului? "
+								icon="ui-icon-alert" />
+			</p:commandButton>
+			</p:dialog>
+		</h:form>
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loading.gif" />
+			</p:dialog>
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />           		
+			
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

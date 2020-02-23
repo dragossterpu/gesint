@@ -1,0 +1,302 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+		<p:importConstants type="ro.stad.online.gesint.constante.NumarMagic" var="NumeroMagic" />
+<div class="filtru">
+				<div class="blocFormular">
+					<div class="titluFormular">Filtre căutare</div>					
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="idCard"  styleClass="cautator" value="CNP:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="idCard" converter="#{trimConverter}" value="#{userBean.filtruUtilizator.idCard}" />
+						</div>
+					</div>
+
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="name" styleClass="cautator" value="Nume (Numele de familie):" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="name" converter="#{trimConverter}" value="#{userBean.filtruUtilizator.nume}" />
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="lastName" styleClass="cautator" value="Prenume:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="lastName" converter="#{trimConverter}" value="#{userBean.filtruUtilizator.prenume}" />
+						</div>
+					</div>
+					
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="email" styleClass="cautator"
+								value="Email:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:inputText id="email" converter="#{trimConverter}" value="#{userBean.filtruUtilizator.email}" />
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare" >
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="role" value="Rol:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:importEnum
+								type="ro.stad.online.gesint.persistence.entities.enums.RolEnum"
+								var="roles" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.filtruUtilizator.role}"
+								id="role" class="selectFiltru" style="min-width:initial;" >
+								<f:selectItem itemLabel="Alege unul..." itemValue="" />
+								<f:selectItems value="#{roles.ALL_ENUM_VALUES}"
+									var="roleUser"
+									itemLabel="#{roleUser.description}"
+									itemValue="#{roleUser}" />
+							</p:selectOneMenu>
+						</div>
+					</div>	
+					
+					
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="sex" value="Sex:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:importEnum
+								type="ro.stad.online.gesint.persistence.entities.enums.SexEnum"
+								var="sexs" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.filtruUtilizator.sex}"
+								id="sex" class="selectFiltru" style="min-width:initial;" >
+								<f:selectItem itemLabel="Alege unul..." itemValue="" />
+								<f:selectItems value="#{sexs.ALL_ENUM_VALUES}"
+									var="sexUser"
+									itemLabel="#{sexUser.description}"
+									itemValue="#{sexUser}" />
+							</p:selectOneMenu>
+						</div>
+					</div>					
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="civilStatus" value="Starea civilă:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:importEnum
+								type="ro.stad.online.gesint.persistence.entities.enums.StatutCivilEnum"
+								var="civilStats" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.filtruUtilizator.statutCivil}"
+								id="civilStatus" class="selectFiltru" style="min-width:initial;" >
+								<f:selectItem itemLabel="Alege unul..." itemValue="" />
+								<f:selectItems value="#{civilStats.ALL_ENUM_VALUES}"
+									var="civilStatusUser"
+									itemLabel="#{civilStatusUser.description}"
+									itemValue="#{civilStatusUserUser}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="typeLocality" value="Tipul localității:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:importEnum
+								type="ro.stad.online.gesint.persistence.entities.enums.TipLocalitateEnum"
+								var="typeLocalitys" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.filtruUtilizator.tipLocalitate}"
+								id="typeLocality" class="selectFiltru" style="min-width:initial;" >
+								<f:selectItem itemLabel="Alege unul..." itemValue="" />
+								<f:selectItems value="#{typeLocalitys.ALL_ENUM_VALUES}"
+									var="typeLocalityUser"
+									itemLabel="#{typeLocalityUser.description}"
+									itemValue="#{typeLocalityUser}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="educatie" value="Nivel de educație:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:importEnum 
+							type="ro.stad.online.gesint.persistence.entities.enums.EducatieEnum" 
+							var="educaties" allSuffix="ALL_ENUM_VALUES" />
+							<p:selectOneMenu value="#{userBean.filtruUtilizator.educatie}" 
+								id="educatie" class="selectFiltru" style="min-width:initial;" >
+								<f:selectItem itemLabel="Alege unul..." itemValue="" />
+								<f:selectItems value="#{educaties.ALL_ENUM_VALUES}" 
+								var="educatieUser" 
+								itemLabel="#{educatieUser.description}" 
+								itemValue="#{educatieUser}" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare" rendered="#{userBean.filaActiva == 'membriSimpatizanti'}">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="eliminado" value="Eliminaţi:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:selectOneMenu class="selectFiltru" id="eliminado"
+								value="#{userBean.filtruUtilizator.eliminat}">
+								<f:selectItem itemLabel="TOŢI" itemValue="" />
+								<f:selectItem itemLabel="ACTIVI" itemValue="NO" />
+								<f:selectItem itemLabel="ELIMINAŢI" itemValue="SI" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare" rendered="#{userBean.filaActiva == 'membriSimpatizanti'}">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="validated" value="Blocaţi/Neblocaţi:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:selectOneMenu class="selectFiltru" id="validated"
+								value="#{userBean.filtruUtilizator.validat}">
+								<f:selectItem itemLabel="TOŢI" itemValue="" />
+								<f:selectItem itemLabel="NEBLOCAŢI" itemValue="true" />
+								<f:selectItem itemLabel="BLOCAŢI" itemValue="false" />
+							</p:selectOneMenu>
+						</div>
+					</div>
+					
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="judeteSelectate" styleClass="cautator" value="Județul:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">							
+	                    <p:selectOneMenu  value="#{userBean.filtruUtilizator.idJudet}"  id="judeteSelectate"
+	                       class="selectFiltru" filter="true" filterMatchMode="startsWith">
+	                        <f:selectItem itemLabel="Alege unul..." itemValue="" />
+	                        <f:selectItems  value="#{userBean.judete}"  var="provincia" itemLabel="#{provincia.nume}"  itemValue="#{provincia.indicator}" />
+	                          <p:ajax event="change" update="locality"
+									listener="#{userBean.actualizareLocalitati(userBean.filtruUtilizator.idJudet)}" />                        
+	                    </p:selectOneMenu>						
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="locality" styleClass="cautator" value="Localitatea:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">							
+							<p:selectOneMenu id="locality" value="#{userBean.filtruUtilizator.idLocalitate}"  class="selectFiltru" filter="true" filterMatchMode="startsWith">
+								<f:selectItem itemLabel="Alege una..." />
+								 <f:selectItems  value="#{userBean.localitati}" var="locality"  itemLabel="#{locality.nume}" itemValue="#{locality.id}" />	
+							</p:selectOneMenu>	
+						</div>						
+					</div>
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="dateFrom" value="Data înregistrării începând:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:calendar id="dateFrom" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{userBean.filtruUtilizator.dateFrom}" />
+						</div>
+					</div>
+					<div class="ui-g coloanaCautare">
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<h:outputLabel for="dateUntil" value="Data înregistrării până:" />
+						</div>
+						<div class="ui-g-12 ui-md-6 ui-lg-6">
+							<p:calendar id="dateUntil" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{userBean.filtruUtilizator.dateUntil}" />
+						</div>
+					</div>
+				</div>
+				<div class="butoaneFormular">
+					<p:commandButton action="#{userBean.cautareCautare}" 
+					class="left" value="Curățare filtre" 
+					update="searchListUsers" icon="fa fa-eraser" />
+					<p:commandButton id="cautareButon" value="Căutare"
+                        actionListener="#{userBean.cautareUtilizator}"
+                        update="@form" icon="fa fa-search"
+						oncomplete="$('.mesajeFaraRezultate').css('opacity', 1)"
+						onstart="PF('statusDialog').show()" class="right"
+						onsuccess="PF('statusDialog').hide()"/>
+					<p:commandButton value="Nou membru" styleClass="newActionTable" rendered="#{userBean.filaActiva == 'membriSimpatizanti'}"
+					 action="#{userBean.getFormInregistrareUtilizator}"  icon="fa fa-user-plus"/>
+				</div>
+			</div>
+			<div class="rezultateFiltru">
+				<p:outputPanel layout="block" id="userPanel">
+					<p:dataTable var="user" value="#{userBean.model}"  rows="#{NumeroMagic.NUMBERFIFTEEN}" id="userTable"  draggableColumns="true" 
+					paginator="true" lazy="true" resizableColumns="true"  sortOrder="descending" styleClass="modHeaderTable"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+					rowKey="#{user.username}" rowsPerPageTemplate="10,25,50" pageLinks="4" paginatorPosition="bottom"
+					emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">
+						<f:facet name="header">
+							<p:outputPanel>
+								<div class="left">
+									<h:commandLink rendered="#{userBean.model.rowCount ne 0}">
+										<p:graphicImage value="/images/xls.png" />
+										<p:dataExporter type="xls" target="userTable" fileName="userList" />
+									</h:commandLink>
+									<h:commandLink rendered="#{userBean.model.rowCount ne 0}">
+										<p:graphicImage value="/images/pdf.png" />
+										<p:dataExporter type="pdf" target="userTable" fileName="userList" />
+									</h:commandLink>
+									<h:commandLink rendered="#{userBean.model.rowCount ne 0}">
+										<p:graphicImage value="/images/csv.png" />
+										<p:dataExporter type="csv" target="userTable" fileName="userList" />
+									</h:commandLink>
+								</div>
+								<span class="titlu">MEMBRII</span>
+								<p:menuButton value="Procese masive membri" styleClass="newActionSelectTable" icon="fa fa-plus">
+							        <p:menuitem value="Înregistrare masivă"  icon="fa fa-plus" action="#{procesoMasivoBean.getFormOperaMasiv(procesoMasivoBean.tipInregistrareMasivaUtilizator)}"  styleClass="sentenceText" />
+							        <p:menuitem value="Eliminare masivă" action="#{procesoMasivoBean.getFormOperaMasiv(procesoMasivoBean.esteEliminareMasiva)}"   icon="fa fa-trash" styleClass="sentenceText"/>
+							        <p:menuitem value="Blocare masivă" action="#{procesoMasivoBean.getFormOperaMasiv(procesoMasivoBean.esteBlocareMasiva)}"   icon="fa fa-pencil" styleClass="sentenceText"/>
+							    </p:menuButton>
+							</p:outputPanel>
+						</f:facet>
+						<p:column headerText="Nume" sortBy="#{user.numeComplet}" style="width:18%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
+							<h:outputText value="#{user.numeComplet}" />
+						</p:column>
+						<p:column headerText="Email" sortBy="#{user.username}" style="width:22%;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
+							<h:outputText value="#{user.username}" />
+						</p:column>
+						<p:column headerText="Județul"  style="width:15%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
+							<h:outputText value="#{user.codJudet.nume}" />
+						</p:column>
+						<p:column headerText="Localitatea"  style="width:22%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
+							<h:outputText value="#{user.localitate.nume}" />
+						</p:column>
+						<p:column headerText="Blocat" sortBy="#{user.validat}"
+							visible="#{userBean.list[4]}" exportable="#{userBean.list[4]}" style="width:10%;text-align:center;">
+							<h:outputText styleClass="fa fa-check-circle"
+									rendered="#{user.validat}" />
+							<h:outputText styleClass="fa fa-times-circle"
+									rendered="#{not user.validat}" />
+						</p:column>
+						
+						<p:column styleClass="butonTabla text-center" exportable="false" style="width:11%;" toggleable="false">
+							<h:commandLink title="Modificare membru"  styleClass="fa fa-fw fa-pencil ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
+								action="#{userBean.getFormModificareUser(user)}" update="userTable" />
+							<p:commandButton title="Eliminare membru" rendered="#{user.validat}" icon="fa fa-trash" styleClass="modBtn"  actionListener="#{userBean.eliminareUtilizator(user)}" 
+							update="searchListUsers" oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">
+								
+								<p:confirm header="Eliminare membru" message="Sunteți sigur că doriți să eliminați DEFINITIV acest membru?" icon="fa fa-warning-sign" />
+							</p:commandButton>
+							<p:commandButton title="Activare membru" rendered="#{not user.validat}" icon="fa fa-unlock-alt" styleClass="modBtn"  actionListener="#{userBean.activareUtilizator(user)}" 
+                                                        update="searchListUsers" oncomplete="$('.noResultMessage').css('opacity', 1)" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()">
+                                                                
+                                                                <p:confirm header="Activare membru" message="Sunteți sigur că doriți să reactivați acest membru?" icon="fa fa-warning-sign" />
+                                                        </p:commandButton>
+						</p:column>
+						<f:facet name="footer">
+	       				 	   Numărul total: <h:outputText value="#{userBean.model.rowCount}">
+		    						<f:convertNumber type="number"   maxIntegerDigits="9"  maxFractionDigits="0"/>
+						</h:outputText>de membrii
+	    					</f:facet>
+					</p:dataTable>
+				</p:outputPanel>
+ 				<p:dialog header="Procesare masivă" id="dlgProcseoMasivo" widgetVar="cdMasivo"  modal="true">		
+		                        <h:outputText value="Alegeți metoda de introducere a datelor." />
+		                        <p:button  title="Obțineți utilizatorii pe ecran" value="Por pantalla"  outcome="/users/reg_masiva_file.xhtml?faces-redirect=true">
+		                            <f:param name="esteEliminare"  value="#{usuarioController.usuarioForm.esteEliminare}" />
+		                        </p:button>
+		                    </p:dialog>
+				<p:confirmDialog global="true">
+					<div class="centrareButoaneDialog">
+						<p:commandButton value="DA" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+						<p:commandButton value="NU" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-remove" />
+					</div>
+				</p:confirmDialog>					   	
+                  </div>
+</ui:composition>

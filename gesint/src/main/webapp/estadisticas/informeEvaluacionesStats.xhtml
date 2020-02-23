@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+
+</h:head>
+<f:view>
+	<ui:composition template="../layouts/layoutInterior.xhtml">
+		<ui:define name="title">prevencion10</ui:define>
+		<ui:define name="content">
+			<h:form id="searchStats">				
+				<div>
+					<p:outputPanel layout="block" id="panelDatos">
+					<p:panelGrid columns="1">
+					
+						<p:commandButton id="exp" value="Generar Informe" icon="fa fa-file-pdf-o" class="left"
+        					onclick="if (typeof InstallTrigger !== 'undefined')exportChart(); else{ alert('Para obtener el informe debe utilizar Firefox');return false;}"
+        					actionListener="#{informeStatsEvaluacionesBean.submittedBase64Str}" ajax="false">        										
+							<p:fileDownload value="#{informeStatsEvaluacionesBean.file}" />              										        										
+        				</p:commandButton>
+					
+						<p:fieldset legend="General" toggleSpeed="500" style="margin-bottom:20px">
+							<p:chart type="pie" widgetVar="graficoTipoUsuarios"
+									model="#{informeStatsEvaluacionesBean.graficoTipoUsuarios}"
+									style="width:700px;height:500px"
+									styleClass="stilTextGrafice" />						
+							<h:inputHidden id="graficoTipoUsuariosBase64Str" value="#{informeStatsEvaluacionesBean.graficoTipoUsuariosBase64Str}" />		
+						</p:fieldset>																																																																																					
+									
+						<p:fieldset legend="Evalua-t Usuarios" toggleSpeed="500" style="margin-bottom:20px">							
+							<p:chart type="metergauge" widgetVar="graficoEvaluacionesTotalesEvaluat"																				
+										model="#{informeStatsEvaluacionesBean.graficoEvaluacionesTotalesEvaluat}"
+										style="width:400px;height:250px" />												
+							<h:inputHidden id="graficoEvaluacionesTotalesEvaluatBase64Str" value="#{informeStatsEvaluacionesBean.graficoEvaluacionesTotalesEvaluatBase64Str}" />											
+								
+							<p:separator />
+																								
+							<p:chart type="bar" widgetVar="graficoDistribucionEvaluacionesTotalesEvaluat"								
+										id="graficoDistribucionEvaluacionesTotalesEvaluat"
+										model="#{informeStatsEvaluacionesBean.graficoDistribucionEvaluacionesTotalesEvaluat}"												
+										style="width:700px;height:400px;" />	
+							<h:inputHidden id="graficoDistribucionEvaluacionesTotalesEvaluatBase64Str" value="#{informeStatsEvaluacionesBean.graficoDistribucionEvaluacionesTotalesEvaluatBase64Str}" />
+							
+							<p:separator />
+							
+							<p:chart type="line" id="graficoDatosEvolucion"	widgetVar="graficoDatosEvolucionEvaluat"										
+													model="#{informeStatsEvaluacionesBean.graficoDatosEvolucionEvaluat}"
+													style="height:300px;" />
+							<h:inputHidden id="graficoDatosEvolucionEvaluatBase64Str" value="#{informeStatsEvaluacionesBean.graficoDatosEvolucionEvaluatBase64Str}" />				
+									
+							<p:separator />		
+							
+							<p:chart type="bar" id="graficoDatosSectores" widgetVar="graficoDatosSectoresEvaluat" 												
+										model="#{informeStatsEvaluacionesBean.graficoDatosSectoresEvaluat}"
+										style="width:1400px;height:1400px"/>
+							<h:inputHidden id="graficoDatosSectoresEvaluatBase64Str" value="#{informeStatsEvaluacionesBean.graficoDatosSectoresEvaluatBase64Str}" />	
+														
+							<p:separator />			
+								
+							<p:chart type="bar" id="graficoDatosEstados" widgetVar="graficoDatosEstadosEvaluat"
+												model="#{informeStatsEvaluacionesBean.graficoDatosEstadosEvaluat}"											
+												style="width:800px;height:500px"/>	
+							<h:inputHidden id="graficoDatosEstadosEvaluatBase64Str" value="#{informeStatsEvaluacionesBean.graficoDatosEstadosEvaluatBase64Str}" />				
+											
+							<p:separator />				
+												
+							<p:chart type="bar" id="graficoDatosNumeroTrabajadores" widgetVar="graficoDatosNumeroTrabajadoresEvaluat"
+												model="#{informeStatsEvaluacionesBean.graficoDatosNumeroTrabajadoresEvaluat}"											
+												style="width:1000px;height:500px"/>
+							<h:inputHidden id="graficoDatosNumeroTrabajadoresEvaluatBase64Str" value="#{informeStatsEvaluacionesBean.graficoDatosNumeroTrabajadoresEvaluatBase64Str}" />				
+												
+							<p:separator />
+							
+							<p:chart type="pie" widgetVar="graficoModalidadPrevencionEvaluat" 
+										model="#{informeStatsEvaluacionesBean.graficoModalidadPrevencionEvaluat}"											
+												dataFormat="value"											
+												style="width:700px;height:500px" />																											
+							<h:inputHidden id="graficoModalidadPrevencionEvaluatBase64Str" value="#{informeStatsEvaluacionesBean.graficoModalidadPrevencionEvaluatBase64Str}" />														
+																																																													
+						</p:fieldset>																					
+						
+						<p:fieldset legend="Autopreven-t" toggleSpeed="500" style="margin-bottom:20px">
+							<p:chart type="metergauge"	widgetVar="graficoEvaluacionesTotalesAutoprevent"																			
+										model="#{informeStatsEvaluacionesBean.graficoEvaluacionesTotalesAutoprevent}"
+										style="width:400px;height:250px" />													
+							<h:inputHidden id="graficoEvaluacionesTotalesAutopreventBase64Str" value="#{informeStatsEvaluacionesBean.graficoEvaluacionesTotalesAutopreventBase64Str}" />
+							
+							<p:separator />
+							
+							<p:chart type="bar" widgetVar="graficoDistribucionEvaluacionesTotalesAutoprevent"								
+										id="graficoDistribucionEvaluacionesTotalesAutoprevent"
+										model="#{informeStatsEvaluacionesBean.graficoDistribucionEvaluacionesTotalesAutoprevent}"												
+										style="width:700px;height:400px;" />							
+							<h:inputHidden id="graficoDistribucionEvaluacionesTotalesAutopreventBase64Str" value="#{informeStatsEvaluacionesBean.graficoDistribucionEvaluacionesTotalesAutopreventBase64Str}" />
+								
+							<p:chart type="line" id="graficoDatosEvolucionAutoprevent" widgetVar="graficoDatosEvolucionAutoprevent"										
+													model="#{informeStatsEvaluacionesBean.graficoDatosEvolucionAutoprevent}"
+													style="height:300px;" />
+							<h:inputHidden id="graficoDatosEvolucionAutopreventBase64Str" value="#{informeStatsEvaluacionesBean.graficoDatosEvolucionAutopreventBase64Str}" />				
+													
+							<p:separator />											
+													
+							<p:chart type="bar" id="graficoDatosSectoresAutoprevent" widgetVar="graficoDatosSectoresAutoprevent" 												
+														model="#{informeStatsEvaluacionesBean.graficoDatosSectoresAutoprevent}"
+														style="width:1400px;height:1400px"/>	
+							<h:inputHidden id="graficoDatosSectoresAutopreventBase64Str" value="#{informeStatsEvaluacionesBean.graficoDatosSectoresAutopreventBase64Str}" />
+						
+						</p:fieldset>
+									
+						<p:fieldset legend="Instruye-t" toggleSpeed="500" style="margin-bottom:20px">
+							<p:chart type="bar" id="graficoDistribucionInscripciones" widgetVar="graficoDistribucionInscripciones"
+							model="#{informeStatsEvaluacionesBean.graficoDistribucionInscripciones}" style="width:700px;height:400px;" />
+							<h:inputHidden id="graficoDatosInstruyetBase64Str" value="#{informeStatsEvaluacionesBean.graficoDatosInstruyetBase64Str}" />
+						</p:fieldset>			
+										
+						<script type="text/javascript">
+					        function exportChart() {
+					        	var isOpera = (!!window.opr &amp;&amp; !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;					        	
+					        	var isFirefox = typeof InstallTrigger !== 'undefined';					        	 
+					        	var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' &amp;&amp; safari.pushNotification));					        	
+					        	var isIE = false || !!document.documentMode;					        	
+					        	var isEdge = !isIE &amp;&amp; !!window.StyleMedia;					        	
+					        	var isChrome = !!window.chrome &amp;&amp; !!window.chrome.webstore;					        	
+					        	var isBlink = (isChrome || isOpera) &amp;&amp; !!window.CSS;					        						        					        
+					        	
+					        	if(isFirefox) {
+							        //Exportamos como imagen cada uno de los gráficos puestos
+							        //USUARIOS
+							        img = PF('graficoTipoUsuarios').exportAsImage();
+							        document.getElementById('searchStats:graficoTipoUsuariosBase64Str').value = img.src;
+							        
+							        //EVALUAT									        
+							        img = PF('graficoEvaluacionesTotalesEvaluat').exportAsImage();
+							        document.getElementById('searchStats:graficoEvaluacionesTotalesEvaluatBase64Str').value = img.src;						        
+							        					        							        
+							        img = PF('graficoDistribucionEvaluacionesTotalesEvaluat').exportAsImage();						        
+							        document.getElementById('searchStats:graficoDistribucionEvaluacionesTotalesEvaluatBase64Str').value = img.src;							       							        
+							        							        
+							        img = PF('graficoDatosEvolucionEvaluat').exportAsImage();
+							        document.getElementById('searchStats:graficoDatosEvolucionEvaluatBase64Str').value = img.src;						        		
+							        							        
+							        img = PF('graficoDatosSectoresEvaluat').exportAsImage();
+							        document.getElementById('searchStats:graficoDatosSectoresEvaluatBase64Str').value = img.src;						        
+							        				        							        
+							        img = PF('graficoDatosEstadosEvaluat').exportAsImage();
+							        document.getElementById('searchStats:graficoDatosEstadosEvaluatBase64Str').value = img.src;						        
+							        						        							        
+							        img = PF('graficoModalidadPrevencionEvaluat').exportAsImage();
+							        document.getElementById('searchStats:graficoModalidadPrevencionEvaluatBase64Str').value = img.src;
+							        							        
+							        img = PF('graficoDatosNumeroTrabajadoresEvaluat').exportAsImage();
+							        document.getElementById('searchStats:graficoDatosNumeroTrabajadoresEvaluatBase64Str').value = img.src;							        							        
+							        						        
+							        //AUTOPREVENT						        
+							        img = PF('graficoEvaluacionesTotalesAutoprevent').exportAsImage();
+							        document.getElementById('searchStats:graficoEvaluacionesTotalesAutopreventBase64Str').value = img.src;
+							        							        
+							        img = PF('graficoDistribucionEvaluacionesTotalesAutoprevent').exportAsImage();
+							        document.getElementById('searchStats:graficoDistribucionEvaluacionesTotalesAutopreventBase64Str').value = img.src;						        							        							        						       
+							        							        
+							        img = PF('graficoDatosEvolucionAutoprevent').exportAsImage();
+							        document.getElementById('searchStats:graficoDatosEvolucionAutopreventBase64Str').value = img.src;
+							        						        							        
+							        img = PF('graficoDatosSectoresAutoprevent').exportAsImage();
+							        document.getElementById('searchStats:graficoDatosSectoresAutopreventBase64Str').value = img.src;
+							        
+							        //INSTRUYET							        
+							        img = PF('graficoDistribucionInscripciones').exportAsImage();
+							        document.getElementById('searchStats:graficoDatosInstruyetBase64Str').value = img.src;
+					        	} 
+					        }
+					    </script>					
+						</p:panelGrid>																																											
+					</p:outputPanel>					
+				</div>
+				<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+					closable="false" resizable="false" showHeader="false">
+					<p:graphicImage value="/images/loading.gif" />
+				</p:dialog>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</f:view>
+</html>

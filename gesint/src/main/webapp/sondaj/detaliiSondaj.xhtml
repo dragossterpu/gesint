@@ -1,0 +1,82 @@
+<ui:composition template="../layouts/layoutInterior2.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	 xmlns:my="http://java.sun.com/jsf/composite/composites">
+	<ui:define name="content">
+	   <div class="content_newForm">
+		<div class="titluFormular">
+			<h3 style="margin-top: 0"><strong>Detalii sondaj</strong></h3>
+		</div>
+	        <div class="container-fluid">
+		   <h:form id="form" class="tabsInvert">
+		     <p:growl id="msgs" showDetail="true" />
+		      <p:accordionPanel multiple="true" activeIndex="0,1,2,3">
+			      <p:tab title="">
+			      <div class="aclaratii5"><STRONG>Descrierea sondaj:<br/></STRONG></div>
+			      <div class="aclaratii5">#{sondajBean.sondaj.descriere}"<br/></div>	
+			      <div class="aclaratii5"><STRONG>Întrebarea sondaj:<br/></STRONG></div>
+			      <div class="aclaratii5">#{sondajBean.sondaj.intrebare}<br/></div>
+			      <div class="aclaratii5"><STRONG>Tip sondaj:</STRONG> #{sondajBean.sondaj.tipSondaj.descripcion}<br/></div>
+			      <div class="aclaratii5"><STRONG>Sondaj: </STRONG>Data începerii sondajului <STRONG>#{sondajBean.incepeSondajul}</STRONG> data finalizării sondajului <STRONG>#{sondajBean.terminaSondajul}<br/></STRONG></div>	
+			      <div class="aclaratii5" ><h:outputText rendered="#{not empty sondajBean.document.id}"  value="Se a generat documentul" /><strong>  #{sondajBean.document.nume}</strong> </div>		
+			      <div class="p-grid">	
+				    <div class="p-col-fixed" style="width:60%">
+					 <div class="box"> <p:chart type="pie" id="grafica" model="#{sondajBean.graficaVoturi}" /></div>
+				   </div>
+				   <div class="p-col-fixed" style="width:15%">
+					<div class="box"><h4>Situatie vot</h4>
+						 DA: <strong> #{sondajBean.sondaj.totalVoturiDa} </strong>.<br/>
+						 NU:<strong>  #{sondajBean.sondaj.totalVoturiNu}</strong>.<br/> 
+						 ABTINERI:<strong> #{sondajBean.sondaj.totalVoturiAbt}</strong><br/>
+						din înregistrările totale în <strong>GESINT</strong>														
+					</div>
+				   </div>			
+				    <p:dialog id="dialogGrafica" style="width:100%"  widgetVar="dialogG" header="Rezultatul sondajului">
+		                        <p:chart type="pie" widgetVar="graficaImagen" model="#{sondajBean.graficaVoturi}" styleClass="graficaStatistici"/>
+		                          <div class="centrareButoaneDialog">
+		                               <p:commandButton value="Cerrar" onclick="PF('dialogG').hide()" />
+		                           </div>
+		                    </p:dialog>		
+			      </div>
+			      <div class="aclaratii5"> <h:outputText rendered="#{sondajBean.sondaj.activ}" value="Până la finalizarea sondajului nu se poate genera nici un document" /></div>        		      
+			      <p:outputPanel id="panouAtasament" rendered="#{not empty sondajBean.document.id}" >
+		                    <p:dataTable id="tablaDocumente" var="document"  value="#{sondajBean.document}" editable="true" onkeypress="if (event.keyCode == 13) {return false; }" emptyMessage="Nu sunt generate documente.">
+		                        <p:column headerText="Document generat ">
+		                            <h:outputText value="#{document.nume}" />
+		                        </p:column>
+		                        <p:column styleClass="butonTabla">
+		                            <p:commandButton icon="fa fa-fw fa-download" ajax="false" actionListener="#{sondajBean.descarcareFisier(document)}" title="Descărcați documentul">
+		                                <p:fileDownload value="#{sondajBean.file}" />
+		                            </p:commandButton>
+		                        </p:column>
+		                    </p:dataTable>
+		                </p:outputPanel>
+			      <p:messages id="message" autoUpdate="true"/>
+			      <div class="butoaneFormular">
+	                        <p:commandButton value="Renunţă" icon="fa fa-fw fa-undo" action="/sondaj/rezultate?faces-redirect=true" immediate="true"> </p:commandButton>
+	                        <p:commandButton value="Votează" icon="fa fa-fw fa-bullseye" rendered="#{sondajBean.sondaj.activ}" action="/sondaj/voteaza?faces-redirect=true" immediate="true"> </p:commandButton>
+	                        <p:commandButton  value="Generează document PDF" rendered="#{empty sondajBean.document.id and !sondajBean.sondaj.activ}" update="message" ajax="false"  onclick="exportarGrafica()"
+	                             actionListener="#{sondajBean.filtreazaPDF(sondajBean.sondaj, graficaExportar)}" icon="fa fa-file-pdf-o" >
+	                         <p:fileDownload value="#{sondajBean.file}" />
+	                        </p:commandButton>
+	                    </div>
+	            	</p:tab>
+		</p:accordionPanel>	
+		<h:inputHidden id="b64" value="#{graficaExportar}" />
+	              <script type="text/javascript">       
+	                  function exportarGrafica() {
+	                  // exportAsImage() will return a base64 png encoded string
+	                       PF('dialogG').show();
+	                         img =  PF('graficaImagen').exportAsImage();
+	                         document.getElementById('form:b64').value = img.src;
+	                         PF('dialogG').hide();
+	                  }	
+	              </script>   	
+		</h:form>
+		</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,148 @@
+<ui:composition template="../layouts/layoutInterior2.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<ui:define name="content">
+		<h:form id="searchlistTeams">
+			<div class="rezultateFiltru">
+				<p:outputPanel layout="block" id="panelTeams">
+				 <p:dataTable id="tablaTeams" var="team" rowIndexVar="rowIndex" value="#{echipaBean.listaEchipa}" 
+				  rows="10"  draggableColumns="true" paginator="true" lazy="true"
+				  resizableColumns="true"  sortOrder="descending" styleClass="modHeaderTable"
+				  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+				  rowKey="#{team.user.username}" rowsPerPageTemplate="5,10,25" pageLinks="4" paginatorPosition="bottom"
+				  emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">
+                    <p:ajax event="rowEdit" listener="#{echipaBean.onRowEdit}" />				
+						<f:facet name="header">
+							<p:outputPanel>
+								<div class="left">
+									<h:commandLink
+										rendered="#{not empty echipaBean.listaEchipa}">
+										<p:graphicImage value="/images/xls.png" />
+										<p:dataExporter type="xls" target="tablaTeams"
+											fileName="listaEchipa" />
+									</h:commandLink>
+									<h:commandLink
+										rendered="#{not empty echipaBean.listaEchipa}">
+										<p:graphicImage value="/images/pdf.png" />
+										<p:dataExporter type="pdf" target="tablaTeams"
+											fileName="listaEchipa" />
+									</h:commandLink>
+									<h:commandLink
+										rendered="#{not empty echipaBean.listaEchipa}">
+										<p:graphicImage value="/images/csv.png" />
+										<p:dataExporter type="csv" target="tablaTeams"
+											fileName="listaEchipa" />
+									</h:commandLink>
+								</div>
+								<span class="titlu">Echipa de conducere</span>
+								<p:menuButton value="Opțiuni membrii" styleClass="newActionSelectTable" icon="fa fa-plus">
+							        <p:menuitem value="Nou membru"  icon="fa fa-plus" action="#{echipaBean.nuevoMembru()}" styleClass="sentenceText" />
+							        <p:menuitem value="Modificare poziție membru" action="#{echipaBean.modificarePozitie()}" icon="fa fa-file-archive-o" styleClass="sentenceText"/>
+							    </p:menuButton>
+							</p:outputPanel>
+						</f:facet>						
+						<p:column headerText="Nume" style="width:15%;" sortBy="#{team.name}"
+							exportable="#{echipaBean.list[0]}">
+							<h:outputText value="#{team.user.name}" />
+						</p:column>
+						
+						<p:column headerText="Prenume" style="width:15%;" sortBy="#{team.user.lastName}"
+							exportable="#{echipaBean.list[1]}">
+							<h:outputText value="#{team.user.lastName}" />
+						</p:column>		
+					<p:column headerText="Functie" sortBy="#{team.team.name}" style="width:20%;" exportable="#{echipaBean.list[2]}">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{team.team.name}" />
+                            </f:facet>
+
+                            <f:facet name="input">
+                                <p:inputText id="numeInput" value="#{team.team.name}" converter="#{trimConverter}" required="true" requiredMessage="Numele funcției nu poate fi gol" maxlength="100" />
+                                <p:messages for="numeInput" autoUpdate="true" closable="true" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+					<p:column headerText="Descriere funcție" sortBy="#{team.team.description}" style="width:20%;" exportable="#{echipaBean.list[3]}">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{team.team.description}" />
+                            </f:facet>
+
+                            <f:facet name="input">
+                                <p:inputText id="descriptionInput" value="#{team.team.name}" converter="#{trimConverter}" maxlength="200" />
+                                <p:messages for="descriptionInput" autoUpdate="true" closable="true" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+					<p:column headerText="Email" sortBy="#{team.user.email}" style="width:15%;" exportable="#{echipaBean.list[4]}">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{team.user.email}" />
+                            </f:facet>
+
+                            <f:facet name="input">
+                                <p:inputText id="emailInput" value="#{team.user.email}" required="true" requiredMessage="Email-ul nu poate fi gol" converter="#{trimConverter}" maxlength="200" />
+                                <p:messages for="emailInput" autoUpdate="true" closable="true" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>		
+					 <p:column styleClass="butonTabla">
+                        <p:rowEditor editTitle="Editar" saveTitle="Guardar" cancelTitle="Cancelar" />
+                    </p:column>
+                    <p:column  headerText="" styleClass="butonTabla text-center" exportable="false"  toggleable="false">
+                    		<p:commandButton title="Eliminar" icon="fa fa-trash" styleClass="modBtn"
+								actionListener="#{echipaBean.eliminarMembru(team.user)}"
+								update="searchlistTeams" 
+								oncomplete="$('.mesajeFaraRezultate').css('opacity', 1)"
+								onstart="PF('statusDialog').show()"
+								onsuccess="PF('statusDialog').hide()">
+								<p:confirm header="Eliminar membru"
+									message="Sigur doriți să ștergeți acest membru al echipei?"
+									icon="fa fa-warning-sign" />
+							</p:commandButton>
+                    </p:column>																		
+						<f:facet name="footer">
+       				 	Total:
+						<h:outputText value="#{fn:length(echipaBean.listaEchipa)}">
+    						<f:convertNumber type="number"
+                                maxIntegerDigits="5"
+                                maxFractionDigits="0"/>
+						</h:outputText>
+       				 	 membrii în echipa de conducere 
+    				</f:facet>
+					</p:dataTable>
+				</p:outputPanel>
+				<p:confirmDialog global="true">
+					<div class="centrareButoaneDialog">
+						<p:commandButton value="Acceptați" type="button"
+							styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+						<p:commandButton value="Anulare" type="button"
+							styleClass="ui-confirmdialog-no" icon="fa fa-remove" />
+					</div>
+				</p:confirmDialog>
+				<!-- <p:messages id="msgs" autoUpdate="true" closable="true" showSummary="true" showDetail="true"/> -->
+			</div>
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+				closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loading.gif" />
+			</p:dialog>
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+            
+            <p:dialog id="dialog" widgetVar="dialogMessage" header="Error" closable="false">
+               <p:messages for="dialogMessage" autoUpdate="true" showDetail="true" showSummary="true" />
+               <div class="centrareButoaneDialog">
+                    <p:commandButton value="Închideţi" onclick="PF('dialogMessage').hide()"/>
+               </div>
+           	</p:dialog>
+			
+			
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

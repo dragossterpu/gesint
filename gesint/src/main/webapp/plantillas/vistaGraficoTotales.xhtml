@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">											
+				<h:panelGrid columns="4" cellpadding="10">		               	              
+		               	<p:dataTable id="tablaUtilizatoriJudet" class = "tabMasuri" value="#{homeBean.mapaUserProvince}" var="entry">				
+								<f:facet name="header">
+									<p:outputPanel>	
+										<div >
+										<h:commandLink rendered="#{not empty homeBean.mapaUserProvince}">
+											<p:graphicImage value="/images/xls.png" />
+											<p:dataExporter type="xls" target="tablaUtilizatoriJudet" fileName="usuariosProvince" />
+										</h:commandLink>
+										<h:commandLink rendered="#{not empty homeBean.mapaUserProvince}">
+											<p:graphicImage value="/images/pdf.png" />
+											<p:dataExporter type="pdf" target="tablaUtilizatoriJudet" fileName="usuariosProvince" />
+										</h:commandLink>
+										<h:commandLink rendered="#{not empty homeBean.mapaUserProvince}">
+											<p:graphicImage value="/images/csv.png" />
+											<p:dataExporter type="csv" target="tablaUtilizatoriJudet" fileName="usuariosProvince" />
+										</h:commandLink>
+										</div>																																						
+										<span class="subtitlu">MEMBRII ÎNREGISTRAȚI-ORGANIZAȚIA/JUDEȚ</span>														
+								</p:outputPanel>
+								</f:facet>												
+								<p:column headerText="Organizația" style="width:100px;">													
+									 <strong><h:outputText value="#{entry.descripcion}"/></strong>																																																					
+								</p:column>
+								<p:column headerText="Număr membrii" style="width:100px%;">
+									<strong><h:outputText value="#{entry.cantidad}" /></strong>
+								</p:column>
+								<p:column headerText="" styleClass="butonTabla text-center" exportable="false" style="width:10%;"
+									 toggleable="false">							
+									<h:commandLink title="Ver/Editar"
+										styleClass="fa fa-fw fa-pencil ui-button ui-state-default modBtn ui-CommandLink ui-CommandLink-icono"
+										action="#{homeBean.visualizar(entry.descripcion)}" />
+								</p:column>
+							</p:dataTable>
+
+						  <div  class = "char">	
+						 	<p:chart type="bar" model="#{homeBean.horizontalBarModelProvince}" style="width:600px;height:600px; "/> 
+					 </div> 
+		            </h:panelGrid>
+</ui:composition>

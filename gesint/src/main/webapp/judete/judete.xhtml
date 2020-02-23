@@ -1,0 +1,58 @@
+<ui:composition template="../layouts/layoutInterior2.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+	    <h:form id="searchlistProvince">
+	       <div class="rezultateFiltruCentral">
+		   <p:outputPanel layout="block" id="panouJudete">
+			<p:dataTable var="judet" value="#{judetBean.model}" rowsPerPageTemplate="10,25,50" rows="10" lazy="true" pageLinks="4" paginatorPosition="bottom" styleClass="modHeaderTable"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" id="tablaJudete" draggableColumns="true" paginator="true"
+			resizableColumns="true" paginatorAlwaysVisible="false">
+			 <f:facet name="header">
+			    <p:outputPanel>
+				<div class="left">
+				    <h:commandLink >
+					<p:graphicImage value="/images/xls.png" />
+					<p:dataExporter type="xls" target="tablaJudete" fileName="judete" />
+				    </h:commandLink>
+				    <h:commandLink >
+					<p:graphicImage value="/images/pdf.png" />
+					<p:dataExporter type="pdf" target="tablaJudete" fileName="judete" />
+				    </h:commandLink>
+				    <h:commandLink >
+					<p:graphicImage value="/images/csv.png" />
+					<p:dataExporter type="csv" target="tablaJudete" fileName="judete" />
+				    </h:commandLink>
+				</div>
+				<span class="titlu">JUDEȚE</span>
+			   </p:outputPanel>
+			</f:facet>						
+	      		<p:column headerText="Codul județului" style="width:35%;" sortBy="#{judet.indicator}">
+				<h:outputText value="#{judet.indicator}" />
+			</p:column>
+			<p:column headerText="Nume" style="width:60%;" sortBy="#{judet.nume}">
+				<h:outputText value="#{judet.nume}" />
+			</p:column>
+			<p:column headerText="Populaţie" style="width:60%;" sortBy="#{judet.populatie}">
+			     <h:outputText value="#{judet.populatie}" />
+			</p:column>
+			<p:column style="width:10%;" exportable="false" toggleable="false">
+				<h:commandLink title="Modifică județ" styleClass="fa fa-fw fa-pencil ui-button ui-state-default modBtn ui-CommandLink ui-CommandLink-icono"
+				action="#{judetBean.getFormModificareJudete(judet)}" />							
+			</p:column>
+			<f:facet name="footer"> Numărul total: 
+                        <h:outputText value="#{judetBean.model.rowCount} ">
+                             <f:convertNumber type="number"   maxIntegerDigits="9"  maxFractionDigits="0"/>
+                        </h:outputText>  de județe
+                     </f:facet>
+		    </p:dataTable>
+		    <p:messages globalOnly="true" autoUpdate="true" closable="true" showDetail="true" />
+		</p:outputPanel>
+	     </div>
+	   </h:form>
+	</ui:define>
+</ui:composition>

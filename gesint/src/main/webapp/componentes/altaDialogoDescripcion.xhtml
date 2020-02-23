@@ -1,0 +1,33 @@
+<!-- Ejemplo de uso:
+
+<ui:decorate template="/componentes/altaDialogoDescripcion.xhtml">
+    <ui:param name="textoBoton" value="Nuevo cuerpo" />
+    <ui:param name="idVista" value="cuerpos" />
+    <ui:param name="controller" value="#{cuerpoController}" />
+</ui:decorate>
+
+ -->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <p:commandButton value="#{textoBoton}" onclick="PF('altaDialogVar').show()" immediate="true" />
+
+    <p:dialog id="altaDialog" widgetVar="altaDialogVar" header="Alta" position="center" resizable="false"
+        onShow="$('[id*=inputDescripcion]').val('');" modal="true" width="30%">
+        <p:panelGrid columns="2" layout="grid" >
+            <h:outputLabel for="inputDescripcion" value="DescripciÃ³n (*):" />
+            <p:inputText id="inputDescripcion" binding="#{descripcionAlta}" converter="#{trimConverter}" required="#{param['formListado:guardar']!=null}"
+                requiredMessage="La descripciÃ³n no puede estar vacÃ­a.">
+                <f:attribute name="idServicio" value="#{idServicio}" />
+                <f:validator binding="#{genericValidator}" />
+            </p:inputText>
+        </p:panelGrid>
+        <div class="centrareButoaneDialog">
+            <p:commandButton id="guardar" value="Guardar" actionListener="#{controller.alta(descripcionAlta.value)}"
+                onclick="PF('altaDialogVar').hide()"/>
+            <p:commandButton value="Cerrar" onclick="PF('altaDialogVar').hide()" immediate="true" />
+        </div>
+    </p:dialog>
+
+</ui:composition>

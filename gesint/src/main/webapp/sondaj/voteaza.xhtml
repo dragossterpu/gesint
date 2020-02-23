@@ -1,0 +1,80 @@
+<ui:composition template="../layouts/layoutInterior2.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+	    <h:form id="listaSondajeActive">
+		<div class="rezultateFiltruCentral">
+		    <p:outputPanel layout="block" id="panouSondajeActive">
+			<p:dataTable id="tableSondajeActive" var="sondajActiv" rowIndexVar="rowIndex" value="#{sondajBean.modelActiv}" rows="20" sortOrder="descending"
+				draggableColumns="true" lazy="true" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+		                resizableColumns="true" paginator="true" rowKey="#{sondajActiv.id}" pageLinks="4" paginatorPosition="bottom" onkeypress="if (event.keyCode == 13) {return false; }" 
+		                styleClass="modHeaderTable" emptyMessage="Nu există niciun sondaj activ în acest moment." paginatorAlwaysVisible="false">
+			   <f:facet name="header">
+				<p:outputPanel ><span class="titlu">SONDAJE ACTIVE</span></p:outputPanel>							
+			   </f:facet>                    	
+			   <p:column headerText="Data sondajului" sortBy="#{sondajActiv.dataIncepere}" style="width:15%;" visible="#{sondajBean.list[0]}" exportable="#{sondajBean.list[0]}">
+				<h:outputText value="#{sondajActiv.dataIncepere}">
+				   <f:convertDateTime pattern="dd/MM/yyyy" timeZone="Europe/Madrid" />
+				</h:outputText>
+			   </p:column>
+			   <p:column headerText="Întrebare sondaj" sortBy="#{sondajActiv.intrebare}" style="width:75%;" visible="#{sondajBean.list[1]}" exportable="#{sondajBean.list[1]}">
+				<h:outputText escape="false" id="descriereIntrebare" value="#{sondajActiv.intrebare.length() gt 80 ? fn:substring(sondajActiv.intrebare,0,80).concat('...') : sondajActiv.intrebare}"></h:outputText>
+                                <p:tooltip id="toolTipText" for="descriereIntrebare" value="#{sondajActiv.intrebare}" position="top" />
+			   </p:column>
+			   <p:column headerText="Votează"  styleClass="butonTabla"  exportable="false" style="width:12%;" toggleable="false">
+			    <h:commandLink title="Votează sondajul" update="tableSondajeActive"   rendered="#{sondajBean.valideazaVot(sondajActiv)}"   styleClass="fa fa-fw fa-bullseye ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
+				action="#{sondajBean.getFormVoteazaSondaj(sondajActiv)}"  immediate="true" onstart="PF('statusDialog').show()"
+                                 onsuccess="PF('statusDialog').hide()"/>			   
+			   </p:column>
+			   <f:facet name="footer" > Total:
+			      <h:outputText value="#{sondajBean.model.rowCount}"> <f:convertNumber type="number"  maxIntegerDigits="5" maxFractionDigits="0"/>
+			      </h:outputText> sondaje active
+    			   </f:facet>
+			</p:dataTable>
+		     </p:outputPanel>		
+		</div>
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="/images/loading.gif" />
+			</p:dialog>			
+		<div class="aclaratii6"> <h:outputText rendered="#{sondajBean.sondaj.activ}" value="Dacă nu apare butonul care redirijează către pagina de vot înseamnă că ați votat. Vă mulțumim!" /></div> 
+		<div class="butoaneFormular">
+		      <p:button outcome="/sondaj/rezultate" value="Renunţă" icon="fa fa-fw fa-undo" />
+                 </div>
+		</h:form>
+	        <h:form id="formVoteazaondaj">
+                        <p:dialog header="Votează sondaj" widgetVar="dialogVoteazaSondaj" dynamic="true" width="800" height="400">                               
+                                <div class="aclaratii4"><strong>Întrebare sondaj</strong><br/> 
+                                #{sondajBean.sondajActiv.intrebare} <br/> 
+                                <strong>Descriere sondaj</strong> <br/> 
+                                 #{sondajBean.sondajActiv.descriere} <br/> <p:separator />
+                                </div>                                
+                                <div class="aclaratii4"><strong>Votul</strong> este unul din principiile de bază ale <strong>democrației</strong>,
+                                care constă în aceea că dă posibilitatea fiecărui membru de a-și exercita activ și pasiv dreptul de vot<br/>
+                                <strong>Dreptul de vot</strong> permite membrilor unui partid să voteze pentru a-și exprima voința.<br/>
+                                Odată exercitat acest drept, <strong>nu mai este posibil în a-și schimba opțiunea de vot.</strong></div>
+                                <p:separator />
+                                <p:panelGrid columns="1" id="panouVoteazaondaj">                                                          
+					    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+					        <p:outputLabel for="console" value=" " />
+					        <p:selectOneRadio id="console" value="#{sondajBean.votSondaj}" unselectable="true">
+					            <f:selectItem itemLabel="DA " itemValue="da" />
+					            <f:selectItem itemLabel="NU " itemValue="nu" />
+					            <f:selectItem itemLabel="ABTINERE " itemValue="abtinere" />
+					        </p:selectOneRadio>
+					    </h:panelGrid>
+                                        <p:outputPanel class="btnModalAcept">
+                                                <p:commandButton value="Votați" onclick="PF('dialogVoteazaSondaj').hide()"  update=":listaSondajeActive" actionListener="#{sondajBean.voteaza(sondajBean.votSondaj)}"/>
+                                        </p:outputPanel>
+                                </p:panelGrid>  
+                        </p:dialog>
+                        <p:dialog id="dialog" widgetVar="dialogMessage" header="INFO" closable="false" resizable="false" modal="true">
+                                <p:messages for="dialogMessage" autoUpdate="true" showDetail="true" showSummary="true" />
+                                <p:commandButton value="Acceptați" onclick="PF('dialogMessage').hide()" outcome="/sondaj/rezultate" styleClass="right" />
+                        </p:dialog>
+                </h:form>
+	</ui:define>
+</ui:composition>

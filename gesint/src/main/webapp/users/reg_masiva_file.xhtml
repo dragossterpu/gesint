@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../layouts/layoutInterior.xhtml">
+    
+      <f:metadata>
+        <f:viewParam name="plantilla" value="#{procesoMasivoBean.plansaDescarcareInregistrare}"/>
+         <f:viewAction action="#{navigareBean.inainte(procesoMasivoBean.titlu, request.servletPath)}"/>
+    </f:metadata>
+    <ui:define name="content">
+ 		<h1 class="titlu">#{procesoMasivoBean.titlu}</h1>
+        	<div class="aclaratii2">  Toți membrii înregistrați vor avea că parolă cuvântul:  perMembru .</div>
+      
+        <div class="contenedor">
+            <div id="panel">
+
+                <h:form>
+                    <p:panel>
+                        <p:panelGrid columns="4" layout="grid">
+                            <p:fileUpload id="uploaderAlta" value="#{procesoMasivoBean.uploadedFile}"
+                                          onstart="PF('statusDialog').show()" 
+                       					  onsuccess="PF('statusDialog').hide()"
+                                          label="Selectați fișierul" cancelLabel="Anulați"
+                                          uploadLabel="Înregistrați membri"
+                                          allowTypes="/(\.|\/)(xlsx)$/"
+                                          invalidFileMessage="Trebuie să selectați un fișier cu extensie Excel'.xlsx' (Superior la 2007)."
+                                          style="width:200%"
+                                          fileUploadListener="#{procesoMasivoBean.incarcareUtilizatoriFisier}"
+                                          process="@this" update="@form" 
+                                          fileLimit="1" fileLimitMessage="Există deja un fișier selectat" >
+                                <p:remoteCommand/>
+                            </p:fileUpload>                      
+
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:button outcome="/users/users" value="Anulați"/>
+
+						    <p:dialog id="dialog" widgetVar="dialogMessage" header="Información" closable="false" width="30%">
+						        <p:messages for="dialogMessage" autoUpdate="true" showDetail="true" showSummary="true" escape="false"/>
+						        <div class="centrareButoaneDialog">
+						            <p:button value="Închideți" outcome="/users/users" />
+						        </div>
+						    </p:dialog>
+						<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+				<p:graphicImage value="./images/loading.gif" />
+			</p:dialog>  
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

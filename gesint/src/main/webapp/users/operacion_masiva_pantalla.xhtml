@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    template="/layout/template.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="esteEliminare"
+            value="#{procesoMasivoController.esteEliminareMasiva}" />
+             <f:viewAction action="#{navigareBean.inainte(procesoMasivoController.titlu, request.servletPath)}"/>
+    </f:metadata>
+    <ui:define name="body">
+        <p:importConstants type="es.mira.pdyrh.constantes.Constantes"
+            var="Constantes" />
+        <p:importConstants type="es.mira.pdyrh.modelo.enums.RoleEnum"
+            var="RoleEnum" />
+        <h1 class="titlu">#{procesoMasivoController.titlu}</h1>
+        <div class="contenedor">
+            <div id="panel">
+                <h:form id="busquedaUsuarios">
+                    <p:panel>
+                        
+                        <p:panelGrid columns="4" layout="grid"
+                            columnClasses="columna-pequenia,,columna-pequenia,">
+
+                            <p:outputLabel for="fechaAccesoDesde"
+                                value="Fecha de último acceso desde" />
+                            <p:calendar id="fechaAccesoDesde"
+                                value="#{procesoMasivoController.usuarioBusqueda.fechaAccesoDesde}"
+                                pattern="dd/MM/yyyy" locale="es"
+                                navigator="true"
+                                maxdate="#{currentDate}" />
+
+                            <p:outputLabel for="fechaAccesoHasta"
+                                value="Fecha de último acceso hasta" />
+                            <p:calendar id="fechaAccesoHasta"
+                                value="#{procesoMasivoController.usuarioBusqueda.fechaAccesoHasta}"
+                                pattern="dd/MM/yyyy" locale="es"
+                                navigator="true"
+                                maxdate="#{currentDate}" />
+
+                            <p:outputLabel for="cuerpoSelect"
+                                value="Cuerpo" />
+                            <p:selectOneMenu
+                                value="#{procesoMasivoController.usuarioBusqueda.cuerpo}"
+                                id="cuerpoSelect"
+                                disabled="#{utilities.usuarioLogado.role eq RoleEnum.ROLE_ADMINISTRADOR_CUERPO}"
+                                converter="#{selectConverter}">
+                                <f:selectItem itemLabel="Seleccione una"
+                                    itemValue="" />
+                                <f:selectItems
+                                    value="#{applicationController.listaCuerpos}"
+                                    var="cuerpo"
+                                    itemLabel="#{cuerpo.descripcion}"
+                                    itemValue="#{cuerpo}" />
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:panelGrid layout="grid" columns="4"
+                            rendered="#{procesoMasivoController.esteEliminareMasiva}"
+                            columnClasses="columna-pequenia,,columna-pequenia,">
+                            <p:outputLabel for="fechaBloqueoDesde"
+                                value="Fecha de bloqueo desde" />
+                            <p:calendar id="fechaBloqueoDesde"
+                                value="#{procesoMasivoController.usuarioBusqueda.fechaBloqueoDesde}"
+                                pattern="dd/MM/yyyy" locale="es"
+                                navigator="true"
+                                maxdate="#{currentDate}" />
+
+                            <p:outputLabel for="fechaBloqueoHasta"
+                                value="Fecha de bloqueo hasta" />
+                            <p:calendar id="fechaBloqueoHasta"
+                                value="#{procesoMasivoController.usuarioBusqueda.fechaBloqueoHasta}"
+                                pattern="dd/MM/yyyy" locale="es"
+                                navigator="true"
+                                maxdate="#{currentDate}" />
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <p:commandButton id="cautareButon" value="Căutare"
+                        actionListener="#{procesoMasivoController.filtruUtilizatori}"
+                        update="@form" />
+                    <p:commandButton
+                        actionListener="#{procesoMasivoController.cautareCautare}"
+                        value="Curăţare" update="@form" />
+                    <p:button
+                        outcome="/administracion/usuarios/usuarios"
+                        value="Renunţare" />
+
+                    <p:outputPanel id="panelTabla"
+                        rendered="#{procesoMasivoController.afisareTabla}">
+                        <p:dataTable var="usuario"
+                            rowStyleClass="#{usuario.fechaInactividad eq null ? 'inactivo' : 'activo'}"
+                            value="#{procesoMasivoController.model}"
+                            id="tablaUtilizatori" draggableColumns="true"
+                            selection="#{procesoMasivoController.usuarioBusqueda.utilizatoriSelectionati}"
+                            rows="#{Constantes.TAMPAGINA}"
+                            rowsPerPageTemplate="5,10,15,20"
+                            paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            paginator="true"
+                            rowKey="#{usuario.username}" lazy="true"
+                            emptyMessage="No existe ningún resultado que cumpla los parámetros de su búsqueda."
+                            rowSelectMode="add" sortField="username">
+                            <p:ajax event="page"
+                                listener="#{procesoMasivoController.adaugareUtilizatoriSchimbPagina}"
+                                global="false" />
+                            <p:ajax event="rowUnselectCheckbox"
+                                listener="#{procesoMasivoController.checkDeselectionat}"
+                                global="false" />
+                            <p:ajax event="rowSelectCheckbox"
+                                listener="#{procesoMasivoController.checkSelectionat}"
+                                global="false" />
+                            <p:ajax event="toggleSelect"
+                                listener="#{procesoMasivoController.checkSelectionatToate}"
+                                global="false" />
+
+                            <f:facet name="header">
+                               USUARIOS
+                                <p:commandButton id="toggler"
+                                    type="button" value="Columnas"
+                                    styleClass="botonToggler"
+                                    icon="fa fa-th" />
+                                <p:columnToggler
+                                    datasource="tablaUtilizatori"
+                                    trigger="toggler">
+                                    <p:ajax event="toggle"
+                                        listener="#{usuarioController.onToggle}" />
+                                </p:columnToggler>
+                            </f:facet>
+
+                            <p:column selectionMode="multiple"
+                                width="16" />
+
+                            <p:column headerText="Usuario" width="100"
+                                sortBy="#{usuario.username}"
+                                visible="#{usuarioController.list[0]}">
+                                <h:outputText
+                                    value="#{usuario.username}" />
+                            </p:column>
+
+                            <p:column headerText="Nombre"
+                                sortBy="#{usuario.nombre}"
+                                visible="#{usuarioController.list[1]}">
+                                <h:outputText value="#{usuario.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Primer apellido"
+                                sortBy="#{usuario.apellido1}"
+                                visible="#{usuarioController.list[2]}">
+                                <h:outputText
+                                    value="#{usuario.apellido1}" />
+                            </p:column>
+
+                            <p:column headerText="Segundo apellido"
+                                sortBy="#{usuario.apellido2}"
+                                visible="#{usuarioController.list[3]}">
+                                <h:outputText
+                                    value="#{usuario.apellido2}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha bloqueo"
+                                width="100"
+                                sortBy="#{usuario.fechaInactividad}"
+                                visible="#{usuarioController.list[4]}">
+                                <h:outputText
+                                    value="#{usuario.fechaInactividad}">
+                                    <f:convertDateTime
+                                        pattern="dd/MM/yyyy"
+                                        timeZone="Europe/Madrid" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Últ. acceso"
+                                width="100"
+                                sortBy="#{usuario.fechaUltimoAcceso}"
+                                visible="#{usuarioController.list[5]}">
+                                <h:outputText
+                                    value="#{usuario.fechaUltimoAcceso}">
+                                    <f:convertDateTime
+                                        pattern="dd/MM/yyyy"
+                                        timeZone="Europe/Madrid" />
+                                </h:outputText>
+                            </p:column>
+
+                            <f:facet name="footer">
+                             Resultado de la búsqueda: #{procesoMasivoController.model.rowCount} usuarios.
+                        </f:facet>
+                        </p:dataTable>
+                        <p:commandButton value="Procesar usuarios"
+                            actionListener="#{procesoMasivoController.procesareUtilizatori}">
+                            <p:confirm />
+                        </p:commandButton>
+                    </p:outputPanel>
+                    <ui:decorate
+                        template="/componentes/dialogoConfirmacion.xhtml">
+                        <ui:param name="ruta"
+                            value="/administracion/usuarios/usuarios" />
+                    </ui:decorate>
+                    <ui:decorate
+                        template="/componentes/dialogoConfirmarAccion.xhtml">
+                        <ui:param name="mensaje"
+                            value="¿Está seguro de la operación de #{procesoMasivoController.titlu} masivo
+                                sobre los usuarios seleccionados?" />
+                        <ui:param name="cabecera" value="Modificación" />
+                    </ui:decorate>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

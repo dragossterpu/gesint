@@ -1,0 +1,162 @@
+body {
+  padding-bottom: 20px;
+  font-family: Kozuka Gothic Pro, Verdana;
+  font-size: 12px;
+}
+
+.navbar {
+  margin-bottom: 0px;
+}
+.navbar-dark .navbar-nav .nav-link{
+	background-color: #ecf6f8;
+    color: #797878;
+    text-transform: uppercase;
+	padding: 18px 20px;
+}
+.bg-dark {
+    background-color: transparent !important;
+}
+ .navbar-dark .navbar-nav .active>.nav-link,
+ .navbar-dark .navbar-nav .nav-link.active,
+ .navbar-dark .navbar-nav .nav-link.show,
+ .navbar-dark .navbar-nav .show>.nav-link {
+    color: #fff;
+    background: #02b5c9;
+}
+.navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover {
+    color: rgba(255,255,255,1);
+    background-color: #02b5c9;
+}
+a.admin {
+    background-color: #ecf6f8;
+	color: #797878;
+    padding: 18px;
+}
+a.salir {
+    background-color: #ecf6f8;
+	color: #797878;
+    padding: 14px 14px 13px;
+	right: 15px;
+    position: absolute;
+}
+.navbar-collapse .form-inline.my-2.my-md-0 {
+    background-color: #ecf6f8;
+    width: 20%;
+}
+.navbar-dark .navbar-toggler-icon{
+	background-image:url(../img/descarga.svg)
+}
+.navbar-toggler {padding: 0px;}
+
+/* ********** Login ********** */
+.login{margin:0 auto 0 auto; padding-top:10px; width:100%;}
+.login form{margin-top:10px;}
+.login .asterisco{margin:auto;}
+.login h1, .change h1{background: url(../img/icon32/padlock.png) no-repeat bottom left; padding-left:40px; padding-top:20px; font:22px Verdana, sans-serif;}
+.login div img{float:left;}
+.login .colCampo{width:40%;}
+#restaurar .asterisco{margin-bottom:10px;}
+    /* ********** Login FIN********** */
+
+    /* ********** Paneles ********** */
+.ui-panel{border:0px; padding:0; margin-bottom:15px; margin-top:0px;}
+.ui-panel .ui-panel-content{border:1px solid #c8def0; background-color: #c8def0 !important;}
+.ui-tabs{padding:0px;}
+.ui-tabs .ui-tabs-panel{padding:10px 0px 0px 0px;}
+ /* ********** Paneles FIN********** */
+ 
+ /* ********** Contenido ********** */
+#contenido{margin:0px auto 10px auto; max-width:1000px;}
+.cuerpo{background-color:#ffffff; border:none; padding:0px;}
+
+ /* ********** Contenido FIN ********** */
+a:-webkit-any-link{
+ 	padding-left: 5px;
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+ .ui-radiobutton ui-widget{
+    position: static;
+    margin-top: 0;
+    margin-right: .3125rem;
+    margin-left: 0;}
+    
+    .ui-radiobutton-icon ui-icon ui-c ui-icon-bullet{
+    position: static;
+    margin-top: 0;
+    margin-right: .3125rem;
+    margin-left: 0;}
+.ui-menu ui-menubar ui-widget ui-widget-content ui-corner-all ui-helper-clearfix navbar-nav mr-auto{
+   background: #79b7e7;
+   } 
+   
+   .perfil {
+    float: right;
+    color: #02b5c9;
+    text-decoration: none;
+}
+.ui-menuitem ui-widget ui-corner-all{
+	    color: #fff;
+    background: #02b5c9;
+	
+}
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    border: 1px solid #79b7e7;
+    background: #cdd5d7;
+    font-weight: bold;
+    color: #2e6e9e;
+}
+
+.body {
+    padding-bottom: 20px;
+    font-family: Kozuka Gothic Pro, Verdana;
+    font-size: 12px;
+}
+
+.ui-menuitem ui-widget ui-corner-all-active{    color: #fff;
+    background: #02b5c9;}
+    
+.collapse navbar-collapse{ background: #ecf6f8;}
+
+
+element.style {
+}
+.ui-chkbox-icon.ui-icon {
+    overflow: visible;
+}
+.ui-state-active .ui-icon {
+    background-image: url(#{request.contextPath}/javax.faces.resource/images/ui-icons_f9bd01_256x240.png.xhtml?ln=primefaces-redmond);
+     color: #2e6e9e;
+}
+.ui-helper-reset {
+    /* margin: 0; */
+    /* padding: 0; */
+    /* border: 0; */
+    outline: 0;
+    /* line-height: 1.3; */
+    text-decoration: none;
+    font-size: 100%;
+    list-style: none;
+}
+.table{
+    margin: 15px 15px 30px;
+}
+.ui-chkbox-icon ui-icon ui-icon-blank ui-c{    box-sizing: border-box;
+    padding: 0;}
+    
+ui-accordion-header ui-helper-reset ui-state-default ui-state-active ui-corner-top{
+	    background: #ecf6f8;
+    border: 1px solid #02b5c9;
+    padding: 15px 0px;
+    width: 100%;
+
+    }
+    .ui-accordion .ui-accordion-content{
+    	    background: #ecf6f8;
+    border: none;
+    padding: 15px 0px;
+    width: 100%;}
+    
+    ui-accordion-content ui-helper-reset ui-widget-content ui-helper-hidden{  margin: 0 0 20px;}

@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" template="../layouts/template-exterior.xhtml">
+
+	<ui:define name="title">Gesint - Login</ui:define>
+    <ui:define name="body2">
+    <div class="row">
+		<div id="holder" class="col-lg-3 col-md-3 col-sm-5 col-xs-12">
+	        <div class="login">
+	            <form action="login" method="post">
+	                <p:panel id="panel">
+	                    <p:focus context="panel" />
+	
+	                    <p:messages id="msgs" showDetail="true" />
+	
+	                    <p:panelGrid columns="2" cellpadding="5">
+	                       <p:outputLabel value="Utilizator"></p:outputLabel>
+	                        <input type="text" name="username" required="required"/>
+	
+	                         <p:outputLabel value="Parola"></p:outputLabel>
+	                        <input type="password" name="password" required="required"/>
+	
+	                    </p:panelGrid>	                   
+	                </p:panel>
+	
+	                <input type="submit" value="Autentificare" class="botonGen" id="btn" />
+	 <br /><br />
+                <p:link outcome="/acces/recuperarPassword" value="Utilizator / Parolă uitată." />
+	                
+	                
+	                <p:outputLabel value="* Contul dvs. este blocat. Contactați administratorul aplicației."
+	                    rendered="#{SPRING_SECURITY_LAST_EXCEPTION.message.contains('locked')}" styleClass="error" />
+	
+	                <p:outputLabel value="* Nume de utilizator sau parolă incorecte. Încercați din nou."
+	                    rendered="#{SPRING_SECURITY_LAST_EXCEPTION.message.contains('Bad credentials')}" styleClass="error" />
+	
+	            </form>
+	
+	        </div>       
+		</div>
+		<div class="listInfo col-lg-9 col-md-9 col-sm-7 col-xs-12">
+			Această aplicație de administrare membrii partid multi-canal conține,:
+			<ul>
+				<li><STRONG>Administrare membrii partid - Client Relationship Management (CRM).</STRONG></li>
+				<li><STRONG>Sondaje publice sau interne</STRONG></li>
+				<li><STRONG>Sistem de votare intern</STRONG></li>
+				<li>Analiză în timp real <STRONG>(Business Intelligence)-BPPM (Business Process and Performance Management)</STRONG></li>
+				<li>Analiză startegică <STRONG>(Business Intelligence)-Datamart</STRONG></li>
+				<li>Asistență și administrare pagină web</li>
+				<li><STRONG>Generator de rapoarte</STRONG></li>
+				<li><STRONG>Suport corespondența e-mail</STRONG></li>
+				 <li><STRONG>Democracy 2.0:</STRONG> politics inside social networks
+Social Networks include groups of people with homogeneous profiles inside heterogeneous network of
+networks. The paradigm of this universalizing tendency has not gone unnoticed for marketing world, advertising and therefore persuasive communication in all aspects. However, one of the applications that undoubtedly are more appealing and interesting is its recent use in politics world. Many public figures have
+their blog, their Youtube's Video Channel, their fanpage in popular networks and for that get an automatic
+informative feedback few seconds after their publication. Are we then facing a much more participatory
+politics in which the voter is able to give his opinion (which is taken into account) in a matter of seconds, or
+is it simply a marketing operation in times of crisis to save costs and get closer (and gain) to young voters
+increasingly accustomed to consuming this type of communication? Anyway, we are facing a new communicative and political landscape that should be analyzed carefully.</li> 
+				<li>... și multe alte lucruri utile și interesante!</li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+    	<div class="versionInfo col-lg-3 col-md-3 col-sm-5 col-xs-12">	      
+	      <b><h:outputText styleClass="fa fa-registered" value=" Gesint - Versión 2.1."	/></b>	       
+		</div>
+    </div>
+    </ui:define>
+</ui:composition>
