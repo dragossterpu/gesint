@@ -245,16 +245,16 @@
 							    </p:menuButton>
 							</p:outputPanel>
 						</f:facet>
-						<p:column headerText="Nume" sortBy="#{user.numeComplet}" style="width:18%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
+						<p:column headerText="Nume" sortBy="#{user.nume}" style="width:18%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
 							<h:outputText value="#{user.numeComplet}" />
 						</p:column>
 						<p:column headerText="Email" sortBy="#{user.username}" style="width:22%;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
 							<h:outputText value="#{user.username}" />
 						</p:column>
-						<p:column headerText="Județul"  style="width:15%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
+						<p:column headerText="Județul"  sortBy="#{user.localitate}" style="width:15%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
 							<h:outputText value="#{user.codJudet.nume}" />
 						</p:column>
-						<p:column headerText="Localitatea"  style="width:22%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
+						<p:column headerText="Localitatea"   sortBy="#{user.localitate}" style="width:22%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
 							<h:outputText value="#{user.localitate.nume}" />
 						</p:column>
 						<p:column headerText="Blocat" sortBy="#{user.validat}"

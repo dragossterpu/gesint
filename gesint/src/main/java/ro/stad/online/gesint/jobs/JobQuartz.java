@@ -30,66 +30,64 @@ import ro.stad.online.gesint.util.FacesUtilities;
 @Slf4j
 public class JobQuartz {
 
-        /**
-         * Variala utilizata pentru injectarea serviciului de sondale.
-         */
-        @Autowired
-        private SondajService sondajService;
+	/**
+	 * Variala utilizata pentru injectarea serviciului de sondale.
+	 */
+	@Autowired
+	private SondajService sondajService;
 
-        /**
-         * Serviciul de înregistrare a activității.
-         */
-        @Autowired
-        private RegistruActivitateService regActividadService;
+	/**
+	 * Serviciul de înregistrare a activității.
+	 */
+	@Autowired
+	private RegistruActivitateService regActividadService;
 
-        /**
-         * Sondaje finalizate.
-         */
-        private List<Sondaj> sondajeFinalizate;
+	/**
+	 * Sondaje finalizate.
+	 */
+	private List<Sondaj> sondajeFinalizate;
 
-        /**
-         * Metodă folosită pentru a calcula procentajul voturilor la sondajele inchise
-         * @param se executa in fiecare noapte la ora 12.
-         */
-        @Scheduled(cron = "60 * * * * *")
-        public void actualizeazaProcentajSondaj() {
-                try {
-                        sondajeFinalizate = sondajService.cautareSondajeFinalizate();
-                        for (final Sondaj sond : sondajeFinalizate) {
-                                sond.setActiv(false);
-                                sond.setProcentajAbt(
-                                                obtinereProcentaj(sond.getTotalVoturiAbt(), sond.getTotalVoturi()));
-                                sond.setProcentajNu(obtinereProcentaj(sond.getTotalVoturiNu(), sond.getTotalVoturi()));
-                                sond.setProcentajDa(obtinereProcentaj(sond.getTotalVoturiDa(), sond.getTotalVoturi()));
-                                sondajService.save(sond);
-                                log.info("Sondajul a fost actualizat și finalizat");
+	/**
+	 * Metodă folosită pentru a calcula procentajul voturilor la sondajele inchise
+	 * @param se executa in fiecare noapte la ora 12.
+	 */
+	@Scheduled(cron = "30 * * * * *")
+	public void actualizeazaProcentajSondaj() {
+		try {
+			sondajeFinalizate = sondajService.cautareSondajeFinalizate();
+			for (final Sondaj sond : sondajeFinalizate) {
+				sond.setActiv(false);
+				sond.setProcentajAbt(obtinereProcentaj(sond.getTotalVoturiAbt(), sond.getTotalVoturi()));
+				sond.setProcentajNu(obtinereProcentaj(sond.getTotalVoturiNu(), sond.getTotalVoturi()));
+				sond.setProcentajDa(obtinereProcentaj(sond.getTotalVoturiDa(), sond.getTotalVoturi()));
+				sondajService.save(sond);
+				log.info("Sondajul a fost actualizat și finalizat");
 
-                        }
+			}
 
-                }
-                catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
-                        log.error("A apărut o eroare la actualizarea și finalizarea sondajului ");
-                        final String descriere = "A apărut o eroare la modificarea sondajului";
-                        this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.SONDAJ.getDescriere(),
-                                        e);
-                        log.error(descriere);
+		}
+		catch (final DataAccessException e) {
+			FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, RegistruEnum.EROARE.getDescriere(),
+					Constante.DESCEROAREMESAJ);
+			log.error("A apărut o eroare la actualizarea și finalizarea sondajului ");
+			final String descriere = "A apărut o eroare la modificarea sondajului";
+			this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.SONDAJ.getDescriere(), e);
+			log.error(descriere);
 
-                }
+		}
 
-        }
+	}
 
-        /**
-         * Metoda care calculeaza procentajul total de voturi
-         * @param numar Integer numar de voturi
-         * @return divFinal Float
-         */
-        private Float obtinereProcentaj(final Integer numar, final Integer totalVoturi) {
-                final int num = numar * NumarMagic.NUMBERHUNDRED;
-                final float div = ((float) num / totalVoturi);
-                return Math.round(div * NumarMagic.NUMBERHUNDRED) / NumarMagic.NUMBERHUNDREDF;
+	/**
+	 * Metoda care calculeaza procentajul total de voturi
+	 * @param numar Integer numar de voturi
+	 * @return divFinal Float
+	 */
+	private Float obtinereProcentaj(final Integer numar, final Integer totalVoturi) {
+		final int num = numar * NumarMagic.NUMBERHUNDRED;
+		final float div = ((float) num / totalVoturi);
+		return Math.round(div * NumarMagic.NUMBERHUNDRED) / NumarMagic.NUMBERHUNDREDF;
 
-        }
+	}
 
 }

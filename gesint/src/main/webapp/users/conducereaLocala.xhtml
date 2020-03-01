@@ -137,16 +137,16 @@
 							    </p:menuButton>
 							</p:outputPanel>
 						</f:facet>
-						<p:column headerText="Nume" sortBy="#{user.numeComplet}" style="width:17%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
+						<p:column headerText="Nume" sortBy="#{user.nume}" style="width:17%;" visible="#{userBean.list[0]}" exportable="#{userBean.list[0]}">
 							<b><h:outputText value="#{user.numeComplet}" /></b>
 						</p:column>
-						<p:column headerText="Funcția" sortBy="#{user.team.nume}" style="width:28%;text-align:center;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
+						<p:column headerText="Funcția" sortBy="#{user.team}" style="width:28%;text-align:center;" visible="#{userBean.list[1]}" exportable="#{userBean.list[1]}">
 							<b><h:outputText value="#{user.team.nume}" /></b>
 						</p:column>
 						<p:column headerText="Email" sortBy="#{user.username}" style="width:22%;" visible="#{userBean.list[2]}" exportable="#{userBean.list[2]}">
 							<b><h:outputText value="#{user.username}" /></b>
 						</p:column>
-						<p:column headerText="Județul"  style="width:14%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
+						<p:column headerText="Județul"  sortBy="#{user.codJudet}" style="width:14%;" visible="#{userBean.list[3]}" exportable="#{userBean.list[3]}">
 							<b><h:outputText value="#{user.codJudet.nume}" /></b>
 						</p:column>
 						<p:column headerText="Rank"  style="width:6%;text-align:center;" visible="#{userBean.list[4]}" exportable="#{userBean.list[4]}">
