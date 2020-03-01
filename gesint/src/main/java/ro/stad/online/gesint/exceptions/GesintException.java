@@ -1,5 +1,7 @@
 package ro.stad.online.gesint.exceptions;
 
+import ro.stad.online.gesint.constante.Constante;
+
 /**
  * Excepție personalizată a aplicatiei
  *
@@ -16,15 +18,7 @@ public class GesintException extends Exception {
         /**
          * Mesaj de excepție.
          */
-        String mesaj;
-
-        /**
-         * Excepție generală fără parametri.
-         */
-
-        public GesintException() {
-                super();
-        }
+        private String mesaj = Constante.SPATIU;
 
         /**
          * Excepție generală
@@ -32,7 +26,6 @@ public class GesintException extends Exception {
          */
         public GesintException(final Exception e) {
                 super(e);
-                mesaj = e.getMessage();
         }
 
         /**

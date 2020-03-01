@@ -14,7 +14,6 @@ import org.hibernate.criterion.Projections;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Throwables;
@@ -29,7 +28,6 @@ import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.persistence.repositories.RegistruActivitateRepository;
 import ro.stad.online.gesint.services.RegistruActivitateService;
 import ro.stad.online.gesint.util.FacesUtilities;
-import ro.stad.online.gesint.util.Utilitati;
 import ro.stad.online.gesint.util.UtilitatiCriteria;
 
 /**
@@ -86,11 +84,16 @@ public class RegistruActivitateServiceImpl implements RegistruActivitateService,
                         final Utilizator utilizator) {
                 try {
                         final RegistruActivitate registruActivitate = new RegistruActivitate();
-                        registruActivitate.setTipRegActivitate(RegistruEnum.INREGISTRARE.toString());
+                        registruActivitate.setTipRegActivitate(RegistruEnum.valueOf(tipReg));
                         registruActivitate.setDataInregistrari(new Date());
                         registruActivitate.setDescriere(descriere);
-                        registruActivitate.setNumeSectiune(sectiune);
-                        registruActivitate.setUsernameRegActividad(utilizator.getUsername());
+                        registruActivitate.setNumeSectiune(SectiuniEnum.valueOf(sectiune));
+                        if (utilizator.getUsername() != null) {
+                                registruActivitate.setUsernameRegActividad(utilizator.getUsername());
+                        }
+                        else {
+                                registruActivitate.setUsernameRegActividad(Constante.SYSTEM);
+                        }
                         this.regActividadRepository.save(registruActivitate);
                 }
                 catch (final DataAccessException e) {
@@ -106,7 +109,8 @@ public class RegistruActivitateServiceImpl implements RegistruActivitateService,
          */
         @Override
         public List<String> cautareUtilizatorDupaRegistru(final String infoUtilizator) {
-                return this.regActividadRepository.cautareUtilizatorDupaRegistru("%" + infoUtilizator + "%");
+                return this.regActividadRepository.cautareUtilizatorDupaRegistru(
+                                Constante.PORCENTAJ.concat(infoUtilizator).concat(Constante.PORCENTAJ));
         }
 
         /**
@@ -138,7 +142,8 @@ public class RegistruActivitateServiceImpl implements RegistruActivitateService,
                                 criteria.addOrder(Order.desc(sortField));
                         }
                         else if (sortField == null) {
-                                criteria.addOrder(Order.asc(Constante.DATECREATE));
+
+                                criteria.addOrder(Order.asc(Constante.DATAINREGISTRARII));
                         }
                         return criteria.list();
                 }
@@ -149,7 +154,7 @@ public class RegistruActivitateServiceImpl implements RegistruActivitateService,
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 }
                         }
                 }
@@ -164,22 +169,16 @@ public class RegistruActivitateServiceImpl implements RegistruActivitateService,
         private void creaCriteria(final FiltruRegistru filtruRegistru, final Criteria criteria) {
 
                 UtilitatiCriteria.setConditieCriteriaDataMaiMare(filtruRegistru.getDataIncepand(), criteria,
-                                Constante.DATECREATE);
-
+                                Constante.DATAINREGISTRARII);
                 UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(filtruRegistru.getDataPana(), criteria,
-                                Constante.DATECREATE);
-
+                                Constante.DATAINREGISTRARII);
                 UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruRegistru.getNumeSectiune(), criteria,
                                 Constante.NUMESECTIUNE);
-
                 UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruRegistru.getTipRegActivitate(), criteria,
                                 Constante.TIPREGACTIVITATE);
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruRegistru.getIdUtilizator(), criteria,
+                                "usernameRegActividad");
 
-                UtilitatiCriteria.setConditieCriteriaTextLike(filtruRegistru.getUsernameRegActividad(), criteria,
-                                Constante.USERCREATE);
-
-                UtilitatiCriteria.setConditieCriteriaEgalitateLong(filtruRegistru.getIdUtilizator(), criteria,
-                                Constante.IDUTILIZATOR);
         }
 
         /**
@@ -205,58 +204,11 @@ public class RegistruActivitateServiceImpl implements RegistruActivitateService,
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 }
                         }
                 }
 
-        }
-
-        /**
-         * Metoda care inregitraza un jurnal de activitate.
-         * @param idObiect Long
-         * @param descriere String
-         * @param ambitul String
-         * @param obiect String
-         * @param eliminat boolean
-         */
-        private void inregistrareRegistru(final Long idObiect, final String descriere, final String ambitul,
-                        final String obiect, final boolean eliminat) {
-                final RegistruEnum operatie = Utilitati.procesarOperacion(idObiect, eliminat);
-
-                final StringBuilder descriereReg = new StringBuilder(operatie.toString());
-                descriereReg.append(obiect);
-                if (!operatie.equals(RegistruEnum.INREGISTRARE)) {
-                        descriereReg.append(idObiect);
-                }
-                descriereReg.append(" (" + descriere + ") s-a terminat cu succes.");
-                inregistrareRegistruActivitate(descriereReg.toString(), operatie.name(), ambitul, null);
-        }
-
-        /**
-         * Metoda care inregitraza sau actualizeaza un jurnal de activitate.
-         * @param idObiect Long
-         * @param descriere String
-         * @param ambitul String
-         * @param obiect String
-         */
-        @Override
-        public void salveazaRegistruInregistrareModificare(final Long idObiect, final String descriere,
-                        final String ambitul, final String obiect) {
-                inregistrareRegistru(idObiect, descriere, ambitul, obiect, false);
-        }
-
-        /**
-         * Metoda care inregitraza un jurnal de activitate de tip eliminare.
-         * @param idObiect Long
-         * @param descriere String
-         * @param ambitul String
-         * @param obiect String
-         */
-        @Override
-        public void salveazaRegistruEliminare(final Long idObiect, final String descriere, final String ambitul,
-                        final String obiect) {
-                inregistrareRegistru(idObiect, descriere, ambitul, obiect, true);
         }
 
         /**
@@ -266,10 +218,9 @@ public class RegistruActivitateServiceImpl implements RegistruActivitateService,
          * @param e Exception
          */
         @Override
-        public void salveazaRegistruEroare(final String ambitul, final String obiect, final Exception e) {
-                inregistrareRegistruActivitate(
-                                Throwables.getStackTraceAsString(e) + Constante.BARAOBLICADREAPTA + obiect,
-                                RegistruEnum.EROARE.name(), ambitul, null);
+        public void salveazaRegistruEroare(final String descriere, final String sectiune, final Exception e) {
+                inregistrareRegistruActivitate(Throwables.getStackTraceAsString(e).concat(Constante.BARAOBLICADREAPTA)
+                                .concat(descriere), RegistruEnum.EROARE.name(), sectiune, null);
         }
 
         /**
@@ -278,7 +229,7 @@ public class RegistruActivitateServiceImpl implements RegistruActivitateService,
          */
         @Override
         public void salveazaRegistruLoginOK(final Utilizator utilizator) {
-                inregistrareRegistruActivitate("Logare utilizator: " + utilizator.getUsername(),
+                inregistrareRegistruActivitate("Logare utilizator: ".concat(utilizator.getUsername()),
                                 RegistruEnum.INREGISTRARE.name(), SectiuniEnum.LOGIN.name(), utilizator);
         }
 
@@ -288,46 +239,8 @@ public class RegistruActivitateServiceImpl implements RegistruActivitateService,
          */
         @Override
         public void salveazaRegistruLoginKO(final String utilizator) {
-                inregistrareRegistruActivitate("Autentificare eronată a utilizatorului : " + utilizator,
+                inregistrareRegistruActivitate("Autentificare eronată a utilizatorului : ".concat(utilizator),
                                 RegistruEnum.EROARE.name(), "LOGIN", null);
-        }
-
-        /**
-         * Metoda care inregistreaza un jurnal de actiovitate
-         * @param sectiune SectiuniEnum
-         * @param tip String
-         * @param descriere String
-         */
-        @Override
-        public void inregistrareActivitate(final String sectiune, final String tip, final String descriere) {
-                final RegistruActivitate reg = new RegistruActivitate();
-                final Utilizator utilizator = (Utilizator) SecurityContextHolder.getContext().getAuthentication()
-                                .getPrincipal();
-                reg.setDataInregistrari(new Date());
-                reg.setNumeSectiune(sectiune);
-                reg.setTipRegActivitate(RegistruEnum.INREGISTRARE.name());
-                reg.setUsernameRegActividad(utilizator.getUsername());
-                this.regActividadRepository.save(reg);
-
-        }
-
-        /**
-         * Metoda care inregistreaza un jurnal de activitate de tip eroare
-         * @param sectiune SectiuniEnum
-         * @param tip String
-         * @param descriere String
-         */
-        @Override
-        public void inregistrareEroare(final String seccion, final Exception exception) {
-                final RegistruActivitate reg = new RegistruActivitate();
-                final Utilizator utilizator = (Utilizator) SecurityContextHolder.getContext().getAuthentication()
-                                .getPrincipal();
-                reg.setDataInregistrari(new Date());
-                reg.setNumeSectiune(seccion);
-                reg.setTipRegActivitate(RegistruEnum.EROARE.name());
-                reg.setUsernameRegActividad(utilizator.getUsername());
-                this.regActividadRepository.save(reg);
-
         }
 
         /**

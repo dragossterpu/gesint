@@ -24,6 +24,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.CategorieEnum;
 
 /**
@@ -51,7 +52,7 @@ public class Proiect extends AbstractEntity implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PROICTE")
         @SequenceGenerator(name = "SEQ_PROICTE", sequenceName = "SEQ_PROICTE", allocationSize = 1)
-        @Column(name = "id", length = 5)
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**
@@ -77,13 +78,13 @@ public class Proiect extends AbstractEntity implements Serializable {
         /**
          * Data publicarii.
          */
-        @Column(name = "date_publish")
+        @Column(name = "DATE_PUBLISH")
         private Date datePublish;
 
         /**
          * Educatie utilizator.
          */
-        @Column(name = "categoria")
+        @Column(name = "CATEGORIA")
         @Enumerated(EnumType.STRING)
         private CategorieEnum categoria;
 
@@ -103,7 +104,7 @@ public class Proiect extends AbstractEntity implements Serializable {
          * Utilizatorul care publica proiectul
          */
         @ManyToOne
-        @JoinColumn(name = "username")
+        @JoinColumn(name = "USERNAME")
         private Utilizator utilizator;
 
 }

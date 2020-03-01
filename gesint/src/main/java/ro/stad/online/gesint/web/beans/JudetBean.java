@@ -21,11 +21,13 @@ import org.springframework.stereotype.Controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.lazydata.LazyDataJudete;
 import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.Tara;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.services.JudetService;
 import ro.stad.online.gesint.services.RegistruActivitateService;
@@ -41,6 +43,7 @@ import ro.stad.online.gesint.util.FacesUtilities;
 @ManagedBean
 @Controller("judetBean")
 @Scope(Constante.SESSION)
+@Slf4j
 public class JudetBean implements Serializable {
 
         /**
@@ -96,8 +99,8 @@ public class JudetBean implements Serializable {
          */
         @PostConstruct
         public void init() {
-                judetul = new Judet();
-                listaJudete = new ArrayList<>();
+                this.judetul = new Judet();
+                this.listaJudete = new ArrayList<>();
                 this.model = new LazyDataJudete(this.judetService);
                 cautareJudete();
         }
@@ -109,6 +112,7 @@ public class JudetBean implements Serializable {
         public void cautareJudete() {
                 this.model = new LazyDataJudete(this.judetService);
                 this.model.load(0, NumarMagic.NUMBERTEN, Constante.ID, SortOrder.DESCENDING, null);
+                log.debug("Intram in cautareJudete");
         }
 
         /**
@@ -120,14 +124,16 @@ public class JudetBean implements Serializable {
                         this.judetul = jud;
                         this.judetService.save(this.judetul);
                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.SCHIMBDATE,
-                                        Constante.REGMODOK);
+                                        Constante.OKMODIFICAREMESAJ);
+                        log.debug("Modificare județ");
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la modificarea județului";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.JUDET.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
         }
 
@@ -160,12 +166,13 @@ public class JudetBean implements Serializable {
                 this.numeDoc = Constante.SPATIU;
                 final UploadedFile uFile = event.getFile();
                 try {
-                        judetul = judetService.incarcareImaginaFaraStocare(IOUtils.toByteArray(uFile.getInputstream()),
-                                        judetul);
-                        numeDoc = uFile.getFileName();
+                        this.judetul = this.judetService.incarcareImaginaFaraStocare(
+                                        IOUtils.toByteArray(uFile.getInputstream()), judetul);
+                        this.numeDoc = uFile.getFileName();
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
                                         "A apărut o eroare la încărcarea imaginii.".concat(Constante.DESCEROAREMESAJ));
                         final String descriere = "A apărut o eroare la încărcarea imaginii";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.JUDET.getDescriere(),

@@ -3,6 +3,7 @@ package ro.stad.online.gesint.services.impl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.exceptions.GesintException;
 import ro.stad.online.gesint.model.filters.FiltruDocument;
 import ro.stad.online.gesint.persistence.entities.Corespondenta;
@@ -34,9 +36,11 @@ import ro.stad.online.gesint.persistence.entities.Documentul;
 import ro.stad.online.gesint.persistence.entities.Sondaj;
 import ro.stad.online.gesint.persistence.entities.TipDocument;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.persistence.repositories.DocumentRepository;
 import ro.stad.online.gesint.persistence.repositories.TipDocumentRepository;
 import ro.stad.online.gesint.services.DocumentService;
+import ro.stad.online.gesint.services.RegistruActivitateService;
 
 /**
  *
@@ -69,6 +73,12 @@ public class DocumentServiceImpl implements DocumentService {
         private TipDocumentRepository tipDocumentRepository;
 
         /**
+         * Serviciul de înregistrare a activității.
+         */
+        @Autowired
+        private RegistruActivitateService regActividadService;
+
+        /**
          * Metoda care returnează documentele care corespund unui tip de document.
          * @param tipDocument Numele tipului de document
          * @return lista List<Documentul>
@@ -98,22 +108,31 @@ public class DocumentServiceImpl implements DocumentService {
          * @return Lista de documente List<Documentul>
          *
          */
+        @SuppressWarnings(Constante.UNCHECKED)
         @Override
         public List<Documentul> cautareDocumentCriteria(final int first, final int pageSize, final String sortField,
                         final SortOrder sortOrder, final FiltruDocument filtruDocument) {
-                final Session session = sessionFactory.openSession();
-                final Criteria criteriaDocument = session.createCriteria(Documentul.class, "documento");
-                creaCriteria(filtruDocument, criteriaDocument);
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                if (filtruDocument.getUtilizator() != null) {
-                        criteriaDocument.createAlias("inspeccion", "inspecciones");
-                        criteriaDocument.add(Restrictions.eq("inspecciones.id",
-                                        filtruDocument.getUtilizator().getUsername()));
+                Session session = sessionFactory.getCurrentSession();
+                List<Documentul> lista = new ArrayList<>();
+                try {
+                        session = sessionFactory.openSession();
+                        final Criteria criteriaDocument = session.createCriteria(Documentul.class);
+                        creaCriteria(filtruDocument, criteriaDocument);
+                        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                        if (filtruDocument.getUtilizator() != null) {
+                                criteriaDocument.createAlias("inspeccion", "inspecciones");
+                                criteriaDocument.add(Restrictions.eq("inspecciones.id",
+                                                filtruDocument.getUtilizator().getUsername()));
+                        }
+                        pregatestePaginareOrdonareCriteria(criteriaDocument, first, pageSize, sortField, sortOrder,
+                                        Constante.ID);
+
+                        lista = criteriaDocument.list();
                 }
-                pregatestePaginareOrdonareCriteria(criteriaDocument, first, pageSize, sortField, sortOrder, "id");
-                @SuppressWarnings("unchecked")
-                final List<Documentul> lista = criteriaDocument.list();
-                session.close();
+                finally {
+                        session.close();
+                }
+
                 return lista;
         }
 
@@ -143,7 +162,7 @@ public class DocumentServiceImpl implements DocumentService {
                         criteria.add(Restrictions.le(Constante.DATECREATE, dataPana));
                 }
                 if (filtruDocument.getNume() != null) {
-                        criteria.add(Restrictions.ilike("nume", filtruDocument.getNume(), MatchMode.ANYWHERE));
+                        criteria.add(Restrictions.ilike(Constante.NUME, filtruDocument.getNume(), MatchMode.ANYWHERE));
                 }
                 if (filtruDocument.getTipDocument() != null) {
                         criteria.add(Restrictions.eq("tipDocument", filtruDocument.getTipDocument()));
@@ -170,8 +189,7 @@ public class DocumentServiceImpl implements DocumentService {
          * @throws DataAccessException Excepción SQL
          * @throws IOException Excepción entrada/salida
          */
-        private Documentul creareDocument(final UploadedFile file, final TipDocument tip, final Utilizator utilizator)
-                        throws IOException {
+        private Documentul creareDocument(final UploadedFile file, final TipDocument tip) throws IOException {
                 final Documentul docu = new Documentul();
                 docu.setNume(file.getFileName());
                 docu.setTipDocument(tip);
@@ -190,7 +208,7 @@ public class DocumentServiceImpl implements DocumentService {
          */
         private void criteriaMateriaIndexada(final Criteria criteria, final String materiaIndexada) {
                 if (materiaIndexada != null) {
-                        final String[] cheie = materiaIndexada.split(",");
+                        final String[] cheie = materiaIndexada.split(Constante.VIRGULA);
                         final Criterion[] cheieOr = new Criterion[cheie.length];
                         for (int i = 0; i < cheie.length; i++) {
                                 cheieOr[i] = Restrictions.ilike("materiaIndexada", cheie[i].trim(), MatchMode.ANYWHERE);
@@ -298,12 +316,19 @@ public class DocumentServiceImpl implements DocumentService {
          */
         @Override
         public int getCounCriteria(final FiltruDocument filtruDocument) {
-                final Session session = sessionFactory.openSession();
-                final Criteria criteria = session.createCriteria(Documentul.class, "document");
-                creaCriteria(filtruDocument, criteria);
-                criteria.setProjection(Projections.rowCount());
-                final Long cnt = (Long) criteria.uniqueResult();
-                session.close();
+                Session session = sessionFactory.getCurrentSession();
+                Long cnt = NumarMagic.NUMBERZEROLONG;
+                try {
+                        session = sessionFactory.openSession();
+                        final Criteria criteria = session.createCriteria(Documentul.class, "document");
+                        creaCriteria(filtruDocument, criteria);
+                        criteria.setProjection(Projections.rowCount());
+                        cnt = (Long) criteria.uniqueResult();
+                }
+                finally {
+                        session.close();
+                }
+
                 return Math.toIntExact(cnt);
         }
 
@@ -330,13 +355,17 @@ public class DocumentServiceImpl implements DocumentService {
         public Documentul incarcareDocument(final UploadedFile file, final TipDocument tip, final Utilizator utilizator)
                         throws GesintException {
                 try {
-                        final Documentul documentul = documentRepository.save(creareDocument(file, tip, utilizator));
+                        final Documentul documentul = documentRepository.save(creareDocument(file, tip));
                         documentul.getNume();
                         utilizator.getUsername();
                         return documentul;
                 }
                 catch (DataAccessException | IOException ex) {
+                        final String descriere = "A apărut o eroare în încarcarea documentului";
+                        this.regActividadService.salveazaRegistruEroare(descriere,
+                                        SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), ex);
                         throw new GesintException(ex);
+
                 }
         }
 
@@ -353,10 +382,14 @@ public class DocumentServiceImpl implements DocumentService {
         public Documentul incarcareDocumentFaraSalvare(final UploadedFile file, final TipDocument tip,
                         final Utilizator utilizator) throws GesintException {
                 try {
-                        return creareDocument(file, tip, utilizator);
+                        return creareDocument(file, tip);
                 }
                 catch (final IOException ex) {
+                        final String descriere = "A apărut o eroare în încarcarea documentului";
+                        this.regActividadService.salveazaRegistruEroare(descriere,
+                                        SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), ex);
                         throw new GesintException(ex);
+
                 }
         }
 

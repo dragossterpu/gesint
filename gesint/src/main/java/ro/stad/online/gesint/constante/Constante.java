@@ -38,14 +38,100 @@ public final class Constante {
         public static final String LOGIN = "login";
 
         /**
+         * Cuvant "nume" pentru a nu-l repeta de n ori în cadrul unei clase.
+         */
+        public static final String NUME = "nume";
+
+        /**
+         * Cuvant "MAN" pentru a nu-l repeta de n ori în cadrul unei clase.
+         */
+        public static final String MAN = "MAN";
+
+        /**
+         * Cuvant "WOMAN" pentru a nu-l repeta de n ori în cadrul unei clase.
+         */
+        public static final String WOMAN = "WOMAN";
+
+        /**
+         * Cuvant "1" pentru a nu-l repeta de n ori în cadrul unei clase.
+         */
+        public static final String UNU = "1";
+
+        /**
+         * Cuvant "2" pentru a nu-l repeta de n ori în cadrul unei clase.
+         */
+        public static final String DOI = "2";
+
+        /**
+         * Cuvant "prenume" pentru a nu-l repeta de n ori în cadrul unei clase.
+         */
+        public static final String PRENUME = "prenume";
+
+        /**
+         * Cuvant "team" pentru a nu-l repeta de n ori în cadrul unei clase.
+         */
+        public static final String TEAM = "team";
+
+        /**
          * Procesare masiva membrii.
          */
         public static final String PROCESMASIV = "PROCES_MASIV_MEMBRI/ ";
 
         /**
+         * Cuvant (SELECT COUNT(*) FROM utilizator WHERE educatie=.
+         */
+        public static final String SQLCOUNTEDUCATIE = "(SELECT COUNT(*) FROM utilizator WHERE educatie=";
+
+        /**
+         * Cuvant "(SELECT COUNT(*) FROM utilizator WHERE sex="
+         */
+        public static final String SQLCOUNTSEX = "(SELECT COUNT(*) FROM utilizator WHERE sex=";
+
+        /**
+         * Cuvant "(SELECT SUM(locuitori) FROM localitate WHERE nivel"
+         */
+        public static final String SQLCOUNTNIVEL = "(SELECT SUM(locuitori) FROM localitate WHERE nivel ";
+
+        /**
+         * Cuvant "(SELECT COUNT(*) FROM utilizator u, localitate l WHERE u.localitate_id = l.id AND l.nivel "
+         */
+        public static final String SQLCOUNTNIVELLOC = "(SELECT COUNT(*) FROM utilizator u, localitate l WHERE  u.localitate_id = l.id AND l.nivel ";
+
+        /**
+         * Cuvant "(SELECT DISTINCT ROUND((SELECT SUM(populatie)FROM judet)- ((SELECT SUM(populatie)FROM judet)*0.2)) AS
+         * locuitori FROM judet ) AS totalVot,"
+         */
+        public static final String SQLSELECT = "(SELECT DISTINCT ROUND((SELECT SUM(populatie)FROM judet)- ((SELECT SUM(populatie)FROM judet)*0.2)) AS locuitori FROM judet ) AS totalVot,";
+
+        /**
+         * Cuvant "' and sex= 'MAN') AS "
+         */
+        public static final String SQLANDMAN = "' AND sex= 'MAN') AS ";
+
+        /**
+         * Cuvant "') AS "
+         */
+        public static final String SQLAS = "') AS ";
+
+        /**
+         * Cuvant SQLSELECTREZULTAT
+         */
+        public static final String SQLSELECTREZULTAT = " SELECT distinct p.nume,p.sigla,p.id,  SUM(rpj.total_voturi_partid) AS voturiPartid ,SUM(rpj.numar_mandate) AS mandatePartid ,(SELECT sum(total_voturi_partid) FROM partid_rezultat_judet WHERE an_alegeri= ";
+
+        /**
+         * Cuvant SQLSUBSELECTREZULTAT
+         */
+        public static final String SQLSUBSELECTREZULTAT = " )AS totalVoturi, (SELECT sum(numar_mandate) FROM partid_rezultat_judet  WHERE an_alegeri= ";
+
+        /**
          * Url "/login" pentru a nu-l repeta de n ori în cadrul unei clase..
          */
         public static final String LOGINROUTE = "/login";
+
+        /**
+         * Cuvantul "dataInregistrari"
+         */
+        public static final String DATAINREGISTRARII = "dataInregistrari";
 
         /**
          * utilizator masiv.
@@ -58,16 +144,6 @@ public final class Constante {
         public static final String LOGOUTROUTE = "/logout";
 
         /**
-         * Cuvantul "Eroare" pentru a nu-l repeta de n ori în cadrul unei clase..
-         */
-        public static final String EROAREMESAJ = "Eroare";
-
-        /**
-         * Cuvantul "Înregistrare" pentru a nu-l repeta de n ori în cadrul unei clase..
-         */
-        public static final String INREGISTRAREMESAJ = "Înregistrare";
-
-        /**
          * Cuvantul "Căutare" pentru a nu-l repeta de n ori în cadrul unei clase..
          */
         public static final String CAUTAREMENSAJE = "Căutare";
@@ -76,16 +152,6 @@ public final class Constante {
          * Cuvantul "Încărcarea fișiere" pentru a nu-l repeta de n ori în cadrul unei clase..
          */
         public static final String INCARCAREFISIER = "Încărcarea fișiere";
-
-        /**
-         * Cuvantul "Eliminare" pentru a nu-l repeta de n ori în cadrul unei clase..
-         */
-        public static final String ELIMINAREMESAJ = "Eliminare";
-
-        /**
-         * Cuvantul "Modificare" pentru a nu-l repeta de n ori în cadrul unei clase..
-         */
-        public static final String MODIFICAREMESAJ = "Modificare";
 
         /**
          * Fraza "Registrul a fost înregistrat corect" pentru a nu-o repeta de n ori.
@@ -106,6 +172,11 @@ public final class Constante {
          * Identificatorul mesajului global din aplicatie.
          */
         public static final String IDMESAJGLOBAL = "messages";
+
+        /**
+         * Cuvantul Judet.
+         */
+        public static final String JUDETUL = "judetul";
 
         /**
          * Constante pentru textul session.
@@ -170,17 +241,12 @@ public final class Constante {
         /**
          * The Constant PAROLA.
          */
-        public static final String PAROLA = "Parolă";
+        public static final String PAR = "Parolă";
 
         /**
          * The Constant SCHIMBDATE.
          */
         public static final String SCHIMBDATE = "Modificare date registru";
-
-        /**
-         * The Constant INREGISTRARE.
-         */
-        public static final String INREGISTRARE = "Inregistrare";
 
         /**
          * The Constant RAWTYPES.
@@ -202,6 +268,11 @@ public final class Constante {
          */
         public static final String NUMERIC = "NUMERIC";
 
+        /**
+         * The Constant ROLE_ADMIN.
+         */
+        public static final String ROLEADMIN = "ROLE_ADMIN";
+
         /***************************
          * Literales de variables.
          *
@@ -218,9 +289,14 @@ public final class Constante {
         public static final String DATEDELETED = "dateDeleted";
 
         /**
-         * The Constant Espacio.
+         * The Constant SPATIU.
          */
         public static final String SPATIU = "";
+
+        /**
+         * The Constant Utillizatorul.
+         */
+        public static final String UTILIZATORUL = "Utillizatorul: ";
 
         /**
          * The Constant apărut o eroare, încercați din nou mai târziu.
@@ -231,6 +307,16 @@ public final class Constante {
          * The Constant true.
          */
         public static final String TRUE = "true";
+
+        /**
+         * The Constant mail.
+         */
+        public static final String MAIL = "MAIL";
+
+        /**
+         * The Constant extensie.
+         */
+        public static final String EXT = "extensie";
 
         /**
          * The Constant NUMESECTIUNE.
@@ -266,11 +352,6 @@ public final class Constante {
          * The Constant titlu.
          */
         public static final String TITLU = "titlu";
-
-        /**
-         * The Constant alerta. Totul ok!!!
-         */
-        public static final String ALERTA = "alerta";
 
         /**
          * The Constant porcentaje. Totul ok!!!
@@ -328,14 +409,14 @@ public final class Constante {
         public static final String VIRGULA = ",";
 
         /**
+         * The Constant localitate.
+         */
+        public static final String LOCALITATE = "localitate";
+
+        /**
          * The Constant SENDDATE Alerte.
          */
         public static final String SENDDATE = "dataTrimiteri";
-
-        /**
-         * The Constant de la alerta.
-         */
-        public static final String DELAALERTA = " de la alerta ";
 
         /**
          * The Constant TRIMITEREALERTA.
@@ -371,26 +452,6 @@ public final class Constante {
          * Constanta pentru cuvantul membru.
          */
         public static final String EXISTERORI = "Au existat erori ";
-
-        /**
-         * Constanta pentru cuvantul Blocare.
-         */
-        public static final String BLOCARE = "Blocare";
-
-        /**
-         * Constanta pentru cuvantul Eliminare.
-         */
-        public static final String ELIMINARE = "Eliminare";
-
-        /**
-         * Constanta pentru fraza Registrul a fost modificat corect.
-         */
-        public static final String REGMODOK = "Registrul a fost modificat corect.";
-
-        /**
-         * Constanta pentru fraza Registrul a fost modificat corect.
-         */
-        public static final String REGDELOK = "Registrul a fost eliminat corect.";
 
         /**
          * Constanta pentru cuvantul proiecte.
@@ -481,7 +542,7 @@ public final class Constante {
          * Constante ruta recurso plantilla (html) con etiquetas pebble para generar correos electrónicos de
          * recuperación de contraseña.
          */
-        public static final String TEMPLATECORREORESTABLECERPASSWORD = "/static/templates/templateRestablecerAcceso.html";
+        public static final String TEMPLATECORREORESTABLECERPAS = "/static/templates/templateRestablecerAcceso.html";
 
         /**
          * Constanta pentru cuvantul "DESC"
@@ -853,7 +914,19 @@ public final class Constante {
          * Constanta pentru cuvantul "dataIncepere"
          */
 
-        public static final String DATAINCEPÈRE = "dataIncepere";
+        public static final String DATAINCEPERE = "dataIncepere";
+
+        /**
+         * Constanta pentru cuvantul " AND partid = "
+         */
+
+        public static final String ANDPARTIDSQL = " AND partid = ";
+
+        /**
+         * Constanta pentru cuvantul " AND id_judet = '"
+         */
+
+        public static final String ANDJUDETSQL = " AND id_judet = '";
 
         /**
          * Constanta pentru cuvantul "'"
@@ -878,6 +951,54 @@ public final class Constante {
          */
 
         public static final String SELECTCOUNTUSERBIRTDATE = "(SELECT COUNT(*)  FROM utilizator WHERE  data_nasterii BETWEEN DATE '";
+
+        /**
+         * Constanta pentru cuvantul "SQLASMANDATE"
+         */
+
+        public static final String SQLASMANDATE = " )AS totalMandate  FROM partid_rezultat_judet rpj , partid p WHERE rpj.partid= p.id  AND rpj.an_alegeri= ";
+
+        /**
+         * Constanta pentru cuvantul "SQLSELECTSTATJUD"
+         */
+
+        public static final String SQLSELECTSTATJUD = " SELECT ss.nume, ss.numero,ss.membrii_minim, ss.populatie,ss.cod_judet, ROUND((ss.numero*100.0)/(ss.membrii_minim),2) AS procentaj , (select ROUND(ss.populatie-(ss.populatie*0.21)) as locuitori) as locuitoriVot FROM ( SELECT COUNT(*) as numero, p.nume, P.cod_judet,p.populatie,p.membrii_minim  FROM utilizator U, judet P WHERE u.cod_judet = p.cod_judet group by u.cod_judet,p.nume,p.populatie ,p.cod_judet,p.membrii_minim  ORDER BY numero ";
+
+        /**
+         * Constanta pentru cuvantul "SQLSELECTSTATJUDPRO"
+         */
+
+        public static final String SQLSELECTSTATJUDPRO = "SELECT nume,membrii_minim,voturi_minim, numero, populatie, procentaj, cod_judet,locuitoriVot from (SELECT ss.nume,ss.membrii_minim,ss.voturi_minim, ss.cod_judet,ss.numero,ss.populatie,ROUND((ss.numero*100.0)/(ss.membrii_minim),2) AS procentaj, (select ROUND(ss.populatie-(ss.populatie*0.21)) as locuitori) as locuitoriVot FROM ( SELECT COUNT(*) as numero, p.nume, p.populatie,p.cod_judet ,p.membrii_minim,p.voturi_minim FROM utilizator U, judet P WHERE u.cod_judet = p.cod_judet  group by u.cod_judet,p.nume,p.populatie,p.cod_judet,p.membrii_minim,p.voturi_minim  ORDER BY numero ";
+
+        /**
+         * Constanta pentru cuvantul "SQLSELECTSTATLOC"
+         */
+
+        public static final String SQLSELECTSTATLOC = "SELECT  totalMembrii,numeprovincie, cod_judet,nume,id, sector,  locuitori,membrii_minim,voturi_minim,numero, locuitoriVot,procentaj FROM (select fff.totalMembrii,fff.numeprovincie,fff.cod_judet,fff.nume,fff.id,fff.sector,fff.locuitori,fff.membrii_minim,fff.voturi_minim, fff.numero,fff.locuitoriVot,ROUND((fff.numero*100.0)/(fff.membrii_minim),2) AS procentaj FROM (  SELECT  totalMembrii,numeprovincie, cod_judet,nume,id, sector,  locuitori,membrii_minim,voturi_minim,numero, locuitoriVot FROM ( SELECT (select count(*) from utilizator where cod_judet='";
+
+        /**
+         * Constanta pentru cuvantul "SQLSELECTSTATLOCTOTMEM"
+         */
+
+        public static final String SQLSELECTSTATLOCTOTMEM = "') as totalMembrii, (select nume from judet where cod_judet='";
+
+        /**
+         * Constanta pentru cuvantul "SQLSELECTSTATLOCCODJ"
+         */
+
+        public static final String SQLSELECTSTATLOCCODJ = "' as cod_judet,  ss.nume, ss.id, ss.sector, ss.locuitori,ss.membrii_minim,ss.voturi_minim, (select count(*) from utilizator where cod_judet='";
+
+        /**
+         * Constanta pentru cuvantul "SQLSELECTSTATLOCNUM"
+         */
+
+        public static final String SQLSELECTSTATLOCNUM = "' and localitate_id = ss.id) as numero, ( select ROUND(ss.locuitori-(ss.locuitori*0.21)) as locuitori) as locuitoriVot FROM ( SELECT l.nume,l.id,l.locuitori,l.sector, l.membrii_minim, l.voturi_minim FROM utilizator U, localitate l  WHERE l.cod_judet='";
+
+        /**
+         * Constanta pentru cuvantul "SQLSELECTSTATGROUP"
+         */
+
+        public static final String SQLSELECTSTATGROUP = " GROUP BY l.id, l.nume, l.locuitori,l.sector , l.membrii_minim, l.voturi_minim ORDER BY voturi_minim desc) as SS) as dd ORDER BY dd.voturi_minim DESC) as fff ) as pp ORDER BY pp.procentaj DESC";
 
         /**
          * Constanta pentru cuvantul "limit 7 offset 0 "

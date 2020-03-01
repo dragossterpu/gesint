@@ -11,7 +11,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 import org.springframework.stereotype.Component;
 
-import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 
 /**
  * Clasa pentru instrumente de FacesUtilities.
@@ -73,8 +73,8 @@ public class FacesUtilities {
          * @param idMesaj Identificator de componente „mesaj / mesaje” PrimeFaces unde doriți să afișați
          */
         public void setmesajEroare(final Exception exception, final String idMesaj) {
-                setMensajeInformativo(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ, exception.getMessage(),
-                                idMesaj);
+                setMensajeInformativo(FacesMessage.SEVERITY_ERROR, RegistruEnum.EROARE.getDescriere(),
+                                exception.getMessage(), idMesaj);
         }
 
         /**
@@ -83,6 +83,7 @@ public class FacesUtilities {
          * @param idMesaj Identificator de componente „mesaj / mesaje” PrimeFaces unde doriți să afișați
          */
         public void setmesajEroare(final String mesajEroare, final String idMesaj) {
-                setMensajeInformativo(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ, mesajEroare, idMesaj);
+                setMensajeInformativo(FacesMessage.SEVERITY_ERROR, RegistruEnum.EROARE.getDescriere(), mesajEroare,
+                                idMesaj);
         }
 }

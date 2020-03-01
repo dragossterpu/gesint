@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  *
@@ -45,25 +46,25 @@ public class Functie implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PTEAM")
         @SequenceGenerator(name = "SEQ_PTEAM", sequenceName = "SEQ_PTEAM", allocationSize = 1)
-        @Column(name = "ID", length = 5)
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**
          * Organizatia functiei.
          */
-        @Column(name = "ORGANIZATIE", length = 100)
+        @Column(name = "ORGANIZATIE", length = NumarMagic.NUMBERHUNDRED)
         private String organizatie;
 
         /**
          * Descrierea functiei.
          */
-        @Column(name = "DESCRIERE", length = 255)
+        @Column(name = "DESCRIERE", length = NumarMagic.NUMBERTWOHUNDREDFIFTYFIVE)
         private String descriere;
 
         /**
          * Numele functiei.
          */
-        @Column(name = "NUME", length = 255, nullable = false)
+        @Column(name = "NUME", length = NumarMagic.NUMBERTWOHUNDREDFIFTYFIVE, nullable = false)
         private String nume;
 
 }

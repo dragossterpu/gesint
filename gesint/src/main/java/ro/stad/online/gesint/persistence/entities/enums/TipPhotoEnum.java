@@ -36,11 +36,19 @@ public enum TipPhotoEnum {
          * jpg.
          */
         JPG("jpg");
-
+        /**
+         * Valoare statica VALUES
+         */
         private static final List<TipPhotoEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
 
+        /**
+         * Valoare statica SIZE
+         */
         private static final int SIZE = VALUES.size();
 
+        /**
+         * Valoare statica RANDOM
+         */
         private static final Random RANDOM = new Random();
 
         /**
@@ -55,6 +63,10 @@ public enum TipPhotoEnum {
                 return tipsPhotos;
         }
 
+        /**
+         * Metoda care obtine o valoare rendom
+         * @return
+         */
         public static TipPhotoEnum randomLetter() {
                 return VALUES.get(RANDOM.nextInt(SIZE));
         }

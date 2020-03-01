@@ -11,21 +11,24 @@ import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.lazydata.LazyDataFunctii;
 import ro.stad.online.gesint.persistence.entities.Functie;
+import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.services.EchipaService;
 import ro.stad.online.gesint.services.FunctieService;
 import ro.stad.online.gesint.services.RegistruActivitateService;
 import ro.stad.online.gesint.services.impl.RegistruActivitateServiceImpl;
 import ro.stad.online.gesint.util.FacesUtilities;
+import ro.stad.online.gesint.util.Utilitati;
 
 /**
  * Controlorul operațiunilor legate de gestionarea functiilor.
@@ -36,6 +39,7 @@ import ro.stad.online.gesint.util.FacesUtilities;
 @Getter
 @Controller("functieBean")
 @Scope(Constante.SESSION)
+@Slf4j
 public class FunctieBean implements Serializable {
 
         /**
@@ -83,6 +87,12 @@ public class FunctieBean implements Serializable {
         private transient RegistruActivitateServiceImpl registruActivitateService;
 
         /**
+         * Componente de utilidades.
+         */
+        @Autowired
+        private transient Utilitati utilitati;
+
+        /**
          * Metoda care Inregistreaza o noua functie.
          * @param numeFunctie String numele functiei
          * @param descriereFunctie String descrierea functiei
@@ -91,24 +101,31 @@ public class FunctieBean implements Serializable {
 
         public void inregistrareFunctie(final String numeFunctie, final String descriereFunctie,
                         final String organizatie) {
+                Utilizator user = utilitati.getUtilizatorLogat();
                 try {
-                        functie = new Functie();
-                        SecurityContextHolder.getContext().getAuthentication().getName();
+                        this.functie = new Functie();
                         functie.setDescriere(descriereFunctie);
                         functie.setOrganizatie(organizatie);
                         functie.setNume(numeFunctie);
-                        functieService.save(functie);
-                        listaFunctii.add(functie);
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.INREGISTRARE,
+                        this.functieService.save(functie);
+                        this.listaFunctii.add(functie);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
+                                        RegistruEnum.INREGISTRARE.getDescriere(),
                                         "Noua funcție a fost înregistrată cu succes");
+                        final String descriere = "Noua funcție a fost înregistrată cu succes";
+                        this.regActividadService.inregistrareRegistruActivitate(descriere,
+                                        RegistruEnum.INREGISTRARE.getName(), SectiuniEnum.FUNCTIE.getName(), user);
+                        log.info(descriere);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
                                         "A apărut o eroare la înregistrarea registrului. "
                                                         .concat(Constante.DESCEROAREMESAJ));
                         final String descriere = "A apărut o eroare la înregistrarea funcției";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.FUNCTIE.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
         }
 
@@ -118,29 +135,34 @@ public class FunctieBean implements Serializable {
          */
         public void eliminaFunctia(final Functie func) {
                 this.functie = func;
+                Utilizator user = utilitati.getUtilizatorLogat();
                 try {
-                        final int tieneUtilizatori = echipaService.existsByTeam(functie.getId());
+                        final int tieneUtilizatori = this.echipaService.existsByTeam(this.functie.getId());
                         if (tieneUtilizatori > 0) {
                                 FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
-                                                "Nu se poate elimina funcția '".concat(functie.getNume())
+                                                "Nu se poate elimina funcția '".concat(this.functie.getNume())
                                                                 .concat("' deoarece sunt persoane care o dețin."),
                                                 Constante.SPATIU, null);
                         }
                         else {
                                 // eliminam functia din lista
-                                listaFunctii.remove(functie);
+                                this.listaFunctii.remove(this.functie);
                                 // eliminam functia
-                                functieService.delete(functie);
-                                model.setDatasource(listaFunctii);
-
+                                this.functieService.delete(this.functie);
+                                this.model.setDatasource(this.listaFunctii);
                                 FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO,
-                                                Constante.ELIMINAREMESAJ, functie.getDescriere(),
+                                                RegistruEnum.ELIMINARE.getDescriere(), functie.getDescriere(),
                                                 Constante.OKELIMINAREMESAJ);
+                                final String descriere = Constante.UTILIZATORUL.concat(user.getNumeComplet())
+                                                .concat(" a eliminat cu succes funcția ").concat(func.getNume());
+                                this.regActividadService.inregistrareRegistruActivitate(descriere,
+                                                RegistruEnum.ELIMINARE.getName(), SectiuniEnum.FUNCTIE.getName(), user);
+                                log.info(descriere);
                         }
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la eliminarea funcției";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.FUNCTIE.getDescriere(),
                                         e);
@@ -154,7 +176,7 @@ public class FunctieBean implements Serializable {
         @PostConstruct
         public void init() {
                 cautareFunctii();
-                listaFunctii = model.getDatasource();
+                this.listaFunctii = this.model.getDatasource();
         }
 
         /**
@@ -174,16 +196,18 @@ public class FunctieBean implements Serializable {
         public void onRowEdit(final RowEditEvent event) {
                 final Functie functia = (Functie) event.getObject();
                 try {
-                        functieService.save(functia);
-                        FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO, Constante.MODIFICAREMESAJ,
-                                        functia.getDescriere(), null);
+                        this.functieService.save(functia);
+                        FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO,
+                                        RegistruEnum.MODIFICARE.getDescriere(), functia.getDescriere(), null);
+                        log.info("S-a modificat corect funcția");
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la modificarea funcției";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.FUNCTIE.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
 
         }

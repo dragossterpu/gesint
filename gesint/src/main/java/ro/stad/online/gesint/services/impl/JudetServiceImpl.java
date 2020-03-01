@@ -43,13 +43,13 @@ public class JudetServiceImpl implements JudetService {
          * Session. SessionFactory
          */
         @Autowired
-        private transient SessionFactory sessionFactory;
+        private SessionFactory sessionFactory;
 
         /**
          * Serviciu pentru a utiliza metodele utilizate împreună cu criteria.
          */
         @Autowired
-        private transient CriteriaService criteriaService;
+        private CriteriaService criteriaService;
 
         /**
          * Acesta primește un fișier UploadedFile și datele necesare pentru a genera un Documentul, dar nu îl stochează
@@ -83,7 +83,7 @@ public class JudetServiceImpl implements JudetService {
          * @throws DataAccessException Excepción SQL
          * @throws IOException Excepción entrada/salida
          */
-        private Judet creareImagine(final byte[] file, final Judet judet) throws IOException {
+        private Judet creareImagine(final byte[] file, final Judet judet) {
                 incarcareDatePersonaleUser(file, judet);
                 judetRepository.save(judet);
                 return judet;

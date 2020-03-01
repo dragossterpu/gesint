@@ -19,9 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.model.filters.FiltruSondaj;
 import ro.stad.online.gesint.persistence.entities.Sondaj;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.repositories.SondajRepository;
 import ro.stad.online.gesint.services.SondajService;
 import ro.stad.online.gesint.util.FacesUtilities;
@@ -35,6 +37,7 @@ import ro.stad.online.gesint.util.UtilitatiCriteria;
 @NoArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class SondajServiceImpl implements SondajService, Serializable {
 
         /**
@@ -83,7 +86,7 @@ public class SondajServiceImpl implements SondajService, Serializable {
                 try {
 
                         session = sessionFactory.openSession();
-                        final Criteria criteria = session.createCriteria(Sondaj.class, "sondaj");
+                        final Criteria criteria = session.createCriteria(Sondaj.class);
                         creaCriteria(filtruSondaj, criteria);
                         criteria.setFirstResult(first);
                         criteria.setMaxResults(pageSize);
@@ -108,7 +111,7 @@ public class SondajServiceImpl implements SondajService, Serializable {
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 }
                         }
                 }
@@ -125,16 +128,16 @@ public class SondajServiceImpl implements SondajService, Serializable {
                 UtilitatiCriteria.setConditieCriteriaTextLike(filtruSondaj.getIntrebare(), criteria, "intrebare");
                 UtilitatiCriteria.setConditieCriteriaEgalitateLong(filtruSondaj.getId(), criteria, Constante.ID);
                 UtilitatiCriteria.setConditieCriteriaDataMaiMare(filtruSondaj.getDataDinSondaj(), criteria,
-                                Constante.DATAINCEPÈRE);
+                                Constante.DATAINCEPERE);
                 UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(filtruSondaj.getDataPanaSondaj(), criteria,
-                                Constante.DATAINCEPÈRE);
+                                Constante.DATAINCEPERE);
                 UtilitatiCriteria.setConditieCriteriaEgalitateBoolean(filtruSondaj.getActiv(), criteria, "activ");
                 UtilitatiCriteria.setConditieCriteriaDataMaiMare(filtruSondaj.getDateFromCreated(), criteria,
                                 Constante.DATECREATE);
                 UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(filtruSondaj.getDateUntilCreated(), criteria,
                                 Constante.DATECREATE);
                 UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruSondaj.getTipSondaj(), criteria, "tipSondaj");
-                // daca este null nu a fst selectrata situatia sondajului
+                // daca este null nu a fost selectata situatia sondajului
 
                 if (filtruSondaj.getValidat() != null) {
                         if (filtruSondaj.getValidat()) {
@@ -178,7 +181,9 @@ public class SondajServiceImpl implements SondajService, Serializable {
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
+                                        log.error(RegistruEnum.EROARE.getDescriere()
+                                                        .concat(" a aparut o eroare la accesarea bazei de date"));
                                 }
                         }
                 }
@@ -219,7 +224,9 @@ public class SondajServiceImpl implements SondajService, Serializable {
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
+                                        log.error(RegistruEnum.EROARE.getDescriere()
+                                                        .concat(" a aparut o eroare la accesarea bazei de date"));
                                 }
                         }
                 }

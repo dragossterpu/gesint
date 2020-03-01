@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.SortOrder;
 import org.primefaces.model.Visibility;
@@ -43,7 +44,7 @@ public class RegistruActivitateBean implements Serializable {
         /**
          * Numărul de coloane din pagină.
          */
-        private static final Integer NUMCOLSREGISTRO = 5;
+        private static final Integer NUMCOLSREGISTRU = NumarMagic.NUMBERFIFTEEN;
 
         /**
          * Lista booleanilor pentru a controla afișarea coloanelor din pagină.
@@ -53,7 +54,7 @@ public class RegistruActivitateBean implements Serializable {
         /**
          * Obiect care se utilizeaza pentru afișarea înregistrărilor.
          */
-        private RegistruActivitate error;
+        private RegistruActivitate registruActivitate;
 
         /**
          * Obiect cu parametri de căutare.
@@ -77,9 +78,9 @@ public class RegistruActivitateBean implements Serializable {
          * @return Lista de resulte
          *
          */
-        public List<String> autocompletarUsuario(final String infoUser) {
-                return regActividadService
-                                .cautareUtilizatorDupaRegistru(Constante.PORCENTAJ + infoUser + Constante.PORCENTAJ);
+        public List<String> autocompletareUtilizator(final String infoUser) {
+                return this.regActividadService.cautareUtilizatorDupaRegistru(
+                                Constante.PORCENTAJ.concat(infoUser).concat(Constante.PORCENTAJ));
         }
 
         /**
@@ -87,8 +88,8 @@ public class RegistruActivitateBean implements Serializable {
          * rezultatele într-o listă pentru vizualizare.
          */
         public void cautareRegActivitate() {
-                model.setFiltruRegistru(filtruRegistru);
-                model.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATECREATE, SortOrder.DESCENDING, null);
+                this.model.setFiltruRegistru(this.filtruRegistru);
+                this.model.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATAINREGISTRARII, SortOrder.DESCENDING, null);
 
         }
 
@@ -98,20 +99,21 @@ public class RegistruActivitateBean implements Serializable {
          */
         @PostConstruct
         public void init() {
-                list = new ArrayList<>();
-                for (int i = 0; i < NUMCOLSREGISTRO; i++) {
-                        list.add(Boolean.TRUE);
+                this.list = new ArrayList<>();
+                for (int i = 0; i < NUMCOLSREGISTRU; i++) {
+                        this.list.add(Boolean.TRUE);
                 }
                 this.filtruRegistru = new FiltruRegistru();
-                model = new LazyDataRegistre(regActividadService);
+                this.model = new LazyDataRegistre(this.regActividadService);
+                this.registruActivitate = new RegistruActivitate();
         }
 
         /**
          * Metodă care curăță parametrii de căutare și rezultatul.
          */
-        public void cautareCautare() {
+        public void curatareCautare() {
                 this.filtruRegistru = new FiltruRegistru();
-                this.model = new LazyDataRegistre(regActividadService);
+                this.model = new LazyDataRegistre(this.regActividadService);
                 this.model.setDatasource(new ArrayList<>());
         }
 
@@ -120,7 +122,17 @@ public class RegistruActivitateBean implements Serializable {
          * @param toggle ToggleEvent
          */
         public void onToggle(final ToggleEvent toggle) {
-                list.set((Integer) toggle.getData(), toggle.getVisibility() == Visibility.VISIBLE);
+                this.list.set((Integer) toggle.getData(), toggle.getVisibility() == Visibility.VISIBLE);
         }
 
+        /**
+         * Metoda care deschide dialogul pentru a vedea detaliul registrului de activitate.
+         * @param regAct RegistruActivitate
+         */
+        public void getFormDetaliuRegistru(RegistruActivitate regAct) {
+                final RequestContext context = RequestContext.getCurrentInstance();
+                this.registruActivitate = regAct;
+                context.execute("PF('dialogDetaliuRegistru').show();");
+
+        }
 }

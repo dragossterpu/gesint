@@ -22,6 +22,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.TipAlegeriEnum;
 
 /**
@@ -51,22 +52,22 @@ public class RezultateAlegeri implements Serializable {
          * id rezultate.
          */
         @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_rezultate")
-        @SequenceGenerator(name = "seq_rezultate", sequenceName = "seq_rezultate", allocationSize = 1)
-        @Column(name = "ID", length = 5)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_REZULTATE")
+        @SequenceGenerator(name = "SEQ_REZULTATE", sequenceName = "SEQ_REZULTATE", allocationSize = 1)
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**
          * Tipul de alegeri.
          */
-        @Column(name = "tipAlegeri")
+        @Column(name = "TIP_ALEGERI")
         @Enumerated(EnumType.STRING)
         private TipAlegeriEnum tipAlegeri;
 
         /**
          * Data alegerilor.
          */
-        @Column(name = "dataAlegerilor")
+        @Column(name = "DATA_ALEGERILOR")
         private Date dataAlegerilor;
 
         /**

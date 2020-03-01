@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * Entitate asociata raspunsurilor unui sondaj.
@@ -43,30 +44,30 @@ import ro.stad.online.gesint.constante.Constante;
 @Table(name = "RASPUNS")
 public class Raspuns implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-	/**
-	 * Identificator.
-	 */
-	@Id
-	@SequenceGenerator(allocationSize = 1, name = "SEQ_RASPUNS", sequenceName = "SEQ_RASPUNS")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RASPUNS")
-	@Column(name = "ID", nullable = false, columnDefinition = Constante.NUMERIC, length = 10)
-	private Long id;
+        /**
+         * Identificator.
+         */
+        @Id
+        @SequenceGenerator(allocationSize = 1, name = "SEQ_RASPUNS", sequenceName = "SEQ_RASPUNS")
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RASPUNS")
+        @Column(name = "ID", nullable = false, columnDefinition = Constante.NUMERIC, length = NumarMagic.NUMBERFIVE)
+        private Long id;
 
-	/**
-	 * Sondaj caruia ii corespund datele.
-	 */
-	@ManyToOne
-	@Id
-	@JoinColumn(name = "id_sondaj", foreignKey = @ForeignKey(name = "fk_sondaj"), insertable = false, updatable = false, nullable = false)
-	private Sondaj sondaj;
+        /**
+         * Sondaj caruia ii corespund datele.
+         */
+        @ManyToOne
+        @Id
+        @JoinColumn(name = "ID_SONDAJ", foreignKey = @ForeignKey(name = "FK_SONDAJ"), insertable = false, updatable = false, nullable = false)
+        private Sondaj sondaj;
 
-	/**
-	 * Raspuns intrebare
-	 */
+        /**
+         * Raspuns intrebare
+         */
 
-	@Column(name = "VALOARE", nullable = false)
-	private String valoare;
+        @Column(name = "VALOARE", nullable = false)
+        private String valoare;
 
 }

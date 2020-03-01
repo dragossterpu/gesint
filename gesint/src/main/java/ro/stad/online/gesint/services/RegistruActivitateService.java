@@ -45,24 +45,6 @@ public interface RegistruActivitateService {
         int getCounCriteria(FiltruRegistru filtruRegistru);
 
         /**
-         * Metoda care inregitraza un jurnal de activitate.
-         * @param idObiect Long
-         * @param descriere String
-         * @param ambitul String
-         * @param obiect String
-         */
-        void salveazaRegistruInregistrareModificare(Long idObiect, String descriere, String ambit, String obiect);
-
-        /**
-         * Metoda care inregitraza un jurnal de activitate de tip eliminare.
-         * @param idObiect Long
-         * @param descriere String
-         * @param ambitul String
-         * @param obiect String
-         */
-        void salveazaRegistruEliminare(Long idObiect, String descriere, String ambitul, String obiect);
-
-        /**
          * Metoda care inregitraza un jurnal de activitate de tip eroare.
          * @param ambitul String
          * @param obiect String
@@ -81,21 +63,6 @@ public interface RegistruActivitateService {
          * @param utilizator String
          */
         void salveazaRegistruLoginKO(String utilizator);
-
-        /**
-         * Metoda care inregistreaza un jurnal de actiovitate
-         * @param sectiune SectiuniEnum
-         * @param tip String
-         * @param descriere String
-         */
-        void inregistrareActivitate(String sectiune, String tip, String descriere);
-
-        /**
-         * Guarda en el registro de actividad el error que se ha producido.
-         * @param seccion Dónde se produce el error
-         * @param exception Excepción generada
-         */
-        void inregistrareEroare(String seccion, Exception exception);
 
         /**
          * Metoda care inregistreaza un jurnal de activitate

@@ -21,10 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.model.filters.FiltruEchipa;
 import ro.stad.online.gesint.model.filters.FiltruUtilizator;
+import ro.stad.online.gesint.persistence.entities.Functie;
 import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.Localitate;
-import ro.stad.online.gesint.persistence.entities.Functie;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.pojo.AnNumarPojo;
 import ro.stad.online.gesint.persistence.repositories.UtilizatorRepository;
 import ro.stad.online.gesint.services.JudetService;
@@ -56,7 +57,7 @@ public class UtilizatorServiceImpl implements UtilizatorService {
          * SessionFactory.
          */
         @Autowired
-        private transient SessionFactory sessionFactory;
+        private SessionFactory sessionFactory;
 
         /**
          * Session.
@@ -242,7 +243,7 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                         }
                         catch (final DataAccessException e) {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         }
                 }
         }
@@ -257,8 +258,8 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                                 Constante.DATECREATE);
                 UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(filtruUtilizator.getDateUntil(), criteria,
                                 Constante.DATECREATE);
-                UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getNume(), criteria, "nume");
-                UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getNume(), criteria, "prenume");
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getNume(), criteria, Constante.NUME);
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getNume(), criteria, Constante.PRENUME);
                 UtilitatiCriteria.setConditieCriteriaEgalitateBoolean(filtruUtilizator.getValidat(), criteria,
                                 Constante.VALIDAT);
                 UtilitatiCriteria.setConditieCriteriaEgalitateBoolean(false, criteria, "destinatarExtern");
@@ -269,7 +270,7 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                 UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruUtilizator.getStatutCivil(), criteria,
                                 "statutCivil");
                 if (filtruUtilizator.getTipLocalitate() != null) {
-                        criteria.createAlias("localitate", "localitate");
+                        criteria.createAlias(Constante.LOCALITATE, Constante.LOCALITATE);
                         UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruUtilizator.getTipLocalitate(),
                                         criteria, "localitate.tipLocalitate");
                 }
@@ -279,15 +280,15 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                         criteria.add(Restrictions.eq("codJudet", judetService.findById(filtruUtilizator.getIdJudet())));
                 }
                 if (filtruUtilizator.getIdFunctia() != null) {
-                        criteria.add(Restrictions.eq("team",
+                        criteria.add(Restrictions.eq(Constante.TEAM,
                                         paramEchipaService.findById(filtruUtilizator.getIdFunctia())));
                 }
                 if (filtruUtilizator.getIdLocalitate() != null) {
-                        criteria.add(Restrictions.eq("localitate",
+                        criteria.add(Restrictions.eq(Constante.LOCALITATE,
                                         localitateService.findById(filtruUtilizator.getIdLocalitate())));
                 }
                 final Functie functia = paramEchipaService.findById(30L);
-                criteria.add(Restrictions.eq("team", functia));
+                criteria.add(Restrictions.eq(Constante.TEAM, functia));
                 UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruUtilizator.getEducatie(), criteria,
                                 "educatie");
                 if (filtruUtilizator.getEliminat() != null) {
@@ -305,8 +306,8 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                                 Constante.DATECREATE);
                 UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(filtruEchipa.getDataPana(), criteria,
                                 Constante.DATECREATE);
-                UtilitatiCriteria.setConditieCriteriaTextLike(filtruEchipa.getNume(), criteria, "nume");
-                UtilitatiCriteria.setConditieCriteriaTextLike(filtruEchipa.getPrenume(), criteria, "prenume");
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruEchipa.getNume(), criteria, Constante.NUME);
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruEchipa.getPrenume(), criteria, Constante.PRENUME);
                 UtilitatiCriteria.setConditieCriteriaTextLike(filtruEchipa.getEmail(), criteria, "email");
                 UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruEchipa.getRole(), criteria, "role");
 
@@ -314,12 +315,13 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                         criteria.add(Restrictions.eq("codJudet", judetService.findById(filtruEchipa.getIdJudet())));
                 }
                 if (filtruEchipa.getIdFunctia() != null) {
-                        criteria.add(Restrictions.eq("team", paramEchipaService.findById(filtruEchipa.getIdFunctia())));
+                        criteria.add(Restrictions.eq(Constante.TEAM,
+                                        paramEchipaService.findById(filtruEchipa.getIdFunctia())));
                 }
                 // Daca nu sa ales o functie le cautam pe toate din conducerea locala
 
                 if (filtruEchipa.getIdFunctia() == null) {
-                        criteria.add(Restrictions.in("team", filtruEchipa.getListaFunctii()));
+                        criteria.add(Restrictions.in(Constante.TEAM, filtruEchipa.getListaFunctii()));
                 }
 
         }
@@ -331,7 +333,7 @@ public class UtilizatorServiceImpl implements UtilizatorService {
          * @return utilizator
          * @throws IOException Exceptie intrare/iesire
          */
-        private Utilizator creareImagine(final byte[] file, final Utilizator utilizat) throws IOException {
+        private Utilizator creareImagine(final byte[] file, final Utilizator utilizat) {
                 incarcareDatePersonaleUser(file, utilizat);
                 return utilizatorRepository.save(utilizat);
         }

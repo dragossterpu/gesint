@@ -15,10 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.lazydata.LazyDataRezultate;
@@ -28,9 +30,12 @@ import ro.stad.online.gesint.model.filters.FiltruRezultat;
 import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.Partid;
 import ro.stad.online.gesint.persistence.entities.PartidRezultateJudete;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
+import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.persistence.entities.enums.TipAlegeriEnum;
 import ro.stad.online.gesint.services.JudetService;
 import ro.stad.online.gesint.services.PartidService;
+import ro.stad.online.gesint.services.RegistruActivitateService;
 import ro.stad.online.gesint.services.RezultatService;
 import ro.stad.online.gesint.services.impl.RegistruActivitateServiceImpl;
 import ro.stad.online.gesint.util.FacesUtilities;
@@ -45,6 +50,7 @@ import ro.stad.online.gesint.util.Utilitati;
 @Getter
 @Controller("rezultatBean")
 @Scope(Constante.VIEW)
+@Slf4j
 public class RezultateBean implements Serializable {
 
         /**
@@ -61,6 +67,11 @@ public class RezultateBean implements Serializable {
          * Numărul de coloane din tabelul de alerte.
          */
         private static final int NUMBERCOLUMNTABLA = NumarMagic.NUMBERSEVEN;
+
+        /**
+         * URL-ul pagini de modificare a corespondentei.
+         */
+        private static final String URLMODCORESP = "/corespondente/modificareCorespondenta?faces-redirect=true";
 
         /**
          * Variabila care ne arata numarul total de votanti
@@ -121,14 +132,14 @@ public class RezultateBean implements Serializable {
          *
          */
         @Autowired
-        private JudetService judetService;
+        private transient JudetService judetService;
 
         /**
          * Variabila utilizata pentru a injecta serviciul partid.
          *
          */
         @Autowired
-        private PartidService partidService;
+        private transient PartidService partidService;
 
         /**
          * Variabila utilizata pentru a injecta serviciul partid.
@@ -173,26 +184,30 @@ public class RezultateBean implements Serializable {
         private String numeTablaPrincipal;
 
         /**
+         * Serviciul de înregistrare a activității.
+         */
+        @Autowired
+        private transient RegistruActivitateService regActividadService;
+
+        /**
          * Căutați rezultate pe baza filtrului de căutare.
          */
         public void cautareRezultate() {
 
-                totalVotanti = 0;
-                totalMandate = 0;
-                numeTabla = Constante.SPATIU;
-                numeTablaPrincipal = Constante.SPATIU;
+                this.totalVotanti = 0;
+                this.totalMandate = 0;
+                this.numeTabla = Constante.SPATIU;
+                this.numeTablaPrincipal = Constante.SPATIU;
                 if (filtruRezultat.getTipAlegeri() == null) {
                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, "INFO",
                                         "Este obligatoriu să alegeți un tip de alegeri");
-                        listaRezultate = new ArrayList<>();
+                        this.listaRezultate = new ArrayList<>();
                         this.model = new LazyDataRezultate(this.rezultatService);
-                        numeTabla = Constante.SPATIU;
-                        numeTablaPrincipal = Constante.SPATIU;
+                        this.numeTabla = Constante.SPATIU;
+                        this.numeTablaPrincipal = Constante.SPATIU;
                         LOG.debug("Este obligatoriu să alegeți un tip de alegeri");
                 }
                 else {
-                        if (TipAlegeriEnum.LOCALE_CONSILIU.equals(filtruRezultat.getTipAlegeri())) {
-                        }
 
                         this.model.setFiltruRezultat(this.filtruRezultat);
                         // Obtinem numele tablei principale
@@ -200,23 +215,21 @@ public class RezultateBean implements Serializable {
                         extractBooleanDateGenerale();
                         this.model.load(0, NumarMagic.NUMBERFIFTEEN, null, SortOrder.DESCENDING, null);
                         // Obtinem data alegerilor in format dd/MM/yyyy
-                        if (!model.getDatasource().isEmpty()) {
-                                dataAlegerilor = Utilitati.getFechaFormateada(
+                        if (!this.model.getDatasource().isEmpty()) {
+                                this.dataAlegerilor = Utilitati.getFechaFormateada(
                                                 model.getDatasource().get(0).getDataAlegerilor(), Constante.FORMATDATE);
                         }
-                        listaRezultate = rezultateDaoService.filterGeneraleRezultate(filtruRezultat);
-
+                        this.listaRezultate = rezultateDaoService.filterGeneraleRezultate(filtruRezultat);
                         if (filtruRezultat.getSuntGenerale()) {
                                 createPieModelRezultate(listaRezultate);
-                                numeTabla = "Primele 10 partide la nivel național";
+                                this.numeTabla = "Primele 10 partide la nivel național";
                         }
-                        if (!listaRezultate.isEmpty()) {
-                                totalVotanti = listaRezultate.get(0).getTotalVoturi();
-                                totalMandate = listaRezultate.get(0).getTotalMandate();
+                        if (!this.listaRezultate.isEmpty()) {
+                                this.totalVotanti = listaRezultate.get(0).getTotalVoturi();
+                                this.totalMandate = listaRezultate.get(0).getTotalMandate();
                                 for (final RezultateDTO rdto : listaRezultate) {
                                         rdto.setNume(Utilitati.convertNumePartid(rdto.getNume()));
                                 }
-
                         }
                 }
         }
@@ -226,11 +239,12 @@ public class RezultateBean implements Serializable {
          * @return boolean
          */
         private void extractBooleanDateGenerale() {
-                if (filtruRezultat.getIdPartid() == null && Constante.SPATIU.equals(filtruRezultat.getIdProvincia())) {
-                        filtruRezultat.setSuntGenerale(true);
+                if (this.filtruRezultat.getIdPartid() == null
+                                && Constante.SPATIU.equals(filtruRezultat.getIdProvincia())) {
+                        this.filtruRezultat.setSuntGenerale(true);
                 }
                 else {
-                        filtruRezultat.setSuntGenerale(false);
+                        this.filtruRezultat.setSuntGenerale(false);
                 }
         }
 
@@ -283,9 +297,7 @@ public class RezultateBean implements Serializable {
          * @return /modificareCorespondenta
          */
         public String getFormRezultateLocalitati(final String indicator) {
-                String redireccion = null;
-                redireccion = "/corespondente/modificareCorespondenta?faces-redirect=true";
-                return redireccion;
+                return URLMODCORESP;
         }
 
         /**
@@ -297,14 +309,25 @@ public class RezultateBean implements Serializable {
                 this.filtruRezultat = new FiltruRezultat();
                 this.judete = new ArrayList<>();
                 this.list = new ArrayList<>();
-                totalVotanti = 0;
-                totalMandate = 0;
-                numeTabla = Constante.SPATIU;
-                judete = judetService.fiindAll();
-                listaPartideJudet = new ArrayList<>();
-                listaPartideJudet = partidService.fiindPartidJudet();
-                listaAni = new ArrayList<>();
-                listaAni = rezultatService.cautaAni();
+                this.totalVotanti = 0;
+                this.totalMandate = 0;
+                this.numeTabla = Constante.SPATIU;
+                this.listaPartideJudet = new ArrayList<>();
+                try {
+                        this.judete = this.judetService.fiindAll();
+                        this.listaPartideJudet = partidService.fiindPartidJudet();
+                }
+                catch (final DataAccessException e) {
+                        final String descriere = "A apărut o eroare la obtinerea judetelor sau a partidelor";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
+                        this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.PARTID.getDescriere(),
+                                        e);
+                        log.error(descriere);
+                }
+                this.listaAni = new ArrayList<>();
+                this.listaAni = rezultatService.cautaAni();
                 for (int i = 0; i < NUMBERCOLUMNTABLA; i++) {
                         this.list.add(Boolean.TRUE);
                 }
@@ -318,11 +341,11 @@ public class RezultateBean implements Serializable {
         public void cautareCautare() {
                 this.filtruRezultat = new FiltruRezultat();
                 this.model = new LazyDataRezultate(this.rezultatService);
-                listaRezultate = new ArrayList<>();
-                numeTabla = Constante.SPATIU;
-                numeTablaPrincipal = Constante.SPATIU;
-                totalVotanti = 0;
-                totalMandate = 0;
+                this.listaRezultate = new ArrayList<>();
+                this.numeTabla = Constante.SPATIU;
+                this.numeTablaPrincipal = Constante.SPATIU;
+                this.totalVotanti = 0;
+                this.totalMandate = 0;
         }
 
         /**

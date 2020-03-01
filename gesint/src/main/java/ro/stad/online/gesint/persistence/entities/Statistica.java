@@ -24,6 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.RezultatEnum;
 import ro.stad.online.gesint.persistence.entities.enums.TipStatisticaEnum;
 
@@ -51,13 +52,13 @@ public class Statistica implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_STATISTICA")
         @SequenceGenerator(name = "SEQ_STATISTICA", sequenceName = "SEQ_STATISTICA", allocationSize = 1)
-        @Column(name = "id", length = 10, columnDefinition = "NUMERIC")
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE, columnDefinition = "NUMERIC")
         private Long id;
 
         /**
          * Numele tipului de statistica.
          */
-        @Column(name = "tip_statistica", length = 20)
+        @Column(name = "TIP_STATISTICA", length = NumarMagic.NUMBERTWENTY)
         @Enumerated(EnumType.STRING)
         private TipStatisticaEnum tipStatistica;
 
@@ -77,49 +78,49 @@ public class Statistica implements Serializable {
         /**
          * Marca registrului ex: Ianuarie 2019.
          */
-        @Column(name = "marca")
+        @Column(name = "MARCA")
         private String marca;
 
         /**
          * Numele registrului ex: Bacau.
          */
-        @Column(name = "nume")
+        @Column(name = "NUME")
         private String nume;
 
         /**
          * Numele registrului ex: BC.
          */
-        @Column(name = "cod_judet")
+        @Column(name = "COD_JUDET")
         private String codeJudet;
 
         /**
          * populatie totala.
          */
-        @Column(name = "populatie_totala")
+        @Column(name = "POPULATIE_TOTALA")
         private Long populatieTotala;
 
         /**
          * populatie totala.
          */
-        @Column(name = "membrii")
+        @Column(name = "MEMBRII")
         private Long membrii;
 
         /**
          * populatie cu drept de vot.
          */
-        @Column(name = "populatie_vot")
+        @Column(name = "POPULATIE_VOT")
         private Long populatieVot;
 
         /**
          * populatie cu drept de vot.
          */
-        @Column(name = "procentaj")
+        @Column(name = "PROCENTAJ")
         private Float procentaj;
 
         /**
          * Numele registrului ex: BC.
          */
-        @Column(name = "valoare")
+        @Column(name = "VALOARE")
         @Enumerated(EnumType.STRING)
         private RezultatEnum valoare;
 

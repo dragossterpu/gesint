@@ -6,6 +6,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * Defineste rolurile sistemului. Datorită utilizării versiunii 4 de Spring Security, toate rolurile trebuie să înceapă
@@ -97,9 +98,9 @@ public enum ExtensieEnum {
          *
          */
         public static Map<String, String> getExtensie() {
-                Map<String, String> extensie = new HashMap<String, String>();
+                Map<String, String> extensie = new HashMap<>();
 
-                for (ExtensieEnum extension : ExtensieEnum.values()) {
+                for (final ExtensieEnum extension : ExtensieEnum.values()) {
                         extensie.put(extension.getNombre(), extension.getDescription());
                 }
                 return extensie;
@@ -114,6 +115,6 @@ public enum ExtensieEnum {
          * @return Nombre del enum sin el prefijo "ROLE_"
          */
         public String getNombre() {
-                return name().substring(5);
+                return name().substring(NumarMagic.NUMBERFIVE);
         }
 }

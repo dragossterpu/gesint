@@ -26,6 +26,7 @@ import ro.stad.online.gesint.model.filters.FiltruCorespondenta;
 import ro.stad.online.gesint.persistence.entities.Corespondenta;
 import ro.stad.online.gesint.persistence.entities.Documentul;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.repositories.CorespondentaRepository;
 import ro.stad.online.gesint.services.CorespondentaService;
 import ro.stad.online.gesint.util.EMail;
@@ -94,7 +95,7 @@ public class CorespondentaServiceImpl implements CorespondentaService, Serializa
                         final FiltruCorespondenta filtruCorespondenta) {
                 try {
                         session = sessionFactory.openSession();
-                        final Criteria criteria = session.createCriteria(Corespondenta.class, Constante.ALERTA);
+                        final Criteria criteria = session.createCriteria(Corespondenta.class);
                         creaCriteria(filtruCorespondenta, criteria);
                         criteria.setFirstResult(first);
                         criteria.setMaxResults(pageSize);
@@ -121,7 +122,7 @@ public class CorespondentaServiceImpl implements CorespondentaService, Serializa
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 }
                         }
                 }
@@ -181,12 +182,12 @@ public class CorespondentaServiceImpl implements CorespondentaService, Serializa
         public int getCounCriteria(final FiltruCorespondenta filtruCorespondenta) {
                 try {
                         session = sessionFactory.openSession();
-                        final Criteria crit = session.createCriteria(Corespondenta.class);
-                        creaCriteria(filtruCorespondenta, crit);
-                        crit.setProjection(Projections.rowCount());
-                        final Long cnt = (Long) crit.uniqueResult();
+                        final Criteria crite = session.createCriteria(Corespondenta.class);
+                        creaCriteria(filtruCorespondenta, crite);
+                        crite.setProjection(Projections.rowCount());
+                        final Long count = (Long) crite.uniqueResult();
 
-                        return Math.toIntExact(cnt);
+                        return Math.toIntExact(count);
                 }
                 finally {
                         if ((session != null) && session.isOpen()) {
@@ -195,7 +196,7 @@ public class CorespondentaServiceImpl implements CorespondentaService, Serializa
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 }
                         }
                 }

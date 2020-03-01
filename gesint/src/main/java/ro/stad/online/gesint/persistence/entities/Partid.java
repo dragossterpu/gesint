@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.DaNuEnum;
 import ro.stad.online.gesint.util.Utilitati;
 
@@ -47,21 +48,21 @@ public class Partid implements Serializable {
          * ID PARTID.
          */
         @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_partid")
-        @SequenceGenerator(name = "seq_partid", sequenceName = "seq_partid", allocationSize = 1)
-        @Column(name = "ID", length = 5)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PARTID")
+        @SequenceGenerator(name = "SEQ_PARTID", sequenceName = "SEQ_PARTID", allocationSize = 1)
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**
          * Sigla formatiunii politice.
          */
-        @Column(name = "SIGLA", length = 7)
+        @Column(name = "SIGLA", length = NumarMagic.NUMBERSEVEN)
         private String sigla;
 
         /**
          * Numele formatiunii politice.
          */
-        @Column(name = "NUME", length = 100)
+        @Column(name = "NUME", length = NumarMagic.NUMBERHUNDRED)
         private String name;
 
         /**
@@ -75,8 +76,7 @@ public class Partid implements Serializable {
          * @return the name
          */
         public String getName() {
-                final String nume = Utilitati.convertNumePartid(name);
-                return nume;
+                return Utilitati.convertNumePartid(name);
         }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.model.dao.StatisticaDAO;
 import ro.stad.online.gesint.model.dao.mapper.StatisticaMapper;
 import ro.stad.online.gesint.model.dto.statistica.StatisticaDTO;
@@ -50,119 +51,130 @@ public class StatisticaDAOImpl implements StatisticaDAO {
         public List<StatisticaDTO> filterGeneraleStatistica(final FiltruStatistica filter) {
 
                 final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                final StringBuilder sql = new StringBuilder();
+                final StringBuilder sql = new StringBuilder(NumarMagic.NUMBERTWOTHOUSAND);
 
-                sql.append(" SELECT COUNT(*) AS numarTotal,");
-                sql.append("(SELECT COUNT(*) FROM utilizator WHERE educatie= 'LICEU') AS totalcuLiceu,");
-                sql.append("(SELECT COUNT(*) FROM utilizator WHERE educatie= 'STUDIISUPERIOARE') AS totalStudiiSup,");
-                sql.append("(SELECT COUNT(*) FROM utilizator WHERE educatie= 'BAZIC') AS totalBazice,");
-                sql.append("(SELECT SUM(populatie)FROM judet)AS locuitoriTotal,");
-                sql.append("(SELECT COUNT(*) FROM utilizator WHERE sex= 'MAN') AS totalBarbati,");
-                sql.append("(SELECT COUNT(*) FROM utilizator WHERE sex= 'WOMAN') AS totalFemei,");
-                sql.append("(SELECT DISTINCT ROUND((SELECT SUM(populatie)FROM judet)- ((SELECT SUM(populatie)FROM judet)*0.2)) AS locuitori FROM judet ) AS totalVot,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimaLuna()) + Constante.ANDDATE
-                                + sdf.format(filter.getDataIncepand()) + "') AS totalUltimaLuna,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimDouaLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimaLuna())
-                                + "') AS totalUltimDouaLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimTreiLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimDouaLuni())
-                                + "') AS totalUltimTreiLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimPatruLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimTreiLuni())
-                                + "') AS totalUltimPatruLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimCinciLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimPatruLuni())
-                                + "') AS totalUltimCinciLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimSaseLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimCinciLuni())
-                                + "') AS totalUltimSaseLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimSapteLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimSaseLuni())
-                                + "') AS totalUltimSapteLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimOptLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimSapteLuni())
-                                + "') AS totalUltimOptLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimNouaLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimOptLuni())
-                                + "') AS totalUltimNouaLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimZeceLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimNouaLuni())
-                                + "') AS totalUltimZeceLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimUnspeLuni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimZeceLuni())
-                                + "') AS totalUltimUnspeLuni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimAn()) + Constante.ANDDATE
-                                + sdf.format(filter.getDataUltimUnspeLuni()) + "') AS totalLuna12,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimAn()) + Constante.ANDDATE
-                                + sdf.format(filter.getDataIncepand()) + "') AS totalUltimAn,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimaLunaAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimaLunaAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimDouaLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimDouaLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimTreiLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimTreiLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimPatruLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimPatruLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimCinciLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimCinciLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimSaseLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimSaseLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimSapteLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimSapteLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimOptLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimOptLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimNouaLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimNouaLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimZeceLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimZeceLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimUnspeLuniAnTrecut())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimAn())
-                                + "') AS totalUltimUnspeLuniAnAtras,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimiDoiAni()) + "' AND DATE '"
-                                + sdf.format(filter.getDataUltimAn()) + "') AS totalUltimiDoiAni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimiTreiAni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimiDoiAni())
-                                + "') AS totalUltimiiTreiAni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimiPatruAni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimiTreiAni())
-                                + "') AS totalUltimiiPatruAni,");
-                sql.append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimiCinciAni())
-                                + Constante.ANDDATE + sdf.format(filter.getDataUltimiPatruAni())
-                                + "') AS totalUltimiiCinciAni,");
-                sql.append("(SELECT COUNT(*)  FROM utilizator WHERE DATE_create <= '"
-                                + sdf.format(filter.getDataUltimiCinciAni()) + "') AS totalAntCinciAni,");
-
-                sql.append("(SELECT COUNT(*)  FROM utilizator WHERE data_nasterii BETWEEN DATE '"
-                                + sdf.format(filter.getDataPana25()) + Constante.ANDDATE
-                                + sdf.format(filter.getDataIncepand()) + "') AS totalPana25,");
-                sql.append(Constante.SELECTCOUNTUSERBIRTDATE + sdf.format(filter.getDataPana25()) + Constante.ANDDATE
-                                + sdf.format(filter.getDataIncepand()) + "' and sex= 'MAN') AS totalBarbati25,");
-                sql.append(Constante.SELECTCOUNTUSERBIRTDATE + sdf.format(filter.getDataPana40()) + Constante.ANDDATE
-                                + sdf.format(filter.getDataPana25()) + "') AS totalPana40,");
-                sql.append(Constante.SELECTCOUNTUSERBIRTDATE + sdf.format(filter.getDataPana40()) + Constante.ANDDATE
-                                + sdf.format(filter.getDataPana25()) + "' and sex= 'MAN') AS totalBarbati40,");
-                sql.append(Constante.SELECTCOUNTUSERBIRTDATE + sdf.format(filter.getDataPana60()) + Constante.ANDDATE
-                                + sdf.format(filter.getDataPana40()) + "') AS totalPana60,");
-                sql.append(Constante.SELECTCOUNTUSERBIRTDATE + sdf.format(filter.getDataPana60()) + Constante.ANDDATE
-                                + sdf.format(filter.getDataPana40()) + "' and sex= 'MAN') AS totalBarbati60,");
-                sql.append("(SELECT COUNT(*)  FROM utilizator WHERE data_nasterii <= '" + sdf.format(filter.getDataPana60())
-                                + "') AS totalMayor60,");
-                sql.append("(SELECT COUNT(*) FROM utilizator u, localitate l WHERE  u.localitate_id = l.id AND l.nivel =3)AS mediuRural,");
-                sql.append("(SELECT COUNT(*) FROM utilizator u, localitate l WHERE  u.localitate_id = l.id AND l.nivel in(2,1))AS mediuUrban,");
-                sql.append("(SELECT SUM(locuitori) FROM localitate WHERE nivel =3) AS locuitoriTotalRural, ");
-                sql.append("(SELECT SUM(locuitori) FROM localitate WHERE nivel in(2,3)) AS locuitoriTotalUrban ");
-                sql.append("FROM utilizator ");
+                sql.append(" SELECT COUNT(*) AS numarTotal,").append(Constante.SQLCOUNTEDUCATIE)
+                                .append(" 'LICEU') AS totalcuLiceu,").append(Constante.SQLCOUNTEDUCATIE)
+                                .append(" 'STUDIISUPERIOARE') AS totalStudiiSup,").append(Constante.SQLCOUNTEDUCATIE)
+                                .append(" 'BAZIC') AS totalBazice,")
+                                .append("(SELECT SUM(populatie)FROM judet)AS locuitoriTotal,")
+                                .append(Constante.SQLCOUNTSEX).append(" 'MAN') AS totalBarbati,")
+                                .append(Constante.SQLCOUNTSEX).append(" 'WOMAN') AS totalFemei,")
+                                .append(Constante.SQLSELECT).append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimaLuna())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataIncepand())).append("') AS totalUltimaLuna,")
+                                .append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimDouaLuni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimaLuna())).append(Constante.SQLAS)
+                                .append(" totalUltimDouaLuni,")
+                                .append(Constante.SELECTCOUNTUSERBETWENN + sdf.format(filter.getDataUltimTreiLuni()))
+                                .append(Constante.ANDDATE).append(sdf.format(filter.getDataUltimDouaLuni()))
+                                .append(Constante.SQLAS).append(" totalUltimTreiLuni,")
+                                .append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimPatruLuni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimTreiLuni())).append(Constante.SQLAS)
+                                .append(" totalUltimPatruLuni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimCinciLuni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimPatruLuni())).append(Constante.SQLAS)
+                                .append(" totalUltimCinciLuni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimSaseLuni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimCinciLuni())).append(Constante.SQLAS)
+                                .append(" totalUltimSaseLuni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimSapteLuni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimSaseLuni())).append(Constante.SQLAS)
+                                .append(" totalUltimSapteLuni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimOptLuni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimSapteLuni())).append(Constante.SQLAS)
+                                .append(" totalUltimOptLuni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimNouaLuni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimOptLuni())).append(Constante.SQLAS)
+                                .append(" totalUltimNouaLuni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimZeceLuni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimNouaLuni())).append(Constante.SQLAS)
+                                .append(" totalUltimZeceLuni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimUnspeLuni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimZeceLuni())).append(Constante.SQLAS)
+                                .append(" totalUltimUnspeLuni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimAn()) + Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimUnspeLuni())).append(Constante.SQLAS)
+                                .append(" totalLuna12,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimAn()) + Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataIncepand())).append(Constante.SQLAS)
+                                .append(" totalUltimAn,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimaLunaAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimaLunaAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimDouaLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimDouaLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimTreiLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimTreiLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimPatruLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimPatruLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimCinciLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimCinciLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimSaseLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimSaseLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimSapteLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimSapteLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimOptLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimOptLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimNouaLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append("totalUltimNouaLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimZeceLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimZeceLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimUnspeLuniAnTrecut())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimUnspeLuniAnAtras,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimiDoiAni())).append("' AND DATE '")
+                                .append(sdf.format(filter.getDataUltimAn())).append(Constante.SQLAS)
+                                .append(" totalUltimiDoiAni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimiTreiAni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimiDoiAni())).append(Constante.SQLAS)
+                                .append(" totalUltimiiTreiAni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimiPatruAni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimiTreiAni())).append(Constante.SQLAS)
+                                .append(" totalUltimiiPatruAni,").append(Constante.SELECTCOUNTUSERBETWENN)
+                                .append(sdf.format(filter.getDataUltimiCinciAni())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataUltimiPatruAni())).append(Constante.SQLAS)
+                                .append(" totalUltimiiCinciAni,")
+                                .append("(SELECT COUNT(*)  FROM utilizator WHERE DATE_create <= '")
+                                .append(sdf.format(filter.getDataUltimiCinciAni())).append(Constante.SQLAS)
+                                .append(" totalAntCinciAni,")
+                                .append("(SELECT COUNT(*)  FROM utilizator WHERE data_nasterii BETWEEN DATE '")
+                                .append(sdf.format(filter.getDataPana25())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataIncepand())).append(Constante.SQLAS)
+                                .append(" totalPana25,").append(Constante.SELECTCOUNTUSERBIRTDATE)
+                                .append(sdf.format(filter.getDataPana25())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataIncepand())).append(Constante.SQLANDMAN)
+                                .append(" totalBarbati25,").append(Constante.SELECTCOUNTUSERBIRTDATE)
+                                .append(sdf.format(filter.getDataPana40())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataPana25())).append(Constante.SQLAS)
+                                .append(" totalPana40,").append(Constante.SELECTCOUNTUSERBIRTDATE)
+                                .append(sdf.format(filter.getDataPana40()) + Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataPana25())).append(Constante.SQLANDMAN)
+                                .append(" totalBarbati40,").append(Constante.SELECTCOUNTUSERBIRTDATE)
+                                .append(sdf.format(filter.getDataPana60())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataPana40())).append(Constante.SQLAS)
+                                .append(" totalPana60,").append(Constante.SELECTCOUNTUSERBIRTDATE)
+                                .append(sdf.format(filter.getDataPana60())).append(Constante.ANDDATE)
+                                .append(sdf.format(filter.getDataPana40())).append(Constante.SQLANDMAN)
+                                .append(" totalBarbati60,")
+                                .append("(SELECT COUNT(*)  FROM utilizator WHERE data_nasterii <= '")
+                                .append(sdf.format(filter.getDataPana60())).append(Constante.SQLAS)
+                                .append(" totalMayor60,").append(Constante.SQLCOUNTNIVELLOC)
+                                .append(" =3)AS mediuRural,").append(Constante.SQLCOUNTNIVELLOC)
+                                .append(" in(2,1))AS mediuUrban,").append(Constante.SQLCOUNTNIVEL)
+                                .append(" =3) AS locuitoriTotalRural, ").append(Constante.SQLCOUNTNIVEL)
+                                .append(" in(2,3)) AS locuitoriTotalUrban ").append("FROM utilizator ");
 
                 final MapSqlParameterSource parameters = new MapSqlParameterSource();
 

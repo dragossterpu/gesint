@@ -20,6 +20,7 @@ import com.itextpdf.layout.element.Image;
 import lombok.Getter;
 import lombok.Setter;
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * Generator de Antet și footer pentru PDF.
@@ -98,10 +99,10 @@ public class HeaderFooterPdf implements IEventHandler {
 
                 final PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
-                if (pdfDoc.getPageNumber(page) == 1) {
+                if (pdfDoc.getPageNumber(page) == NumarMagic.NUMBERONE) {
                         final Rectangle rect = new Rectangle(pdfDoc.getDefaultPageSize().getX() + doc.getLeftMargin(),
-                                        pdfDoc.getDefaultPageSize().getTop() - doc.getTopMargin(), 523,
-                                        header1.getImageHeight());
+                                        pdfDoc.getDefaultPageSize().getTop() - doc.getTopMargin(),
+                                        NumarMagic.NUMBERFIVEHUNDREDTWENTYTHREE, header1.getImageHeight());
                         header1.setFixedPosition(pageSize.getLeft() + doc.getLeftMargin(),
                                         pageSize.getTop() - doc.getTopMargin());
                         header2.setFixedPosition(
@@ -114,12 +115,12 @@ public class HeaderFooterPdf implements IEventHandler {
                 }
                 else {
                         final Rectangle rect = new Rectangle(pdfDoc.getDefaultPageSize().getX() + doc.getLeftMargin(),
-                                        pdfDoc.getDefaultPageSize().getTop() - doc.getTopMargin(), 523,
-                                        headerRepetat.getImageHeight());
+                                        pdfDoc.getDefaultPageSize().getTop() - doc.getTopMargin(),
+                                        NumarMagic.NUMBERFIVEHUNDREDTWENTYTHREE, headerRepetat.getImageHeight());
                         headerRepetat.setFixedPosition(
                                         pageSize.getRight() - doc.getRightMargin()
                                                         - headerRepetat.getImageScaledWidth(),
-                                        pageSize.getTop() - doc.getTopMargin() + 10);
+                                        pageSize.getTop() - doc.getTopMargin() + NumarMagic.NUMBERTEN);
                         final Canvas c = new Canvas(canvas, pdfDoc, rect);
                         c.add(headerRepetat);
                         c.close();
@@ -136,10 +137,9 @@ public class HeaderFooterPdf implements IEventHandler {
                 final PdfPage page = docEvent.getPage();
                 final Rectangle pageSize = docEvent.getPage().getPageSize();
 
-                footer1.setFixedPosition(
-                                (pageSize.getRight() - doc.getRightMargin()
-                                                - (pageSize.getLeft() + doc.getLeftMargin())) / 2 + doc.getLeftMargin(),
-                                pageSize.getBottom() + 10);
+                footer1.setFixedPosition((pageSize.getRight() - doc.getRightMargin()
+                                - (pageSize.getLeft() + doc.getLeftMargin())) / NumarMagic.NUMBERTWO
+                                + doc.getLeftMargin(), pageSize.getBottom() + NumarMagic.NUMBERTEN);
 
                 final PdfCanvas pdfCanvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
                 final Rectangle rectFooter = new Rectangle(pdfDoc.getDefaultPageSize().getX() + doc.getLeftMargin(),

@@ -40,7 +40,7 @@ public class UtilizatorConvertor implements Converter {
                 boolean oprire = false;
 
                 for (int i = 0; i < listaEchipa.size() && !oprire; i++) {
-                        if (listaEchipa.get(i).getUsername().toString().equals(value)) {
+                        if (listaEchipa.get(i).getUsername().equals(value)) {
                                 echipa = listaEchipa.get(i);
                                 oprire = true;
                         }
@@ -61,7 +61,7 @@ public class UtilizatorConvertor implements Converter {
                 final Utilizator user = (Utilizator) value;
 
                 if (user != null && user.getUsername() != null) {
-                        idEchipa = user.getUsername().toString();
+                        idEchipa = user.getUsername();
                 }
 
                 return idEchipa;

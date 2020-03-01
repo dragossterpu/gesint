@@ -39,10 +39,19 @@ public enum EducatieEnum {
          */
         NESPECIFICAT("Nespecificat");
 
+        /**
+         * Valoare statica VALUES
+         */
         private static final List<EducatieEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
 
+        /**
+         * Valoare statica SIZE
+         */
         private static final int SIZE = VALUES.size();
 
+        /**
+         * Valoare statica RANDOM
+         */
         private static final Random RANDOM = new Random();
 
         /**
@@ -57,6 +66,10 @@ public enum EducatieEnum {
                 return educatii;
         }
 
+        /**
+         * Metoda care obtine o valoare rendom
+         * @return
+         */
         public static EducatieEnum randomLetter() {
                 return VALUES.get(RANDOM.nextInt(SIZE));
         }

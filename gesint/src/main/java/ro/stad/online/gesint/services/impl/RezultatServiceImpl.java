@@ -22,6 +22,7 @@ import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.model.filters.FiltruRezultat;
 import ro.stad.online.gesint.persistence.entities.PartidRezultateJudete;
 import ro.stad.online.gesint.persistence.entities.PartidRezultateLocalitate;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.repositories.RezultatRepository;
 import ro.stad.online.gesint.services.JudetService;
 import ro.stad.online.gesint.services.PartidService;
@@ -61,14 +62,14 @@ public class RezultatServiceImpl implements RezultatService, Serializable {
          *
          */
         @Autowired
-        private JudetService judetService;
+        private transient JudetService judetService;
 
         /**
          * Variabila utilizata pentru a injecta serviciul partid.
          *
          */
         @Autowired
-        private PartidService partidService;
+        private transient PartidService partidService;
 
         /**
          * Session.
@@ -113,7 +114,7 @@ public class RezultatServiceImpl implements RezultatService, Serializable {
                                 }
                         }
                         else {
-                                criteria.addOrder(Order.asc("judetul"));
+                                criteria.addOrder(Order.asc(Constante.JUDETUL));
                                 criteria.addOrder(Order.desc("procentajTotalVoturi"));
                         }
                         return criteria.list();
@@ -125,7 +126,7 @@ public class RezultatServiceImpl implements RezultatService, Serializable {
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 }
                         }
                 }
@@ -174,7 +175,7 @@ public class RezultatServiceImpl implements RezultatService, Serializable {
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 }
                         }
                 }
@@ -196,9 +197,8 @@ public class RezultatServiceImpl implements RezultatService, Serializable {
          * @param criteria consulta criteria
          * @param filtruRezultat Obiect care conține parametrii de căutare
          */
-        @SuppressWarnings("unlikely-arg-type")
         private void creaCriteria(final FiltruRezultat filtruRezultat, final Criteria criteria) {
-                if (filtruRezultat.getIdPartid() != null && !Constante.SPATIU.equals(filtruRezultat.getIdPartid())) {
+                if (filtruRezultat.getIdPartid() != null) {
                         criteria.add(Restrictions.eq("partid", partidService.fiindOne(filtruRezultat.getIdPartid())));
                 }
                 if (filtruRezultat.getIdProvincia() != null
@@ -214,20 +214,20 @@ public class RezultatServiceImpl implements RezultatService, Serializable {
 
         /**
          * Metoda care obține numărul de registre din baza de date
-         * @param filtruDocument FiltruDocument
-         * @return int
+         * @param filtruRezultat FiltruRezultat
+         * @return Long cntRezultat
          */
         @Override
 
         public int getCounCriteria(final FiltruRezultat filtruRezultat) {
                 try {
                         session = sessionFactory.openSession();
-                        final Criteria crit = session.createCriteria(PartidRezultateJudete.class);
-                        creaCriteria(filtruRezultat, crit);
-                        crit.setProjection(Projections.rowCount());
-                        final Long cnt = (Long) crit.uniqueResult();
+                        final Criteria critRezultat = session.createCriteria(PartidRezultateJudete.class);
+                        creaCriteria(filtruRezultat, critRezultat);
+                        critRezultat.setProjection(Projections.rowCount());
+                        final Long cntRezultat = (Long) critRezultat.uniqueResult();
 
-                        return Math.toIntExact(cnt);
+                        return Math.toIntExact(cntRezultat);
                 }
                 finally {
                         if ((session != null) && session.isOpen()) {
@@ -236,7 +236,7 @@ public class RezultatServiceImpl implements RezultatService, Serializable {
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 }
                         }
                 }

@@ -28,6 +28,7 @@ import ro.stad.online.gesint.model.filters.FiltruLocalitate;
 import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.Localitate;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.persistence.entities.enums.TipLocalitateEnum;
 import ro.stad.online.gesint.services.JudetService;
@@ -35,6 +36,7 @@ import ro.stad.online.gesint.services.LocalitateService;
 import ro.stad.online.gesint.services.RegistruActivitateService;
 import ro.stad.online.gesint.services.UtilizatorService;
 import ro.stad.online.gesint.util.FacesUtilities;
+import ro.stad.online.gesint.util.Utilitati;
 
 /**
  * Controller de gestiune al localitatilor.
@@ -114,7 +116,7 @@ public class LocalitateBean implements Serializable {
          * Serviciu utilizatorului
          */
         @Autowired
-        private UtilizatorService utilizatorService;
+        private transient UtilizatorService utilizatorService;
 
         /**
          * Serviciul de înregistrare a activității.
@@ -123,18 +125,24 @@ public class LocalitateBean implements Serializable {
         private transient RegistruActivitateService regActividadService;
 
         /**
+         * Componente de utilidades.
+         */
+        @Autowired
+        private transient Utilitati utilitati;
+
+        /**
          * Metoda init() de LocalitateBean.
          * @PostConstruct
          */
         @PostConstruct
         public void init() {
-                filtruLocalitate = new FiltruLocalitate();
+                this.filtruLocalitate = new FiltruLocalitate();
                 this.idJudet = Constante.SPATIU;
-                judetul = new Judet();
-                localitatea = new Localitate();
-                listaLocalitati = new ArrayList<>();
-                listaJudete = judetService.fiindAll();
-                listaLocalitati = localitateService.fiindAll();
+                this.judetul = new Judet();
+                this.localitatea = new Localitate();
+                this.listaLocalitati = new ArrayList<>();
+                this.listaJudete = judetService.fiindAll();
+                this.listaLocalitati = localitateService.fiindAll();
         }
 
         /**
@@ -156,11 +164,11 @@ public class LocalitateBean implements Serializable {
                         this.localitatea = loca;
                         this.localitateService.save(this.localitatea);
                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.SCHIMBDATE,
-                                        Constante.REGMODOK);
+                                        Constante.OKMODIFICAREMESAJ);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la modificarea localității";
                         this.regActividadService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.LOCALITATI.getDescriere(), e);
@@ -176,24 +184,24 @@ public class LocalitateBean implements Serializable {
                 try {
                         this.localitatea = loca;
                         if (indicator != null) {
-                                localitatea.setJudet(judetService.findById(indicator));
+                                this.localitatea.setJudet(this.judetService.findById(indicator));
                         }
-                        if (localitatea.getTipLocalitate().equals(TipLocalitateEnum.MUNICIPALITY)) {
-                                localitatea.setNivel(NumarMagic.NUMBERONELONG);
+                        if (this.localitatea.getTipLocalitate().equals(TipLocalitateEnum.MUNICIPALITY)) {
+                                this.localitatea.setNivel(NumarMagic.NUMBERONELONG);
                         }
-                        else if (localitatea.getTipLocalitate().equals(TipLocalitateEnum.CITY)) {
-                                localitatea.setNivel(NumarMagic.NUMBERTWOLONG);
+                        else if (this.localitatea.getTipLocalitate().equals(TipLocalitateEnum.CITY)) {
+                                this.localitatea.setNivel(NumarMagic.NUMBERTWOLONG);
                         }
                         else {
-                                localitatea.setNivel(NumarMagic.NUMBERTHREEL);
+                                this.localitatea.setNivel(NumarMagic.NUMBERTHREEL);
                         }
                         this.localitateService.save(this.localitatea);
                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.SCHIMBDATE,
-                                        Constante.REGMODOK);
+                                        Constante.OKMODIFICAREMESAJ);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la înregistrarea localității";
                         this.regActividadService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.LOCALITATI.getDescriere(), e);
@@ -241,17 +249,17 @@ public class LocalitateBean implements Serializable {
                 this.numeDoc = Constante.SPATIU;
                 final UploadedFile uFile = event.getFile();
                 try {
-                        localitatea = localitateService.incarcareImaginaFaraStocare(
+                        this.localitatea = localitateService.incarcareImaginaFaraStocare(
                                         IOUtils.toByteArray(uFile.getInputstream()), localitatea);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la încarcarea imaginii localității";
                         this.regActividadService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.LOCALITATI.getDescriere(), e);
                 }
-                numeDoc = uFile.getFileName();
+                this.numeDoc = uFile.getFileName();
         }
 
         /**
@@ -260,8 +268,8 @@ public class LocalitateBean implements Serializable {
          */
         public void cautareCautare() {
                 this.filtruLocalitate = new FiltruLocalitate();
-                model.setRowCount(0);
-                model = null;
+                this.model.setRowCount(0);
+                this.model = null;
         }
 
         /**
@@ -269,8 +277,9 @@ public class LocalitateBean implements Serializable {
          * @param loca Localitate care se va elimina
          */
         public void eliminaLocalitate(Localitate loca) {
+                Utilizator user = utilitati.getUtilizatorLogat();
                 List<Utilizator> membrii = new ArrayList<>();
-                membrii = utilizatorService.findByLocality(loca);
+                membrii = this.utilizatorService.findByLocality(loca);
                 if (!membrii.isEmpty()) {
                         FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
                                         "Nu se poate elimina localitatea. Sunt înregistrate persoane în acesta localitate. Modificații și după încercați iarăși.",
@@ -278,13 +287,18 @@ public class LocalitateBean implements Serializable {
                 }
                 else {
                         try {
-                                localitateService.delete(loca);
+                                this.localitateService.delete(loca);
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
-                                                Constante.ELIMINAREMESAJ, Constante.REGMODOK);
+                                                RegistruEnum.ELIMINARE.getDescriere(), Constante.OKMODIFICAREMESAJ);
+                                final String descriere = Constante.UTILIZATORUL.concat(user.getNumeComplet())
+                                                .concat(" a eliminat localitatea: ".concat(loca.getNume()));
+                                this.regActividadService.inregistrareRegistruActivitate(descriere,
+                                                RegistruEnum.ELIMINARE.getName(), SectiuniEnum.LOCALITATI.getName(),
+                                                user);
                         }
                         catch (DataAccessException e) {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 final String descriere = "A apărut o eroare la eliminarea localității";
                                 this.regActividadService.salveazaRegistruEroare(descriere,
                                                 SectiuniEnum.LOCALITATI.getDescriere(), e);

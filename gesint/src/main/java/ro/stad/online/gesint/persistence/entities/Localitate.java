@@ -25,6 +25,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.TipLocalitateEnum;
 
 /**
@@ -53,65 +54,65 @@ public class Localitate implements Serializable {
          * ID.
          */
         @Id
-        @SequenceGenerator(name = "seq_locality", sequenceName = "seq_locality", allocationSize = 1)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_locality")
-        @Column(name = "id")
+        @SequenceGenerator(name = "SEQ_LOCALITY", sequenceName = "SEQ_LOCALITY", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LOCALITY")
+        @Column(name = "ID")
         private Long id;
 
         /**
          * Numele localitatii.
          */
-        @Column(name = "nume", length = 100, nullable = false)
+        @Column(name = "NUME", length = NumarMagic.NUMBERHUNDRED, nullable = false)
         private String nume;
 
         /**
          * Tipul localitatii.
          */
-        @Column(name = "tipLocalitate", length = 50, nullable = false)
+        @Column(name = "TIP_LOCALITATE", length = NumarMagic.NUMBERFIFTY, nullable = false)
         @Enumerated(EnumType.STRING)
         private TipLocalitateEnum tipLocalitate;
 
         /**
          * Indicator.
          */
-        @Column(name = "resedinta")
+        @Column(name = "RESEDINTA")
         private Boolean resedinta;
 
         /**
          * Judetul localitatii.
          */
         @ManyToOne
-        @JoinColumn(name = "cod_judet", foreignKey = @ForeignKey(name = "FK_PROVINCE"), nullable = false)
+        @JoinColumn(name = "COD_JUDET", foreignKey = @ForeignKey(name = "FK_PROVINCE"), nullable = false)
         private Judet judet;
 
         /**
          * Sectorul localitatii.
          */
-        @Column(name = "SECTOR", length = 10)
+        @Column(name = "SECTOR", length = NumarMagic.NUMBERTEN)
         private String sector;
 
         /**
          * Nivel.
          */
-        @Column(name = "nivel")
+        @Column(name = "NIVEL")
         private Long nivel;
 
         /**
          * Populatie.
          */
-        @Column(name = "locuitori")
+        @Column(name = "LOCUITORI")
         private Long locuitori;
 
         /**
          * Voturi minim.
          */
-        @Column(name = "voturi_minim")
+        @Column(name = "VOTURI_MINIM")
         private Long voturiMinim;
 
         /**
          * Membrii minim.
          */
-        @Column(name = "membrii_minim")
+        @Column(name = "MEMBRII_MINIM")
         private Long membriiMinim;
 
         /**

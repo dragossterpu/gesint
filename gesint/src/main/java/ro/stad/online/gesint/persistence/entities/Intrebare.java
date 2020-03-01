@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.TipSuportEnum;
 
 /**
@@ -48,13 +49,13 @@ public class Intrebare implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_INTREBARE")
         @SequenceGenerator(name = "SEQ_INTREBARE", sequenceName = "SEQ_INTREBARE", allocationSize = 1)
-        @Column(name = "ID", length = 5)
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**
          * Descrierea intrebarii.
          */
-        @Column(name = "DESCRIERE", length = 200)
+        @Column(name = "DESCRIERE", length = NumarMagic.NUMBERTWOHUNDRED)
         private String descriere;
 
         /**
@@ -66,7 +67,7 @@ public class Intrebare implements Serializable {
         /**
          * Tipul suportului.
          */
-        @Column(name = "TIP_SUPORT", length = 50, nullable = false)
+        @Column(name = "TIP_SUPORT", length = NumarMagic.NUMBERFIFTY, nullable = false)
         @Enumerated(EnumType.STRING)
         private TipSuportEnum tipSuport;
 }

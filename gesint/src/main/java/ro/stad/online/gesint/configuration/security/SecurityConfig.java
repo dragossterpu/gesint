@@ -47,20 +47,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          * Implementarea UserDetailsService de care Spring Security are nevoie.
          */
         @Autowired
-        private transient LoginService loginService;
+        private LoginService loginService;
 
         /**
          * Implementarea a ce face Spring Security atunci când un utilizator se conectează cu succes. Folosit pentru
          * auditul de acces al aplicației.
          */
         @Autowired
-        private transient AuthenticationSuccessHandlerPersonalizado authenticationSuccessHandlerPersonalizado;
+        private AuthenticationSuccessHandlerPersonalizado authenticationSuccessHandlerPersonalizado;
 
         /**
          * Manager de conectare incorectA în sistem.
          */
         @Autowired
-        private transient AuthenticationFailureHandler authenticationFailureHandlerPersonalizado;
+        private AuthenticationFailureHandler authenticationFailureHandlerPersonalizado;
 
         /**
          * Configurăm UserDetailsService și PasswordEncoder pe care le vom folosi.

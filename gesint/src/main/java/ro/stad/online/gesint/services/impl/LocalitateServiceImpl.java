@@ -49,19 +49,19 @@ public class LocalitateServiceImpl implements LocalitateService {
          * Session. SessionFactory
          */
         @Autowired
-        private transient SessionFactory sessionFactory;
+        private SessionFactory sessionFactory;
 
         /**
          * Serviciu pentru a utiliza metodele utilizate împreună cu criteria.
          */
         @Autowired
-        private transient CriteriaService criteriaService;
+        private CriteriaService criteriaService;
 
         /**
          * Variabila utilizata pentru injectarea serviciului de judete
          */
         @Autowired
-        private transient JudetService judetService;
+        private JudetService judetService;
 
         /**
          * Metodă care caută orașele care aparțin unei judet.
@@ -81,7 +81,8 @@ public class LocalitateServiceImpl implements LocalitateService {
          */
         @Override
         @Transactional(readOnly = false)
-        public Localitate crearLocalidad(final String nume, final Judet judet, final TipLocalitateEnum tipLoclalitate) {
+        public Localitate inregistrareLocalitate(final String nume, final Judet judet,
+                        final TipLocalitateEnum tipLoclalitate) {
                 final Localitate nouaLocalitate = new Localitate();
                 nouaLocalitate.setNume(nume);
                 nouaLocalitate.setJudet(judet);
@@ -199,7 +200,7 @@ public class LocalitateServiceImpl implements LocalitateService {
          * @return localitate Localitate
          * @throws IOException Exceptie intrare/iesire
          */
-        private Localitate creareImagine(final byte[] file, final Localitate localitate) throws IOException {
+        private Localitate creareImagine(final byte[] file, final Localitate localitate) {
                 incarcareDatePersonaleUser(file, localitate);
                 localitateRepository.save(localitate);
                 return localitate;
@@ -222,7 +223,7 @@ public class LocalitateServiceImpl implements LocalitateService {
         @Override
         public int getCounCriteria(final FiltruLocalitate filtruLocalitate) {
                 this.session = this.sessionFactory.openSession();
-                final Criteria criteria = this.session.createCriteria(Localitate.class, "localitate");
+                final Criteria criteria = this.session.createCriteria(Localitate.class, Constante.LOCALITATE);
                 cautareCriteria(filtruLocalitate, criteria);
                 criteria.setProjection(Projections.rowCount());
                 final Long cnt = (Long) criteria.uniqueResult();
@@ -236,7 +237,7 @@ public class LocalitateServiceImpl implements LocalitateService {
          * @param criteria Criteria
          */
         private void cautareCriteria(final FiltruLocalitate filtruLocalitate, final Criteria criteria) {
-                UtilitatiCriteria.setConditieCriteriaTextLike(filtruLocalitate.getNume(), criteria, "nume");
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruLocalitate.getNume(), criteria, Constante.NUME);
                 UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruLocalitate.getTip(), criteria,
                                 "tipLocalitate");
                 if (filtruLocalitate.getIdJudet() != null && !Constante.SPATIU.equals(filtruLocalitate.getIdJudet())) {
@@ -257,7 +258,7 @@ public class LocalitateServiceImpl implements LocalitateService {
         public List<Localitate> cautareLocalitateCriteria(final int first, final int pageSize, final String sortField,
                         final SortOrder sortOrder, final FiltruLocalitate filtruLocalitate) {
                 this.session = this.sessionFactory.openSession();
-                final Criteria criteria = this.session.createCriteria(Localitate.class, "localitate");
+                final Criteria criteria = this.session.createCriteria(Localitate.class, Constante.LOCALITATE);
                 cautareCriteria(filtruLocalitate, criteria);
                 this.criteriaService.pregatirePaginareOrdenareCriteria(criteria, first, pageSize, sortField, sortOrder,
                                 Constante.ID);

@@ -47,7 +47,7 @@ public class DocumentBlob implements Serializable {
         @Id
         @SequenceGenerator(name = "seq_documenteblob", sequenceName = "seq_documenteblob", allocationSize = 1)
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_documenteblob")
-        @Column(name = "id", nullable = false)
+        @Column(name = "ID", nullable = false)
         private Long id;
 
         /**
@@ -60,7 +60,7 @@ public class DocumentBlob implements Serializable {
          * Array de byte cu conținutul fișierului.
          */
         @Lob
-        @Column(name = "fisier")
+        @Column(name = "FISIER")
         private byte[] fisier;
 
         /**

@@ -17,8 +17,6 @@ import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.chart.PieChartModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -55,11 +53,6 @@ public class AcasaBean implements Serializable {
          *
          */
         private static final long serialVersionUID = 1L;
-
-        /**
-         * Constant pentru log
-         */
-        private static final Logger LOG = LoggerFactory.getLogger(AcasaBean.class.getSimpleName());
 
         /**
          * Variabila pentru datele de cautare ale statisticii.
@@ -146,7 +139,7 @@ public class AcasaBean implements Serializable {
         /**
          * String current_date
          */
-        private String current_date;
+        private String currentDate;
 
         /**
          * Procentaj total membrii
@@ -232,7 +225,7 @@ public class AcasaBean implements Serializable {
          * Componente de utilidades.
          */
         @Autowired
-        private Utilitati utilitati;
+        private transient Utilitati utilitati;
 
         /**
          * Metoda care calculeaza numarul maxim
@@ -269,8 +262,7 @@ public class AcasaBean implements Serializable {
                 final int zi = calIncepand.get(Calendar.DAY_OF_MONTH);
                 final int anFinal = anulProv - numarAn;
                 calPana.set(anFinal, luna, zi);
-                final Date dataPana = calPana.getTime();
-                return dataPana;
+                return calPana.getTime();
         }
 
         /**
@@ -289,8 +281,7 @@ public class AcasaBean implements Serializable {
                 final int zi = calIncepand.get(Calendar.DAY_OF_MONTH);
                 final int luna = lunaProv - numarLuna;
                 calPana.set(anFinal, luna, zi);
-                final Date dataPana = calPana.getTime();
-                return dataPana;
+                return calPana.getTime();
         }
 
         /**
@@ -493,41 +484,7 @@ public class AcasaBean implements Serializable {
         private void createHorizontalBarModel() {
                 horizontalBarModel = new HorizontalBarChartModel();
                 numarMaxim = 0;
-                final ChartSeries boys = new ChartSeries();
-                boys.setLabel("Membrii noi");
-                boys.set(Utilitati.luna(getData(filtruStatistica.getDataIncepand())), statistica.getTotalUltimaLuna());
-                numarMaxim = statistica.getTotalUltimaLuna();
-                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimaLuna())),
-                                statistica.getTotalUltimDouaLuni());
-                if (statistica.getTotalUltimDouaLuni() > numarMaxim) {
-                        numarMaxim = statistica.getTotalUltimDouaLuni();
-                }
-                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimDouaLuni())),
-                                statistica.getTotalUltimTreiLuni());
-                if (statistica.getTotalUltimTreiLuni() > numarMaxim) {
-                        numarMaxim = statistica.getTotalUltimTreiLuni();
-                }
-                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimTreiLuni())),
-                                statistica.getTotalUltimPatruLuni());
-                ;
-                if (statistica.getTotalUltimPatruLuni() > numarMaxim) {
-                        numarMaxim = statistica.getTotalUltimPatruLuni();
-                }
-                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimPatruLuni())),
-                                statistica.getTotalUltimCinciLuni());
-                if (statistica.getTotalUltimCinciLuni() > numarMaxim) {
-                        numarMaxim = statistica.getTotalUltimCinciLuni();
-                }
-                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimCinciLuni())),
-                                statistica.getTotalUltimSaseLuni());
-                if (statistica.getTotalUltimSaseLuni() > numarMaxim) {
-                        numarMaxim = statistica.getTotalUltimSaseLuni();
-                }
-                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimSaseLuni())),
-                                statistica.getTotalUltimSapteLuni());
-                if (statistica.getTotalUltimSapteLuni() > numarMaxim) {
-                        numarMaxim = statistica.getTotalUltimSapteLuni();
-                }
+                final ChartSeries boys = extractBoys();
                 boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimSapteLuni())),
                                 statistica.getTotalUltimOptLuni());
                 if (statistica.getTotalUltimOptLuni() > numarMaxim) {
@@ -553,7 +510,6 @@ public class AcasaBean implements Serializable {
                 horizontalBarModel.addSeries(boys);
                 horizontalBarModel.setLegendPosition(Constante.E);
                 horizontalBarModel.setStacked(true);
-
                 final Axis xAxis = horizontalBarModel.getAxis(AxisType.X);
                 xAxis.setLabel("Membrii");
                 xAxis.setMin(0);
@@ -561,8 +517,49 @@ public class AcasaBean implements Serializable {
                 xAxis.setMax(numarMaxim);
                 final Axis yAxis = horizontalBarModel.getAxis(AxisType.Y);
                 yAxis.setLabel("Lună");
-                log.debug("Orixontal bar: " + boys);
-                LOG.info("Orixontal bar: " + String.valueOf(boys));
+                log.debug("Orixontal bar: ".concat(boys.toString()));
+                log.info("Orixontal bar: ".concat(boys.toString()));
+        }
+
+        /**
+         * @return
+         */
+        private ChartSeries extractBoys() {
+                final ChartSeries boys = new ChartSeries();
+                boys.setLabel("Membrii noi");
+                boys.set(Utilitati.luna(getData(filtruStatistica.getDataIncepand())), statistica.getTotalUltimaLuna());
+                numarMaxim = statistica.getTotalUltimaLuna();
+                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimaLuna())),
+                                statistica.getTotalUltimDouaLuni());
+                if (statistica.getTotalUltimDouaLuni() > numarMaxim) {
+                        numarMaxim = statistica.getTotalUltimDouaLuni();
+                }
+                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimDouaLuni())),
+                                statistica.getTotalUltimTreiLuni());
+                if (statistica.getTotalUltimTreiLuni() > numarMaxim) {
+                        numarMaxim = statistica.getTotalUltimTreiLuni();
+                }
+                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimTreiLuni())),
+                                statistica.getTotalUltimPatruLuni());
+                if (statistica.getTotalUltimPatruLuni() > numarMaxim) {
+                        numarMaxim = statistica.getTotalUltimPatruLuni();
+                }
+                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimPatruLuni())),
+                                statistica.getTotalUltimCinciLuni());
+                if (statistica.getTotalUltimCinciLuni() > numarMaxim) {
+                        numarMaxim = statistica.getTotalUltimCinciLuni();
+                }
+                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimCinciLuni())),
+                                statistica.getTotalUltimSaseLuni());
+                if (statistica.getTotalUltimSaseLuni() > numarMaxim) {
+                        numarMaxim = statistica.getTotalUltimSaseLuni();
+                }
+                boys.set(Utilitati.luna(getData(filtruStatistica.getDataUltimSaseLuni())),
+                                statistica.getTotalUltimSapteLuni());
+                if (statistica.getTotalUltimSapteLuni() > numarMaxim) {
+                        numarMaxim = statistica.getTotalUltimSapteLuni();
+                }
+                return boys;
         }
 
         /**
@@ -668,7 +665,7 @@ public class AcasaBean implements Serializable {
          */
         private void dataString() {
                 final SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                current_date = df.format(filtruStatistica.getDataIncepand());
+                currentDate = df.format(filtruStatistica.getDataIncepand());
         }
 
         /**
@@ -720,13 +717,15 @@ public class AcasaBean implements Serializable {
          */
         private void obtinereValoareProcentaj() {
                 valoare = Constante.SPATIU;
-                if (procentajTotalMembrii >= 0.40) {
+                if (procentajTotalMembrii >= NumarMagic.FOURTYZEROD) {
                         valoare = "EXCELENT";
                 }
-                else if (procentajTotalMembrii < 0.40 && procentajTotalMembrii >= 0.25) {
+                else if (procentajTotalMembrii < NumarMagic.FOURTYZEROD
+                                && procentajTotalMembrii >= NumarMagic.ZEROTWENTYFIVE) {
                         valoare = Constante.BUN;
                 }
-                else if (procentajTotalMembrii < 0.25 && procentajTotalMembrii >= 0.10) {
+                else if (procentajTotalMembrii < NumarMagic.ZEROTWENTYFIVE
+                                && procentajTotalMembrii >= NumarMagic.ZEROTEN) {
                         valoare = Constante.ACCEPTABIL;
                 }
                 else {
@@ -786,7 +785,7 @@ public class AcasaBean implements Serializable {
         private void obtinereProcentajTotal() {
                 final int num = statistica.getNumarTotal() * NumarMagic.NUMBERHUNDRED;
                 final float div = ((float) num / statistica.getTotalVot());
-                final float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / 100f;
+                final float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / NumarMagic.NUMBERHUNDREDF;
                 procentajTotalMembrii = divFinal;
         }
 
@@ -797,8 +796,8 @@ public class AcasaBean implements Serializable {
         private Float obtinereProcentajTotalAn(final int an) {
                 final int num = an * NumarMagic.NUMBERHUNDRED;
                 final float div = ((float) num / statistica.getNumarTotal());
-                final float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / 100f;
-                return divFinal;
+                return Math.round(div * NumarMagic.NUMBERHUNDRED) / NumarMagic.NUMBERHUNDREDF;
+
         }
 
         /**
@@ -808,7 +807,7 @@ public class AcasaBean implements Serializable {
         private void obtinereProcentajTotalUltimulAn() {
                 final int num = statistica.getTotalUltimAn() * NumarMagic.NUMBERHUNDRED;
                 final float div = ((float) num / statistica.getNumarTotal());
-                final float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / 100f;
+                final float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / NumarMagic.NUMBERHUNDREDF;
                 procentajTotalMembriiUltimAn = divFinal;
         }
 
@@ -856,14 +855,15 @@ public class AcasaBean implements Serializable {
          */
         private void obtinereTextProcentaj() {
                 if (mediaProcentaj > procentajTotalMembriiUltimAn) {
+
                         textValorarProcentaj = "SCADERE";
-                        if ((mediaProcentaj - procentajTotalMembriiUltimAn) > 3) {
+                        if ((mediaProcentaj - procentajTotalMembriiUltimAn) > NumarMagic.NUMBERTHREE) {
                                 textValorarProcentaj = "SCADERE IMPORTANTĂ";
                         }
                 }
                 else {
                         textValorarProcentaj = "CREȘTERE";
-                        if ((procentajTotalMembriiUltimAn - mediaProcentaj) > 3) {
+                        if ((procentajTotalMembriiUltimAn - mediaProcentaj) > NumarMagic.NUMBERTHREE) {
                                 textValorarProcentaj = "CREȘTERE IMPORTANTĂ";
                         }
                 }
@@ -884,12 +884,12 @@ public class AcasaBean implements Serializable {
          * @param date
          * @return
          */
-        public static String getData(Date date) {
+        public static String getData(Date dat) {
                 final Calendar cal = Calendar.getInstance();
-                cal.setTime(date);
+                cal.setTime(dat);
                 final SimpleDateFormat df = new SimpleDateFormat("MMMMM");
-                date = cal.getTime();
-                return df.format(date);
+                dat = cal.getTime();
+                return df.format(dat);
         }
 
 }

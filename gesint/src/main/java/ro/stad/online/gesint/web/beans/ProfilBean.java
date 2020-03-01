@@ -11,19 +11,21 @@ import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.services.RegistruActivitateService;
 import ro.stad.online.gesint.services.UtilizatorService;
 import ro.stad.online.gesint.util.FacesUtilities;
+import ro.stad.online.gesint.util.Utilitati;
 
 /**
  * Controlator de operatii relationate cu profilul utilizatorului. Schimbare parola.
@@ -34,6 +36,7 @@ import ro.stad.online.gesint.util.FacesUtilities;
 @Setter
 @Controller("miPerfilBean")
 @Scope(Constante.SESSION)
+@Slf4j
 public class ProfilBean implements Serializable {
 
         /**
@@ -70,13 +73,19 @@ public class ProfilBean implements Serializable {
          * Serviciul de user.
          */
         @Autowired
-        private UtilizatorService utilizatorService;
+        private transient UtilizatorService utilizatorService;
 
         /**
          * Serviciul de înregistrare a activității.
          */
         @Autowired
         private transient RegistruActivitateService regActividadService;
+
+        /**
+         * Componente de utilidades.
+         */
+        @Autowired
+        private transient Utilitati utilitati;
 
         /**
          * Metodă folosită pentru schimbarea parolei.
@@ -91,10 +100,11 @@ public class ProfilBean implements Serializable {
                         if (passwordEncoder.matches(this.getParolaCurenta(), user.getPassword())) {
                                 try {
                                         if (validaPass(this.parolaNoua)) {
-                                                user.setPassword(passwordEncoder.encode(this.getParolaNoua()));
+                                                this.user.setPassword(passwordEncoder.encode(this.getParolaNoua()));
                                                 utilizatorService.save(user);
                                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
                                                                 "Parola a fost modificată cu succes", "dialogMessage");
+                                                log.info("Parola a fost modificată cu succes");
                                         }
                                         else {
                                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
@@ -104,15 +114,17 @@ public class ProfilBean implements Serializable {
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                         final String descriere = "A apărut o eroare la modificarea parolei";
                                         this.regActividadService.salveazaRegistruEroare(descriere,
                                                         SectiuniEnum.USERS.getDescriere(), e);
+                                        log.error(descriere);
                                 }
                         }
                         else {
                                 FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
-                                                "Parola curentă introdusă nu este validă. Încercați din nou", "", null);
+                                                "Parola curentă introdusă nu este validă. Încercați din nou",
+                                                Constante.SPATIU, null);
                         }
                 }
 
@@ -133,14 +145,7 @@ public class ProfilBean implements Serializable {
          */
         @PostConstruct
         public void init() {
-                try {
-                        user = utilizatorService
-                                        .fiindOne(SecurityContextHolder.getContext().getAuthentication().getName());
-                }
-                catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
-                }
+                this.user = utilitati.getUtilizatorLogat();
         }
 
         /**

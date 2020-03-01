@@ -27,6 +27,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * Entitatea documentului. Orice fișier încărcat în aplicație este stocata în acesta tabla.
@@ -51,7 +52,7 @@ public class Documentul extends AbstractEntity implements Serializable {
         @Id
         @SequenceGenerator(name = "SEQ_DOCUMENT", sequenceName = "SEQ_DOCUMENT", allocationSize = 1)
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DOCUMENT")
-        @Column(name = "id", nullable = false)
+        @Column(name = "ID", nullable = false)
         private Long id;
 
         /**
@@ -64,58 +65,58 @@ public class Documentul extends AbstractEntity implements Serializable {
         /**
          * ContentType din fișierul atașat.
          */
-        @Column(name = "tipContinut", nullable = false)
+        @Column(name = "TIP_CONTINUT", nullable = false)
         private String tipContinut;
 
         /**
          * Numele documentului
          */
-        @Column(name = "nume")
+        @Column(name = "NUME")
         private String nume;
 
         /**
          * Descriere.
          */
-        @Column(name = "descriere", length = 2000)
+        @Column(name = "DESCRIERE", length = NumarMagic.NUMBERTWOTHOUSAND)
         private String descriere;
 
         /**
          * Cuvinte cheie ale documentului.
          */
-        @Column(name = "materia_indexada", length = 2000)
+        @Column(name = "MATERIA_INDEXATA", length = NumarMagic.NUMBERTWOTHOUSAND)
         private String materiaIndexada;
 
         /**
          * Tipul documentului
          */
         @ManyToOne
-        @JoinColumn(name = "tipDocument")
+        @JoinColumn(name = "TIP_DOCUMENT")
         private TipDocument tipDocument;
 
         /**
          * Utilizatorul care publica proiectul
          */
         @ManyToOne
-        @JoinColumn(name = "username")
+        @JoinColumn(name = "USERNAME")
         private Utilizator utilizator;
 
         /**
          * Document validat sau nu.
          */
-        @Column(name = "validat")
+        @Column(name = "VALIDAT")
         private Boolean validat;
 
         /**
          * Proiectul la care este atribuit documentul.
          */
         @ManyToMany
-        @JoinTable(name = "documente_proiect", joinColumns = {
-                        @JoinColumn(name = "id_document") }, inverseJoinColumns = { @JoinColumn(name = "id_proiect") })
+        @JoinTable(name = "DOCUMENTE_PROIECT", joinColumns = {
+                        @JoinColumn(name = "ID_DOCUMENT") }, inverseJoinColumns = { @JoinColumn(name = "ID_PROIECT") })
         private List<Proiect> proiect;
 
         /** The job instance. */
         @ManyToOne
-        @JoinColumn(name = "corespondenta", nullable = true, unique = false)
+        @JoinColumn(name = "CORESPONDENTA", nullable = true, unique = false)
         private Corespondenta corespondenta;
 
         /**
@@ -123,7 +124,7 @@ public class Documentul extends AbstractEntity implements Serializable {
          */
         /** The job instance. */
         @ManyToOne
-        @JoinColumn(name = "sondaj", nullable = true, unique = false)
+        @JoinColumn(name = "SONDAJ", nullable = true, unique = false)
         private Sondaj sondaj;
 
 }

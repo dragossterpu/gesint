@@ -15,9 +15,12 @@ import org.springframework.stereotype.Controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.exceptions.EMailException;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.services.RegistruActivitateService;
 import ro.stad.online.gesint.services.UtilizatorService;
@@ -34,6 +37,7 @@ import ro.stad.online.gesint.util.Utilitati;
 @Getter
 @Controller("recoverBean")
 @Scope("request")
+@Slf4j
 public class RecuperareBean implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -72,52 +76,55 @@ public class RecuperareBean implements Serializable {
         public String parolaUitata(final String email, final String cnp) {
                 String retur = Constante.SPATIU;
                 if (Constante.SPATIU.equals(cnp) && Constante.SPATIU.equals(email)) {
-                        FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        "Trebuie să furnizați e-mailul sau CNP-ul pentru a vă putea identifica", null);
+                        final String descriere = "Trebuie să furnizați e-mailul sau CNP-ul pentru a vă putea identifica";
+                        FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), descriere, null);
+                        log.error(descriere);
                 }
                 else {
                         // Recuperăm o listă de utilizatori deoarece pot exista mai mulți cu același e-mail în acest caz
                         // utilizatori temporali
-                        final List<Utilizator> listaUser = utilizatorService
+                        final List<Utilizator> listaUser = this.utilizatorService
                                         .findByEmailIgnoreCaseOrDocIdentitateIgnoreCase(email, cnp);
                         if (listaUser != null && !listaUser.isEmpty()) {
                                 try {
                                         final String password = Utilitati.getPassword();
-                                        final String passCod = passwordEncoder.encode(password);
+                                        final String passCod = this.passwordEncoder.encode(password);
                                         final Map<String, String> paramSablon = new HashMap<>();
                                         paramSablon.put("password", password);
-                                        if (listaUser.size() > 1) {
+                                        if (listaUser.size() > NumarMagic.NUMBERONE) {
                                                 paramSablon.put(Constante.LOGIN, listaUser.get(0).getEmail());
                                         }
                                         else {
                                                 paramSablon.put(Constante.LOGIN, listaUser.get(0).getUsername());
                                         }
-                                        listaUser.forEach((final Utilizator user) -> {
-                                                user.setPassword(passCod);
-                                        });
-                                        utilizatorService.save(listaUser);
-                                        eMail.trimitereEmail(listaUser.get(0).getEmail(),
+                                        listaUser.forEach((final Utilizator user) -> user.setPassword(passCod));
+                                        this.utilizatorService.save(listaUser);
+                                        this.eMail.trimitereEmail(listaUser.get(0).getEmail(),
                                                         "Acces restabilit in aplicația GESINT",
-                                                        Constante.TEMPLATECORREORESTABLECERPASSWORD, paramSablon);
-
-                                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, "PAROLA",
-                                                        "Accesul dvs. la sistem a fost restaurat, noile dvs. credențiale v-au fost trimise prin e-mail");
+                                                        Constante.TEMPLATECORREORESTABLECERPAS, paramSablon);
+                                        final String descriere = "Accesul dvs. la sistem a fost restaurat, noile dvs. credențiale v-au fost trimise prin e-mail";
+                                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
+                                                        RegistruEnum.ACTIVARE.getDescriere(), descriere);
+                                        log.info(descriere);
 
                                 }
                                 catch (DataAccessException | EMailException e) {
-                                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ,
-                                                        "A apărut o eroare la regenerarea sau la trimiterea parolei");
                                         final String descriere = "A apărut o eroare la regenerarea sau la trimiterea parolei";
+                                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                                        RegistruEnum.EROARE.getDescriere(), descriere);
                                         this.regActividadService.salveazaRegistruEroare(descriere,
                                                         SectiuniEnum.LOGIN.getDescriere(), e);
+                                        log.error(descriere);
                                 }
 
                                 retur = "/acces/recuperarPassword";
                         }
                         else {
-                                FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                                "Utilizatorul nu există în sistem. Contactați administratorul", null);
+                                final String descriere = "Utilizatorul nu există în sistem. Contactați administratorul";
+                                FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
+                                                RegistruEnum.EROARE.getDescriere(), descriere, null);
+                                log.error(descriere);
                         }
 
                 }

@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.model.dao.StatisticaJudetDAO;
 import ro.stad.online.gesint.model.dao.mapper.StatisticaJudetMapper;
 import ro.stad.online.gesint.model.dao.mapper.StatisticaJudetMinimMapper;
@@ -38,7 +39,7 @@ public class StatisticaJudetDAOImpl implements StatisticaJudetDAO {
          */
         @Override
         public List<StatisticaJudetMinimDTO> dateMinime() {
-                final StringBuilder sql = new StringBuilder();
+                final StringBuilder sql = new StringBuilder(NumarMagic.NUMBERHUNDRED);
                 sql.append("select sum(membrii_minim) as membrii_minim, sum (voturi_minim)as voturi_minim from judet");
                 final MapSqlParameterSource parameters = new MapSqlParameterSource();
                 return namedParameterJdbcTemplate.query(sql.toString(), parameters, new StatisticaJudetMinimMapper());
@@ -51,12 +52,11 @@ public class StatisticaJudetDAOImpl implements StatisticaJudetDAO {
          */
         @Override
         public List<StatisticaJudetDTO> filterStatisticaJudet(final FiltruStatisticaJudete filter) {
-                final StringBuilder sql = new StringBuilder();
+                final StringBuilder sql = new StringBuilder(NumarMagic.NUMBERFIFTY);
 
-                sql.append(" SELECT ss.nume, ss.numero,ss.membrii_minim, ss.populatie,ss.cod_judet, ROUND((ss.numero*100.0)/(ss.membrii_minim),2) AS procentaj , (select ROUND(ss.populatie-(ss.populatie*0.21)) as locuitori) as locuitoriVot FROM ( SELECT COUNT(*) as numero, p.nume, P.cod_judet,p.populatie,p.membrii_minim  FROM utilizator U, judet P WHERE u.cod_judet = p.cod_judet"
-                                + " group by u.cod_judet,p.nume,p.populatie ,p.cod_judet,p.membrii_minim  ORDER BY numero "
-                                + filter.getDescendent() + ") as SS order by procentaj " + filter.getDescendent()
-                                + Constante.LIMITOFFSET);
+                sql.append(Constante.SQLSELECTSTATJUD).append(filter.getDescendent())
+                                .append(") as SS order by procentaj ").append(filter.getDescendent())
+                                .append(Constante.LIMITOFFSET);
                 final MapSqlParameterSource parameters = new MapSqlParameterSource();
                 return namedParameterJdbcTemplate.query(sql.toString(), parameters, new StatisticaUserJudetMapper());
         }
@@ -68,12 +68,9 @@ public class StatisticaJudetDAOImpl implements StatisticaJudetDAO {
          */
         @Override
         public List<StatisticaJudetDTO> filterStatisticaJudetProcentaj(final FiltruStatisticaJudete filter) {
-                final StringBuilder sql = new StringBuilder();
-                sql.append("SELECT nume,membrii_minim,voturi_minim, numero, populatie, procentaj, cod_judet,locuitoriVot from (SELECT ss.nume,ss.membrii_minim,ss.voturi_minim, ss.cod_judet,ss.numero,ss.populatie,ROUND((ss.numero*100.0)/(ss.membrii_minim),2) "
-                                + "AS procentaj, (select ROUND(ss.populatie-(ss.populatie*0.21)) as locuitori) as locuitoriVot FROM ( SELECT COUNT(*) as numero, p.nume, p.populatie,p.cod_judet ,p.membrii_minim,p.voturi_minim FROM utilizator U, judet P WHERE u.cod_judet = p.cod_judet "
-                                + " group by u.cod_judet,p.nume,p.populatie,p.cod_judet,p.membrii_minim,p.voturi_minim  ORDER BY numero "
-                                + filter.getDescendent() + ") as SS  ) as dd order by dd.procentaj "
-                                + filter.getDescendent());
+                final StringBuilder sql = new StringBuilder(NumarMagic.NUMBERFIFTY);
+                sql.append(Constante.SQLSELECTSTATJUDPRO).append(filter.getDescendent())
+                                .append(") as SS  ) as dd order by dd.procentaj ").append(filter.getDescendent());
                 final MapSqlParameterSource parameters = new MapSqlParameterSource();
                 if (filter.getGeneralJudetProcentaj().equals(Constante.NO)) {
                         sql.append(Constante.LIMITOFFSET);

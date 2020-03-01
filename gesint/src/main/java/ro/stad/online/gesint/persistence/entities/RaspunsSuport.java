@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * Entitate asociata raspunsurilor suportului
@@ -33,42 +34,43 @@ import ro.stad.online.gesint.constante.Constante;
  * @author STAD
  *
  */
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "id")
+@Setter
 @Builder
 @ToString
 @Getter
-@Setter
-@Entity
+
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "RASPUNS_SUPORT")
 public class RaspunsSuport implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-	/**
-	 * Identificator.
-	 */
-	@Id
-	@SequenceGenerator(allocationSize = 1, name = "SEQ_RASPUNS_SUPORT", sequenceName = "SEQ_RASPUNS_SUPORT")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RASPUNS_SUPORT")
-	@Column(name = "ID", nullable = false, columnDefinition = Constante.NUMERIC, length = 10)
-	private Long id;
+        /**
+         * Identificator.
+         */
+        @Id
+        @SequenceGenerator(allocationSize = 1, name = "SEQ_RASPUNS_SUPORT", sequenceName = "SEQ_RASPUNS_SUPORT")
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RASPUNS_SUPORT")
+        @Column(name = "ID", nullable = false, columnDefinition = Constante.NUMERIC, length = NumarMagic.NUMBERFIVE)
+        private Long id;
 
-	/**
-	 * Sondaj caruia ii corespund datele.
-	 */
-	@ManyToOne
-	@JoinColumn(name = "id_intrebare", foreignKey = @ForeignKey(name = "fk_intrebare"), nullable = false)
-	private Intrebare intrebare;
+        /**
+         * Sondaj caruia ii corespund datele.
+         */
+        @ManyToOne
+        @JoinColumn(name = "ID_INTREBARE", foreignKey = @ForeignKey(name = "FK_INTREBARE"), nullable = false)
+        private Intrebare intrebare;
 
-	/**
-	 * Raspuns intrebare
-	 */
-	@Lob
-	@Type(type = "org.hibernate.type.TextType")
-	@Column(name = "VALOARE", nullable = false)
-	private String valoare;
+        /**
+         * Raspuns intrebare
+         */
+        @Lob
+        @Type(type = "org.hibernate.type.TextType")
+        @Column(name = "VALOARE", nullable = false)
+        private String valoare;
 
 }

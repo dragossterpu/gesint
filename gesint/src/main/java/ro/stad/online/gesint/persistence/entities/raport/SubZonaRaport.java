@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * Entitate pentru subarea raport.
@@ -35,44 +36,44 @@ import lombok.Setter;
 @Table(name = "SUBZONA_RAPORT")
 public class SubZonaRaport implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-	/**
-	 * ID.
-	 */
-	@Id
-	@Column(name = "ID")
-	@SequenceGenerator(name = "SEQ_SUBZONARAPORT", sequenceName = "SEQ_SUBZONARAPORT", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SUBZONARAPORT")
-	private Long id;
+        /**
+         * ID.
+         */
+        @Id
+        @Column(name = "ID")
+        @SequenceGenerator(name = "SEQ_SUBZONARAPORT", sequenceName = "SEQ_SUBZONARAPORT", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SUBZONARAPORT")
+        private Long id;
 
-	/**
-	 * Descriere.
-	 */
-	@Column(name = "DESCRIPTION", length = 1000, nullable = false)
-	private String descripcion;
+        /**
+         * Descriere.
+         */
+        @Column(name = "DESCRIPTION", length = NumarMagic.NUMBERTHOUSAND, nullable = false)
+        private String descripcion;
 
-	/**
-	 * Zonă din care face parte..
-	 */
-	//
-	@ManyToOne
-	@JoinColumn(name = "zona_id", foreignKey = @ForeignKey(name = "fk_zona_raport"))
-	private ZonaRaport zona;
+        /**
+         * Zonă din care face parte..
+         */
+        //
+        @ManyToOne
+        @JoinColumn(name = "ZONA_ID", foreignKey = @ForeignKey(name = "FK_ZONA_RAPORT"))
+        private ZonaRaport zona;
 
-	/**
-	 * Ordonarea subzonei în zonă.
-	 */
-	@Column(name = "orden")
-	private Integer orden;
+        /**
+         * Ordonarea subzonei în zonă.
+         */
+        @Column(name = "ORDEN")
+        private Integer orden;
 
-	/**
-	 * Suprascrierea metodei toString pentru a folosi SelectItemsConvertor într-un mod generic, întotdeauna
-	 * întorcându-se cheia principala.
-	 */
-	@Override
-	public String toString() {
-		return id.toString();
-	}
+        /**
+         * Suprascrierea metodei toString pentru a folosi SelectItemsConvertor într-un mod generic, întotdeauna
+         * întorcându-se cheia principala.
+         */
+        @Override
+        public String toString() {
+                return id.toString();
+        }
 
 }

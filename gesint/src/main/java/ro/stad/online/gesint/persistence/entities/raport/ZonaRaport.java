@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * Entitate pentru a pastra zona unui raport.
@@ -37,43 +38,43 @@ import lombok.Setter;
 @Table(name = "ZONA_RAPORT")
 public class ZonaRaport implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-	/**
-	 * ID.
-	 */
-	@Id
-	@Column(name = "ID")
-	@SequenceGenerator(name = "SEQ_ZONERAPORT", sequenceName = "SEQ_ZONERAPORT", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ZONERAPORT")
-	private Long id;
+        /**
+         * ID.
+         */
+        @Id
+        @Column(name = "ID")
+        @SequenceGenerator(name = "SEQ_ZONERAPORT", sequenceName = "SEQ_ZONERAPORT", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ZONERAPORT")
+        private Long id;
 
-	/**
-	 * Descriere.
-	 */
-	@Column(name = "DESCRIPTION", length = 1000, nullable = false)
-	private String descripcion;
+        /**
+         * Descriere.
+         */
+        @Column(name = "DESCRIPTION", length = NumarMagic.NUMBERTHOUSAND, nullable = false)
+        private String descripcion;
 
-	/**
-	 * Lista de subareas.
-	 */
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name = "zona_id")
-	private List<SubZonaRaport> subzone;
+        /**
+         * Lista de subareas.
+         */
+        @OneToMany(fetch = FetchType.EAGER)
+        @JoinColumn(name = "ZONA_ID")
+        private List<SubZonaRaport> subzone;
 
-	/**
-	 * Ordinea in care apar subareas.
-	 */
-	@Column(name = "orden")
-	private Integer orden;
+        /**
+         * Ordinea in care apar subareas.
+         */
+        @Column(name = "ORDEN")
+        private Integer orden;
 
-	/**
-	 * Suprascrierea metodei toString pentru a folosi SelectItemsConvertor într-un mod generic, întotdeauna
-	 * întorcându-se cheia principala.
-	 */
-	@Override
-	public String toString() {
-		return id.toString();
-	}
+        /**
+         * Suprascrierea metodei toString pentru a folosi SelectItemsConvertor într-un mod generic, întotdeauna
+         * întorcându-se cheia principala.
+         */
+        @Override
+        public String toString() {
+                return id.toString();
+        }
 
 }

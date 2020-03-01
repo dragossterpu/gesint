@@ -26,6 +26,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.TipAlegeriEnum;
 
 /**
@@ -55,41 +56,41 @@ public class PartidRezultateJudete implements Serializable {
          * ID
          */
         @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_partid_judet")
-        @SequenceGenerator(name = "seq_partid_judet", sequenceName = "seq_partid_judet", allocationSize = 1)
-        @Column(name = "ID", length = 5)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PARTID_JUDET")
+        @SequenceGenerator(name = "SEQ_PARTID_JUDET", sequenceName = "SEQ_PARTID_JUDET", allocationSize = 1)
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**
          * Data alegerilor.
          */
-        @Column(name = "dataAlegerilor")
+        @Column(name = "DATA_ALEGERILOR")
         private Date dataAlegerilor;
 
         /**
          * Procentaj total de voturi.
          */
-        @Column(name = "procentaj_total_voturi")
+        @Column(name = "PROCENTAJ_TOTAL_VOTURI")
         private Float procentajTotalVoturi;
 
         /**
          * Tipul de alegeri.
          */
-        @Column(name = "tip_alegeri")
+        @Column(name = "TIP_ALEGERI")
         @Enumerated(EnumType.STRING)
         private TipAlegeriEnum tipAlegeri;
 
         /**
          * Numarul total de voturi.
          */
-        @Column(name = "total_voturi_judet")
+        @Column(name = "TOTAL_VOTURI_JUDET")
         private Long totalVoturi;
 
         /**
          * Judetul.
          */
         @OneToOne
-        @JoinColumn(name = "ID_JUDET", referencedColumnName = "cod_judet", foreignKey = @ForeignKey(name = "FK_U_PROVINCE"))
+        @JoinColumn(name = "ID_JUDET", referencedColumnName = "COD_JUDET", foreignKey = @ForeignKey(name = "FK_U_PROVINCE"))
         private Judet judetul;
 
         /**
@@ -97,31 +98,31 @@ public class PartidRezultateJudete implements Serializable {
          */
         @ManyToOne
 
-        @JoinColumn(name = "PARTID", referencedColumnName = "id", foreignKey = @ForeignKey(name = "FK_U_PARTID"))
+        @JoinColumn(name = "PARTID", referencedColumnName = "ID", foreignKey = @ForeignKey(name = "FK_U_PARTID"))
         private Partid partid;
 
         /**
          * Numarul total de mandate.
          */
-        @Column(name = "numar_mandate")
+        @Column(name = "NUMAR_MANDATE")
         private Long numarMandate;
 
         /**
          * Numarul total de voturi ale partidului.
          */
-        @Column(name = "total_voturi_partid")
+        @Column(name = "TOTAL_VOTURI_PARTID")
         private Long totalVoturiPartid;
 
         /**
          * Procentaj total mandate judet.
          */
-        @Column(name = "procentaj_mandate_judet")
+        @Column(name = "PROCENTAJ_MANDATE_JUDET")
         private Float procentajMandateJudet;
 
         /**
          * Anul alegerilor.
          */
-        @Column(name = "an_alegeri")
+        @Column(name = "AN_ALEGERI")
         private Integer anAlegeri;
 
 }

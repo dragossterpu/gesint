@@ -2,18 +2,14 @@ package ro.stad.online.gesint.lazydata;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
 import lombok.Getter;
 import lombok.Setter;
-import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.model.filters.FiltruProiect;
 import ro.stad.online.gesint.persistence.entities.Proiect;
 import ro.stad.online.gesint.services.ProiectService;
@@ -55,37 +51,6 @@ public class LazyDataProiecte extends LazyDataModel<Proiect> implements Serializ
          */
         public LazyDataProiecte(final ProiectService serviciu) {
                 proiectService = serviciu;
-        }
-
-        /**
-         * Suprascrierea metodei getRowData pentru a functiona cu obiecte de tip Proiect.
-         * @param rowKey String Cheia rândului pe care s-a făcut clic in pagina
-         * @return proiect Proiect care corespunde cheii primite prin parametru
-         *
-         */
-        @SuppressWarnings("unlikely-arg-type")
-        @Override
-        public Proiect getRowData(final String rowKey) {
-                Proiect proiect = new Proiect();
-                @SuppressWarnings(Constante.UNCHECKED)
-                final List<Proiect> listaWrapped = (List<Proiect>) this.getWrappedData();
-                final Set<Proiect> setProiecte = new HashSet<>();
-                if (listaWrapped != null) {
-                        setProiecte.addAll(listaWrapped);
-                }
-                if (getDatasource() != null) {
-                        setProiecte.addAll(getDatasource());
-                }
-                final Iterator<Proiect> iteratorProiecte = setProiecte.iterator();
-                boolean encontrat = false;
-                while (iteratorProiecte.hasNext() && !encontrat) {
-                        final Proiect proi = iteratorProiecte.next();
-                        if (rowKey.equals(proi.getId())) {
-                                proiect = proi;
-                                encontrat = true;
-                        }
-                }
-                return proiect;
         }
 
         /**

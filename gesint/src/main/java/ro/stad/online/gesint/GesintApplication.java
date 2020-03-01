@@ -165,8 +165,7 @@ public class GesintApplication {
          */
         @Bean
         public JavaMailSenderImpl javaMailSender() {
-                final JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-                return mailSender;
+                return new JavaMailSenderImpl();
         }
 
         /**

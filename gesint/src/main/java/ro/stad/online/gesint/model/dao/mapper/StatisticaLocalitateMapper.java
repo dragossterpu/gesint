@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
+import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.model.dto.statistica.StatisticaLocalitateDTO;
 
 /**
@@ -24,9 +25,10 @@ public final class StatisticaLocalitateMapper implements RowMapper<StatisticaLoc
         @Override
         public StatisticaLocalitateDTO mapRow(final ResultSet rs, final int rowNum) throws SQLException {
                 final StatisticaLocalitateDTO dto = new StatisticaLocalitateDTO();
+
                 dto.setNumeProvincie(rs.getString("numeprovincie"));
                 dto.setCodJudet(rs.getString("cod_judet"));
-                dto.setNumeLocalitate(rs.getString("nume"));
+                dto.setNumeLocalitate(rs.getString(Constante.NUME));
                 dto.setSector(rs.getString("sector"));
                 dto.setTotalLocuitori(rs.getInt("locuitori"));
                 dto.setNumarMembrii(rs.getInt("numero"));

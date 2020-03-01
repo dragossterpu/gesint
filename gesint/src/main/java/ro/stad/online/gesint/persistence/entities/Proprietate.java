@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * 
@@ -42,7 +43,7 @@ public class Proprietate implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_PROPERTIES")
         @SequenceGenerator(name = "SEQ_PROPERTIES", sequenceName = "SEQ_PROPERTIES", allocationSize = 1)
-        @Column(name = "id", length = 5)
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**

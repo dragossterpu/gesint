@@ -21,8 +21,7 @@
 			</p:submenu>
 		
 			<p:submenu label="Setările sistemului" icon="fa fa-fw fa-sun-o" styleClass="itemAdministracion" rendered="#{p:ifAnyGranted('ROLE_ADMIN')}">								
-				<p:menuitem value="Activități" icon="fa fa-fw fa-edit" outcome="/enConstruccion" />	
-				<p:menuitem value="Log de sistema" icon="fa fa-fw fa-database" outcome="/enConstruccion"/>
+				<p:menuitem value="Activități/Registru de activitate" icon="fa fa-fw fa-edit" outcome="/regActivitate/registreActivitate" />	
 				<p:menuitem value="Proprietăţi" icon="fa fa-fw fa-edit" outcome="/enConstruccion"/>
 				<p:submenu label="Administraţie" icon="fa fa-fw fa-cog">
 	                    <p:menuitem value="Judeţe" outcome="/judete/judete" />

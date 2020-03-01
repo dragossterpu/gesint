@@ -16,6 +16,11 @@ import ro.stad.online.gesint.model.dto.statistica.StatisticaJudetDTO;
 public final class StatisticaJudetMapper implements RowMapper<StatisticaJudetDTO> {
 
         /**
+         * Clasa construita pentru a evita duplicitate de cod
+         */
+        StatisticaAbstractMapper statMaper;
+
+        /**
          * Conversia unui registru la o clasă dto.
          * @param rs ResultSet
          * @param rowNum int
@@ -23,15 +28,7 @@ public final class StatisticaJudetMapper implements RowMapper<StatisticaJudetDTO
          */
         @Override
         public StatisticaJudetDTO mapRow(final ResultSet rs, final int rowNum) throws SQLException {
-                final StatisticaJudetDTO dto = new StatisticaJudetDTO();
-
-                dto.setCodJudet(rs.getString("cod_judet"));
-                dto.setNume(rs.getString("nume"));
-                dto.setTotalLocuitori(rs.getInt("populatie"));
-                dto.setNumarMembrii(rs.getInt("numero"));
-                dto.setProcentaj(rs.getFloat("procentaj"));
-                dto.setLocuitoriVot(rs.getInt("locuitoriVot"));
-                dto.setMembriiMinim(rs.getInt("membrii_minim"));
+                final StatisticaJudetDTO dto = statMaper.dtoMaperr(rs);
                 dto.setVoturiMinim(rs.getInt("voturi_minim"));
                 return dto;
         }

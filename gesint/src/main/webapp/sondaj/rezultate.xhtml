@@ -104,7 +104,7 @@
 	       </div>						
 	       <div class="rezultateFiltru">
 		   <p:outputPanel layout="block" id="panelSondaje">
-			 <p:dataTable id="tablaSondaje" var="sondaj" rowIndexVar="rowIndex" value="#{sondajBean.model}"  rows="10"  draggableColumns="true" paginator="true" lazy="true" resizableColumns="true"  
+			 <p:dataTable id="tablaSondaje" var="sondaj" rowIndexVar="rowIndex" value="#{sondajBean.model}"  rows="15"  draggableColumns="true" paginator="true" lazy="true" resizableColumns="true"  
 			  sortOrder="descending" styleClass="modHeaderTable" onkeypress="if (event.keyCode == 13) {return false; }"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
 			  rowKey="#{sondaj.id}" rowsPerPageTemplate="5,10,15" pageLinks="4" paginatorPosition="bottom" emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">				
 			    <f:facet name="header">
@@ -157,7 +157,7 @@
 			     <h:outputText styleClass="fa fa-check-circle" value=" ACTIV" rendered="#{sondaj.activ}" />
 			     <h:outputText styleClass="fa fa-times-circle" value=" FINALIZAT" rendered="#{not sondaj.activ}"  />
 			</p:column>						
-			<p:column headerText="Voturi" style="width:10%;" sortBy="#{sondaj.totalVoturi}" visible="#{sondajBean.list[5]}" exportable="#{sondajBean.list[5]}">
+			<p:column headerText="Voturi" style="width:10%;" sortBy="#{sondaj.totalVoturi}" visible="#{sondajBean.list[6]}" exportable="#{sondajBean.list[6]}">
 			     <b><h:outputText value="#{sondaj.totalVoturi}" /></b>
 			</p:column>							
 			<p:column styleClass="butonTabla" headerText="" style="width:16%;">

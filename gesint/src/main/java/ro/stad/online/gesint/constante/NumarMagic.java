@@ -170,12 +170,17 @@ public final class NumarMagic {
         /**
          * Numar magic 70.
          */
-        public static final int NUMBERSEVENTY = 60;
+        public static final int NUMBERSEVENTY = 70;
 
         /**
          * Numar magic 100.
          */
         public static final int NUMBERHUNDRED = 100;
+
+        /**
+         * Numar magic 100 float.
+         */
+        public static final float NUMBERHUNDREDF = 100f;
 
         /**
          * Constante pentru numarul magic 110
@@ -203,6 +208,11 @@ public final class NumarMagic {
         public static final int NUMBERTWOHUNDREDONE = 201;
 
         /**
+         * Numar magic 250.
+         */
+        public static final int NUMBERTWOHUNDREDANDFIFTY = 250;
+
+        /**
          * Numar magic 255.
          */
         public static final int NUMBERTWOHUNDREDFIFTYFIVE = 255;
@@ -223,9 +233,19 @@ public final class NumarMagic {
         public static final int NUMBERFIVEHUNDRED = 500;
 
         /**
+         * Numar magic 523.
+         */
+        public static final int NUMBERFIVEHUNDREDTWENTYTHREE = 523;
+
+        /**
          * Numar magic 800.
          */
         public static final int NUMBEREIGHTHUNDRED = 800;
+
+        /**
+         * Numar magic 1000.
+         */
+        public static final int NUMBERTHOUSAND = 1000;
 
         /**
          * Numar magic 2000.
@@ -246,6 +266,11 @@ public final class NumarMagic {
          * Numar magic 3000.
          */
         public static final int NUMBERTHREETHOUSAND = 3000;
+
+        /**
+         * Numar magic 4000.
+         */
+        public static final int NUMBERFOURTHOUSAND = 4000;
 
         /**
          * Constante pentru numarul magic 0L
@@ -421,6 +446,21 @@ public final class NumarMagic {
          * Constante pentru numarul magic 1000000
          */
         public static final Long ONEMILLIONLONG = 1000000L;
+
+        /**
+         * Constante pentru numarul magic 0.40
+         */
+        public static final double FOURTYZEROD = 0.40;
+
+        /**
+         * Constante pentru numarul magic 0.25
+         */
+        public static final double ZEROTWENTYFIVE = 0.25;
+
+        /**
+         * Constante pentru numarul magic 10
+         */
+        public static final double ZEROTEN = 0.10;
 
         /**
          * Constructor de Numero mágico.

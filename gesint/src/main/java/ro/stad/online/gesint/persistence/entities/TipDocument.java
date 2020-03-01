@@ -36,13 +36,13 @@ public class TipDocument implements Serializable {
          * Identificatorul entității.
          */
         @Id
-        @Column(name = "id")
+        @Column(name = "ID")
         Long id;
 
         /**
          * Denumirea tipului de document.
          */
-        @Column(name = "nume")
+        @Column(name = "NUME")
         String nume;
 
         /**

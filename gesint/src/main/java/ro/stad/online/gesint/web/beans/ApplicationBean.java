@@ -40,16 +40,6 @@ public class ApplicationBean implements Serializable {
         private static final long serialVersionUID = 1L;
 
         /**
-         * Constante para cargar la lista de datos para envio mail
-         */
-        private static String MAIL = "MAIL";
-
-        /**
-         * Constante para cargar la lista de extensiones
-         */
-        private static String EXT = "extensie";
-
-        /**
          * Entity Manager para gestión de la persistencia.
          */
         @PersistenceContext
@@ -75,8 +65,11 @@ public class ApplicationBean implements Serializable {
          */
         private List<Proprietate> listaExtensie;
 
+        /**
+         * Serviciu pentru judete
+         */
         @Autowired
-        private JudetService judetService;
+        private transient JudetService judetService;
 
         /**
          * Lista de judete.
@@ -107,8 +100,8 @@ public class ApplicationBean implements Serializable {
         @PostConstruct
         public void init() {
                 this.listaConfMail = new ArrayList<>();
-                listaConfMail = proprietateService.findByFilename(MAIL);
-                listaExtensie = proprietateService.findByFilename(EXT);
+                listaConfMail = proprietateService.findByFilename(Constante.MAIL);
+                listaExtensie = proprietateService.findByFilename(Constante.EXT);
                 this.judete = judetService.fiindAll();
                 paramMail();
                 extensie();

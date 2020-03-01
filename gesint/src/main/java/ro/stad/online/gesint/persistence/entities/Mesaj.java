@@ -34,18 +34,18 @@ import lombok.Setter;
 @Table(name = "MESSAGE")
 public class Mesaj implements Serializable {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 8133415273601486902L;
+        /**
+         *
+         */
+        private static final long serialVersionUID = 8133415273601486902L;
 
-	/**
-	 * ID.
-	 */
-	@Id
-	@SequenceGenerator(name = "seq_message", sequenceName = "seq_message", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_message")
-	@Column(name = "id")
-	private Long id;
+        /**
+         * ID.
+         */
+        @Id
+        @SequenceGenerator(name = "SEQ_MESSAGE", sequenceName = "SEQ_MESSAGE", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MESSAGE")
+        @Column(name = "ID")
+        private Long id;
 
 }

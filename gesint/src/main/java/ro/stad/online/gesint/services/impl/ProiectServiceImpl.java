@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.model.filters.FiltruProiect;
 import ro.stad.online.gesint.persistence.entities.Proiect;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.repositories.ProiectRepository;
 import ro.stad.online.gesint.services.ProiectService;
 import ro.stad.online.gesint.util.FacesUtilities;
@@ -47,7 +48,7 @@ public class ProiectServiceImpl implements ProiectService {
          * SessionFactory.
          */
         @Autowired
-        private transient SessionFactory sessionFactory;
+        private SessionFactory sessionFactory;
 
         /**
          * Session.
@@ -107,7 +108,7 @@ public class ProiectServiceImpl implements ProiectService {
                         }
                         catch (final DataAccessException e) {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         }
                 }
         }
@@ -191,8 +192,7 @@ public class ProiectServiceImpl implements ProiectService {
          */
         @Override
         public Proiect save(final Proiect proiect) {
-                final Proiect proiectActualizado = proiectRepository.save(proiect);
-                return proiectActualizado;
+                return proiectRepository.save(proiect);
 
         }
 
@@ -216,19 +216,19 @@ public class ProiectServiceImpl implements ProiectService {
          * @param defaultField câmpul de ordonare prin defect
          */
         @Override
-        public void pregatirePaginareOrdenareCriteria(final Criteria criteria, final int first, final int pageSize,
-                        final String sortField, final SortOrder sortOrder, final String defaultField) {
-                criteria.setFirstResult(first);
-                criteria.setMaxResults(pageSize);
+        public void pregatirePaginareOrdenareCriteria(final Criteria crit, final int first, final int pageSize,
+                        final String sField, final SortOrder sortOrder, final String defaultField) {
+                crit.setFirstResult(first);
+                crit.setMaxResults(pageSize);
 
-                if (sortField != null && sortOrder.equals(SortOrder.ASCENDING)) {
-                        criteria.addOrder(Order.asc(sortField));
+                if (sField != null && sortOrder.equals(SortOrder.ASCENDING)) {
+                        crit.addOrder(Order.asc(sField));
                 }
-                else if (sortField != null && sortOrder.equals(SortOrder.DESCENDING)) {
-                        criteria.addOrder(Order.desc(sortField));
+                else if (sField != null && sortOrder.equals(SortOrder.DESCENDING)) {
+                        crit.addOrder(Order.desc(sField));
                 }
-                else if (sortField == null) {
-                        criteria.addOrder(Order.asc(defaultField));
+                else if (sField == null) {
+                        crit.addOrder(Order.asc(defaultField));
                 }
         }
 }

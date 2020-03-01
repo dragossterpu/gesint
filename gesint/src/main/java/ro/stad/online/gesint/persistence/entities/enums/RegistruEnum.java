@@ -15,24 +15,44 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum RegistruEnum {
         /**
-         * El registro corresponde a un alta.
+         * Registrul corespunde unei inregistrari.
          */
-        INREGISTRARE("Inregistrare"),
+        INREGISTRARE("Înregistrare"),
         /**
-         * El registro corresponde a una modificación.
+         * ERegistrul corespunde unei modificari.
          */
         MODIFICARE("Modificare"),
         /**
-         * El registro corresponde a una baja.
+         * Registrul corespunde unei eliminari.
          */
         ELIMINARE("Eliminare"),
         /**
-         * El registro corresponde a un error.
+         * Registrul corespunde unei blocari.
+         */
+        BLOCARE("Blocare"),
+        /**
+         * Registrul corespunde unei activari.
+         */
+        ACTIVARE("Activare"),
+        /**
+         * Registrul corespunde unei cautari
+         */
+        CAUTARE("Căutare"),
+        /**
+         * Registrul corespunde uneierori.
          */
         EROARE("Eroare");
 
         /**
-         * Descripción del tipo de registro.
+         * Descrierea tipului de înregistrare.
          */
         private String descriere;
+
+        /**
+         * @return Numele enum
+         */
+        public String getName() {
+                return name();
+        }
+
 }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
+import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.model.dto.statistica.RezultateDTO;
 
 /**
@@ -24,13 +25,14 @@ public final class RezultateMapper implements RowMapper<RezultateDTO> {
         @Override
         public RezultateDTO mapRow(final ResultSet rs, final int rowNum) throws SQLException {
                 final RezultateDTO dto = new RezultateDTO();
-                dto.setNume(rs.getString("nume"));
+
+                dto.setNume(rs.getString(Constante.NUME));
                 dto.setMandatePartid(rs.getInt("mandatePartid"));
                 dto.setTotalMandate(rs.getInt("totalMandate"));
                 dto.setTotalVoturi(rs.getInt("totalVoturi"));
                 dto.setVoturiPartid(rs.getInt("voturiPartid"));
                 dto.setSigla(rs.getString("sigla"));
-                dto.setId(rs.getLong("id"));
+                dto.setId(rs.getLong(Constante.ID));
                 return dto;
         }
 

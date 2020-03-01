@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -52,8 +53,9 @@ public abstract class PdfAbstractGenerator {
          * Generați conținutul care va fi afișat în PDF
          * @param document Document pdf la care va fi atașat conținutul
          * @throws GesintException excepție care se poate lansa
+         * @throws MalformedURLException
          */
-        public abstract void creareCorpPdf(Document document) throws GesintException;
+        public abstract void creareCorpPdf(Document document) throws GesintException, MalformedURLException;
 
         /**
          * Genereaza numele documentului
@@ -144,7 +146,7 @@ public abstract class PdfAbstractGenerator {
                         doc.showTextAligned(new Paragraph(String.format("Pagina %s de %s", i, numPagini)),
                                         (pdfDoc.getDefaultPageSize().getRight() - doc.getRightMargin()
                                                         - (pdfDoc.getDefaultPageSize().getLeft() + doc.getLeftMargin()))
-                                                        / 2 + doc.getLeftMargin(),
+                                                        / NumarMagic.NUMBERTWO + doc.getLeftMargin(),
                                         pdfDoc.getDefaultPageSize().getBottom() + NumarMagic.NUMBERTWENTY, i,
                                         TextAlignment.CENTER, VerticalAlignment.BOTTOM, 0);
                 }

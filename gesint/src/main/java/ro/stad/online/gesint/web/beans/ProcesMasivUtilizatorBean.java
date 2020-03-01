@@ -31,6 +31,7 @@ import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.lazydata.LazyDataUtilizatori;
 import ro.stad.online.gesint.model.filters.FiltruUtilizator;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.services.OperatieMasivaFisierService;
 import ro.stad.online.gesint.services.UtilizatorService;
@@ -158,10 +159,10 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          * Metodă folosită pentru a adaugă utilizatori noi la lista de utilizatori selectați.
          */
         public void adaugareUtilizatoriSchimbPagina() {
-                if (filtruUtilizator.getUtilizatoriSelectionati() != null
-                                && !filtruUtilizator.getUtilizatoriSelectionati().isEmpty()) {
-                        listautilizatoriSelectionati.addAll(filtruUtilizator.getUtilizatoriSelectionati());
-                        filtruUtilizator.setUtilizatoriSelectionati(new ArrayList<>(listautilizatoriSelectionati));
+                if (this.filtruUtilizator.getUtilizatoriSelectionati() != null
+                                && !this.filtruUtilizator.getUtilizatoriSelectionati().isEmpty()) {
+                        this.listautilizatoriSelectionati.addAll(this.filtruUtilizator.getUtilizatoriSelectionati());
+                        this.filtruUtilizator.setUtilizatoriSelectionati(new ArrayList<>(listautilizatoriSelectionati));
                 }
         }
 
@@ -172,16 +173,13 @@ public class ProcesMasivUtilizatorBean implements Serializable {
                 try {
                         final List<String> listaSeleccionados = validareListaSelectionati(listautilizatoriSelectionati);
                         if (!listaSeleccionados.isEmpty()) {
-                                utilizatorService.bajaLogica(listaSeleccionados);
+                                this.utilizatorService.bajaLogica(listaSeleccionados);
                                 final String mensaje = "Membrii prezenți în listă au fost eliminați cu succes.";
-                                utilitati.procesareResultateOperatiune(Constante.UTILIZATORIMASIV, "ELIMINARE", mensaje,
-                                                Constante.PROCESMASIV, SectiuniEnum.ALTELE.getDescriere(),
-                                                facesUtilities);
+                                this.registruActivitateService.inregistrareRegistruActivitate(mensaje,
+                                                RegistruEnum.ELIMINARE.getName(), SectiuniEnum.USERS.getName(), null);
                         }
                 }
                 catch (final TransactionException te) {
-                        utilitati.procesareEceptie(te, SectiuniEnum.ALTELE.getDescriere(),
-                                        "eliminare masivă a membrilor", facesUtilities);
                         final String descriere = "A apărut o eroare la eliminarea logică masivă a utilizatorului";
                         this.registruActivitateService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.PROCESMASIV.getDescriere(), te);
@@ -194,12 +192,11 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          */
         public void blocareFisierUtilizatori(final FileUploadEvent event) {
                 try {
-                        operatieMasivaFisierService.procesareOperatieMasivaFisier(event, Constante.BLOCARE,
+                        this.operatieMasivaFisierService.procesareOperatieMasivaFisier(event,
+                                        RegistruEnum.BLOCARE.getDescriere(),
                                         "executând blocarea în masă a utilizatorilor.");
                 }
                 catch (final TransactionException te) {
-                        utilitati.procesareEceptie(te, SectiuniEnum.ALTELE.getDescriere(),
-                                        "eliminare masivă a membrilor", facesUtilities);
                         final String descriere = "A apărut o eroare executând blocarea în masă a utilizatorilor";
                         this.registruActivitateService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.PROCESMASIV.getDescriere(), te);
@@ -213,16 +210,13 @@ public class ProcesMasivUtilizatorBean implements Serializable {
                 try {
                         final List<String> listaSeleccionados = validareListaSelectionati(listautilizatoriSelectionati);
                         if (!listaSeleccionados.isEmpty()) {
-                                utilizatorService.dezactivare(listaSeleccionados);
+                                this.utilizatorService.dezactivare(listaSeleccionados);
                                 final String mensaje = "Membrii prezenți în listă au fost blocați cu succes.";
-                                utilitati.procesareResultateOperatiune(Constante.UTILIZATORIMASIV, "DEZACTIVARE",
-                                                mensaje, Constante.PROCESMASIV,
-                                                SectiuniEnum.ADMINISTRARE.getDescriere(), facesUtilities);
+                                this.registruActivitateService.inregistrareRegistruActivitate(mensaje,
+                                                RegistruEnum.BLOCARE.getName(), SectiuniEnum.USERS.getName(), null);
                         }
                 }
                 catch (final TransactionException te) {
-                        utilitati.procesareEceptie(te, SectiuniEnum.ALTELE.getDescriere(),
-                                        "blochează utilizatorii masiv", facesUtilities);
                         final String descriere = "A apărut o eroare executând blocarea în masă a utilizatorilor";
                         this.registruActivitateService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.PROCESMASIV.getDescriere(), te);
@@ -235,12 +229,11 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          */
         public void eliminareUtilizatoriFisier(final FileUploadEvent event) {
                 try {
-                        operatieMasivaFisierService.procesareOperatieMasivaFisier(event, Constante.ELIMINARE,
+                        this.operatieMasivaFisierService.procesareOperatieMasivaFisier(event,
+                                        RegistruEnum.ELIMINARE.getDescriere(),
                                         "executând eliminarea logică în masă a utilizatorilor.");
                 }
                 catch (final TransactionException te) {
-                        utilitati.procesareEceptie(te, SectiuniEnum.ALTELE.getDescriere(),
-                                        "blochează utilizatorii masiv", facesUtilities);
                         final String descriere = "A apărut o eroare executând eliminarea logică în masă a utilizatorilor.";
                         this.registruActivitateService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.PROCESMASIV.getDescriere(), te);
@@ -251,8 +244,8 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          * Metodă folosită pentru a căuta utilizatorii prin datele introduse în filtru.
          */
         public void cautareUtilizatori() {
-                model.setFiltruUtilizator(filtruUtilizator);
-                afisareTabla = true;
+                this.model.setFiltruUtilizator(filtruUtilizator);
+                this.afisareTabla = true;
         }
 
         /**
@@ -262,12 +255,11 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          */
         public void incarcareUtilizatoriFisier(final FileUploadEvent event) {
                 try {
-                        operatieMasivaFisierService.procesareOperatieMasivaFisier(event, Constante.INREGISTRARE,
+                        this.operatieMasivaFisierService.procesareOperatieMasivaFisier(event,
+                                        RegistruEnum.INREGISTRARE.getDescriere(),
                                         "executând înregistrarea în masă a utilizatorilor.");
                 }
                 catch (final TransactionException te) {
-                        utilitati.procesareEceptie(te, SectiuniEnum.ALTELE.getDescriere(),
-                                        "blochează utilizatorii masiv", facesUtilities);
                         final String descriere = "A apărut o eroare executând înregistrarea în masă a utilizatorilor.";
                         this.registruActivitateService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.PROCESMASIV.getDescriere(), te);
@@ -280,8 +272,8 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          */
         public void checkDeselectionat(final UnselectEvent event) {
                 final Utilizator usu = (Utilizator) event.getObject();
-                listautilizatoriSelectionati.remove(usu);
-                model.setDataSource(listautilizatoriSelectionati);
+                this.listautilizatoriSelectionati.remove(usu);
+                this.model.setDataSource(listautilizatoriSelectionati);
         }
 
         /**
@@ -290,8 +282,8 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          */
         public void checkSelectionat(final SelectEvent event) {
                 final Utilizator usu = (Utilizator) event.getObject();
-                listautilizatoriSelectionati.add(usu);
-                model.setDataSource(listautilizatoriSelectionati);
+                this.listautilizatoriSelectionati.add(usu);
+                this.model.setDataSource(listautilizatoriSelectionati);
         }
 
         /**
@@ -302,18 +294,16 @@ public class ProcesMasivUtilizatorBean implements Serializable {
         public void checkSelectionatToate(final ToggleSelectEvent toogleEvent) {
                 try {
                         if (toogleEvent.isSelected()) {
-                                listautilizatoriSelectionati = new HashSet<>(
+                                this.listautilizatoriSelectionati = new HashSet<>(
                                                 utilizatorService.cautareUtilizator(filtruUtilizator));
                         }
                         else {
-                                listautilizatoriSelectionati = new HashSet<>();
+                                this.listautilizatoriSelectionati = new HashSet<>();
                         }
-                        model.setDataSource(listautilizatoriSelectionati);
-                        filtruUtilizator.setUtilizatoriSelectionati(new ArrayList<>(listautilizatoriSelectionati));
+                        this.model.setDataSource(listautilizatoriSelectionati);
+                        this.filtruUtilizator.setUtilizatoriSelectionati(new ArrayList<>(listautilizatoriSelectionati));
                 }
                 catch (final TransactionException te) {
-                        utilitati.procesareEceptie(te, SectiuniEnum.ALTELE.getDescriere(),
-                                        "blochează utilizatorii masiv", facesUtilities);
                         final String descriere = "A apărut o eroare executând blocarea utilizatorii masiv.";
                         this.registruActivitateService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.PROCESMASIV.getDescriere(), te);
@@ -331,7 +321,7 @@ public class ProcesMasivUtilizatorBean implements Serializable {
                                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sablon));
                 }
                 catch (final IOException e) {
-                        facesUtilities.setmesajEroare("A apărut o eroare la descărcarea fișierului.",
+                        this.facesUtilities.setmesajEroare("A apărut o eroare la descărcarea fișierului.",
                                         Constante.IDMESAJGLOBAL);
                         final String descriere = "A apărut o eroare la descărcarea fișierului.";
                         this.registruActivitateService.salveazaRegistruEroare(descriere,
@@ -346,26 +336,26 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          * @return URL-ul paginii
          */
         public String getFormOperaMasiv(final String tip) {
-                resultat = null;
-                this.tipInregistrareMasivaUtilizator = null;
-                this.esteEliminareMasiva = null;
-                this.esteBlocareMasiva = null;
+                this.resultat = Constante.SPATIU;
+                this.tipInregistrareMasivaUtilizator = Constante.SPATIU;
+                this.esteEliminareMasiva = Constante.SPATIU;
+                this.esteBlocareMasiva = Constante.SPATIU;
                 this.titlu = Constante.SPATIU;
-                if (tip.equals(Constante.INREGISTRARE)) {
+                if (tip.equals(RegistruEnum.INREGISTRARE.getDescriere())) {
                         this.tipInregistrareMasivaUtilizator = tip;
                         this.titlu = "Înregistrare masivă a membrilor prin fișier";
-                        plansaDescarcareInregistrare = "fisier_inregistrare_masiva_membri.xlsx";
-                        resultat = "/users/reg_masiva_file?faces-redirect=true";
+                        this.plansaDescarcareInregistrare = "fisier_inregistrare_masiva_membri.xlsx";
+                        this.resultat = "/users/reg_masiva_file?faces-redirect=true";
 
                 }
                 else if (tip.equals(Constante.ESTEELIMINARE)) {
                         this.esteEliminareMasiva = tip;
                         this.titlu = "Eliminarea masivă a membrilor";
-                        resultat = "/users/del_masiva_file?faces-redirect=true";
+                        this.resultat = "/users/del_masiva_file?faces-redirect=true";
                 }
                 else {
                         this.esteBlocareMasiva = tip;
-                        filtruUtilizator.setValidat(true);
+                        this.filtruUtilizator.setValidat(true);
                         this.titlu = "Blocarea masivă a membrilor";
                         resultat = "/users/bloq_masiva_file?faces-redirect=true";
                 }
@@ -379,14 +369,14 @@ public class ProcesMasivUtilizatorBean implements Serializable {
         @PostConstruct
         public void init() {
                 final HttpServletRequest req = (HttpServletRequest) context.getRequest();
-                tipInregistrareMasivaUtilizator = Constante.INREGISTRARE;
-                esteEliminareMasiva = Constante.ESTEELIMINARE;
-                esteBlocareMasiva = Constante.ESTEBLOCAJ;
-                plansaDescarcareInregistrare = String.valueOf(req.getParameter("plantilla"));
-                filtruUtilizator = new FiltruUtilizator();
-                filtruUtilizator.setUtilizatoriSelectionati(new ArrayList<>());
-                listautilizatoriSelectionati = new HashSet<>();
-                model = new LazyDataUtilizatori(utilizatorService);
+                this.tipInregistrareMasivaUtilizator = RegistruEnum.INREGISTRARE.getDescriere();
+                this.esteEliminareMasiva = Constante.ESTEELIMINARE;
+                this.esteBlocareMasiva = Constante.ESTEBLOCAJ;
+                this.plansaDescarcareInregistrare = String.valueOf(req.getParameter("plantilla"));
+                this.filtruUtilizator = new FiltruUtilizator();
+                this.filtruUtilizator.setUtilizatoriSelectionati(new ArrayList<>());
+                this.listautilizatoriSelectionati = new HashSet<>();
+                this.model = new LazyDataUtilizatori(utilizatorService);
                 setList(utilitati.listaTrue(numarColoaneListaUtilizatori));
         }
 
@@ -394,8 +384,8 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          * Metodă folosită pentru a sterge rezultatele căutărilor anterioare.
          */
         public void cautareCautare() {
-                filtruUtilizator = new FiltruUtilizator();
-                afisareTabla = false;
+                this.filtruUtilizator = new FiltruUtilizator();
+                this.afisareTabla = false;
         }
 
         /**
@@ -418,7 +408,7 @@ public class ProcesMasivUtilizatorBean implements Serializable {
          * @return lista de utilizatori selectați
          */
         private List<String> validareListaSelectionati(final Set<Utilizator> selectionati) {
-                if (listautilizatoriSelectionati == null || listautilizatoriSelectionati.isEmpty()) {
+                if (this.listautilizatoriSelectionati == null || this.listautilizatoriSelectionati.isEmpty()) {
                         FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR, "Membri selectați",
                                         "Trebuie să selectați cel puțin un membru din listă pentru a procesa operația masivă.",
                                         Constante.IDMESAJGLOBAL);

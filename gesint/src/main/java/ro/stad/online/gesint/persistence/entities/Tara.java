@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  *
@@ -40,13 +41,13 @@ public class Tara implements Serializable {
          * Id.
          */
         @Id
-        @Column(name = "CODE", length = 4)
+        @Column(name = "CODE", length = NumarMagic.NUMBERFOUR)
         private String code;
 
         /**
          * Numele tarii.
          */
-        @Column(name = "NUME", length = 100)
+        @Column(name = "NUME", length = NumarMagic.NUMBERHUNDRED)
         private String name;
 
 }

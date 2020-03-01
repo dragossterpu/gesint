@@ -33,6 +33,7 @@ import ro.stad.online.gesint.persistence.entities.Localitate;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
 import ro.stad.online.gesint.persistence.entities.enums.CanalAlertaEnum;
 import ro.stad.online.gesint.persistence.entities.enums.EducatieEnum;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.RolEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SexEnum;
@@ -78,10 +79,10 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
         private Utilitati utilitati;
 
         /**
-         * Clasa de utilitati pentru mesajes.
+         * Variala utilizata pentru injectarea serviciului înregistrare a activității.
          */
         @Autowired
-        private transient FacesUtilities facesUtilities;
+        private RegistruActivitateServiceImpl registruActivitateService;
 
         /**
          * Variabila utilizata pentru a injecta serviciul localitatilor.
@@ -118,18 +119,18 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
                         final String mesaj = incarcareFisierOperareMasiva(event.getFile(), tipRegistru);
                         if (StringUtils.isEmpty(mesaj)) {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
-                                                Constante.INREGISTRARE,
+                                                RegistruEnum.INREGISTRARE.getDescriere(),
                                                 "Toți utilizatorii au fost procesați cu succes.");
                         }
                         else {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                Constante.EROAREMESAJ,
+                                                RegistruEnum.EROARE.getDescriere(),
                                                 Constante.EXISTERORI.concat(mesajExceptie) + mesaj);
                         }
                 }
                 catch (final TransactionException | IOException | NoSuchElementException te) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.EXISTERORI.concat(mesajExceptie));
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.EXISTERORI.concat(mesajExceptie));
                 }
         }
 
@@ -205,15 +206,15 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
                         }
                 }
                 String suntErori = "Rezolvați-le și încercați din nou.";
-                if (!listaUtilizatoriSalvare.isEmpty() && operare.equals(Constante.INREGISTRARE)) {
+                if (!listaUtilizatoriSalvare.isEmpty() && operare.equals(RegistruEnum.INREGISTRARE.getDescriere())) {
                         utilizatorService.salvat(listaUtilizatoriSalvare);
                         suntErori = suntErori.concat(" Restul membrilor au fost salvați cu succes.");
                 }
-                else if (operare.equals(Constante.ELIMINARE)) {
+                else if (operare.equals(RegistruEnum.ELIMINARE.getDescriere())) {
                         utilizatorService.bajaLogica(listaBazeDate);
                         suntErori = suntErori.concat(" Restul membrilor s-au eliminat cu succes.");
                 }
-                else if (operare.equals(Constante.BLOCARE)) {
+                else if (operare.equals(RegistruEnum.BLOCARE.getDescriere())) {
                         utilizatorService.dezactivare(listaBazeDate);
                         suntErori = suntErori.concat(" Restul membrilor s-au blocat cu succes.");
                 }
@@ -237,7 +238,7 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
                         final List<Utilizator> listaUtilizatoriSalvare, final Row row, final String username) {
                 final DataFormatter dataFormatter = new DataFormatter();
                 final StringBuilder mesaj = new StringBuilder();
-                if (operare.equals(Constante.INREGISTRARE)) {
+                if (operare.equals(RegistruEnum.INREGISTRARE.getDescriere())) {
                         if (!listaBazeDate.contains(username)) {
                                 final Utilizator utilizator = new Utilizator();
                                 utilizator.setUsername(username);
@@ -246,9 +247,9 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
                                                         mesaj);
                                         listaUtilizatoriSalvare.add(utilizator);
                                 }
-                                catch (final Exception e) {
+                                catch (final GesintException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.EROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 }
                         }
                         else {
@@ -257,7 +258,8 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
                         }
                 }
                 else {
-                        if (!listaBazeDate.contains(username) && operare.equals(Constante.INREGISTRARE)) {
+                        if (!listaBazeDate.contains(username)
+                                        && operare.equals(RegistruEnum.INREGISTRARE.getDescriere())) {
                                 adaugareRegistruEroare(mesaj, row,
                                                 (Constante.MEMBRUL + username + "' nu este găsit în baza de date."));
                         }
@@ -276,7 +278,6 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
         private void obtinemDateUtilizatorInregistrare(final Utilizator utilizator, final Iterator<Cell> colIterator,
                         final DataFormatter dataFormatter, final StringBuilder mesaj) throws GesintException {
                 String cellValue;
-                cnp = Constante.SPATIU;
                 colIterator.next();
                 // Nume
                 cellValue = dataFormatter.formatCellValue(colIterator.next());
@@ -318,8 +319,9 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
                 }
                 catch (final ParseException e1) {
                         mesaj.append("Eroare apărută la procesarea datei de naștere");
-                        utilitati.procesareEceptie(e1, SectiuniEnum.ALTELE.getDescriere(),
-                                        "Eroare apărută la procesarea datei de naștere", facesUtilities);
+                        final String descriere = "A apărut o eroare la procesarea datei de naștere";
+                        this.registruActivitateService.salveazaRegistruEroare(descriere,
+                                        SectiuniEnum.PROCESMASIV.getDescriere(), e1);
                 }
                 // NIVEL DE EDUCATIE
                 cellValue = dataFormatter.formatCellValue(colIterator.next());
@@ -371,12 +373,13 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
                 this.localidad = localitateService.localidadByNumeIgnoreCaseAndJudet(cellValue, judet);
                 // Daca nu exista o cream
                 if (localidad == null) {
-                        utilizator.setLocalitate(localitateService.crearLocalidad(cellValue, judet, tipulLocalitatii));
+                        utilizator.setLocalitate(
+                                        localitateService.inregistrareLocalitate(cellValue, judet, tipulLocalitatii));
                 }
                 else {
                         utilizator.setLocalitate(localidad);
                 }
-                utilizator.setPassword(passwordEncoder.encode("1"));
+                utilizator.setPassword(passwordEncoder.encode(Constante.UNU));
                 // MEMBRU ACTIV
                 utilizator.setValidat(true);
                 // SCANAL DE COMUNICARE
@@ -392,21 +395,21 @@ public class OperatieMasivaFisierServiceImpl implements OperatieMasivaFisierServ
          */
         private boolean valideazaCnp(final String sex, final Date dataFisier, final String cnp) {
                 boolean resultat = true;
-                if (cnp.length() == 11) {
+                if (cnp.length() == NumarMagic.NUMBERELEVEN) {
                         final String an = cnp.substring(1, NumarMagic.NUMBERTHREE);
                         final String luna = cnp.substring(NumarMagic.NUMBERTHREE, NumarMagic.NUMBERFIVE);
                         final String zi = cnp.substring(NumarMagic.NUMBERFIVE, NumarMagic.NUMBERSEVEN);
                         final String cnpul = cnp.substring(0, 1);
-                        final Date data = dataFisier;
+                        final Date dataCnp = dataFisier;
                         final SimpleDateFormat sdf = new SimpleDateFormat("yy");
                         final SimpleDateFormat lsdf = new SimpleDateFormat(Constante.MM);
                         final SimpleDateFormat zsdf = new SimpleDateFormat("dd");
-                        final String anString = sdf.format(data);
-                        final String lunaString = lsdf.format(data);
-                        final String ziString = zsdf.format(data);
+                        final String anString = sdf.format(dataCnp);
+                        final String lunaString = lsdf.format(dataCnp);
+                        final String ziString = zsdf.format(dataCnp);
                         if (an.equals(anString) && luna.equals(lunaString) && zi.equals(ziString)
-                                        && (sex.equals("MAN") && cnpul.equals("1")
-                                                        || sex.equals("WOMAN") && cnpul.equals("2"))) {
+                                        && (Constante.MAN.equals(sex) && Constante.UNU.equals(cnpul)
+                                                        || Constante.WOMAN.equals(sex) && Constante.DOI.equals(cnpul))) {
                                 resultat = true;
                         }
                         else {

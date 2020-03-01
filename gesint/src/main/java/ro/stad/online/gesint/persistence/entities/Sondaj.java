@@ -35,6 +35,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.TipSondajEnum;
 
 /**
@@ -43,13 +44,14 @@ import ro.stad.online.gesint.persistence.entities.enums.TipSondajEnum;
  */
 @TypeDefs({ @TypeDef(name = "double precision", typeClass = java.lang.Float.class) })
 @AllArgsConstructor
-@NoArgsConstructor
+
 @EqualsAndHashCode(callSuper = false, of = "id")
 @Builder
 @ToString
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "SONDAJ")
 public class Sondaj extends AbstractEntity implements Serializable {
@@ -65,7 +67,7 @@ public class Sondaj extends AbstractEntity implements Serializable {
         @Id
         @SequenceGenerator(allocationSize = 1, name = "SEQ_SONDAJ", sequenceName = "SEQ_SONDAJ")
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SONDAJ")
-        @Column(name = "ID", nullable = false, columnDefinition = Constante.NUMERIC, length = 10)
+        @Column(name = "ID", nullable = false, columnDefinition = Constante.NUMERIC, length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**
@@ -80,7 +82,7 @@ public class Sondaj extends AbstractEntity implements Serializable {
          * Intrebarea
          */
 
-        @Column(name = "INTREBARE", nullable = false, length = 1000)
+        @Column(name = "INTREBARE", nullable = false, length = NumarMagic.NUMBERTHOUSAND)
         private String intrebare;
 
         /**
@@ -93,21 +95,21 @@ public class Sondaj extends AbstractEntity implements Serializable {
         /**
          * Data Inceperii
          */
-        @Column(name = "DATA_INCEPERE", length = 19)
+        @Column(name = "DATA_INCEPERE", length = NumarMagic.NUMBERNINETEEN)
         private Date dataIncepere;
 
         /**
          * Data finalizarii.
          */
-        @Column(name = "DATA_FINALIZARE", length = 19)
+        @Column(name = "DATA_FINALIZARE", length = NumarMagic.NUMBERNINETEEN)
         private Date dataFinalizare;
 
         /**
          * Tabla unde salvam voturile unui sondaj
          */
         @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-        @JoinTable(name = "utilizator_sondaj", joinColumns = { @JoinColumn(name = "id_sondaj") }, inverseJoinColumns = {
-                        @JoinColumn(name = "username") })
+        @JoinTable(name = "UTILIZATOR_SONDAJ", joinColumns = { @JoinColumn(name = "ID_SONDAJ") }, inverseJoinColumns = {
+                        @JoinColumn(name = "USERNAME") })
         private List<Utilizator> utilizatori;
 
         /**

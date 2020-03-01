@@ -20,14 +20,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.joda.time.ReadableInstant;
 import org.joda.time.Years;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -46,7 +44,6 @@ import ro.stad.online.gesint.persistence.entities.enums.RolEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SexEnum;
 import ro.stad.online.gesint.persistence.entities.enums.StatutCivilEnum;
 import ro.stad.online.gesint.persistence.entities.enums.TipLocalitateEnum;
-import ro.stad.online.gesint.services.RegistruActivitateService;
 
 /**
  * Metode de utilitate
@@ -56,19 +53,14 @@ import ro.stad.online.gesint.services.RegistruActivitateService;
 public class Utilitati {
 
         /**
-         * Service de jurnal de activitate.
-         */
-        @Autowired
-        private RegistruActivitateService registro;
-
-        /**
          * Elimină din sesiune bean-ul, care conține acel nume.
          * @param listaBeans Numele bean-ului care nu trebuie scoase din sesiune.
          */
         public static void cleanSession(final List<String> listaBeans) {
                 final Map<String, Object> mapaSesion = FacesContext.getCurrentInstance().getExternalContext()
                                 .getSessionMap();
-                for (final String cabecera : mapaSesion.keySet()) {
+                for (Map.Entry<String, Object> entry : mapaSesion.entrySet()) {
+                        String cabecera = entry.getKey();
                         final String ubicacion = mapaSesion.get(cabecera).getClass().getPackage().toString()
                                         .toLowerCase();
                         if (ubicacion.contains(Constante.BEAN)
@@ -86,7 +78,8 @@ public class Utilitati {
         public static void cleanSession(final String numeBeanActual) {
                 final Map<String, Object> mapaSesion = FacesContext.getCurrentInstance().getExternalContext()
                                 .getSessionMap();
-                for (final String antet : mapaSesion.keySet()) {
+                for (Map.Entry<String, Object> entry : mapaSesion.entrySet()) {
+                        String antet = entry.getKey();
                         final String ubicacion = mapaSesion.get(antet).getClass().getPackage().toString().toLowerCase();
                         if (ubicacion.contains(Constante.BEAN) && Constante.NAVIGAREBEAN.equals(antet) == Boolean.FALSE
                                         && antet.equals(numeBeanActual) == Boolean.FALSE) {
@@ -126,16 +119,12 @@ public class Utilitati {
          */
         public static String generarTextoConPlantilla(final String sablon, final Map<String, Object> parametrii)
                         throws PebbleException, IOException {
-
                 final PebbleEngine engine = new PebbleEngine.Builder().autoEscaping(false).build();
                 final PebbleTemplate compiledTemplate = engine.getTemplate(sablon);
-
                 final Writer writer = new StringWriter();
                 compiledTemplate.evaluate(writer, parametrii);
+                return writer.toString();
 
-                final String textCompilat = writer.toString();
-
-                return textCompilat;
         }
 
         /**
@@ -211,28 +200,14 @@ public class Utilitati {
         }
 
         /**
-         * Verificați dacă un obiect este nul sau alb.
-         * @param obj Obiectul de verificat.
-         * @return true, Dacă obiectul este nul sau valoarea sa în String este "".
-         */
-        public static boolean isNullOrBlank(final Object obj) {
-                if (obj == null) {
-                        return true;
-                }
-                if (Constante.SPATIU.equals(obj.toString())) {
-                        return true;
-                }
-                return false;
-        }
-
-        /**
          * Elimina bean din șesiunecare nu conține acest nume.
          * @param numeBeanActual
          */
         public static void cautareSesiune(final String numeBeanActual) {
                 final Map<String, Object> mapaSesion = FacesContext.getCurrentInstance().getExternalContext()
                                 .getSessionMap();
-                for (final String antet : mapaSesion.keySet()) {
+                for (Map.Entry<String, Object> entry : mapaSesion.entrySet()) {
+                        String antet = entry.getKey();
                         final String url = mapaSesion.get(antet).getClass().getPackage().toString().toLowerCase();
                         if (url.contains(Constante.BEAN) && Constante.NAVIGAREBEAN.equals(antet) == Boolean.FALSE
                                         && antet.equals(numeBeanActual) == Boolean.FALSE) {
@@ -311,7 +286,7 @@ public class Utilitati {
          */
         public static String messageError(final Exception e) {
                 String message = Arrays.toString(e.getStackTrace());
-                if (message.length() > 2000) {
+                if (message.length() > NumarMagic.NUMBERTWOTHOUSAND) {
                         message = message.substring(message.length() - NumarMagic.NUMBERTWOTHOUSAND);
                 }
                 return message;
@@ -356,8 +331,8 @@ public class Utilitati {
          *
          */
         public static String obtinemNumeLuna(final Date data) {
-                data.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                final Month luna = LocalDate.now().getMonth();
+                final LocalDate localDate = data.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                final Month luna = localDate.getMonth();
                 final String nume = luna.getDisplayName(TextStyle.FULL, new Locale("ro", "RO"));
                 final String primaLitera = nume.substring(0, 1);
                 final String majuscula = primaLitera.toUpperCase();
@@ -467,18 +442,6 @@ public class Utilitati {
         }
 
         /**
-         * Verificați dacă există un rol trecut prin parametru.
-         * @param descriere String
-         * @throws GesintException exceptie
-         */
-        @SuppressWarnings("unlikely-arg-type")
-        public void existeRol(final String descriere) throws GesintException {
-                if (!RolEnum.getRoles().contains(descriere)) {
-                        throw new GesintException("Câmpul rol nu este un valid.");
-                }
-        }
-
-        /**
          * Verificați dacă există un camp valabil pentru sex trecut ca parametru.
          * @param descriere SexEnum
          * @throws GesintException exceptie
@@ -521,33 +484,4 @@ public class Utilitati {
                 return list;
         }
 
-        /**
-         * Metoda care procesează excepția pentru a arunca un mesaj de eroare și a salva înregistrarea.
-         * @param exceptie Exceptie capturata.
-         * @param accion actiune care a lansat exceptia.
-         * @param facesUtilities pentru a seta mesajul care va fi afișat
-         * @param seccion Secțiunea în care apare excepția
-         */
-        public void procesareEceptie(final Exception exceptie, final String seccion, final String accion,
-                        final FacesUtilities facesUtilities) {
-                facesUtilities.setmesajEroare("A apărut o eroare ".concat(accion), Constante.IDMESAJGLOBAL);
-                registro.inregistrareEroare(seccion, exceptie);
-        }
-
-        /**
-         * Metoda care procesează rezultatul unei operații de bază de date pentru a afișa mesajul și a salva
-         * înregistrarea. Mesajul este cu confirmare pentru a reveni la ecranul anterior sau a reîmprospăta.
-         * @param descriere Descrierea obiectului modificat
-         * @param operatie tipul de operatie(inregitrare, eliminare...)
-         * @param mesaj mesaj care va fi afisat utilizatorului
-         * @param sectiune unde apare rezultatul
-         * @param paragraf din meniul în care apare
-         * @param facesUtilities pentru a seta mesajul care va fi afișat.
-         */
-        public void procesareResultateOperatiune(final String descriere, final String operatie, final String mesaj,
-                        final String paragraf, final String sectiune, final FacesUtilities facesUtilities) {
-                FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, operatie, mesaj);
-                registro.inregistrareActivitate(sectiune, operatie, paragraf.concat(Constante.OPERATION.concat(operatie)
-                                .concat(Constante.DE).concat(descriere).concat(Constante.SEHAREALEXIT)));
-        }
 }

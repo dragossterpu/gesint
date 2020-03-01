@@ -98,8 +98,7 @@ public class EchipaServiceImpl implements EchipaService {
          */
         @Override
         public Echipa save(final Echipa echipa) {
-                final Echipa echipaActualizata = echipaRepository.save(echipa);
-                return echipaActualizata;
+                return echipaRepository.save(echipa);
         }
 
         /**

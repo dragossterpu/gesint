@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  *
@@ -47,20 +48,20 @@ public class Judet implements Serializable {
          * Id.
          */
         @Id
-        @Column(name = "cod_judet")
+        @Column(name = "COD_JUDET")
         private String indicator;
 
         /**
          * Numele judetului.
          */
-        @Column(name = "nume", length = 100)
+        @Column(name = "NUME", length = NumarMagic.NUMBERHUNDRED)
         private String nume;
 
         /**
          * Resedinta.
          */
-        @Column(name = "REZIDENTA", length = 100)
-        private String Resedinta;
+        @Column(name = "REZIDENTA", length = NumarMagic.NUMBERHUNDRED)
+        private String resedinta;
 
         /**
          * Populatie.
@@ -71,20 +72,20 @@ public class Judet implements Serializable {
         /**
          * Voturi minim.
          */
-        @Column(name = "voturi_minim")
+        @Column(name = "VOTURI_MINIM")
         private Long voturiMinim;
 
         /**
          * Membrii minim.
          */
-        @Column(name = "membrii_minim")
+        @Column(name = "MEMBRII_MINIM")
         private Long membriiMinim;
 
         /**
          * Tari.
          */
         @ManyToOne
-        @JoinColumn(name = "cod_tara", foreignKey = @ForeignKey(name = "FK_COUNTRY"), nullable = false)
+        @JoinColumn(name = "COD_TARA", foreignKey = @ForeignKey(name = "FK_COUNTRY"), nullable = false)
         private Tara code;
 
         /**

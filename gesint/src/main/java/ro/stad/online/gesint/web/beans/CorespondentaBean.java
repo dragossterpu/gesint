@@ -42,15 +42,15 @@ import ro.stad.online.gesint.model.filters.FiltruUtilizator;
 import ro.stad.online.gesint.persistence.entities.Corespondenta;
 import ro.stad.online.gesint.persistence.entities.Documentul;
 import ro.stad.online.gesint.persistence.entities.Echipa;
-import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.Functie;
+import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.TipDocument;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
 import ro.stad.online.gesint.persistence.entities.enums.CanalAlertaEnum;
 import ro.stad.online.gesint.persistence.entities.enums.EducatieEnum;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.RolEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
-import ro.stad.online.gesint.persistence.entities.enums.TipRegistruEnum;
 import ro.stad.online.gesint.services.CorespondentaService;
 import ro.stad.online.gesint.services.DocumentService;
 import ro.stad.online.gesint.services.EchipaService;
@@ -199,7 +199,7 @@ public class CorespondentaBean implements Serializable {
          *
          */
         @Autowired
-        private JudetService judetService;
+        private transient JudetService judetService;
 
         /**
          * Variabila utilizata pentru a recupera emailul unor utilizatori externi.
@@ -270,7 +270,7 @@ public class CorespondentaBean implements Serializable {
          *
          */
         @Autowired
-        private ParamEchipaService pEchipaService;
+        private transient ParamEchipaService pEchipaService;
 
         /**
          * Objeto de búsqueda de usuario.
@@ -381,7 +381,8 @@ public class CorespondentaBean implements Serializable {
                         setFile(documentService.descarcareDocument(documentul));
                 }
                 catch (final GesintException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
                                         "A apărut o eroare la descărcarea fișierului");
                         final String descriere = "A apărut o eroare la descărcarea fișierului";
                         this.regActividadService.salveazaRegistruEroare(descriere,
@@ -404,8 +405,7 @@ public class CorespondentaBean implements Serializable {
                 this.numarMembrii = this.listaEchipa.size();
                 final RequestContext context = RequestContext.getCurrentInstance();
                 context.execute(Constante.DIALOGCAUTARE);
-                List<Functie> lista = new ArrayList<>();
-                lista = incarcamToateFunctileCentrale();
+                final List<Functie> lista = incarcamToateFunctileCentrale();
                 filtruEchipa.setListaFunctii(lista);
                 listUsersCentral = utilizatorService.cautareUtilizatorCriteriaLocal(filtruEchipa);
                 rowCountCentral = listUsersCentral.size();
@@ -460,12 +460,12 @@ public class CorespondentaBean implements Serializable {
                                 }
                         }
                         corespondentaService.delete(corespondenta.getId());
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.ELIMINAREMESAJ,
-                                        Constante.OKELIMINAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
+                                        RegistruEnum.ELIMINARE.getDescriere(), Constante.OKELIMINAREMESAJ);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la eliminarea  corespondenței";
                         this.regActividadService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.CORESPONDENTA.getDescriere(), e);
@@ -482,8 +482,8 @@ public class CorespondentaBean implements Serializable {
                         this.documentService.delete(document);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la eliminarea fișierului";
                         this.regActividadService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
@@ -500,8 +500,8 @@ public class CorespondentaBean implements Serializable {
                         this.documentService.delete(document);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la eliminarea fișierului";
                         this.regActividadService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
@@ -552,21 +552,22 @@ public class CorespondentaBean implements Serializable {
                                 final Documentul documentul = this.documentService.incarcareDocument(fisier, tip,
                                                 utilizator);
                                 this.listaDocumente.add(documentul);
-                                FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO, Constante.INREGISTRARE,
+                                FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO,
+                                                RegistruEnum.INREGISTRARE.getDescriere(),
                                                 "Fișierul/ele încărcat/e cu succes", Constante.MSGS);
                         }
                         else {
                                 FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
                                                 Constante.INCARCAREFISIER,
-                                                "Fișierul încărcat " + fisier.getFileName()
-                                                                + " nu este valabil, numele sau extensia nu corespunde cu fișierul încărcat.",
+                                                "Fișierul încărcat ".concat(fisier.getFileName()).concat(
+                                                                " nu este valabil, numele sau extensia nu corespunde cu fișierul încărcat."),
                                                 Constante.MSGS);
                         }
                 }
 
                 catch (DataAccessException | GesintException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                        TipRegistruEnum.EROARE.name(), "A apărut o eroare la încărcarea fișierului. "
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, RegistruEnum.EROARE.name(),
+                                        "A apărut o eroare la încărcarea fișierului. "
                                                         .concat(Constante.DESCEROAREMESAJ));
                         final String descriere = "A apărut o eroare la încărcarea fișierului";
                         this.regActividadService.salveazaRegistruEroare(descriere,
@@ -593,21 +594,22 @@ public class CorespondentaBean implements Serializable {
                                 final Documentul documentul = this.documentService.incarcareDocument(fisier, tip,
                                                 utilizator);
                                 this.listaDocumente.add(documentul);
-                                FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO, Constante.INREGISTRARE,
+                                FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_INFO,
+                                                RegistruEnum.INREGISTRARE.getDescriere(),
                                                 "Fișierul/ele încărcat/e cu succes", Constante.MSGS);
                         }
                         else {
                                 FacesUtilities.setMensajeInformativo(FacesMessage.SEVERITY_ERROR,
                                                 Constante.INCARCAREFISIER,
-                                                "Fișierul încărcat " + fisier.getFileName()
-                                                                + " nu este valabil, numele sau extensia nu corespunde cu fișierul încărcat.",
+                                                "Fișierul încărcat ".concat(fisier.getFileName()).concat(
+                                                                " nu este valabil, numele sau extensia nu corespunde cu fișierul încărcat."),
                                                 Constante.MSGS);
                         }
                 }
 
                 catch (DataAccessException | GesintException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                        TipRegistruEnum.EROARE.name(), "A apărut o eroare la încărcarea fișierului. "
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, RegistruEnum.EROARE.name(),
+                                        "A apărut o eroare la încărcarea fișierului. "
                                                         .concat(Constante.DESCEROAREMESAJ));
                         final String descriere = "A apărut o eroare la încărcarea fișierului";
                         this.regActividadService.salveazaRegistruEroare(descriere,
@@ -628,8 +630,8 @@ public class CorespondentaBean implements Serializable {
                 }
 
                 catch (DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                        TipRegistruEnum.EROARE.name(), "A apărut o eroare la căutarea corespondenței . "
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, RegistruEnum.EROARE.name(),
+                                        "A apărut o eroare la căutarea corespondenței . "
                                                         .concat(Constante.DESCEROAREMESAJ));
                         final String descriere = "A apărut o eroare la căutarea corespondenței ";
                         this.regActividadService.salveazaRegistruEroare(descriere,
@@ -644,7 +646,8 @@ public class CorespondentaBean implements Serializable {
                         redirectionare = "/corespondente/modificareCorespondenta?faces-redirect=true";
                 }
                 else {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.MODIFICAREMESAJ,
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.MODIFICARE.getDescriere(),
                                         "A apărut o eroare la accesarea corespondenței. Corespondența nu există.");
                 }
                 return redirectionare;
@@ -682,8 +685,7 @@ public class CorespondentaBean implements Serializable {
                 }
 
                 catch (DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                        TipRegistruEnum.EROARE.name(),
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, RegistruEnum.EROARE.name(),
                                         "A apărut o eroare la căutarea funcților. ".concat(Constante.DESCEROAREMESAJ));
                         final String descriere = "A apărut o eroare la căutarea funcților";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
@@ -738,8 +740,8 @@ public class CorespondentaBean implements Serializable {
          * @param event eveniment lansat care conține corespondenta
          */
         public void onRowSelectedTeam(final SelectEvent event) {
-                final Echipa echipa = (Echipa) event.getObject();
-                this.utilizatoriSelectionatiFinali.add(echipa.getUser());
+                final Echipa echip = (Echipa) event.getObject();
+                this.utilizatoriSelectionatiFinali.add(echip.getUser());
                 this.modelUser.setDsource(this.utilizatoriSelectionatiFinali);
         }
 
@@ -758,8 +760,8 @@ public class CorespondentaBean implements Serializable {
          * @param event eveniment lansat care conține corespondenta
          */
         public void onRowUnSelectedTeam(final UnselectEvent event) {
-                final Echipa echipa = (Echipa) event.getObject();
-                this.utilizatoriSelectionatiFinali.remove(echipa.getUser());
+                final Echipa echip = (Echipa) event.getObject();
+                this.utilizatoriSelectionatiFinali.remove(echip.getUser());
                 this.modelUser.setDsource(this.utilizatoriSelectionatiFinali);
         }
 
@@ -787,11 +789,10 @@ public class CorespondentaBean implements Serializable {
          * @param toogleEvent ToggleSelectEvent
          */
         public void onToggleSelectTeam(final ToggleSelectEvent toogleEvent) {
-                if (toogleEvent.isSelected()) {
-                }
-                else {
+                if (!toogleEvent.isSelected()) {
                         this.utilizatoriSelectionati = new ArrayList<>();
                 }
+
                 this.modelUser.setDsource(this.utilizatoriSelectionatiFinali);
         }
 
@@ -804,12 +805,7 @@ public class CorespondentaBean implements Serializable {
                 if (toogleEvent.isSelected()) {
                         this.utilizatoriSelectionati = new ArrayList<>(
                                         this.utilizatorService.cautareUtilizatorCriteria(this.filtruUtilizator));
-                        for (final Utilizator user : this.utilizatoriSelectionati) {
-                                user.getUsername();
-                                if (!this.utilizatoriSelectionatiFinali.contains(user)) {
-                                        this.utilizatoriSelectionatiFinali.add(user);
-                                }
-                        }
+                        extractUtilizator();
                 }
                 else {
                         this.utilizatoriSelectionati = new ArrayList<>();
@@ -825,12 +821,7 @@ public class CorespondentaBean implements Serializable {
         public void onToggleSelectUsersCL(final ToggleSelectEvent toogleEvent) {
                 if (toogleEvent.isSelected()) {
                         this.utilizatoriSelectionati = new ArrayList<>(listUsersLocal);
-                        for (final Utilizator user : this.utilizatoriSelectionati) {
-                                user.getUsername();
-                                if (!this.utilizatoriSelectionatiFinali.contains(user)) {
-                                        this.utilizatoriSelectionatiFinali.add(user);
-                                }
-                        }
+                        extractUtilizator();
                 }
                 else {
                         this.utilizatoriSelectionati = new ArrayList<>();
@@ -856,17 +847,7 @@ public class CorespondentaBean implements Serializable {
                                         destina = destinatari.toString().substring(1);
                                         corespondenta.setDestinatari(destina);
                                 }
-                                corespondenta.setTitlu(corespondenta.getTipCorespondenta().getDescription()
-                                                .concat(Constante.PUNCTSPATIU).concat(corespondenta.getTitlu()));
-                                corespondenta.setCanal(CanalAlertaEnum.EMAIL);
-                                corespondenta.setDescriere(this.corespondenta.getDescriere());
-                                if (this.corespondenta.getAutomatic()) {
-                                        corespondenta.setAutomatic(true);
-                                        corespondenta.setDataTrimiteri(this.corespondenta.getDataTrimiteri());
-                                }
-                                else {
-                                        corespondenta.setAutomatic(false);
-                                }
+                                extractTitluCanalDescriere();
                                 corespondentaService.save(corespondenta);
                                 if (!this.documenteIncarcate.isEmpty()) {
                                         for (final Documentul documentul : documenteIncarcate) {
@@ -876,22 +857,43 @@ public class CorespondentaBean implements Serializable {
                                         }
                                 }
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
-                                                Constante.INREGISTRARE,
-                                                "Comunicarea electonică a fost salvată cu succes.");
+                                                RegistruEnum.INREGISTRARE.getDescriere(),
+                                                "Corespondența a fost salvată cu succes.");
                         }
                         else {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                Constante.EROAREMESAJ, "Nu se pot salva comunicări fara destinatari.");
+                                                RegistruEnum.EROARE.getDescriere(),
+                                                "Nu se pot salva corespondenței fara destinatari.");
                         }
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        "A apărut o eroare la salvarea Alertei/Comunicării "
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        "A apărut o eroare la salvarea corespondenței "
                                                         .concat(Constante.DESCEROAREMESAJ));
-                        // this.registruActivitateService.salveazaRegistruEroare(SectiuniEnum.ALERTAS.name(),
-                        // Constante.ALERTA, e);
+                        final String descriere = "A apărut o eroare la salvarea corespondenței ";
+                        this.regActividadService.salveazaRegistruEroare(descriere,
+                                        SectiuniEnum.CORESPONDENTA.getDescriere(), e);
+
                 }
                 return "/corespondente/corespondente?faces-redirect=true";
+        }
+
+        /**
+         * 
+         */
+        private void extractTitluCanalDescriere() {
+                corespondenta.setTitlu(corespondenta.getTipCorespondenta().getDescription()
+                                .concat(Constante.PUNCTSPATIU).concat(corespondenta.getTitlu()));
+                corespondenta.setCanal(CanalAlertaEnum.EMAIL);
+                corespondenta.setDescriere(this.corespondenta.getDescriere());
+                if (this.corespondenta.getAutomatic()) {
+                        corespondenta.setAutomatic(true);
+                        corespondenta.setDataTrimiteri(this.corespondenta.getDataTrimiteri());
+                }
+                else {
+                        corespondenta.setAutomatic(false);
+                }
         }
 
         /**
@@ -909,64 +911,77 @@ public class CorespondentaBean implements Serializable {
          */
         public void stabilireUtilizatoriFinali() {
                 final Utilizator usua = new Utilizator();
-                if (this.opcion == NumarMagic.NUMBERTWO) {
-                        for (final Utilizator user : this.utilizatoriSelectionati) {
-                                user.getUsername();
-                                if (!this.utilizatoriSelectionatiFinali.contains(user)) {
-                                        this.utilizatoriSelectionatiFinali.add(user);
-                                }
-                        }
-                }
-                else if (this.opcion == NumarMagic.NUMBERFOUR) {
-                        if (utilizatorExtern != null) {
-                                final String[] chei = utilizatorExtern.split(Constante.VIRGULA);
-                                for (final String cheie : chei) {
-                                        final String nume = cheie.trim();
-                                        final Utilizator usu = utilizatorService.fiindOne(nume);
-                                        if (usu == null) {
-                                                usua.setUsername(nume);
-                                                usua.setDestinatarExtern(true);
-                                                usua.setAdresa(null);
-                                                usua.setCanalCorespondenta(CanalAlertaEnum.EMAIL);
-                                                usua.setDataNasterii(new Date());
-                                                usua.setStatutCivil(null);
-                                                usua.setEducatie(EducatieEnum.NESPECIFICAT);
-                                                usua.setEmail(nume);
-                                                usua.setCodJudet(null);
-                                                usua.setIdCard(null);
-                                                usua.setPrenume("VIA EMAIL");
-                                                usua.setLocalitate(null);
-                                                usua.setNume(Constante.DESTINATAR);
-                                                usua.setNumarCard(null);
-                                                usua.setPassword(
-                                                                "$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
-                                                usua.setPersonalEmail(nume);
-                                                usua.setPhone(null);
-
-                                                usua.setRole(RolEnum.ROLE_SIMPATIZANT);
-                                                usua.setSex(null);
-                                                usua.setValidat(false);
-                                                usua.setLocMunca(null);
-                                                utilizatorService.save(usua);
-                                                if (!this.utilizatoriSelectionatiFinali.contains(usua)) {
-                                                        this.utilizatoriSelectionatiFinali.add(usua);
-                                                }
-                                        }
-
-                                        else {
-                                                if (!this.utilizatoriSelectionatiFinali.contains(usu)) {
-                                                        this.utilizatoriSelectionatiFinali.add(usu);
-                                                }
-                                        }
-                                }
-                        }
+                if (this.opcion == NumarMagic.NUMBERFOUR) {
+                        extractUtilizatorExtern(usua);
                 }
                 else {
-                        for (final Utilizator user : this.utilizatoriSelectionati) {
-                                user.getUsername();
-                                if (!this.utilizatoriSelectionatiFinali.contains(user)) {
-                                        this.utilizatoriSelectionatiFinali.add(user);
-                                }
+                        extractUtilizator();
+                }
+        }
+
+        /**
+         * 
+         */
+        private void extractUtilizator() {
+                for (final Utilizator user : this.utilizatoriSelectionati) {
+                        user.getUsername();
+                        if (!this.utilizatoriSelectionatiFinali.contains(user)) {
+                                this.utilizatoriSelectionatiFinali.add(user);
+                        }
+                }
+        }
+
+        /**
+         * @param usua
+         */
+        private void extractUtilizatorExtern(final Utilizator usua) {
+                if (utilizatorExtern != null) {
+                        final String[] chei = utilizatorExtern.split(Constante.VIRGULA);
+                        for (final String cheie : chei) {
+                                final String nume = cheie.trim();
+                                extractUtilizator(usua, nume);
+                        }
+                }
+        }
+
+        /**
+         * @param usua
+         * @param nume
+         */
+        private void extractUtilizator(final Utilizator usua, final String nume) {
+                final Utilizator usu = utilizatorService.fiindOne(nume);
+                if (usu == null) {
+                        usua.setUsername(nume);
+                        usua.setDestinatarExtern(true);
+                        usua.setAdresa(null);
+                        usua.setCanalCorespondenta(CanalAlertaEnum.EMAIL);
+                        usua.setDataNasterii(new Date());
+                        usua.setStatutCivil(null);
+                        usua.setEducatie(EducatieEnum.NESPECIFICAT);
+                        usua.setEmail(nume);
+                        usua.setCodJudet(null);
+                        usua.setIdCard(null);
+                        usua.setPrenume("VIA EMAIL");
+                        usua.setLocalitate(null);
+                        usua.setNume(Constante.DESTINATAR);
+                        usua.setNumarCard(null);
+                        usua.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
+                        usua.setPersonalEmail(nume);
+                        usua.setPhone(null);
+
+                        usua.setRole(RolEnum.ROLE_SIMPATIZANT);
+                        usua.setSex(null);
+                        usua.setValidat(false);
+                        usua.setLocMunca(null);
+                        utilizatorService.save(usua);
+                        if (!this.utilizatoriSelectionatiFinali.contains(usua)) {
+                                this.utilizatoriSelectionatiFinali.add(usua);
+                        }
+                }
+
+                else {
+                        if (!this.utilizatoriSelectionatiFinali.contains(usu)) {
+                                this.utilizatoriSelectionatiFinali.add(usu);
                         }
                 }
         }
@@ -1030,9 +1045,13 @@ public class CorespondentaBean implements Serializable {
                 catch (
 
                 final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
                                         "A apărut o eroare la trimiterea corespondenței electronice"
                                                         .concat(Constante.DESCEROAREMESAJ));
+                        final String descriere = "A apărut o eroare la trimiterea corespondenței electronice ";
+                        this.regActividadService.salveazaRegistruEroare(descriere,
+                                        SectiuniEnum.CORESPONDENTA.getDescriere(), e);
                 }
                 return "/corespondente/corespondente?faces-redirect=true";
         }

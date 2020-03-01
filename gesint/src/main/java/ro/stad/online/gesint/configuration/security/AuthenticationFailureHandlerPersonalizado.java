@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.stereotype.Component;
 
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * Administrator de erori de autentificare la conectare.
@@ -29,9 +30,8 @@ public class AuthenticationFailureHandlerPersonalizado extends SimpleUrlAuthenti
         public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response,
                         final AuthenticationException exception) throws IOException, ServletException {
 
-                final StringBuilder textoReg = new StringBuilder(
-                                "S-a produs o încercare de conectare nereușită în sistem.");
-                textoReg.append("Eroare detectată: ");
+                final StringBuilder textoReg = new StringBuilder(NumarMagic.NUMBERHUNDRED);
+                textoReg.append("S-a produs o încercare de conectare nereușită în sistem. Eroare detectată: ");
                 if (exception.getMessage().contains("locked")) {
                         textoReg.append("Contul a fost blocat");
                 }

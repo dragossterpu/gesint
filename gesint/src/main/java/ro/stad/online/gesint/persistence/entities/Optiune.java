@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  *
@@ -46,28 +47,28 @@ public class Optiune implements Serializable {
          * id optiuni
          */
         @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_optiuni")
-        @SequenceGenerator(name = "seq_optiuni", sequenceName = "seq_optiuni", allocationSize = 1)
-        @Column(name = "ID", length = 5)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_OPTIUNI")
+        @SequenceGenerator(name = "SEQ_OPTIUNI", sequenceName = "SEQ_OPTIUNI", allocationSize = 1)
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**
          * Numele optiunii.
          */
-        @Column(name = "NUME", length = 150)
+        @Column(name = "NUME", length = NumarMagic.NUMBERONEHUNDREDFIFTY)
         private String nume;
 
         /**
          * Voturi optinute
          */
-        @Column(name = "voturi_obtinute")
+        @Column(name = "VOTURI_OBTINUTE")
         private Long voturiOptinute;
 
         /**
          * Judetul optiunii.
          */
         @ManyToOne
-        @JoinColumn(name = "cod_judet", foreignKey = @ForeignKey(name = "FK_PROVINCE_OPT"), nullable = false)
+        @JoinColumn(name = "COD_JUDET", foreignKey = @ForeignKey(name = "FK_PROVINCE_OPT"), nullable = false)
         private Judet judet;
 
         /**
@@ -75,7 +76,7 @@ public class Optiune implements Serializable {
          * Localitatate optiune.
          */
         @ManyToOne
-        @JoinColumn(name = "locality_id", foreignKey = @ForeignKey(name = "FK_LOCALITATE_OPT"), nullable = false)
+        @JoinColumn(name = "LOCALITY_ID", foreignKey = @ForeignKey(name = "FK_LOCALITATE_OPT"), nullable = false)
         private Localitate localitate;
 
 }

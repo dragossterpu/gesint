@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  *
@@ -43,39 +44,39 @@ public class Mapa implements Serializable {
          * ID mapa
          */
         @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_mapa")
-        @SequenceGenerator(name = "seq_mapa", sequenceName = "seq_mapa", allocationSize = 1)
-        @Column(name = "ID", length = 10)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MAPA")
+        @SequenceGenerator(name = "SEQ_MAPA", sequenceName = "SEQ_MAPA", allocationSize = 1)
+        @Column(name = "ID", length = NumarMagic.NUMBERTEN)
         private Long id;
 
         /**
          * Codul judetului.
          */
-        @Column(name = "COD_JUDET", length = 3)
+        @Column(name = "COD_JUDET", length = NumarMagic.NUMBERTHREE)
         private String codJudet;
 
         /**
          * Codul judetului.
          */
-        @Column(name = "INDICATIV", length = 20)
+        @Column(name = "INDICATIV", length = NumarMagic.NUMBERTWENTY)
 
         private String indicativ;
 
         /**
          * Numele fregistrului.
          */
-        @Column(name = "NUME", length = 100)
+        @Column(name = "NUME", length = NumarMagic.NUMBERHUNDRED)
         private String nume;
 
         /**
          * Coordonatele registrului.
          */
-        @Column(name = "COORDONATE", length = 1000)
+        @Column(name = "COORDONATE", length = NumarMagic.NUMBERTHOUSAND)
         private String coordonate;
 
         /**
          * eticheta registrului.
          */
-        @Column(name = "eticheta", length = 10)
+        @Column(name = "ETICHETA", length = NumarMagic.NUMBERTEN)
         private String eticheta;
 }

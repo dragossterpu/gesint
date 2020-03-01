@@ -31,7 +31,7 @@ public interface LocalitateService {
          * @param judet din care face parte localitatea
          * @return localitate Localitate localitate creata
          */
-        Localitate crearLocalidad(String nombre, Judet judet, TipLocalitateEnum tipLocalitate);
+        Localitate inregistrareLocalitate(String nombre, Judet judet, TipLocalitateEnum tipLocalitate);
 
         /**
          * Metodă care verifică dacă există o localitate cu același nume..

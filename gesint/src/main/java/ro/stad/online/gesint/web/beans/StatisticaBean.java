@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Component;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.model.dao.StatisticaJudetDAO;
@@ -25,9 +24,9 @@ import ro.stad.online.gesint.model.dto.statistica.StatisticaJudetDTO;
 import ro.stad.online.gesint.model.dto.statistica.StatisticaLocalitateDTO;
 import ro.stad.online.gesint.model.filters.FiltruStatisticaJudete;
 import ro.stad.online.gesint.model.filters.FiltruUtilizator;
+import ro.stad.online.gesint.persistence.entities.Functie;
 import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.Optiune;
-import ro.stad.online.gesint.persistence.entities.Functie;
 import ro.stad.online.gesint.persistence.entities.Statistica;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
 import ro.stad.online.gesint.services.EchipaService;
@@ -48,12 +47,8 @@ import ro.stad.online.gesint.services.UtilizatorService;
 @Getter
 @NoArgsConstructor
 @Scope(Constante.SESSION)
+@Slf4j
 public class StatisticaBean implements Serializable {
-
-        /**
-         * Constanta log
-         */
-        private static final Logger LOG = LoggerFactory.getLogger(StatisticaBean.class.getSimpleName());
 
         /**
          *
@@ -63,7 +58,7 @@ public class StatisticaBean implements Serializable {
         /**
          * Variable map
          */
-        public static Map<String, String> mapa;
+        private Map<String, String> mapa;
 
         /**
          * Lista registrelor din mapa.
@@ -96,7 +91,7 @@ public class StatisticaBean implements Serializable {
          * Service de utilizatori.
          */
         @Autowired
-        private UtilizatorService utilizatorService;
+        private transient UtilizatorService utilizatorService;
 
         /**
          * Filtru de cautare utilizator.
@@ -620,14 +615,14 @@ public class StatisticaBean implements Serializable {
          *
          */
         @Autowired
-        private ParamEchipaService pEchipaService;
+        private transient ParamEchipaService pEchipaService;
 
         /**
          * Variabila utilizata pentru a injecta serviciul provinciei.
          *
          */
         @Autowired
-        private JudetService judetService;
+        private transient JudetService judetService;
 
         /**
          * Variabila pentru a vizualiza stema judetului
@@ -648,7 +643,7 @@ public class StatisticaBean implements Serializable {
          * Service de functii.
          */
         @Autowired
-        private EchipaService echipaService;
+        private transient EchipaService echipaService;
 
         /**
          * Metoda care obtine cele mai bune si slabe localitati
@@ -656,30 +651,30 @@ public class StatisticaBean implements Serializable {
          * @return pagina statisticaJudete
          */
         public String buttonAction(final String cod) {
-                LOG.info("buttonAction.String cod: " + cod);
-                esteBucuresti = Constante.NU;
-                if (cod.equals(Constante.B)) {
+                log.info("buttonAction.String cod: ".concat(cod));
+                this.esteBucuresti = Constante.NU;
+                if (Constante.B.equals(cod)) {
                         esteBucuresti = "DA";
                 }
-                codulProvinciei = Constante.SPATIU;
-                presedinteFiliala = new Utilizator();
-                conducereFiliala = new ArrayList<>();
-                listaOptiuni = new ArrayList<>();
+                this.codulProvinciei = Constante.SPATIU;
+                this.presedinteFiliala = new Utilizator();
+                this.conducereFiliala = new ArrayList<>();
+                this.listaOptiuni = new ArrayList<>();
+                this.filtruUtilizator = new FiltruUtilizator();
+                this.judet = new Judet();
 
-                filtruUtilizator = new FiltruUtilizator();
-                judet = new Judet();
-                Functie functie = new Functie();
                 final Long idTeam = NumarMagic.NUMBERTWENTYONELONG;
-                functie = echipaService.findOne(idTeam);
+                Functie functie = new Functie();
+                functie = this.echipaService.findOne(idTeam);
                 obtinereLocalitateSupProcentaj(cod);
-                final Judet jude = judetService.findById(cod);
-                listaOptiuni = optiuneService.findByCodJudet(jude);
-                judet = jude;
-                presedinteFiliala = utilizatorService.findByTeamAndJudet(functie, jude);
+                final Judet jude = this.judetService.findById(cod);
+                this.listaOptiuni = this.optiuneService.findByCodJudet(jude);
+                this.judet = jude;
+                this.presedinteFiliala = this.utilizatorService.findByTeamAndJudet(functie, jude);
                 List<Functie> lista = new ArrayList<>();
                 lista = incarcamToateFunctileLocale();
-                conducereFiliala = utilizatorService.findByJudetSiEchipa(jude, lista);
-                codulProvinciei = cod;
+                this.conducereFiliala = this.utilizatorService.findByJudetSiEchipa(jude, lista);
+                this.codulProvinciei = cod;
                 return "/estadisticas/statisticaJudete.xhtml?faces-redirect=true";
         }
 
@@ -1249,44 +1244,45 @@ public class StatisticaBean implements Serializable {
          */
         @PostConstruct
         public void init() {
-                listaJudeteSuperiorProcentaj = new ArrayList<>();
-                listaLocalitatiSuperiorProcentaj = new ArrayList<>();
-                filtruStatisticaJudete = new FiltruStatisticaJudete();
-                numeOrganizatie = Constante.SPATIU;
+                this.listaJudeteSuperiorProcentaj = new ArrayList<>();
+                this.listaLocalitatiSuperiorProcentaj = new ArrayList<>();
+                this.filtruStatisticaJudete = new FiltruStatisticaJudete();
+                this.numeOrganizatie = Constante.SPATIU;
                 obtinereStatisticaSupInf();
-                rowCount = utilizatorService.findCount();
-                esteBucuresti = Constante.NU;
+                this.rowCount = this.utilizatorService.findCount();
+                this.esteBucuresti = Constante.NU;
         }
 
         /**
          * Metoda care obtine cele mai bune judete
          */
         private void obtinereJudetSuperiorProcentaj() {
-                mapa = new HashMap<>();
-                listaJudeteSuperiorProcentaj = new ArrayList<>();
-                filtruStatisticaJudete.setDescendent(Constante.DESC);
-                filtruStatisticaJudete.setGeneralJudetProcentaj("SI");
-                listaJudSuprProCautare = statisticaJudetService.filterStatisticaJudetProcentaj(filtruStatisticaJudete);
-                LOG.info("obtinereJudetSuperiorProcentaj.listaJudSuprProCautare.size: "
-                                + listaJudSuprProCautare.size());
-                for (final StatisticaJudetDTO judet : listaJudSuprProCautare) {
-                        judet.setValoare(obtenerValoare(judet.getProcentaj()));
-                        if (judet.getValoare().equals(Constante.BUN)) {
-                                judet.setEticheta(Constante.VERDE);
-                                mapa.put(judet.getCodJudet(), Constante.FILLGREEN);
+                this.mapa = new HashMap<>();
+                this.listaJudeteSuperiorProcentaj = new ArrayList<>();
+                this.filtruStatisticaJudete.setDescendent(Constante.DESC);
+                this.filtruStatisticaJudete.setGeneralJudetProcentaj("SI");
+                this.listaJudSuprProCautare = this.statisticaJudetService
+                                .filterStatisticaJudetProcentaj(this.filtruStatisticaJudete);
+                log.info("obtinereJudetSuperiorProcentaj.listaJudSuprProCautare.size: "
+                                .concat(String.valueOf(listaJudSuprProCautare.size())));
+                for (final StatisticaJudetDTO jude : listaJudSuprProCautare) {
+                        jude.setValoare(obtenerValoare(jude.getProcentaj()));
+                        if (jude.getValoare().equals(Constante.BUN)) {
+                                jude.setEticheta(Constante.VERDE);
+                                this.mapa.put(jude.getCodJudet(), Constante.FILLGREEN);
                         }
-                        else if (judet.getValoare().equals(Constante.ACCEPTABIL)) {
-                                judet.setEticheta(Constante.GALBEN);
-                                mapa.put(judet.getCodJudet(), Constante.FILLYELLOW);
+                        else if (jude.getValoare().equals(Constante.ACCEPTABIL)) {
+                                jude.setEticheta(Constante.GALBEN);
+                                this.mapa.put(jude.getCodJudet(), Constante.FILLYELLOW);
 
                         }
                         else {
-                                judet.setEticheta(Constante.ROSU);
-                                mapa.put(judet.getCodJudet(), Constante.FILLRED);
+                                jude.setEticheta(Constante.ROSU);
+                                mapa.put(jude.getCodJudet(), Constante.FILLRED);
                         }
-                        listaJudeteSuperiorProcentaj.add(judet);
+                        this.listaJudeteSuperiorProcentaj.add(jude);
                 }
-                incarcareEtichete(mapa);
+                incarcareEtichete(this.mapa);
         }
 
         /**
@@ -1294,16 +1290,16 @@ public class StatisticaBean implements Serializable {
          * @param cod String
          */
         private void obtinereLocalitateSupProcentaj(final String cod) {
-                numeOrganizatie = Constante.SPATIU;
-                listaLocalitatiSuperiorProcentaj = new ArrayList<>();
-                filtruStatisticaJudete.setCodJudet(cod);
-                listaLocSuprProCautare = statisticaLocalitateService
+                this.numeOrganizatie = Constante.SPATIU;
+                this.listaLocalitatiSuperiorProcentaj = new ArrayList<>();
+                this.filtruStatisticaJudete.setCodJudet(cod);
+                this.listaLocSuprProCautare = this.statisticaLocalitateService
                                 .filterStatisticaLocalitateProcentaj(filtruStatisticaJudete);
-                LOG.info("obtinereLocalitateSupProcentaj.listaLocSuprProCautare.size: "
-                                + listaLocSuprProCautare.size());
-                numeOrganizatie = listaLocSuprProCautare.get(0).getNumeProvincie();
-                totalMembrii = listaLocSuprProCautare.get(0).getTotalMembrii();
-                for (final StatisticaLocalitateDTO localitate : listaLocSuprProCautare) {
+                log.info("obtinereLocalitateSupProcentaj.listaLocSuprProCautare.size: "
+                                .concat(String.valueOf(listaLocSuprProCautare.size())));
+                this.numeOrganizatie = this.listaLocSuprProCautare.get(0).getNumeProvincie();
+                this.totalMembrii = this.listaLocSuprProCautare.get(0).getTotalMembrii();
+                for (final StatisticaLocalitateDTO localitate : this.listaLocSuprProCautare) {
 
                         if (localitate.getSector() != null) {
                                 localitate.setNumeLocalitate(localitate.getSector());
@@ -1322,10 +1318,10 @@ public class StatisticaBean implements Serializable {
                         incarcareEticheteSectoare(localitate);
 
                         if (localitate.getSector() != null || !localitate.getCodJudet().equals(Constante.B)) {
-                                listaLocalitatiSuperiorProcentaj.add(localitate);
+                                this.listaLocalitatiSuperiorProcentaj.add(localitate);
                         }
                 }
-                incarcareEticheteJudet(mapa, cod);
+                incarcareEticheteJudet(this.mapa, cod);
         }
 
         /**
@@ -1360,7 +1356,7 @@ public class StatisticaBean implements Serializable {
          */
         private List<Functie> incarcamToateFunctileLocale() {
                 List<Functie> listaFunc = new ArrayList<>();
-                listaFunc = pEchipaService.fiindAllByParam();
+                listaFunc = this.pEchipaService.fiindAllByParam();
                 for (final Functie functia : listaFunc) {
                         if (functia.getId() == NumarMagic.NUMBERTWENTYONELONG) {
                                 listaFunc.remove(functia);

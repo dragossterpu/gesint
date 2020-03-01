@@ -27,6 +27,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.Statistica;
 
 /**
@@ -51,23 +52,23 @@ public class Raport implements Serializable {
          * Id-ul raportului. Generadt prin secventa.
          */
         @Id
-        @SequenceGenerator(name = "seq_raport", sequenceName = "seq_raport", allocationSize = 1)
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_raport")
-        @Column(name = "id", nullable = false)
+        @SequenceGenerator(name = "SEQ_RAPORT", sequenceName = "SEQ_RAPORT", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RAPORT")
+        @Column(name = "ID", nullable = false)
         private Long id;
 
         /**
          * Statistica din care face parte raportul.
          */
         @OneToOne
-        @JoinColumn(name = "statistica_id", foreignKey = @ForeignKey(name = "fk_rap_statistica"))
+        @JoinColumn(name = "STATISTICA_ID", foreignKey = @ForeignKey(name = "FK_RAP_STATISTICA"))
         private Statistica statistica;
 
         /**
          * Data de creatie.
          */
         @CreatedDate
-        @Column(name = "date_create", nullable = false)
+        @Column(name = "DATE_CREATE", nullable = false)
         private Date dateCreate;
 
         /**
@@ -79,7 +80,7 @@ public class Raport implements Serializable {
         /**
          * Utilizator care elimina un registru
          */
-        @Column(name = "user_deleted", length = 100)
+        @Column(name = "USER_DELETED", length = NumarMagic.NUMBERHUNDRED)
         private String userDeleted;
 
 }

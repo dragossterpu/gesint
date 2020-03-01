@@ -43,43 +43,43 @@ import lombok.ToString;
 @Table(name = "DATE_RAPORT")
 public class DateRaport implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-	/**
-	 * Raport caruia ii corespund datele.
-	 */
-	@ManyToOne
-	@Id
-	@JoinColumn(name = "raport_id", foreignKey = @ForeignKey(name = "fk_raport"), insertable = false, updatable = false, nullable = false)
-	private Raport raport;
+        /**
+         * Raport caruia ii corespund datele.
+         */
+        @ManyToOne
+        @Id
+        @JoinColumn(name = "RAPORT_ID", foreignKey = @ForeignKey(name = "FK_RAPORT"), insertable = false, updatable = false, nullable = false)
+        private Raport raport;
 
-	/**
-	 * Subzona date.
-	 */
-	@ManyToOne
-	@Id
-	@JoinColumn(name = "subzona_id", foreignKey = @ForeignKey(name = "fk_subzona_rap"), insertable = false, updatable = false, nullable = false)
-	private SubZonaRaport subzona;
+        /**
+         * Subzona date.
+         */
+        @ManyToOne
+        @Id
+        @JoinColumn(name = "SUBZONA_ID", foreignKey = @ForeignKey(name = "FK_SUBZONA_RAP"), insertable = false, updatable = false, nullable = false)
+        private SubZonaRaport subzona;
 
-	/**
-	 * Textul datelor din subzona raportului in cod HTML cu stiluri de PrimeFaces.
-	 */
-	@Lob
-	@Type(type = "org.hibernate.type.TextType")
-	@Column(name = "TEXT")
-	private String texto;
+        /**
+         * Textul datelor din subzona raportului in cod HTML cu stiluri de PrimeFaces.
+         */
+        @Lob
+        @Type(type = "org.hibernate.type.TextType")
+        @Column(name = "TEXT")
+        private String texto;
 
-	/**
-	 * Imagini.
-	 */
-	private byte[] photo;
+        /**
+         * Imagini.
+         */
+        private byte[] photo;
 
-	/**
-	 * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine..
-	 * @return StreamedContent
-	 */
-	public StreamedContent getImageRaport() {
-		return new DefaultStreamedContent(new ByteArrayInputStream(this.photo));
-	}
+        /**
+         * Metoda care obține imaginea pentru previzualizare în cazul în care documentul este un tip de imagine..
+         * @return StreamedContent
+         */
+        public StreamedContent getImageRaport() {
+                return new DefaultStreamedContent(new ByteArrayInputStream(this.photo));
+        }
 
 }

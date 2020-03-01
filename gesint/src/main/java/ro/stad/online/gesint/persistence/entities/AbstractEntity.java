@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Getter;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  * Clasa abstracta para a evita duplicitatea in cod si in resltado.
@@ -37,40 +38,40 @@ public abstract class AbstractEntity implements Serializable {
          * userCreate
          */
         @CreatedBy
-        @Column(name = "user_create", length = 250)
+        @Column(name = "USER_CREATE", length = NumarMagic.NUMBERTWOHUNDREDANDFIFTY)
         private String userCreate;
 
         /**
          * Data de creatie.
          */
         @CreatedDate
-        @Column(name = "date_create", nullable = false)
+        @Column(name = "DATE_CREATE", nullable = false)
         private Date dateCreate;
 
         /**
          * Utilizator care elimina un registru
          */
-        @Column(name = "user_deleted", length = 250)
+        @Column(name = "USER_DELETED", length = NumarMagic.NUMBERTWOHUNDREDANDFIFTY)
         private String userDeleted;
 
         /**
          * Data eliminarii.
          */
-        @Column(name = "date_deleted")
+        @Column(name = "DATE_DELETED")
         private Date dateDeleted;
 
         /**
          * Utilizator care modifica un registru
          */
         @LastModifiedBy
-        @Column(name = "user_updated", length = 250)
+        @Column(name = "USER_UPDATED", length = NumarMagic.NUMBERTWOHUNDREDANDFIFTY)
         private String userUpdated;
 
         /**
          * Data ultimei modificari
          */
         @LastModifiedDate
-        @Column(name = "date_updated")
+        @Column(name = "DATE_UPDATED")
         private Date dateUpdated;
 
 }

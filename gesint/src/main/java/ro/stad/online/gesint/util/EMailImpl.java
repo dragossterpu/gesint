@@ -27,11 +27,14 @@ import org.springframework.stereotype.Component;
 import com.mitchellbosecke.pebble.error.PebbleException;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.exceptions.EMailException;
 import ro.stad.online.gesint.persistence.entities.Corespondenta;
 import ro.stad.online.gesint.persistence.entities.Documentul;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.services.RegistruActivitateService;
 
@@ -43,18 +46,19 @@ import ro.stad.online.gesint.services.RegistruActivitateService;
  */
 @Component("correoElectronico")
 @Getter
+@Slf4j
 public class EMailImpl implements EMail {
 
         /**
          * Serviciul de înregistrare a activității.
          */
         @Autowired
-        private transient RegistruActivitateService regActividadService;
+        private RegistruActivitateService regActividadService;
 
         /**
          * Session.
          */
-        private transient Session session;
+        private Session session;
 
         /**
          * Metodă folosită pentru trimiterea de e-mailuri către unul sau mai mulți destinatari în format HTML cu sau
@@ -77,7 +81,7 @@ public class EMailImpl implements EMail {
                         // trimitere gmail
                         props.setProperty("mail.smtp.host", "mail.gmail.com");
                         props.put("mail.smtp.starttls.enable", "true");
-                        props.put("mail.smtp.port", 25);
+                        props.put("mail.smtp.port", NumarMagic.NUMBERTWENTYFIVE);
                         props.put("mail.smtp.mail.sender", "dragossterpu@gmail.com");
                         props.put("mail.smtp.user", "dragossterpu@gmail.com");
                         props.put("mail.smtp.auth", "true");
@@ -135,11 +139,15 @@ public class EMailImpl implements EMail {
                         // t.connect("dragos.sterpu@per.ro", "Per20182018");
                         // t.sendMessage(message, message.getAllRecipients());
                         // t.close();
-                        if (!fisiereIncarcate.isEmpty()) {
+                        if (!fisiereIncarcate.isEmpty() && tempFile != null) {
                                 tempFile.deleteOnExit();
                         }
                 }
                 catch (MailException | MessagingException e) {
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
+                        log.error(RegistruEnum.EROARE.getDescriere()
+                                        .concat(" a aparut o eroare la trimiterea e-mailului"));
                         throw new EMailException(e);
                 }
 
@@ -168,7 +176,7 @@ public class EMailImpl implements EMail {
                                 }
                                 catch (final IOException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                        Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                         final String descriere = "A apărut o eroare la trimiterea corespondenței";
                                         this.regActividadService.salveazaRegistruEroare(descriere,
                                                         SectiuniEnum.CORESPONDENTA.getDescriere(), e);

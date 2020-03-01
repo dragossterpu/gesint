@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.exceptions.GesintException;
@@ -38,8 +39,8 @@ import ro.stad.online.gesint.persistence.entities.Intrebare;
 import ro.stad.online.gesint.persistence.entities.RaspunsSuport;
 import ro.stad.online.gesint.persistence.entities.Sondaj;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
-import ro.stad.online.gesint.persistence.entities.enums.TipRegistruEnum;
 import ro.stad.online.gesint.services.IntrebareService;
 import ro.stad.online.gesint.services.RaspunsSuportService;
 import ro.stad.online.gesint.services.RegistruActivitateService;
@@ -58,6 +59,7 @@ import ro.stad.online.gesint.util.Utilitati;
 @Getter
 @Controller("sondajBean")
 @Scope(Constante.SESSION)
+@Slf4j
 public class SondajBean implements Serializable {
 
         /**
@@ -68,7 +70,7 @@ public class SondajBean implements Serializable {
         /**
          * Numărul de coloane din tabelul de sondaje.
          */
-        private static final int NUMBERCOLUMNTABLA = NumarMagic.NUMBERSIX;
+        private static final int NUMBERCOLUMNTABLA = NumarMagic.NUMBERSEVEN;
 
         /**
          * Sondaj nou.
@@ -211,26 +213,29 @@ public class SondajBean implements Serializable {
          * Componente de utilidades.
          */
         @Autowired
-        private Utilitati utilitati;
+        private transient Utilitati utilitati;
 
         /**
          * Metodă care returnează un raspuns cautat cu id-ul.
          * @param id Long
-         * @return raspuns
+         * @return raspuns RaspunsSuport
          */
         public RaspunsSuport actualizeazaRaspuns(final Long id) {
                 this.idIntrebare = id;
                 if (this.idIntrebare != null) {
                         try {
-                                this.intrebare = intrebareService.findById(id);
-                                this.raspuns = raspunsSuportService.findById(intrebare);
+                                this.intrebare = this.intrebareService.findById(id);
+                                log.info("S-a obținut întrebarea");
+                                this.raspuns = this.raspunsSuportService.findById(intrebare);
+                                log.info("S-a obținut răspunsul cu id-ul întrebării ");
                         }
                         catch (final DataAccessException e) {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                Constante.EROAREMESAJ, Constante.DESCEROAREMESAJ);
+                                                RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                 final String descriere = "A apărut o eroare la căutarea raspunsurilor";
                                 this.regActividadService.salveazaRegistruEroare(descriere,
                                                 SectiuniEnum.SONDAJ.getDescriere(), e);
+                                log.error(descriere);
 
                         }
                 }
@@ -252,20 +257,21 @@ public class SondajBean implements Serializable {
          * @return modelActiv
          */
         public void cautareSondajeActive() {
-                filtruSondaj.setActiv(true);
+                this.filtruSondaj.setActiv(true);
                 this.modelActiv.setCautare(this.filtruSondaj);
                 this.modelActiv.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATECREATE, SortOrder.DESCENDING, null);
+
         }
 
         /**
          * Metodă care generează un gráfic.
          */
         public void createGrafica() {
-                graficaVoturi = new PieChartModel();
-                graficaVoturi.setShowDataLabels(true);
-                graficaVoturi.setShowDatatip(true);
-                graficaVoturi.setLegendPosition("w");
-                graficaVoturi.setSeriesColors(
+                this.graficaVoturi = new PieChartModel();
+                this.graficaVoturi.setShowDataLabels(true);
+                this.graficaVoturi.setShowDatatip(true);
+                this.graficaVoturi.setLegendPosition("w");
+                this.graficaVoturi.setSeriesColors(
                                 "008000,00FFFF,008080,0000FF,800080,f6546a,084D6E,FFFFFF,C0C0C0,808080,d0b38e,FF0000,ec9931,FFFF00,00FF00");
 
         }
@@ -275,15 +281,15 @@ public class SondajBean implements Serializable {
          * @param sond Sondaj.
          */
         private void createPieModel(final Sondaj sond) {
-                graficaVoturi = new PieChartModel();
-                graficaVoturi.set("DA : " + sond.getTotalVoturiDa(), sond.getTotalVoturiDa());
-                graficaVoturi.set("NU: " + sond.getTotalVoturiNu(), sond.getTotalVoturiNu());
-                graficaVoturi.set("ABȚINERI: " + sond.getTotalVoturiAbt(), sond.getTotalVoturiAbt());
-                graficaVoturi.setLegendPosition(Constante.E);
-                graficaVoturi.setFill(false);
-                graficaVoturi.setShowDataLabels(true);
-                graficaVoturi.setDiameter(200);
-                graficaVoturi.setShadow(false);
+                this.graficaVoturi = new PieChartModel();
+                this.graficaVoturi.set("DA : " + sond.getTotalVoturiDa(), sond.getTotalVoturiDa());
+                this.graficaVoturi.set("NU: " + sond.getTotalVoturiNu(), sond.getTotalVoturiNu());
+                this.graficaVoturi.set("ABȚINERI: " + sond.getTotalVoturiAbt(), sond.getTotalVoturiAbt());
+                this.graficaVoturi.setLegendPosition(Constante.E);
+                this.graficaVoturi.setFill(false);
+                this.graficaVoturi.setShowDataLabels(true);
+                this.graficaVoturi.setDiameter(NumarMagic.NUMBERTWOHUNDRED);
+                this.graficaVoturi.setShadow(false);
         }
 
         /**
@@ -310,18 +316,18 @@ public class SondajBean implements Serializable {
         public String detaliiSondaj(final Sondaj sond) {
                 this.document = new Documentul();
                 this.sondaj = sond;
-                List<Documentul> listaDoc = documentService.cautaDocumenteSondaj(sond);
+                List<Documentul> listaDoc = this.documentService.cautaDocumenteSondaj(sond);
                 if (!listaDoc.isEmpty()) {
                         this.document = listaDoc.get(0);
                 }
                 createPieModel(sondaj);
                 final String pattern = "dd/MM/yyyy HH:mm:ss";
                 final DateFormat df = new SimpleDateFormat(pattern);
-                incepeSondajul = df.format(sondaj.getDataIncepere());
+                this.incepeSondajul = df.format(this.sondaj.getDataIncepere());
                 final String pattern2 = Constante.FORMATDATE;
                 final DateFormat df2 = new SimpleDateFormat(pattern2);
-                terminaSondajul = df2.format(sondaj.getDataFinalizare());
-                terminaSondajul = terminaSondajul.concat(" 23:59:59");
+                this.terminaSondajul = df2.format(this.sondaj.getDataFinalizare());
+                this.terminaSondajul = terminaSondajul.concat(" 23:59:59");
                 return "/sondaj/detaliiSondaj?faces-redirect=true";
         }
 
@@ -332,12 +338,13 @@ public class SondajBean implements Serializable {
         public void descarcareFisier(final Documentul documentul) {
                 setFile(null);
                 try {
-                        setFile(documentService.descarcareDocument(documentul));
+                        setFile(this.documentService.descarcareDocument(documentul));
+                        log.info("S-a descărcat corect fișierul  ");
                 }
                 catch (final GesintException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        "A apărut o eroare la descărcarea fișierului");
                         final String descriere = "A apărut o eroare la descărcarea fișierului";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), descriere);
                         this.regActividadService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
                 }
@@ -351,7 +358,7 @@ public class SondajBean implements Serializable {
         public void filtreazaPDF(final Sondaj sond, final String imagine) {
                 File fileImg = null;
                 this.sondaj = sond;
-                if (imagine.split(Constante.VIRGULA).length > 1) {
+                if (imagine.split(Constante.VIRGULA).length > NumarMagic.NUMBERONE) {
                         final String encoded = imagine.split(Constante.VIRGULA)[1];
                         final byte[] decoded = org.apache.commons.codec.binary.Base64.decodeBase64(encoded);
 
@@ -361,12 +368,11 @@ public class SondajBean implements Serializable {
                                 ImageIO.write(renderedImage, Constante.PNG, fileImg);
                         }
                         catch (final IOException e) {
-                                registruActivitateService.salveazaRegistruInregistrareModificare(null,
-                                                TipRegistruEnum.EROARE.name(), SectiuniEnum.SONDAJ.getDescriere(),
-                                                e.toString());
+
                                 final String descriere = "A apărut o eroare în exportul unui sondaj în format PDF";
                                 this.regActividadService.salveazaRegistruEroare(descriere,
                                                 SectiuniEnum.SONDAJ.getDescriere(), e);
+                                log.error(descriere);
                         }
                 }
                 obtieneInformePDF(fileImg);
@@ -378,19 +384,20 @@ public class SondajBean implements Serializable {
          * @throws IOException posibila exceptie
          * @return pagina modificareSondaj
          */
-        public String getFormModificaSondaj(final Sondaj sondajModifca) throws IOException {
+        public String getFormModificaSondaj(final Sondaj sondajModifca) {
                 String redireccion = Constante.SPATIU;
                 Sondaj scomun = new Sondaj();
-                scomun = sondajService.fiindOne(sondajModifca);
+                scomun = this.sondajService.fiindOne(sondajModifca);
                 if (scomun != null) {
                         this.sondaj = scomun;
                         redireccion = "/sondaj/modificareSondaj?faces-redirect=true";
                 }
                 else {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.MODIFICAREMESAJ,
-                                        "A apărut o eroare la accesarea sondajului. Sondajul nu există.");
+                        final String descriere = "A apărut o eroare la accesarea sondajului. Sondajul nu există";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.MODIFICARE.getDescriere(), descriere);
+                        log.error(descriere);
                 }
-
                 return redireccion;
         }
 
@@ -400,7 +407,7 @@ public class SondajBean implements Serializable {
          */
         @PostConstruct
         public void init() {
-                this.intrebari = intrebareService.findAll();
+                this.intrebari = this.intrebareService.findAll();
                 this.incepeSondajul = Constante.SPATIU;
                 this.terminaSondajul = Constante.SPATIU;
                 this.sondaj = new Sondaj();
@@ -413,8 +420,8 @@ public class SondajBean implements Serializable {
                 curatareCautareSondajActiv();
                 this.model = new LazyDataSondaje(this.sondajService);
                 this.modelActiv = new LazyDataSondaje(this.sondajService);
-                raspuns = new RaspunsSuport();
-                graficaVoturi = new PieChartModel();
+                this.raspuns = new RaspunsSuport();
+                this.graficaVoturi = new PieChartModel();
                 Utilitati.cautareSesiune("sondajBean");
                 cautareSondajeActive();
         }
@@ -425,15 +432,13 @@ public class SondajBean implements Serializable {
          */
         private void obtieneInformePDF(final File fileImg) {
                 try {
-                        setFile(statisticaService.exportar(sondaj, fileImg));
+                        setFile(this.statisticaService.exportar(this.sondaj, fileImg));
                 }
                 catch (final GesintException e) {
-                        registruActivitateService.salveazaRegistruInregistrareModificare(null,
-                                        TipRegistruEnum.EROARE.name(), SectiuniEnum.SONDAJ.getDescriere(),
-                                        e.toString());
                         final String descriere = "A apărut o eroare în obținerea unui sondaj";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.SONDAJ.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
         }
 
@@ -453,24 +458,33 @@ public class SondajBean implements Serializable {
         public String salvatiSondajul(final Sondaj sond) {
                 try {
                         this.sondaj = sond;
-                        sondaj.setActiv(true);
-                        sondaj.setProcentajAbt((float) 0.00);
-                        sondaj.setProcentajDa((float) 0.00);
-                        sondaj.setProcentajNu((float) 0.00);
-                        sondaj.setTotalVoturi(0);
-                        sondaj.setTotalVoturiAbt(0);
-                        sondaj.setTotalVoturiDa(0);
-                        sondaj.setTotalVoturiNu(0);
-                        sondajService.save(sondaj);
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.INREGISTRARE,
-                                        "Sondajul a fost salvat cu succes.");
+                        this.sondaj.setActiv(true);
+                        this.sondaj.setProcentajAbt((float) 0.00);
+                        this.sondaj.setProcentajDa((float) 0.00);
+                        this.sondaj.setProcentajNu((float) 0.00);
+                        this.sondaj.setTotalVoturi(0);
+                        this.sondaj.setTotalVoturiAbt(0);
+                        this.sondaj.setTotalVoturiDa(0);
+                        this.sondaj.setTotalVoturiNu(0);
+                        this.sondajService.save(this.sondaj);
+                        final String descriere = "Sondajul a fost salvat cu succes: ";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
+                                        RegistruEnum.INREGISTRARE.getDescriere(), descriere);
+
+                        this.regActividadService.inregistrareRegistruActivitate(descriere,
+                                        RegistruEnum.INREGISTRARE.getName(), SectiuniEnum.SONDAJ.getName(),
+                                        utilitati.getUtilizatorLogat());
+                        log.info(descriere);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        "A apărut o eroare la salvarea Sondajului ".concat(Constante.DESCEROAREMESAJ));
-                        final String descriere = "A apărut o eroare în înregistrarea sondajului";
+                        final String descriere = "A apărut o eroare în înregistrarea sondajului ";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
+
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.SONDAJ.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
                 return "/sondaj/rezultate?faces-redirect=true";
         }
@@ -482,24 +496,26 @@ public class SondajBean implements Serializable {
          */
         public String voteaza(final String vot) {
                 try {
-                        this.sondaj = sondajActiv;
+                        this.sondaj = this.sondajActiv;
                         selectVotSondaj(vot);
-                        List<Utilizator> useri = sondaj.getUtilizatori();
-                        Utilizator user = utilitati.getUtilizatorLogat();
+                        final List<Utilizator> useri = this.sondaj.getUtilizatori();
+                        final Utilizator user = this.utilitati.getUtilizatorLogat();
                         useri.add(user);
-                        sondaj.setUtilizatori(useri);
-                        sondajService.save(sondaj);
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.INREGISTRARE,
-                                        "Votul dumneavoastră a fost înregistrat cu succes. Vă mulțumim!");
+                        this.sondaj.setUtilizatori(useri);
+                        this.sondajService.save(this.sondaj);
+                        final String descriere = "Votul dumneavoastră a fost înregistrat cu succes. Vă mulțumim! ";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
+                                        RegistruEnum.INREGISTRARE.getDescriere(), descriere);
+                        log.info(descriere);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
                                         "A apărut o eroare la salvarea Sondajului ".concat(Constante.DESCEROAREMESAJ));
-                        this.registruActivitateService.salveazaRegistruEroare(SectiuniEnum.CORESPONDENTA.name(),
-                                        Constante.ALERTA, e);
                         final String descriere = "A apărut o eroare în înregistrarea sondajului";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.SONDAJ.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
                 return "/sondaj/rezultate?faces-redirect=true";
         }
@@ -510,15 +526,15 @@ public class SondajBean implements Serializable {
          */
         private void selectVotSondaj(final String vot) {
                 if ("da".equals(vot)) {
-                        sondaj.setTotalVoturiDa(sondaj.getTotalVoturiDa() + 1);
+                        this.sondaj.setTotalVoturiDa(this.sondaj.getTotalVoturiDa() + NumarMagic.NUMBERONE);
                 }
                 else if ("nu".equals(vot)) {
-                        sondaj.setTotalVoturiNu(sondaj.getTotalVoturiNu() + 1);
+                        this.sondaj.setTotalVoturiNu(this.sondaj.getTotalVoturiNu() + NumarMagic.NUMBERONE);
                 }
                 else {
-                        sondaj.setTotalVoturiAbt(sondaj.getTotalVoturiAbt() + 1);
+                        this.sondaj.setTotalVoturiAbt(this.sondaj.getTotalVoturiAbt() + NumarMagic.NUMBERONE);
                 }
-                sondaj.setTotalVoturi(sondaj.getTotalVoturi() + 1);
+                this.sondaj.setTotalVoturi(this.sondaj.getTotalVoturi() + NumarMagic.NUMBERONE);
         }
 
         /**
@@ -526,7 +542,7 @@ public class SondajBean implements Serializable {
          * @return pagina creazaSondaj
          */
         public String sondajNou() {
-                sondaj = new Sondaj();
+                this.sondaj = new Sondaj();
                 return "/sondaj/creazaSondaj?faces-redirect=true";
         }
 
@@ -535,7 +551,7 @@ public class SondajBean implements Serializable {
          * @return graficaVoturi
          */
         public PieChartModel getGraficaVoturi() {
-                return graficaVoturi;
+                return this.graficaVoturi;
         }
 
         /**
@@ -545,7 +561,7 @@ public class SondajBean implements Serializable {
         public void getFormVoteazaSondaj(Sondaj sond) {
                 final RequestContext context = RequestContext.getCurrentInstance();
                 this.sondajActiv = sond;
-                votSondaj = "abtinere";
+                this.votSondaj = "abtinere";
                 context.execute("PF('dialogVoteazaSondaj').show();");
 
         }
@@ -558,11 +574,8 @@ public class SondajBean implements Serializable {
         public Boolean valideazaVot(final Sondaj sond) {
                 Boolean potiVota = true;
                 final List<Utilizator> useri = sond.getUtilizatori();
-                final Utilizator user = utilitati.getUtilizatorLogat();
-                if (useri.isEmpty()) {
-                        potiVota = true;
-                }
-                else {
+                final Utilizator user = this.utilitati.getUtilizatorLogat();
+                if (!useri.isEmpty()) {
                         for (final Utilizator utilizat : useri) {
                                 // Daca utilizatorul logat a votat si se regaseste pe lista celor care au votat se
                                 // ascunde iconul care permite votul

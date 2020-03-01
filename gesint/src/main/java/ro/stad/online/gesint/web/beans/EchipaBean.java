@@ -2,13 +2,8 @@ package ro.stad.online.gesint.web.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.text.Normalizer;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -33,21 +28,18 @@ import org.springframework.util.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.lazydata.LazyDataUtilizatori;
 import ro.stad.online.gesint.model.filters.FiltruUtilizator;
 import ro.stad.online.gesint.persistence.entities.Echipa;
+import ro.stad.online.gesint.persistence.entities.Functie;
 import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.Localitate;
-import ro.stad.online.gesint.persistence.entities.Functie;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
-import ro.stad.online.gesint.persistence.entities.enums.CanalAlertaEnum;
-import ro.stad.online.gesint.persistence.entities.enums.EducatieEnum;
-import ro.stad.online.gesint.persistence.entities.enums.RolEnum;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
-import ro.stad.online.gesint.persistence.entities.enums.SexEnum;
-import ro.stad.online.gesint.persistence.entities.enums.StatutCivilEnum;
 import ro.stad.online.gesint.persistence.entities.enums.TipLocalitateEnum;
 import ro.stad.online.gesint.services.EchipaService;
 import ro.stad.online.gesint.services.JudetService;
@@ -56,7 +48,6 @@ import ro.stad.online.gesint.services.ParamEchipaService;
 import ro.stad.online.gesint.services.RegistruActivitateService;
 import ro.stad.online.gesint.services.UtilizatorService;
 import ro.stad.online.gesint.util.FacesUtilities;
-import ro.stad.online.gesint.util.Generator;
 import ro.stad.online.gesint.util.Utilitati;
 
 /**
@@ -70,6 +61,7 @@ import ro.stad.online.gesint.util.Utilitati;
 @Getter
 @NoArgsConstructor
 @Scope(Constante.SESSION)
+@Slf4j
 public class EchipaBean implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -149,14 +141,14 @@ public class EchipaBean implements Serializable {
          *
          */
         @Autowired
-        private JudetService judetService;
+        private transient JudetService judetService;
 
         /**
          * Variabila utilizata pentru a injecta serviciul provinciei.
          *
          */
         @Autowired
-        private LocalitateService localitateService;
+        private transient LocalitateService localitateService;
 
         /**
          * Serviciul de înregistrare a activității.
@@ -227,14 +219,32 @@ public class EchipaBean implements Serializable {
         private transient String mesajEroare;
 
         /**
+         * Componente de utilidades.
+         */
+        @Autowired
+        private transient Utilitati utilitati;
+
+        /**
          * Metodă care deschide dialogul de căutare al utilizatorilor.
          */
         public void deschideDialogCautareUtilizatori() {
-                functia = new Functie();
-                listaJudete = judetService.fiindAll();
-                listaEchipa = echipaService.fiindByTeam();
-                listaFunctii = pEchipaService.fiindAll();
-                modelUser = new LazyDataUtilizatori(utilizatorService);
+                this.functia = new Functie();
+                try {
+                        this.listaJudete = this.judetService.fiindAll();
+                        this.listaEchipa = this.echipaService.fiindByTeam();
+                        this.listaFunctii = this.pEchipaService.fiindAll();
+                }
+                catch (final DataAccessException e) {
+                        final String descriere = "A apărut o eroare la dechiderea cautarii utilizator";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
+
+                        this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
+                                        e);
+                        log.error(descriere);
+                }
+                this.modelUser = new LazyDataUtilizatori(utilizatorService);
                 final RequestContext context = RequestContext.getCurrentInstance();
                 context.execute(Constante.DIALOGCAUTARE);
         }
@@ -246,7 +256,19 @@ public class EchipaBean implements Serializable {
                 this.echipa = new Echipa();
                 this.echipa = echip;
                 this.listaFunctii = new ArrayList<>();
-                listaFunctii = pEchipaService.fiindAll();
+                try {
+                        this.listaFunctii = this.pEchipaService.fiindAll();
+                }
+                catch (final DataAccessException e) {
+                        final String descriere = "A apărut o eroare la deschiderea dialogului modificării utilizatorului";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
+
+                        this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
+                                        e);
+                        log.error(descriere);
+                }
                 final RequestContext context = RequestContext.getCurrentInstance();
                 context.execute("PF('dlgModifica').show();");
         }
@@ -255,113 +277,21 @@ public class EchipaBean implements Serializable {
          * Deschide dialogul pentru pozitionarea membrilor.
          */
         public void deschideDialogOrdenaMembru() {
-                listaEchipa = echipaService.fiindByTeam();
+                try {
+                        this.listaEchipa = echipaService.fiindByTeam();
+                }
+                catch (final DataAccessException e) {
+                        final String descriere = "A apărut o eroare la deschiderea dialogului ordonează utilizatorul";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
+
+                        this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
+                                        e);
+                        log.error(descriere);
+                }
                 final RequestContext context = RequestContext.getCurrentInstance();
                 context.execute("PF('dlgOrdena').show();");
-        }
-
-        /**
-         * Metoda care da de alta utilizatori
-         */
-        public void alta() {
-                String sex = null;
-                Date data = null;
-                int numero = 0;
-                for (int i = 0; i < 1000; i++) {
-                        numero = i;
-                        final Utilizator user = new Utilizator();
-                        user.setDateCreate(Generator.obtenerFechaRegistru());
-                        user.setNume(Generator.apellidoFinal3().toUpperCase());
-
-                        user.setPassword("$2a$10$tDGyXBpEASeXlAUCdKsZ9u3MBBvT48xjA.v0lrDuRWlSZ6yfNsLve");
-                        data = Generator.obtenerFechaNastere();
-                        user.setDataNasterii(data);
-                        user.setSex(SexEnum.randomLetter());
-                        final Judet pro = new Judet();
-                        pro.setIndicator(Generator.provinciasFinal());
-                        user.setCodJudet(pro);
-                        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-                        final String anString = sdf.format(data);
-                        if (user.getSex().getName().equals("MAN")) {
-                                user.setPrenume(Generator.nombreFinalHombre());
-                                if (Integer.valueOf(anString) >= 2000) {
-                                        sex = "5";
-                                }
-                                else {
-                                        sex = "1";
-                                }
-                        }
-                        else {
-                                user.setPrenume(Generator.nombreFinal());
-                                if (Integer.valueOf(anString) >= 2000) {
-                                        sex = "6";
-                                }
-                                else {
-                                        sex = "2";
-                                }
-                        }
-                        user.setEmail(mail(user.getNume(), user.getPrenume(), numero));
-                        user.setIdCard(Generator.generaCnp(sex, data, pro));
-                        user.setAdresa(Generator.numeStraziFinal().concat("  Nr: ").concat(Generator.getNumeroCalle()));
-
-                        user.setStatutCivil(StatutCivilEnum.randomLetter());
-                        if (user.getStatutCivil().equals(StatutCivilEnum.WIDOWED)) {
-                                user.setStatutCivil(StatutCivilEnum.MARRIED);
-                        }
-                        user.setEducatie(EducatieEnum.randomLetter());
-
-                        List<Localitate> loc = new ArrayList<>();
-                        Long indice = Long.valueOf(Generator.getNumero());
-                        if (pro.getIndicator().equals(Constante.IF)) {
-                                indice = NumarMagic.NUMBERTWOLONG;
-                        }
-                        loc = localitateService.findByJudetAndNivel(pro, indice);
-                        Localitate locality = new Localitate();
-                        if (pro.getIndicator().equals(Constante.B)) {
-                                Long id = null;
-                                if (user.getIdCard().substring(NumarMagic.NUMBERSIX, NumarMagic.NUMBEREIGHT)
-                                                .equals("41")) {
-                                        id = NumarMagic.NUMBERSEVENTYTWOLONG;
-                                }
-                                else if (user.getIdCard().substring(NumarMagic.NUMBERSIX, NumarMagic.NUMBEREIGHT)
-                                                .equals("42")) {
-                                        id = NumarMagic.NUMBERSEVENTYTHREELONG;
-                                }
-                                else if (user.getIdCard().substring(NumarMagic.NUMBERSIX, NumarMagic.NUMBEREIGHT)
-                                                .equals("43")) {
-                                        id = NumarMagic.NUMBERSEVENTYFOURLONG;
-                                }
-                                else if (user.getIdCard().substring(NumarMagic.NUMBERSIX, NumarMagic.NUMBEREIGHT)
-                                                .equals("44")) {
-                                        id = NumarMagic.NUMBERSEVENTYFIVELONG;
-                                }
-                                else if (user.getIdCard().substring(NumarMagic.NUMBERSIX, NumarMagic.NUMBEREIGHT)
-                                                .equals("45")) {
-                                        id = NumarMagic.NUMBERSEVENTYSIXLONG;
-                                }
-                                else {
-                                        id = NumarMagic.NUMBERSEVENTYSEVENLONG;
-                                }
-                                locality = localitateService.findById(Long.valueOf(id));
-                        }
-                        else {
-
-                                final Random rand = new Random();
-                                locality = loc.get(rand.nextInt(loc.size()));
-                        }
-                        user.setLocalitate(locality);
-                        user.setNumarCard(Generator.getDni());
-                        user.setPersonalEmail(user.getEmail());
-                        user.setPhone(Generator.getTelefon());
-                        user.setCanalCorespondenta(CanalAlertaEnum.EMAIL);
-                        user.setValidat(true);
-                        user.setLocMunca(Generator.meserii());
-                        user.setUsername(user.getPersonalEmail());
-                        user.setRole(RolEnum.ROLE_MEMBRU);
-                        user.setUserCreate("system");
-                        utilizatorService.save(user);
-                }
-
         }
 
         /**
@@ -381,8 +311,8 @@ public class EchipaBean implements Serializable {
          * Căută utilizatori pe baza unui filtru.
          */
         public void cautareUtilizatori() {
-                modelUser.setFiltruUtilizator(filtruUtilizator);
-                modelUser.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATECREATE, SortOrder.DESCENDING, null);
+                this.modelUser.setFiltruUtilizator(this.filtruUtilizator);
+                this.modelUser.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATECREATE, SortOrder.DESCENDING, null);
         }
 
         /**
@@ -390,8 +320,9 @@ public class EchipaBean implements Serializable {
          * @return
          */
         public List<Utilizator> cautareUtilizatoriL() {
-                modelUser.setFiltruUtilizator(filtruUtilizator);
-                return modelUser.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATECREATE, SortOrder.DESCENDING, null);
+                this.modelUser.setFiltruUtilizator(this.filtruUtilizator);
+                return this.modelUser.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATECREATE, SortOrder.DESCENDING,
+                                null);
         }
 
         /**
@@ -404,16 +335,18 @@ public class EchipaBean implements Serializable {
                 this.numeDoc = Constante.SPATIU;
                 final UploadedFile uFile = event.getFile();
                 try {
-                        user = utilizatorService
+                        this.user = this.utilizatorService
                                         .incarcareImaginaFaraStocare(IOUtils.toByteArray(uFile.getInputstream()), user);
-                        numeDoc = uFile.getFileName();
+                        this.numeDoc = uFile.getFileName();
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        "A apărut o eroare la încărcarea imaginii. ".concat(Constante.DESCEROAREMESAJ));
                         final String descriere = "A apărut o eroare la la încărcarea imaginii";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
         }
 
@@ -422,21 +355,28 @@ public class EchipaBean implements Serializable {
          * @param echipa membru candidat pentru eliminare
          */
         public void eliminarMembru(final Utilizator membru) {
+                Utilizator user = this.utilitati.getUtilizatorLogat();
                 try {
-                        Echipa echip = new Echipa();
-                        echip = echipaService.findByUser(membru);
-                        echipaService.delete(echip);
-                        listaEchipa.remove(echip);
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.ELIMINAREMESAJ,
-                                        Constante.OKELIMINAREMESAJ);
+                        Echipa echip = this.echipaService.findByUser(membru);
+                        this.echipaService.delete(echip);
+                        this.listaEchipa.remove(echip);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
+                                        RegistruEnum.ELIMINARE.getDescriere(), Constante.OKELIMINAREMESAJ);
+                        final String descriere = Constante.UTILIZATORUL.concat(user.getNumeComplet())
+                                        .concat(" a eliminat cu succes membrul: ".concat(
+                                                        membru.getNumeComplet().concat(" din echipa de conducere: ")));
+                        this.regActividadService.inregistrareRegistruActivitate(descriere,
+                                        RegistruEnum.ELIMINARE.getName(), SectiuniEnum.USERS.getName(), user);
+                        log.info(descriere);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        "A apărut o eroare la eliminarea membrului echipei de conducere. "
-                                                        .concat(Constante.DESCEROAREMESAJ));
-                        final String descriere = "A apărut o eroare la eliminarea membrului echipei";
+                        final String descriere = "A apărut o eroare la eliminarea membrului din echipa de conducere.";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
 
         }
@@ -445,9 +385,9 @@ public class EchipaBean implements Serializable {
          * Metoda de stabilire a utilizatorilor din lista generală.
          */
         public void stabilireUtilizatoriFinali() {
-                utilizatoriSelectionatiFinali.add(user);
-                modelUser.setDsource(utilizatoriSelectionatiFinali);
-                this.utilizatoriSelectionatiFinali = utilizatoriSelectionati;
+                this.utilizatoriSelectionatiFinali.add(this.user);
+                this.modelUser.setDsource(this.utilizatoriSelectionatiFinali);
+                this.utilizatoriSelectionatiFinali = this.utilizatoriSelectionati;
         }
 
         /**
@@ -460,20 +400,21 @@ public class EchipaBean implements Serializable {
                 this.user = membru.getUser();
                 this.imagineSelectata = null;
                 this.judetSelectat = new Judet();
-                judetSelectat = user.getCodJudet();
+                this.judetSelectat = this.user.getCodJudet();
                 this.localitati = new ArrayList<>();
                 try {
-                        localitatiSelectate = localitateService.findByJudet(judetSelectat);
+                        this.localitatiSelectate = this.localitateService.findByJudet(this.judetSelectat);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        "A apărut o eroare la modificarea membrului echipei de conducere. "
-                                                        .concat(Constante.DESCEROAREMESAJ));
                         final String descriere = "A apărut o eroare la modificarea membrului echipei";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
-                this.judete = judetService.fiindAll();
+                this.judete = this.judetService.fiindAll();
                 return "/teams/modifyTeam?faces-redirect=true";
         }
 
@@ -485,7 +426,18 @@ public class EchipaBean implements Serializable {
                 this.filtruUtilizator = new FiltruUtilizator();
                 this.user = new Utilizator();
                 this.listaEchipa = new ArrayList<>();
-                this.listaEchipa = echipaService.fiindByTeam();
+                try {
+                        this.listaEchipa = this.echipaService.fiindByTeam();
+                }
+                catch (final DataAccessException e) {
+                        final String descriere = "A apărut o eroare la obținerea funcților echipei de conducere";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
+                        this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
+                                        e);
+                        log.error(descriere);
+                }
                 this.functia = new Functie();
                 this.list = new ArrayList<>();
                 for (int i = 0; i < 5; i++) {
@@ -500,18 +452,18 @@ public class EchipaBean implements Serializable {
          * Curăță căutarea utilizatorilor
          */
         public void cautareFiltre() {
-                filtruUtilizator = new FiltruUtilizator();
-                user = new Utilizator();
-                utilizatoriSelectionati = new ArrayList<>();
-                modelUser = new LazyDataUtilizatori(utilizatorService);
+                this.filtruUtilizator = new FiltruUtilizator();
+                this.user = new Utilizator();
+                this.utilizatoriSelectionati = new ArrayList<>();
+                this.modelUser = new LazyDataUtilizatori(this.utilizatorService);
         }
 
         /**
          * Curăță câmpurile utilizatorilor selectați și lista de utilizatori.
          */
         public void curatareCampuriNouaEchipa() {
-                utilizatoriSelectionatiFinali = new ArrayList<>();
-                modelUser = new LazyDataUtilizatori(utilizatorService);
+                this.utilizatoriSelectionatiFinali = new ArrayList<>();
+                this.modelUser = new LazyDataUtilizatori(this.utilizatorService);
                 final RequestContext context = RequestContext.getCurrentInstance();
                 context.execute(Constante.DIALOGMESGHIDE);
         }
@@ -521,13 +473,20 @@ public class EchipaBean implements Serializable {
          * @param usu Utilizator
          */
         public void modificareUtilizator(final Utilizator usu) {
+                Utilizator utilizator = utilitati.getUtilizatorLogat();
                 try {
                         this.user = usu;
                         if (valideaza()) {
-                                user.setLocalitate(localitatiSelectate.get(0));
-                                utilizatorService.save(user);
+                                this.user.setLocalitate(this.localitatiSelectate.get(0));
+                                this.utilizatorService.save(this.user);
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
                                                 Constante.SCHIMBDATE, Constante.OKMODIFICAREMESAJ);
+                                final String descriere = Constante.UTILIZATORUL.concat(usu.getNumeComplet())
+                                                .concat(" a fost modificat cu succes de: ")
+                                                .concat(utilizator.getUsername());
+                                this.regActividadService.inregistrareRegistruActivitate(descriere,
+                                                RegistruEnum.MODIFICARE.getName(), SectiuniEnum.USERS.getName(), user);
+                                log.info(descriere);
                         }
                         else {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
@@ -540,6 +499,7 @@ public class EchipaBean implements Serializable {
                         final String descriere = "A apărut o eroare la modificarea utilizatorului";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.USERS.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
         }
 
@@ -551,18 +511,20 @@ public class EchipaBean implements Serializable {
                 this.echipa = new Echipa();
                 try {
                         this.echipa = membru;
-                        echipaService.save(membru);
+                        this.echipaService.save(membru);
                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.SCHIMBDATE,
-                                        Constante.REGMODOK);
+                                        Constante.OKMODIFICAREMESAJ);
                         final RequestContext context = RequestContext.getCurrentInstance();
                         context.execute("PF('dlgModifica').hide();");
+                        log.info("S-a modificat cu succes membrul echipei");
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la salvarea/modificarea membrului echipei";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
         }
 
@@ -571,11 +533,11 @@ public class EchipaBean implements Serializable {
          * @return String
          */
         public String nuevoMembru() {
-                echipa = new Echipa();
-                functia = new Functie();
-                utilizatoriSelectionati = new ArrayList<>();
-                utilizatoriSelectionatiFinali = new ArrayList<>();
-                modelUser = new LazyDataUtilizatori(utilizatorService);
+                this.echipa = new Echipa();
+                this.functia = new Functie();
+                this.utilizatoriSelectionati = new ArrayList<>();
+                this.utilizatoriSelectionatiFinali = new ArrayList<>();
+                this.modelUser = new LazyDataUtilizatori(this.utilizatorService);
                 return "/teams/newTeam?faces-redirect=true";
         }
 
@@ -583,9 +545,9 @@ public class EchipaBean implements Serializable {
          * Metodă de a adăuga noi utilizatori la lista de utilizatori selectați.
          */
         public void schimbarePaginaUtilizatori() {
-                if (utilizatoriSelectionati != null && !utilizatoriSelectionati.isEmpty()) {
-                        utilizatoriSelectionatiFinali.addAll(utilizatoriSelectionati);
-                        utilizatoriSelectionati = new ArrayList<>(utilizatoriSelectionatiFinali);
+                if (this.utilizatoriSelectionati != null && !this.utilizatoriSelectionati.isEmpty()) {
+                        this.utilizatoriSelectionatiFinali.addAll(this.utilizatoriSelectionati);
+                        this.utilizatoriSelectionati = new ArrayList<>(this.utilizatoriSelectionatiFinali);
                 }
         }
 
@@ -600,11 +562,12 @@ public class EchipaBean implements Serializable {
                                         new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la reordonarea membrului echipei";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
         }
 
@@ -616,16 +579,17 @@ public class EchipaBean implements Serializable {
                 try {
                         final Echipa membrul = (Echipa) event.getObject();
                         this.echipa = membrul;
-                        echipaService.save(echipa);
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.REGMODOK,
+                        this.echipaService.save(this.echipa);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, Constante.OKMODIFICAREMESAJ,
                                         echipa.getTeam().getDescriere());
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la modificarea membrului echipei";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
         }
 
@@ -636,8 +600,8 @@ public class EchipaBean implements Serializable {
 
         public void onRowSelectedUser(final SelectEvent event) {
                 this.user = (Utilizator) event.getObject();
-                utilizatoriSelectionatiFinali.add(user);
-                modelUser.setDsource(utilizatoriSelectionatiFinali);
+                this.utilizatoriSelectionatiFinali.add(this.user);
+                this.modelUser.setDsource(this.utilizatoriSelectionatiFinali);
         }
 
         /**
@@ -663,9 +627,9 @@ public class EchipaBean implements Serializable {
          */
         public void onToggleSelectUsers(final ToggleSelectEvent toogleEvent) {
                 if (toogleEvent.isSelected()) {
-                        utilizatoriSelectionatiFinali = cautareUtilizatoriL();
-                        modelUser.setDsource(utilizatoriSelectionatiFinali);
-                        utilizatoriSelectionati = new ArrayList<>(utilizatoriSelectionatiFinali);
+                        this.utilizatoriSelectionatiFinali = cautareUtilizatoriL();
+                        this.modelUser.setDsource(this.utilizatoriSelectionatiFinali);
+                        this.utilizatoriSelectionati = new ArrayList<>(this.utilizatoriSelectionatiFinali);
                 }
         }
 
@@ -674,7 +638,7 @@ public class EchipaBean implements Serializable {
          * @param user Utilizator
          */
         public void eliminareUtilizator(final Utilizator user) {
-                utilizatoriSelectionatiFinali.remove(user);
+                this.utilizatoriSelectionatiFinali.remove(user);
         }
 
         /**
@@ -693,11 +657,12 @@ public class EchipaBean implements Serializable {
                         }
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la reordonarea echipei";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
         }
 
@@ -706,38 +671,48 @@ public class EchipaBean implements Serializable {
          */
         public String save() {
                 String intoarcere = Constante.SPATIU;
+                Utilizator utilizator = utilitati.getUtilizatorLogat();
                 try {
-                        if (utilizatoriSelectionatiFinali.isEmpty()) {
-                                final Utilizator utiliz = utilizatorService.fiindOne(numeUtilizator);
+                        if (this.utilizatoriSelectionatiFinali.isEmpty()) {
+                                final Utilizator utiliz = this.utilizatorService.fiindOne(this.numeUtilizator);
                                 if (utiliz != null) {
-                                        utilizatoriSelectionatiFinali.add(utiliz);
+                                        this.utilizatoriSelectionatiFinali.add(utiliz);
                                 }
                         }
-                        for (final Utilizator user : utilizatoriSelectionatiFinali) {
-                                final boolean existaUtilizator = echipaService.existsByUser(user);
+                        for (final Utilizator use : this.utilizatoriSelectionatiFinali) {
+                                final boolean existaUtilizator = this.echipaService.existsByUser(use);
                                 if (existaUtilizator) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
                                                         " Nu se poate înregistra utilizatorul  '"
-                                                                        + user.getNume().concat(Constante.PUNCT)
-                                                                                        .concat(user.getPrenume())
-                                                                        + "'  deoarece acesta există în echipa de conducere ",
-                                                        "");
+                                                                        .concat(use.getNume().concat(Constante.PUNCT))
+                                                                        .concat(use.getPrenume())
+                                                                        .concat("'  deoarece acesta există în echipa de conducere "),
+                                                        Constante.SPATIU);
 
                                 }
                                 else {
                                         final Echipa tea = new Echipa();
-                                        tea.setUser(user);
+                                        tea.setUser(use);
                                         final Functie pteam = new Functie();
-                                        pteam.setId(echipa.getId());
+                                        pteam.setId(this.echipa.getId());
                                         tea.setTeam(pteam);
-                                        listaPozitie = echipaService.findAllByOrderByRankDesc();
-                                        final Long rank = listaPozitie.get(0).getRank() + 1;
+                                        this.listaPozitie = this.echipaService.findAllByOrderByRankDesc();
+                                        final Long rank = this.listaPozitie.get(0).getRank() + 1;
                                         tea.setRank(rank);
-                                        echipaService.save(tea);
+                                        this.echipaService.save(tea);
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
-                                                        Constante.INREGISTRAREMESAJ, Constante.OKINREGISTRAREMESAJ);
+                                                        RegistruEnum.INREGISTRARE.getDescriere(),
+                                                        Constante.OKINREGISTRAREMESAJ);
                                         curatareCampuriNouaEchipa();
-                                        listaEchipa = echipaService.fiindByTeam();
+                                        this.listaEchipa = this.echipaService.fiindByTeam();
+                                        final String descriere = Constante.UTILIZATORUL
+                                                        .concat(tea.getUser().getNumeComplet())
+                                                        .concat(" a fost inregistrat cu succes de: ")
+                                                        .concat(utilizator.getUsername());
+                                        this.regActividadService.inregistrareRegistruActivitate(descriere,
+                                                        RegistruEnum.INREGISTRARE.getName(),
+                                                        SectiuniEnum.ECHIPA.getName(), utilizator);
+                                        log.info(descriere);
                                         final RequestContext context = RequestContext.getCurrentInstance();
                                         context.execute("PF('dialogCautare').hide();");
                                         intoarcere = "/teams/teams?faces-redirect=true";
@@ -745,11 +720,12 @@ public class EchipaBean implements Serializable {
                         }
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                         final String descriere = "A apărut o eroare la salvarea membrului";
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
                                         e);
+                        log.error(descriere);
                         intoarcere = "/teams/newTeam?faces-redirect=true";
                 }
                 return intoarcere;
@@ -765,11 +741,11 @@ public class EchipaBean implements Serializable {
                 boolean validat = true;
                 if (!valideazaUsername()) {
                         this.mesajEroare = "Membrul există deja în sistem";
-                        validat = true;
+                        validat = false;
                 }
                 if (!valideazaCnpUnic()) {
                         this.mesajEroare = "CNP-ul există deja în sistem";
-                        validat = true;
+                        validat = false;
                 }
                 return validat;
         }
@@ -785,13 +761,13 @@ public class EchipaBean implements Serializable {
                                 resultat = cautareUtilizatorPorNif();
                         }
                         catch (final DataAccessException e) {
-                                FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                Constante.EROAREMESAJ,
-                                                "A apărut o eroare la validarea cnp-ului membrului. "
-                                                                .concat(Constante.DESCEROAREMESAJ));
                                 final String descriere = "A apărut o eroare la validarea cnp-ului membrului";
+                                FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                                RegistruEnum.EROARE.getDescriere(),
+                                                descriere.concat(Constante.DESCEROAREMESAJ));
                                 this.regActividadService.salveazaRegistruEroare(descriere,
                                                 SectiuniEnum.ECHIPA.getDescriere(), e);
+                                log.error(descriere);
                         }
                 }
                 return resultat;
@@ -808,12 +784,13 @@ public class EchipaBean implements Serializable {
                         use = this.utilizatorService.fiindOne(this.user.getUsername());
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        "A apărut o eroare la căutarea utilizatorului. "
-                                                        .concat(Constante.DESCEROAREMESAJ));
                         final String descriere = "A apărut o eroare la căutarea utilizatorului";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
                         this.regActividadService.salveazaRegistruEroare(descriere, SectiuniEnum.ECHIPA.getDescriere(),
                                         e);
+                        log.error(descriere);
                 }
                 if (use != null && !use.getUsername().equals(this.user.getUsername())) {
                         resultat = false;
@@ -821,26 +798,4 @@ public class EchipaBean implements Serializable {
                 return resultat;
         }
 
-        /**
-         * Obtener DNI.
-         * @param prenume
-         * @param nume
-         * @return dni + letra
-         */
-        public static String mail(final String nume, final String prenume, final int numar) {
-                final String numeCurat = Normalizer.normalize(nume.toLowerCase(), Normalizer.Form.NFD);
-                final Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-                final String nnume = pattern.matcher(numeCurat).replaceAll(Constante.SPATIU);
-                final String prenumaCurat = Normalizer.normalize(prenume.toLowerCase(), Normalizer.Form.NFD);
-                final String pprenume = pattern.matcher(prenumaCurat).replaceAll(Constante.SPATIU);
-                if (numar % NumarMagic.NUMBERTWO == 0) {
-                        return nnume.concat(Constante.PUNCT).concat(pprenume.concat(Generator.nombresMail()));
-                }
-                else {
-                        if (numar % NumarMagic.NUMBERSEVENTEEN == 0) {
-                                return pprenume.substring(0, 1).concat(nnume.concat(Generator.nombresMail()));
-                        }
-                        return pprenume.concat(nnume.concat(Generator.nombresMail()));
-                }
-        }
 }

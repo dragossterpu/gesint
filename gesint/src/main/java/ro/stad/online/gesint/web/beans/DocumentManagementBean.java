@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.exceptions.GesintException;
@@ -33,12 +34,14 @@ import ro.stad.online.gesint.model.filters.FiltruDocument;
 import ro.stad.online.gesint.persistence.entities.Documentul;
 import ro.stad.online.gesint.persistence.entities.TipDocument;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
 import ro.stad.online.gesint.persistence.repositories.TipDocumentRepository;
 import ro.stad.online.gesint.services.RegistruActivitateService;
 import ro.stad.online.gesint.services.UtilizatorService;
 import ro.stad.online.gesint.services.impl.DocumentServiceImpl;
 import ro.stad.online.gesint.util.FacesUtilities;
+import ro.stad.online.gesint.util.Utilitati;
 
 /**
  * Bean pentru managerul de documente.
@@ -51,6 +54,7 @@ import ro.stad.online.gesint.util.FacesUtilities;
 @Getter
 @Controller("gestorDocumentalBean")
 @Scope(Constante.SESSION)
+@Slf4j
 public class DocumentManagementBean implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -136,6 +140,12 @@ public class DocumentManagementBean implements Serializable {
         private Utilizator user;
 
         /**
+         * Componente de utilidades.
+         */
+        @Autowired
+        private transient Utilitati utilitati;
+
+        /**
          * Metodă folosită pentru a elimina un document.
          * @param doc Documentul
          */
@@ -144,15 +154,16 @@ public class DocumentManagementBean implements Serializable {
                         doc.setUtilizator(null);
                         this.documentService.delete(doc);
                         this.cautareDocument();
-                        final String descriere = "Proiectul a fost eliminat cu succes";
-                        this.regActividadService.inregistrareRegistruActivitate(descriere, Constante.ELIMINARE,
-                                        SectiuniEnum.PROIECT.getDescriere(), user);
+                        final String descriere = "Fișierul a fost eliminat cu succes";
+                        this.regActividadService.inregistrareRegistruActivitate(descriere,
+                                        RegistruEnum.ELIMINARE.getName(), SectiuniEnum.PROIECT.getName(), user);
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        "A apărut o eroare la eliminarea documentului."
-                                                        .concat(Constante.DESCEROAREMESAJ));
-                        final String descriere = "A apărut o eroare la eliminarea documentului";
+                        final String descriere = "A apărut o eroare la eliminarea fișierului";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(),
+                                        descriere.concat(Constante.DESCEROAREMESAJ));
+
                         this.regActividadService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
                 }
@@ -164,7 +175,7 @@ public class DocumentManagementBean implements Serializable {
          */
         public void cautareDocument() {
                 this.model.setFiltruDocument(this.filtruDocument);
-                this.model.load(0, NumarMagic.NUMBERFIFTEEN, "fechaAlta", SortOrder.DESCENDING, null);
+                this.model.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATECREATE, SortOrder.DESCENDING, null);
                 this.numeDoc = Constante.SPATIU;
         }
 
@@ -173,17 +184,17 @@ public class DocumentManagementBean implements Serializable {
          * tipul de document corespunde realității.
          * @param event FileUploadEvent Event care este lansat în încărcarea documentului
          */
-        public void cargaFichero(final FileUploadEvent event) {
+        public void incarcareFisier(final FileUploadEvent event) {
                 try {
-                        final TipDocument tipo = this.tipDocumentRepository.findByNume("OTROS");
+                        final TipDocument tipo = this.tipDocumentRepository.findByNume("ALTELE");
                         final UploadedFile uFile = event.getFile();
                         this.document = this.documentService.incarcareDocumentFaraSalvare(uFile, tipo, null);
                         this.numeDoc = uFile.getFileName();
                 }
                 catch (final GesintException ex) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, INCARCAREFISIER,
-                                        "A apărut o eroare la încărcarea fișierului");
                         final String descriere = "A apărut o eroare la încărcarea fișierului";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, INCARCAREFISIER,
+                                        descriere);
                         this.regActividadService.salveazaRegistruEroare(descriere,
                                         SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), ex);
                 }
@@ -203,29 +214,29 @@ public class DocumentManagementBean implements Serializable {
                                 this.document.setNume(numeDocument);
                                 this.document.setTipDocument(tipDocument);
                                 this.document.setDescriere(descriere);
-                                final Utilizator user = this.utilizatorService.fiindOne(
+                                final Utilizator utilizator = this.utilizatorService.fiindOne(
                                                 SecurityContextHolder.getContext().getAuthentication().getName());
-                                this.document.setUtilizator(user);
+                                this.document.setUtilizator(utilizator);
                                 this.document.setMateriaIndexada(materiaIndexada);
                                 this.document.setDateDeleted(null);
                                 this.documentService.save(this.document);
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
-                                                Constante.INREGISTRARE, "S-a înregistrat cu exit");
+                                                RegistruEnum.INREGISTRARE.getDescriere(), "S-a înregistrat cu exit");
                                 this.reincarcareLista();
                                 RequestContext.getCurrentInstance().reset("formAlta:asociado");
                                 this.numeDoc = Constante.SPATIU;
-                                final String mesaj = "Documentul a fost înregistrat cu succes";
-                                this.regActividadService.inregistrareRegistruActivitate(mesaj, Constante.ELIMINARE,
-                                                SectiuniEnum.PROIECT.getDescriere(), user);
+                                final String mesaj = "Fișierului a fost înregistrat cu succes";
+                                this.regActividadService.inregistrareRegistruActivitate(mesaj,
+                                                RegistruEnum.ELIMINARE.getName(), SectiuniEnum.PROIECT.getName(),
+                                                utilizator);
                         }
                         catch (final DataAccessException e) {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                Constante.EROAREMESAJ,
-                                                "A apărut o eroare la înregistrarea documentului."
-                                                                .concat(Constante.DESCEROAREMESAJ));
-                                final String mesaj = "A apărut o eroare la înregistrarea documentului";
-                                this.regActividadService.salveazaRegistruEroare(mesaj,
-                                                SectiuniEnum.PROIECT.getDescriere(), e);
+                                                RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
+                                final String descrier = "A apărut o eroare la înregistrarera  fișierului";
+                                this.regActividadService.salveazaRegistruEroare(descrier,
+                                                SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
+                                log.error(descrier);
                         }
                 }
                 else {
@@ -247,10 +258,11 @@ public class DocumentManagementBean implements Serializable {
                         }
                         catch (final GesintException e) {
                                 FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
-                                                Constante.EROAREMESAJ, e.getMessage());
-                                final String mesaj = "A apărut o eroare la descarcarea fișierului";
-                                this.regActividadService.salveazaRegistruEroare(mesaj,
-                                                SectiuniEnum.PROIECT.getDescriere(), e);
+                                                RegistruEnum.EROARE.getDescriere(), e.getMessage());
+                                final String descriere = "A apărut o eroare la descarcarea fișierului";
+                                this.regActividadService.salveazaRegistruEroare(descriere,
+                                                SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
+                                log.error(descriere);
                         }
                 }
                 else {
@@ -263,9 +275,8 @@ public class DocumentManagementBean implements Serializable {
          * Metodă folosită pentru a obține documentul pentru a fie modificat.
          * @param doc Documentul
          * @return URL de la vista de edición
-         * @throws GesintException
          */
-        public String editareDocument(final Documentul doc) throws GesintException {
+        public String editareDocument(final Documentul doc) {
                 final Documentul docAux = this.documentService.findOne(doc.getId());
                 String ruta = Constante.SPATIU;
                 if (docAux != null) {
@@ -274,16 +285,17 @@ public class DocumentManagementBean implements Serializable {
                         ruta = "/gestorDocumental/editareDocument?faces-redirect=true";
                 }
                 else {
+                        final String descriere = "A apărut o eroare la accesarea fișierului";
                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, INCARCAREFISIER,
-                                        "Se ha producido un error al acceder al documento");
+                                        descriere);
+                        log.error(descriere);
                 }
                 return ruta;
         }
 
         /**
-         * Realiza la baja lógica del documento que podrá ser recuperado desde la papelera.
-         *
-         * @param document Documentul al que se dará de baja lógica
+         * Metodă folosită pentru a obține eliminarea logica a documentului care poate fi recuperat din coșul de gunoi..
+         * @param document Documentul care va elimina logic
          */
         public void eliminareDocument(final Documentul document) {
                 try {
@@ -293,33 +305,33 @@ public class DocumentManagementBean implements Serializable {
                         this.cautareDocument();
                 }
                 catch (final DataAccessException e) {
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
+                        final String descriere = "A apărut o eroare la eliminarea documentului";
+                        this.regActividadService.salveazaRegistruEroare(descriere,
+                                        SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
+                        log.error(descriere);
                 }
         }
 
         /**
-         * Inicializa el objeto.
+         * @PostConstruct Inițializează obiectul.
          */
         @PostConstruct
         public void init() {
                 this.filtruDocument = new FiltruDocument();
                 this.list = new ArrayList<>();
-                for (int i = 0; i <= 5; i++) {
+                for (int i = 0; i <= NumarMagic.NUMBERFIVE; i++) {
                         this.list.add(Boolean.TRUE);
                 }
                 this.model = new LazyDataDocumente(this.documentService);
                 this.mapEditie = new HashMap<>();
-                try {
-                        user = utilizatorService
-                                        .fiindOne(SecurityContextHolder.getContext().getAuthentication().getName());
-                }
-                catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, Constante.EROAREMESAJ,
-                                        Constante.DESCEROAREMESAJ);
-                }
+                this.user = this.utilitati.getUtilizatorLogat();
+
         }
 
         /**
-         * Reseteo del objeto de búsqueda y limpieza de la lista de resultados.
+         * Metodă folosită pentru a obține resetarea obiectului de căutare și curățarea listei de rezultate.
          */
         public void cautareCautare() {
                 this.filtruDocument = new FiltruDocument();
@@ -327,42 +339,45 @@ public class DocumentManagementBean implements Serializable {
         }
 
         /**
-         * Graba el documento modificado.
+         * Metodă folosită pentru a salva documentul modificat.
          */
         public void modificaDocument() {
                 try {
                         this.documentService.save(this.document);
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO, "MODIFCARE",
-                                        "Documentul a fost modificat");
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
+                                        RegistruEnum.MODIFICARE.getDescriere(), "Documentul a fost modificat");
                         this.reincarcareLista();
                 }
                 catch (final DataAccessException e) {
-                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, "MODIFCARE",
-                                        "A apărut o eroare la modificarea documentului");
+                        final String descriere = "A apărut o eroare la modificarea documentului";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.MODIFICARE.getDescriere(), descriere);
+                        this.regActividadService.salveazaRegistruEroare(descriere,
+                                        SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
+                        log.error(descriere);
                 }
         }
 
         /**
-         * Inicia la creación de un nuevo documento.
-         * @return ruta de la vista
+         * Metodă folosită pentru a incepe crearea unui nou document.
+         * @return string url
          */
         public String nouDocument() {
                 this.document = new Documentul();
-                this.numeDoc = "";
+                this.numeDoc = Constante.SPATIU;
                 return "/gestorDocumental/nouDocument?faces-redirect=true";
         }
 
         /**
-         * Muestra/oculta las columnas de la tabla de resultados de la búsqueda.
-         *
-         * @param e La columna a mostrar/ocultar
+         * Metodă folosită pentru a afișa / ascunde coloanele din tabelul cu rezultatele căutării.
+         * @param e ToggleEvent
          */
         public void onToggle(final ToggleEvent e) {
                 this.list.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
         }
 
         /**
-         * Recarga la lista de resultados no eliminados.
+         * Metodă folosită pentru a reîncărca lista cu documentele care nu au fost șterse.
          */
         public void reincarcareLista() {
                 this.filtruDocument.setEliminat(false);
@@ -371,7 +386,7 @@ public class DocumentManagementBean implements Serializable {
         }
 
         /**
-         * Recarga la lista de resultados eliminados.
+         * Metodă folosită pentru a reîncărca lista cu documentele eliminate.
          */
         public void reincarcareListaEliminati() {
                 this.filtruDocument.setEliminat(true);
@@ -379,8 +394,8 @@ public class DocumentManagementBean implements Serializable {
         }
 
         /**
-         * Recupera un documento desde la papelera.
-         * @param doc Documentul a recuperar
+         * Metodă folosită pentru a recupera un document din coșul de gunoi.
+         * @param doc Documentul de recuperat
          */
         public void recuperareDocument(final Documentul doc) {
                 try {
@@ -388,14 +403,20 @@ public class DocumentManagementBean implements Serializable {
                         this.cautareDocument();
                 }
                 catch (final DataAccessException e) {
+                        final String descriere = "A apărut o eroare la recuperarea documentului";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                        RegistruEnum.MODIFICARE.getDescriere(), descriere);
+                        this.regActividadService.salveazaRegistruEroare(descriere,
+                                        SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
+                        log.error(descriere);
                 }
 
         }
 
         /**
-         * Resetea el objeto de búsqueda, limpia la lista de resultados y establece el booleano de eliminado a false
-         * para indicar que sólo se van a buscar documentos no eliminados.
-         * @return ruta siguiente
+         * Metodă folosită pentru a reseta obiectul cu filtru de căutare, șterge lista de rezultate și seteaza booleanul
+         * de la șters la fals pentru a indica faptul că vor fi căutate doar documentele care nu sunt șterse.
+         * @return String url
          */
         public String curatareFiltru() {
                 this.filtruDocument = new FiltruDocument();
@@ -406,9 +427,9 @@ public class DocumentManagementBean implements Serializable {
         }
 
         /**
-         * Resetea el objeto de búsqueda, limpia la lista de resultados y establece el booleano de eliminado a false
-         * para indicar que sólo se van a buscar documentos eliminados.
-         * @return ruta
+         * Metodă folosită pentru a reseta obiectul de căutare, șterge lista de rezultate și seteaza booleanul de la
+         * șters la fals pentru a indica că doar documentele șterse trebuie să fie căutate.
+         * @return url
          */
         public String curatareFiltruEliminati() {
                 this.numeDoc = Constante.SPATIU;
@@ -419,18 +440,24 @@ public class DocumentManagementBean implements Serializable {
         }
 
         /**
-         * Vacía la papelera de reciclaje.
+         * Metodă foloită la golirea coșului de gunoi.
          */
         public void vaciarPapelera() {
                 try {
                         final List<Documentul> documentosEliminados = this.documentService.golesteCosulGunoi();
-                        final StringBuffer nombreFicherosEliminados = new StringBuffer().append("\n\n");
+                        final StringBuilder nombreFicherosEliminados = new StringBuilder().append("\n\n");
                         for (final Documentul docu : documentosEliminados) {
                                 nombreFicherosEliminados.append('-').append(docu.getNume()).append("\n");
                         }
                         this.cautareDocument();
                 }
                 catch (final DataAccessException e) {
+                        final String descriere = "A apărut o eroare la golirea coșului de gunoi";
+                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR, "MODIFCARE", descriere);
+                        this.regActividadService.salveazaRegistruEroare(descriere,
+                                        SectiuniEnum.MANAGERDOCUMENTE.getDescriere(), e);
+                        log.error(descriere);
+
                 }
         }
 

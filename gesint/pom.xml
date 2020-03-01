@@ -225,4 +225,84 @@
 			
 		</plugins>
 	</build>
+	<profiles>
+                <profile>
+                
+                        <id>sonarqube</id>
+            
+                        <properties>
+                <jacoco.version>0.7.9</jacoco.version>
+                                <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
+                                <jacoco.it.execution.data.file>${project.build.directory}/coverage-reports/jacoco-it.exec</jacoco.it.execution.data.file>
+                                <jacoco.ut.execution.data.file>${project.build.directory}/coverage-reports/jacoco-ut.exec</jacoco.ut.execution.data.file>
+                        </properties>
+            
+                        <dependencies>
+                                <dependency>
+                                        <groupId>com.google.code.findbugs</groupId>
+                                        <artifactId>jsr305</artifactId>
+                                        <version>3.0.0</version>
+                                </dependency>
+                <dependency>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+                    <scope>test</scope>
+                </dependency>
+                                <dependency>
+                                        <groupId>org.jacoco</groupId>
+                                        <artifactId>org.jacoco.agent</artifactId>
+                                        <classifier>runtime</classifier>
+                                        <version>${jacoco.version}</version>
+                                        <scope>test</scope>
+                                </dependency>
+                        </dependencies>
+
+                        <build>
+                                <plugins>
+                                        <plugin>
+                                                <groupId>org.sonarsource.scanner.maven</groupId>
+                                                <artifactId>sonar-maven-plugin</artifactId>
+                                                <version>3.2</version>
+                                        </plugin>
+
+                                        <plugin>
+                                                <groupId>org.jacoco</groupId>
+                                                <artifactId>jacoco-maven-plugin</artifactId>
+                                                <version>${jacoco.version}</version>
+                                                <executions>
+                                                        <execution>
+                                                                <id>default-instrument</id>
+                                                                <goals>
+                                                                        <goal>instrument</goal>
+                                                                </goals>
+                                                        </execution>
+                                                        <execution>
+                                                                <id>default-restore-instrumented-classes</id>
+                                                                <goals>
+                                                                        <goal>restore-instrumented-classes</goal>
+                                                                </goals>
+                                                        </execution>
+                                                        <execution>
+                                                                <id>default-report</id>
+                                                                <phase>prepare-package</phase>
+                                                                <goals>
+                                                                        <goal>report</goal>
+                                                                </goals>
+                                                        </execution>
+                                                </executions>
+                                        </plugin>
+                                        <plugin>
+                                                <groupId>org.apache.maven.plugins</groupId>
+                                                <artifactId>maven-surefire-plugin</artifactId>
+                                                <configuration>
+                                                        <systemPropertyVariables>
+                                                                <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+                                                        </systemPropertyVariables>
+                                                </configuration>
+                                        </plugin>
+                                </plugins>
+                        </build>
+                </profile>
+        </profiles>
 </project>

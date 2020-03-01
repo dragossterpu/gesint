@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.CanalAlertaEnum;
 import ro.stad.online.gesint.persistence.entities.enums.CategorieEnum;
 
@@ -35,12 +36,14 @@ import ro.stad.online.gesint.persistence.entities.enums.CategorieEnum;
  */
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false, of = "id")
 @Builder
+@EqualsAndHashCode(callSuper = false, of = "id")
+
 @ToString
-@Getter
+
 @Setter
 @Entity
+@Getter
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "CORESPONDENTA")
 public class Corespondenta extends AbstractEntity implements Serializable {
@@ -54,18 +57,18 @@ public class Corespondenta extends AbstractEntity implements Serializable {
         @Id
         @SequenceGenerator(allocationSize = 1, name = "SEQ_ALERT", sequenceName = "SEQ_ALERT")
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ALERT")
-        @Column(name = "ID", nullable = false, columnDefinition = Constante.NUMERIC, length = 10)
+        @Column(name = "ID", nullable = false, columnDefinition = Constante.NUMERIC, length = NumarMagic.NUMBERTEN)
         private Long id;
 
         /** Titlu. */
-        @Column(name = "TITLU", nullable = false, length = 256)
+        @Column(name = "TITLU", nullable = false, length = NumarMagic.NUMBERTWOHUNDREDFIFTYFIVE)
         private String titlu;
 
         /**
          * Corpul mesajului
          */
 
-        @Column(name = "BODY", nullable = false, length = 4000)
+        @Column(name = "BODY", nullable = false, length = NumarMagic.NUMBERFOURTHOUSAND)
         private String descriere;
 
         /**
@@ -76,7 +79,7 @@ public class Corespondenta extends AbstractEntity implements Serializable {
         private CanalAlertaEnum canal;
 
         /** The sended on. */
-        @Column(name = "DATA_TRIMITERI", length = 19)
+        @Column(name = "DATA_TRIMITERI", length = NumarMagic.NUMBERNINETEEN)
         private Date dataTrimiteri;
 
         /**
@@ -84,25 +87,25 @@ public class Corespondenta extends AbstractEntity implements Serializable {
          */
         @Lob
         @Type(type = "org.hibernate.type.TextType")
-        @Column(name = "destinatari")
+        @Column(name = "DESTINATARI")
         private String destinatari;
 
         /**
          * Trimitere automatica.
          */
-        @Column(name = "auto")
+        @Column(name = "AUTO")
         private Boolean automatic;
 
         /**
          * Data planificata.
          */
-        @Column(name = "data_planificata")
+        @Column(name = "DATA_PLANIFICATA")
         private Date dataPlanificata;
 
         /**
          * Tip corepondenta.
          */
-        @Column(name = "tip_corespondenta")
+        @Column(name = "TIP_CORESPONDENTA")
         @Enumerated(EnumType.STRING)
         private CategorieEnum tipCorespondenta;
 

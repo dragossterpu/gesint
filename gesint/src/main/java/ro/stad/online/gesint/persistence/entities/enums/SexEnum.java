@@ -19,58 +19,61 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public enum SexEnum {
-	/**
-	 * Bărbat .
-	 */
-	MAN("Bărbat"),
+        /**
+         * Bărbat .
+         */
+        MAN("Bărbat"),
 
-	/**
-	 * Femeie.
-	 */
-	WOMAN("Femeie");
+        /**
+         * Femeie.
+         */
+        WOMAN("Femeie");
 
-	/**
-	 * Altul.
-	 */
-	// OTHER("Altul"),
+        /**
+         * Valoare statica VALUES
+         */
+        private static final List<SexEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
 
-	/**
-	 * Nespecificat.
-	 */
-	// UNSPECIFIED("Nespecificat");
+        /**
+         * Valoare statica SIZE
+         */
+        private static final int SIZE = VALUES.size();
 
-	private static final List<SexEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+        /**
+         * Valoare statica RANDOM
+         */
+        private static final Random RANDOM = new Random();
 
-	private static final int SIZE = VALUES.size();
+        /**
+         * Recupera la lista de sex in aplicatie.
+         * @return List<SexEnum>
+         * @see ro.mira.per.controller.AdminController.getRoles()
+         */
+        public static List<SexEnum> getSex() {
+                final List<SexEnum> sexs = new ArrayList<>();
+                for (final SexEnum sex : SexEnum.values()) {
+                        sexs.add(sex);
+                }
+                return sexs;
+        }
 
-	private static final Random RANDOM = new Random();
+        /**
+         * Metoda care obtine o valoare rendom
+         * @return
+         */
+        public static SexEnum randomLetter() {
+                return VALUES.get(RANDOM.nextInt(SIZE));
+        }
 
-	/**
-	 * Recupera la lista de sex in aplicatie.
-	 * @return List<SexEnum>
-	 * @see ro.mira.per.controller.AdminController.getRoles()
-	 */
-	public static List<SexEnum> getSex() {
-		final List<SexEnum> sexs = new ArrayList<>();
-		for (final SexEnum sex : SexEnum.values()) {
-			sexs.add(sex);
-		}
-		return sexs;
-	}
+        /**
+         * Descrierea enum.
+         */
+        private String description;
 
-	public static SexEnum randomLetter() {
-		return VALUES.get(RANDOM.nextInt(SIZE));
-	}
-
-	/**
-	 * Descrierea enum.
-	 */
-	private String description;
-
-	/**
-	 * @return Numele enum-ului "
-	 */
-	public String getName() {
-		return name();
-	}
+        /**
+         * @return Numele enum-ului "
+         */
+        public String getName() {
+                return name();
+        }
 }

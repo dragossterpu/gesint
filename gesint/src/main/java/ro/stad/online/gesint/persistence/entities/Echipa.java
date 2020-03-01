@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.constante.NumarMagic;
 
 /**
  *
@@ -49,7 +50,7 @@ public class Echipa implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_team")
         @SequenceGenerator(name = "seq_team", sequenceName = "seq_team", allocationSize = 1)
-        @Column(name = "ID", length = 5)
+        @Column(name = "ID", length = NumarMagic.NUMBERFIVE)
         private Long id;
 
         /**
@@ -68,7 +69,7 @@ public class Echipa implements Serializable {
         /**
          * Ordinea de aparitie in lista.
          */
-        @Column(name = "RANK", length = 2)
+        @Column(name = "RANK", length = NumarMagic.NUMBERTWO)
         private Long rank;
 
 }

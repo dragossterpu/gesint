@@ -58,7 +58,7 @@ public class PdfGenerareStatistica extends PdfAbstractGenerator {
          * Servicio.
          */
         @Autowired
-        private transient DocumentService documentService;
+        private DocumentService documentService;
 
         /**
          * Genereaza numele documentului
@@ -75,9 +75,10 @@ public class PdfGenerareStatistica extends PdfAbstractGenerator {
          * Genereaza conținutul care va fi afișat în PDF.
          * @param document Document pdf la care va fi atașat conținutul
          * @throws GesintException excepție pe care o poți lanza
+         * @throws MalformedURLException
          */
         @Override
-        public void creareCorpPdf(final Document document) throws GesintException {
+        public void creareCorpPdf(final Document document) throws GesintException, MalformedURLException {
                 // Títlu
                 final Paragraph titlu = new Paragraph("Raport statistic");
 
@@ -193,16 +194,11 @@ public class PdfGenerareStatistica extends PdfAbstractGenerator {
                 document.add(new AreaBreak()); // Salt de página
                 document.add(creaSubtitlu("Grafica"));
 
-                try {
+                document.add(new Image(ImageDataFactory.create(fileImg.getPath())));
+                if (fileImg.exists()) {
+                        fileImg.delete();
+                }
 
-                        document.add(new Image(ImageDataFactory.create(fileImg.getPath())));
-                        if (fileImg.exists()) {
-                                fileImg.delete();
-                        }
-                }
-                catch (final MalformedURLException e) {
-                        throw new GesintException(e);
-                }
         }
 
         /**
@@ -297,9 +293,9 @@ public class PdfGenerareStatistica extends PdfAbstractGenerator {
          * Metoda care calculeaza procentajul total de membrii cu Da
          */
         private String obtinereProcentajTotalDa(Sondaj sond) {
-                final int num = (int) (sond.getTotalVoturiDa() * NumarMagic.NUMBERHUNDRED);
+                final int num = sond.getTotalVoturiDa() * NumarMagic.NUMBERHUNDRED;
                 final float div = ((float) num / sond.getTotalVoturi());
-                float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / 100f;
+                float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / NumarMagic.NUMBERHUNDREDF;
                 return String.valueOf(divFinal);
         }
 
@@ -308,9 +304,9 @@ public class PdfGenerareStatistica extends PdfAbstractGenerator {
          * Metoda care calculeaza procentajul total de membrii cu nu
          */
         private String obtinereProcentajTotalNu(Sondaj sond) {
-                final int num = (int) (sond.getTotalVoturiNu() * NumarMagic.NUMBERHUNDRED);
+                final int num = sond.getTotalVoturiNu() * NumarMagic.NUMBERHUNDRED;
                 final float div = ((float) num / sond.getTotalVoturi());
-                float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / 100f;
+                float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / NumarMagic.NUMBERHUNDREDF;
                 return String.valueOf(divFinal);
         }
 
@@ -319,9 +315,9 @@ public class PdfGenerareStatistica extends PdfAbstractGenerator {
          * Metoda care calculeaza procentajul de abtineri
          */
         private String obtinereProcentajTotalAbt(Sondaj sond) {
-                final int num = (int) (sond.getTotalVoturiAbt() * NumarMagic.NUMBERHUNDRED);
+                final int num = sond.getTotalVoturiAbt() * NumarMagic.NUMBERHUNDRED;
                 final float div = ((float) num / sond.getTotalVoturi());
-                float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / 100f;
+                float divFinal = Math.round(div * NumarMagic.NUMBERHUNDRED) / NumarMagic.NUMBERHUNDREDF;
                 return String.valueOf(divFinal);
         }
 
@@ -338,8 +334,6 @@ public class PdfGenerareStatistica extends PdfAbstractGenerator {
                 docbl.setNumeFisier(numeDocument);
                 doc.setFisier(docbl);
                 doc.setNume(numeDocument);
-                // final List<Sondaj> list = new ArrayList<>();
-                // list.add(sondaj);
                 doc.setSondaj(sondaj);
                 doc.setTipContinut("application/pdf");
                 doc.setMateriaIndexada(numeDocument.substring(0, NumarMagic.NUMBERSIX));

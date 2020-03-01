@@ -26,6 +26,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.persistence.entities.enums.CanalAlertaEnum;
 import ro.stad.online.gesint.persistence.entities.enums.EducatieEnum;
 import ro.stad.online.gesint.persistence.entities.enums.RolEnum;
@@ -42,10 +43,11 @@ import ro.stad.online.gesint.persistence.entities.enums.StatutCivilEnum;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, of = "username")
 @Builder
-@ToString
+
 @Getter
 @Setter
 @Entity
+@ToString
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "UTILIZATOR")
 public class Utilizator extends AbstractEntity implements Serializable {
@@ -59,38 +61,38 @@ public class Utilizator extends AbstractEntity implements Serializable {
          * Login (ID).
          */
         @Id
-        @Column(name = "username", length = 150, nullable = false)
+        @Column(name = "USERNAME", length = NumarMagic.NUMBERONEHUNDREDFIFTY, nullable = false)
         private String username;
 
         /**
          * Parola utilizatorlui.
          */
-        @Column(name = "password", length = 100, nullable = false)
+        @Column(name = "PASSWORD", length = NumarMagic.NUMBERHUNDRED, nullable = false)
         private String password;
 
         /**
          * Rolul utilizatorlui.
          */
-        @Column(name = "role", length = 50, nullable = false)
+        @Column(name = "ROLE", length = NumarMagic.NUMBERFIFTY, nullable = false)
         @Enumerated(EnumType.STRING)
         private RolEnum role;
 
         /**
          * Numele utilizatorlui.
          */
-        @Column(name = "nume", length = 100, nullable = false)
+        @Column(name = "NUME", length = NumarMagic.NUMBERHUNDRED, nullable = false)
         private String nume;
 
         /**
          * Prenumele utilizatorlui.
          */
-        @Column(name = "prenume", length = 100, nullable = false)
+        @Column(name = "PRENUME", length = NumarMagic.NUMBERHUNDRED, nullable = false)
         private String prenume;
 
         /**
          * Email.
          */
-        @Column(name = "email", length = 100, nullable = false)
+        @Column(name = "EMAIL", length = NumarMagic.NUMBERHUNDRED, nullable = false)
         private String email;
 
         /**
@@ -102,7 +104,7 @@ public class Utilizator extends AbstractEntity implements Serializable {
          * Judetul.
          */
         @ManyToOne
-        @JoinColumn(name = "cod_judet")
+        @JoinColumn(name = "COD_JUDET")
         private Judet codJudet;
 
         /**
@@ -140,14 +142,14 @@ public class Utilizator extends AbstractEntity implements Serializable {
         /**
          * Educatie utilizator.
          */
-        @Column(name = "educatie")
+        @Column(name = "EDUCATIE")
         @Enumerated(EnumType.STRING)
         private EducatieEnum educatie;
 
         /**
          * Canal de alertas del usuario.
          */
-        @Column(name = "canal_corespondenta", length = 10)
+        @Column(name = "CANAL_CORESPONDENTA", length = NumarMagic.NUMBERTEN)
         @Enumerated(EnumType.STRING)
         private CanalAlertaEnum canalCorespondenta;
 
@@ -159,14 +161,14 @@ public class Utilizator extends AbstractEntity implements Serializable {
         /**
          * Sex utilizator.
          */
-        @Column(name = "sex")
+        @Column(name = "SEX")
         @Enumerated(EnumType.STRING)
         private SexEnum sex;
 
         /**
          * Stare civila utilizator.
          */
-        @Column(name = "statutCivil")
+        @Column(name = "STATUT_CIVIL")
         @Enumerated(EnumType.STRING)
         private StatutCivilEnum statutCivil;
 
@@ -195,7 +197,7 @@ public class Utilizator extends AbstractEntity implements Serializable {
         /**
          * Ordinea de aparitie.
          */
-        @Column(name = "RANK", length = 2)
+        @Column(name = "RANK", length = NumarMagic.NUMBERTWO)
         private Long rank;
 
         /**
@@ -213,9 +215,6 @@ public class Utilizator extends AbstractEntity implements Serializable {
          */
         public String getNumeComplet() {
                 final StringBuilder numeComplet = new StringBuilder();
-                numeComplet.append(nume);
-                numeComplet.append(' ');
-                numeComplet.append(prenume);
-                return numeComplet.toString();
+                return numeComplet.append(nume).append(' ').append(prenume).toString();
         }
 }

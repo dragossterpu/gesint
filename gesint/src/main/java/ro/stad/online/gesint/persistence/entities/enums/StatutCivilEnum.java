@@ -19,65 +19,77 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public enum StatutCivilEnum {
-	/**
-	 * Necasatorit.
-	 */
-	SINGLE("Necăsătorit/ă"),
-	/**
-	 * Casatorit.
-	 */
-	MARRIED("Căsătorit/ă"),
-	/**
-	 * Divortat.
-	 */
-	DIVORCED("Divorţat/ă"),
+        /**
+         * Necasatorit.
+         */
+        SINGLE("Necăsătorit/ă"),
+        /**
+         * Casatorit.
+         */
+        MARRIED("Căsătorit/ă"),
+        /**
+         * Divortat.
+         */
+        DIVORCED("Divorţat/ă"),
 
-	/**
-	 * Vaduv.
-	 */
-	WIDOWED("Văduv/ă"),
+        /**
+         * Vaduv.
+         */
+        WIDOWED("Văduv/ă"),
 
-	/**
-	 * Altul.
-	 */
-	OTHER("Alta"),
+        /**
+         * Altul.
+         */
+        OTHER("Alta"),
 
-	/**
-	 * Nespecificat.
-	 */
-	UNSPECIFIED("Nespecificat");
+        /**
+         * Nespecificat.
+         */
+        UNSPECIFIED("Nespecificat");
+        /**
+         * Valoare statica VALUES
+         */
+        private static final List<StatutCivilEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
 
-	private static final List<StatutCivilEnum> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+        /**
+         * Valoare statica SIZE
+         */
+        private static final int SIZE = VALUES.size();
 
-	private static final int SIZE = VALUES.size();
+        /**
+         * Valoare statica RANDOM
+         */
+        private static final Random RANDOM = new Random();
 
-	private static final Random RANDOM = new Random();
+        /**
+         * @return Returnează o listă cu descrierile enum.
+         *
+         */
+        public static List<StatutCivilEnum> getStatus() {
+                final List<StatutCivilEnum> civilStatuts = new ArrayList<>();
+                for (final StatutCivilEnum civilStatut : StatutCivilEnum.values()) {
+                        civilStatuts.add(civilStatut);
+                }
+                return civilStatuts;
+        }
 
-	/**
-	 * @return Returnează o listă cu descrierile enum.
-	 *
-	 */
-	public static List<StatutCivilEnum> getStatus() {
-		final List<StatutCivilEnum> civilStatuts = new ArrayList<>();
-		for (final StatutCivilEnum civilStatut : StatutCivilEnum.values()) {
-			civilStatuts.add(civilStatut);
-		}
-		return civilStatuts;
-	}
+        /**
+         * Metoda care obtine o valoare rendom
+         * @return
+         */
+        public static StatutCivilEnum randomLetter() {
+                return VALUES.get(RANDOM.nextInt(SIZE));
+        }
 
-	public static StatutCivilEnum randomLetter() {
-		return VALUES.get(RANDOM.nextInt(SIZE));
-	}
+        /**
+         * Descrierea enum.
+         */
+        private String description;
 
-	/**
-	 * Descrierea enum.
-	 */
-	private String description;
-
-	/**
-	 * @return Numele enum-ului "
-	 */
-	public String getName() {
-		return name();
-	}
+        /**
+         * @return Numele enum-ului "
+         */
+        public String getName() {
+                return name();
+        }
 }

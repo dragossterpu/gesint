@@ -1,0 +1,147 @@
+<ui:composition template="../layouts/layoutInterior2.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	<ui:define name="content">
+	    <h:form id="cautareRegistre">
+		<div class="filtru">
+		    <div class="blocFormular">
+			<div class="titluFormular">Căutare registre</div>
+			  										
+			     <div class="ui-g coloanaCautare">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">						
+				    <h:outputLabel for="utilizator" value="Utilizator: " />							
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+				    <p:autoComplete id="utilizator" minQueryLength="1" value="#{registruBean.filtruRegistru.idUtilizator}" completeMethod="#{registruBean.autocompletareUtilizator}" effect="fade" />				    
+				</div>
+		             </div>
+			     <div class="ui-g coloanaCautare" >
+                                 <div class="ui-g-12 ui-md-6 ui-lg-6">
+				    <h:outputLabel for="tipSectiune" value="Tip secțiune:" />
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+				   <p:importEnum type="ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum" var="tipuri" allSuffix="ALL_ENUM_VALUES" />
+				   <p:selectOneMenu  value="#{registruBean.filtruRegistru.numeSectiune}" id="tipSectiune" class="selectFiltru" style="min-width:initial;"  >
+					<f:selectItem itemLabel="Alege unul..." itemValue="" />
+					<f:selectItems value="#{tipuri.ALL_ENUM_VALUES}" var="tip" itemLabel="#{tip.descriere}" itemValue="#{tip}" />
+				   </p:selectOneMenu>
+				</div>
+			    </div>						
+			    <div class="ui-g coloanaCautare">
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+				    <h:outputLabel for="tipRegistru" value="Tip registru:" />
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-6">
+				    <p:importEnum type="ro.stad.online.gesint.persistence.entities.enums.RegistruEnum" var="tipuriReg" allSuffix="ALL_ENUM_VALUES" />
+				     <p:selectOneMenu  value="#{registruBean.filtruRegistru.tipRegActivitate}" id="tipRegistru" class="selectFiltru"  >
+                                        <f:selectItem itemLabel="Alege unul..." itemValue="" />
+                                        <f:selectItems value="#{tipuriReg.ALL_ENUM_VALUES}" var="tipReg" itemLabel="#{tipReg.descriere}" itemValue="#{tipReg}" />
+                                   </p:selectOneMenu>
+				</div>
+			   </div>
+			<div class="ui-g coloanaCautare">
+			     <div class="ui-g-12 ui-md-6 ui-lg-6">
+				<h:outputLabel for="dateFrom" value="Data înregistrării începând:" />
+			     </div>
+			     <div class="ui-g-12 ui-md-6 ui-lg-6">
+				<p:calendar id="dateFrom" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{registruBean.filtruRegistru.dataIncepand}" />
+			     </div>
+			</div>
+			<div class="ui-g coloanaCautare">
+			     <div class="ui-g-12 ui-md-6 ui-lg-6">
+				<h:outputLabel for="dateUntil" value="Data înregistrării până :" />
+			     </div>
+			     <div class="ui-g-12 ui-md-6 ui-lg-6">
+				<p:calendar id="dateUntil" pattern="dd/MM/yyyy" locale="ro" navigator="true" maxdate="#{currentDate}" value="#{registruBean.filtruRegistru.dataPana}" />
+			     </div>
+			</div>
+		
+		</div>
+		<div class="butoaneFormular">
+		      <p:commandButton action="#{registruBean.curatareCautare}" class="left" value="Curățare filtre" update="cautareRegistre" icon="fa fa-eraser" />
+		      <p:commandButton id="cautareButon" value="Căutare"  actionListener="#{registruBean.cautareRegActivitate}"  update="panelRegistre" icon="fa fa-search"
+			oncomplete="$('.mesajeFaraRezultate').css('opacity', 1)" onstart="PF('statusDialog').show()" class="right" onsuccess="PF('statusDialog').hide()"/>
+		</div>
+	       </div>						
+	       <div class="rezultateFiltru">
+		   <p:outputPanel layout="block" id="panelRegistre">
+			 <p:dataTable id="tablaRegistre" var="registruActivitate" rowIndexVar="rowIndex" value="#{registruBean.model}"  rows="15"  draggableColumns="true" paginator="true" lazy="true" resizableColumns="true"  
+			  sortOrder="descending" styleClass="modHeaderTable" onkeypress="if (event.keyCode == 13) {return false; }"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+			  rowKey="#{registruActivitate.id}" rowsPerPageTemplate="5,10,15" pageLinks="4" paginatorPosition="bottom" emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">				
+			    <f:facet name="header">
+				<p:outputPanel>
+				    <div class="left">
+					<h:commandLink rendered="#{registruBean.model.rowCount ne 0}">
+					   <p:graphicImage value="/images/xls.png" />
+					   <p:dataExporter type="xls" target="tablaRegistre" fileName="listaRegistre" />
+					</h:commandLink>
+					<h:commandLink rendered="#{registruBean.model.rowCount ne 0}">
+					   <p:graphicImage value="/images/pdf.png" />
+					   <p:dataExporter type="pdf" target="tablaRegistre" fileName="listaRegistre" />
+					</h:commandLink>
+					<h:commandLink rendered="#{registruBean.model.rowCount ne 0}">
+					   <p:graphicImage value="/images/csv.png" />
+					   <p:dataExporter type="csv" target="tablaRegistre" fileName="listaRegistre" />
+					</h:commandLink>
+				    </div>
+				    <span class="titlu">Registre de activitate</span>
+				     <p:commandButton id="toggler" type="button" value="Coloane" styleClass="butonColoane" icon="fa fa-th"
+				      rendered="#{registruBean.model.rowCount ne 0}" />
+			             <p:columnToggler datasource="tablaRegistre" trigger="toggler">
+			                 <p:ajax event="toggle" listener="#{registruBean.onToggle}" />
+			             </p:columnToggler>
+			     </p:outputPanel>
+			</f:facet>	
+			<p:ajax event="rowSelect" oncomplete="PF('dlg').show()" update=":cautareRegistre:dialog" />											
+			<p:column headerText="Descriere" style="width:30%;text-align:center;" sortBy="#{registruActivitate.descriere}" visible="#{registruBean.list[0]}" exportable="#{registruBean.list[0]}">							
+			     <h:outputText escape="false" id="descriereRegistruActivitate" value="#{registruActivitate.descriere.length() gt 40 ? fn:substring(registruActivitate.descriere,0,40).concat('...') : registruActivitate.descriere}"></h:outputText>
+			     <p:tooltip id="toolTipText" for="descriereRegistruActivitate" value="#{registruActivitate.descriere}" position="top" />	
+			</p:column>						
+			<p:column headerText="Data registrului" sortBy="#{registruActivitate.dataInregistrari}" style="width:13%; text-align:center;" visible="#{registruBean.list[1]}" exportable="#{registruBean.list[1]}">
+                                <h:outputText value="#{registruActivitate.dataInregistrari}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="Europe/Madrid" />
+                                </h:outputText>
+                        </p:column>	
+			<p:column headerText="Nume secțiune" style="width:11%;text-align:center;" sortBy="#{registruActivitate.numeSectiune}" visible="#{registruBean.list[2]}" exportable="#{registruBean.list[2]}">
+			     <h:outputText value="#{registruActivitate.numeSectiune}" />
+			</p:column>					
+			<p:column headerText="Tip de registru" style="width:15%;text-align:center;" sortBy="#{registruActivitate.tipRegActivitate}" visible="#{registruBean.list[3]}" exportable="#{registruBean.list[3]}">
+			     <h:outputText value="#{registruActivitate.tipRegActivitate}" />
+			</p:column>				
+			<p:column headerText="Utilizator" style="width:20%; text-align:center;" sortBy="#{registruActivitate.usernameRegActividad}" visible="#{registruBean.list[4]}" exportable="#{registruBean.list[4]}">
+			     <h:outputText value="#{registruActivitate.usernameRegActividad}" />
+			</p:column>							
+			<p:column headerText="Detalii"  styleClass="butonTabla"  exportable="false" style="width:6%;" toggleable="false">
+                            <h:commandLink title="Detalii registru de activitate"  styleClass="fa fa-fw fa-bullseye ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
+                                action="#{registruBean.getFormDetaliuRegistru(registruActivitate)}"  immediate="true" onstart="PF('statusDialog').show()"
+                                 onsuccess="PF('statusDialog').hide()"/>                           
+                         </p:column>	  																
+			<f:facet name="footer"> Total: <h:outputText value="#{registruBean.model.rowCount}"> <f:convertNumber type="number"
+                                 maxIntegerDigits="5"  maxFractionDigits="0"/></h:outputText> registre de activitate
+    			</f:facet>  			
+		      </p:dataTable>
+		      <p:dialog id="dialog" header="Descrierea în integralitate" widgetVar="dlg" modal="true" height="500" width="800" resizable="false">
+                            <h:outputText id="textoContinut" escape="false" value="#{registruActivitate.descriere}" styleClass="saltoLinea"/>
+                        </p:dialog>			
+		</p:outputPanel>
+		<p:dialog header="Detalii registru de activitate" widgetVar="dialogDetaliuRegistru" dynamic="true" width="800" height="400">                               
+                        <div class="aclaratii4"><strong>Descriere</strong><br/> 
+                           #{registruBean.registruActivitate.descriere} <br/> 
+                           <strong>Data registrului</strong> <br/> 
+                           #{registruBean.registruActivitate.dataInregistrari} <br/>
+                           <strong>Nume secțiune</strong> <br/> 
+                           #{registruBean.registruActivitate.numeSectiune} <br/> 
+                           <strong>Tip de registru</strong> <br/> 
+                           #{registruBean.registruActivitate.tipRegActivitate} <br/>
+                           <strong>Utilizator</strong> <br/> 
+                           #{registruBean.registruActivitate.usernameRegActividad} <br/>
+                       </div>                                 
+                 </p:dialog>		
+	   </div>       		
+	   </h:form>
+	</ui:define>
+</ui:composition>
