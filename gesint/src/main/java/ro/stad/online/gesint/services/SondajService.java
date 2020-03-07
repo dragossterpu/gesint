@@ -36,6 +36,12 @@ public interface SondajService {
         List<Sondaj> cautareSondajeFinalizate();
 
         /**
+         * Cauta sondaje programate pentru a le activa.
+         * @return List<Sondaj>
+         */
+        List<Sondaj> cautareSondajePentruActivare();
+
+        /**
          * Cauta un sondaj
          * @param sondaj Sondaj
          * @return sondaj Sondaj

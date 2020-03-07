@@ -120,6 +120,16 @@ public class JudetServiceImpl implements JudetService {
         }
 
         /**
+         * Metoda care cauta judete
+         * @param List<String> string
+         * @return List<Judet> judete
+         */
+        @Override
+        public List<Judet> findById(final List<String> judete) {
+                return judetRepository.findAllByIndicator(judete);
+        }
+
+        /**
          * Metoda care cauta un judet dupa nume
          * @param descriere String
          * @retur judet Judet

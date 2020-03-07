@@ -74,6 +74,16 @@ public class LocalitateServiceImpl implements LocalitateService {
         }
 
         /**
+         * Metodă care cauta toate localitatile selectate dupa id
+         * @param idsLocal List<String>
+         * @return lista de localitati.
+         */
+        @Override
+        public List<Localitate> findAllById(final List<String> idsLocal) {
+                return localitateRepository.findAllById(idsLocal);
+        }
+
+        /**
          * Metodă care salveaza o localitate nouă
          * @param nume localitatii
          * @param judet din care face parte localitatea
@@ -155,6 +165,16 @@ public class LocalitateServiceImpl implements LocalitateService {
         @Override
         public List<Localitate> findByJudet(final Judet judet) {
                 return localitateRepository.findAllByJudet(judet);
+        }
+
+        /**
+         * Metodă care cauta toate localitatile judetelor trecuta ca parametru
+         * @param judete List<Judet>
+         * @return lista List<Localitate> lista de localitati.
+         */
+        @Override
+        public List<Localitate> findByJudete(final List<Judet> judete) {
+                return localitateRepository.findAllByJudete(judete);
         }
 
         /**

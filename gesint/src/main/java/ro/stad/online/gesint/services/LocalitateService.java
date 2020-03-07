@@ -56,6 +56,13 @@ public interface LocalitateService {
         List<Localitate> fiindAll();
 
         /**
+         * Metodă care cauta toate localitatile
+         * @param idsLocal List<String>
+         * @return lista de localitati.
+         */
+        List<Localitate> findAllById(List<String> idsLocal);
+
+        /**
          * Metodă care cauta o localitate dupa id acestuia
          * @param localidadId Long
          * @return localitate Localitate
@@ -77,6 +84,13 @@ public interface LocalitateService {
          * @return lista List<Localitate> lista de localitati.
          */
         List<Localitate> findByJudet(Judet judet);
+
+        /**
+         * Metodă care cauta toate localitatile judetelor trecuta ca parametru
+         * @param judete List<Judet>
+         * @return lista List<Localitate> lista de localitati.
+         */
+        List<Localitate> findByJudete(List<Judet> judete);
 
         /**
          * Metodă care cauta toate localitatile unui judet

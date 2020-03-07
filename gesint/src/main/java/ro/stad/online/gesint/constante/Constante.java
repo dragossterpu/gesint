@@ -28,6 +28,11 @@ public final class Constante {
         public static final String OPERATION = "Operația ";
 
         /**
+         * Constante final text "activ".
+         */
+        public static final String ACTIV = "activ";
+
+        /**
          * Constante final text se a realizat cu éxit.
          */
         public static final String SEHAREALEXIT = " a fost făcută cu succes.";
@@ -362,6 +367,11 @@ public final class Constante {
          * The Constant dd/MM/yyyy. Totul ok!!!
          */
         public static final String FORMATDATE = "dd/MM/yyyy";
+
+        /**
+         * The Constant yyyy-MM-dd. Totul ok!!!
+         */
+        public static final String FORMATUSADATE = "yyyy-MM-dd";
 
         /**
          * The Constant UNDERSCORE.

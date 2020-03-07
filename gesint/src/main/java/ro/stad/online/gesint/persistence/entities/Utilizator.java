@@ -147,7 +147,14 @@ public class Utilizator extends AbstractEntity implements Serializable {
         private EducatieEnum educatie;
 
         /**
-         * Canal de alertas del usuario.
+         * Definimos un alt câmp de tip String care nu se poate insera și nu poate fi actualizat atribuit aceleiași
+         * coloane. Se foloseste pentru criteria , cautare dupa lista de enum
+         */
+        @Column(name = "EDUCATIE", insertable = false, updatable = false)
+        private String educatieAsText;
+
+        /**
+         * Canal de comunicare al utilizatorului
          */
         @Column(name = "CANAL_CORESPONDENTA", length = NumarMagic.NUMBERTEN)
         @Enumerated(EnumType.STRING)

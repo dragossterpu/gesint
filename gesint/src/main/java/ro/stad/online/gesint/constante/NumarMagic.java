@@ -458,9 +458,14 @@ public final class NumarMagic {
         public static final double ZEROTWENTYFIVE = 0.25;
 
         /**
-         * Constante pentru numarul magic 10
+         * Constante pentru numarul magic 0.10
          */
         public static final double ZEROTEN = 0.10;
+
+        /**
+         * Constante pentru numarul magic 0.00
+         */
+        public static final double ZEROZERO = 0.00;
 
         /**
          * Constructor de Numero mágico.

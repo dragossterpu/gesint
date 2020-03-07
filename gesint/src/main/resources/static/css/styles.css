@@ -484,12 +484,19 @@ ul ul span {
 	color: #e60000 !important;
 }
 
+/* .fa-exclamation-triangle:before { */
+/* 	color: #ff751a !important; */
+/* } */
+
 .fa-exclamation-triangle:before {
-	color: #ff751a !important;
+        color: #0080ff !important;
 }
+/* .fa-check-circle:before { */
+/* 	color: #0080ff !important; */
+/* } */
 
 .fa-check-circle:before {
-	color: #0080ff !important;
+        color: #00d9d9!important;
 }
 .fa-plus-circle:before {
 	color: #00cc00 !important;

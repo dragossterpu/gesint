@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.constante.NumarMagic;
 import ro.stad.online.gesint.model.filters.FiltruEchipa;
 import ro.stad.online.gesint.model.filters.FiltruUtilizator;
 import ro.stad.online.gesint.persistence.entities.Functie;
@@ -149,6 +150,88 @@ public class UtilizatorServiceImpl implements UtilizatorService {
          */
         @SuppressWarnings(Constante.UNCHECKED)
         @Override
+        public List<Utilizator> cautareUtilizatorCentralCriteria(final int first, final int pageSize,
+                        final String sortField, final SortOrder sortOrder, final FiltruUtilizator filtruUtilizator) {
+                try {
+                        this.session = this.sessionFactory.openSession();
+                        final Criteria criteria = this.session.createCriteria(Utilizator.class, "utilizator");
+                        criteria.setFirstResult(first);
+                        criteria.setMaxResults(pageSize);
+                        if (sortField != null) {
+                                if (sortOrder.equals(SortOrder.ASCENDING)) {
+                                        criteria.addOrder(Order.asc(sortField));
+                                }
+                                else if (sortOrder.equals(SortOrder.DESCENDING)) {
+                                        criteria.addOrder(Order.desc(sortField));
+                                }
+                        }
+                        else {
+                                criteria.addOrder(Order.asc("rank"));
+                        }
+
+                        creaCriteriaUtilizatorLocali(filtruUtilizator, criteria);
+                        return criteria.list();
+                }
+                finally {
+                        closeSession();
+                }
+        }
+
+        /**
+         * Metoda care se foloseste pentru a selecta filtrulile introduse de utilizator pentru cautare
+         * @param filtruUtilizator
+         * @param criteria
+         */
+        private void creaCriteriaUtilizatorLocali(final FiltruUtilizator filtruUtilizator, final Criteria criteria) {
+                if (filtruUtilizator.getIdFunctia() == null) {
+                        criteria.add(Restrictions.in(Constante.TEAM, filtruUtilizator.getListaFunctii()));
+                }
+                else {
+                        criteria.add(Restrictions.eq(Constante.TEAM,
+                                        paramEchipaService.findById(filtruUtilizator.getIdFunctia())));
+                }
+                UtilitatiCriteria.setConditieCriteriaDataMaiMare(filtruUtilizator.getDateFrom(), criteria,
+                                Constante.DATECREATE);
+                UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(filtruUtilizator.getDateUntil(), criteria,
+                                Constante.DATECREATE);
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getNume(), criteria, Constante.NUME);
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getPrenume(), criteria,
+                                Constante.PRENUME);
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getEmail(), criteria, "email");
+                if (filtruUtilizator.getIdJudet() != null && !filtruUtilizator.getIdJudet().equals(Constante.SPATIU)) {
+                        criteria.add(Restrictions.eq("codJudet", judetService.findById(filtruUtilizator.getIdJudet())));
+                }
+        }
+
+        /**
+         * Metoda care cauta utilizatori folosind parametrii din filtru.
+         * @param filtruUtilizator FiltruUtilizator
+         * @return lista List<Utilizator>
+         */
+        @Override
+        public List<Utilizator> cautareUtilizatorCriteria(final FiltruUtilizator filtruUtilizator) {
+                try {
+                        this.session = this.sessionFactory.openSession();
+                        final Criteria criteria = this.session.createCriteria(Utilizator.class);
+                        return gestionareCriteriaUtilizatori(filtruUtilizator, criteria);
+                }
+                finally {
+                        closeSession();
+                }
+        }
+
+        /**
+         * Metoda care cauta în baza de date pe baza parametrilor primiți. Cautarea este paginată in server.
+         * @param first primul element
+         * @param pageSize dimensiunea fiecărei pagini de rezultate
+         * @param sortField câmpul dupa care sunt sortate rezultatele
+         * @param sortOrder direcția de ordonare (ascendent / descendent)
+         * @param filtruUtilizator FiltruUtilizator Obiect care conține criteriile de căutare
+         * @return Lista de utilizatori List<Utilizator>
+         *
+         */
+        @SuppressWarnings(Constante.UNCHECKED)
+        @Override
         public List<Utilizator> cautareUtilizatorCriteria(final int first, final int pageSize, final String sortField,
                         final SortOrder sortOrder, final FiltruUtilizator filtruUtilizator) {
                 try {
@@ -177,23 +260,6 @@ public class UtilizatorServiceImpl implements UtilizatorService {
         }
 
         /**
-         * Metoda care cauta utilizatori folosind parametrii din filtru.
-         * @param filtruUtilizator FiltruUtilizator
-         * @return lista List<Utilizator>
-         */
-        @Override
-        public List<Utilizator> cautareUtilizatorCriteria(final FiltruUtilizator filtruUtilizator) {
-                try {
-                        this.session = this.sessionFactory.openSession();
-                        final Criteria criteria = this.session.createCriteria(Utilizator.class);
-                        return gestionareCriteriaUtilizatori(filtruUtilizator, criteria);
-                }
-                finally {
-                        closeSession();
-                }
-        }
-
-        /**
          * Metoda care cauta utilizatori conducere locala folosind parametrii din filtru.
          * @param filtruEchipa FiltruEchipa
          * @return lista List<Utilizator>
@@ -209,28 +275,6 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                 finally {
                         closeSession();
                 }
-        }
-
-        /**
-         * Metodă care primeste un fișier din care se recupereaza datele pentru a genera un Document care va fi stocat
-         * în baza de date. Lasă obiectul pregatit pentru salvare.
-         * @param file byte[] fisier care se va stoca in baza de date
-         * @param utilizator Utilizator
-         * @return Document document stocat in bbdd
-         */
-        @Override
-        public Utilizator incarcareImaginaFaraStocare(final byte[] file, final Utilizator user) throws IOException {
-                return creareImagine(file, user);
-        }
-
-        /**
-         * Metoda care incarca datele personale ale utilizatorului
-         * @param fileBlob byte[] fisier care se va stoca in baza de date
-         * @param utilizator Utilizator
-         * @return usuario
-         */
-        private void incarcareDatePersonaleUser(final byte[] fileBlob, final Utilizator utilizator) {
-                utilizator.setPhoto(fileBlob);
         }
 
         /**
@@ -259,7 +303,8 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                 UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(filtruUtilizator.getDateUntil(), criteria,
                                 Constante.DATECREATE);
                 UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getNume(), criteria, Constante.NUME);
-                UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getNume(), criteria, Constante.PRENUME);
+                UtilitatiCriteria.setConditieCriteriaTextLike(filtruUtilizator.getPrenume(), criteria,
+                                Constante.PRENUME);
                 UtilitatiCriteria.setConditieCriteriaEgalitateBoolean(filtruUtilizator.getValidat(), criteria,
                                 Constante.VALIDAT);
                 UtilitatiCriteria.setConditieCriteriaEgalitateBoolean(false, criteria, "destinatarExtern");
@@ -274,23 +319,33 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                         UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruUtilizator.getTipLocalitate(),
                                         criteria, "localitate.tipLocalitate");
                 }
-                UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruUtilizator.getEducatie(), criteria,
-                                "educatie");
-                if (filtruUtilizator.getIdJudet() != null && !filtruUtilizator.getIdJudet().equals(Constante.SPATIU)) {
-                        criteria.add(Restrictions.eq("codJudet", judetService.findById(filtruUtilizator.getIdJudet())));
+
+                if (!filtruUtilizator.getListaEducatie().isEmpty()) {
+                        criteria.add(Restrictions.in("educatieAsText", filtruUtilizator.getListaEducatie()));
                 }
+
+                if (filtruUtilizator.getListaJudeteSelectate() != null
+                                && !filtruUtilizator.getListaJudeteSelectate().isEmpty()) {
+                        criteria.add(Restrictions.in("codJudet", filtruUtilizator.getListaJudeteSelectate()));
+                }
+
                 if (filtruUtilizator.getIdFunctia() != null) {
                         criteria.add(Restrictions.eq(Constante.TEAM,
                                         paramEchipaService.findById(filtruUtilizator.getIdFunctia())));
                 }
-                if (filtruUtilizator.getIdLocalitate() != null) {
-                        criteria.add(Restrictions.eq(Constante.LOCALITATE,
-                                        localitateService.findById(filtruUtilizator.getIdLocalitate())));
+                if (!filtruUtilizator.getListaFunctii().isEmpty()) {
+                        criteria.add(Restrictions.in(Constante.TEAM, filtruUtilizator.getListaFunctii()));
                 }
-                final Functie functia = paramEchipaService.findById(30L);
-                criteria.add(Restrictions.eq(Constante.TEAM, functia));
-                UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruUtilizator.getEducatie(), criteria,
-                                "educatie");
+                if (filtruUtilizator.getListaIdLocalitate() != null
+                                && !filtruUtilizator.getListaIdLocalitate().isEmpty()) {
+                        criteria.add(Restrictions.in(Constante.LOCALITATE,
+                                        localitateService.findAllById(filtruUtilizator.getListaIdLocalitate())));
+                }
+                if (filtruUtilizator.getListaFunctii().isEmpty() && filtruUtilizator.getIdFunctia() == null) {
+                        final Functie functia = paramEchipaService.findById(NumarMagic.NUMBERTHIRTYL);
+                        criteria.add(Restrictions.eq(Constante.TEAM, functia));
+                }
+
                 if (filtruUtilizator.getEliminat() != null) {
                         extragereUserEliminat(filtruUtilizator, criteria);
                 }
@@ -421,6 +476,17 @@ public class UtilizatorServiceImpl implements UtilizatorService {
         }
 
         /**
+         * Metodă care caută utilizatori după județ și echipă.
+         * @param jude Judet
+         * @param listaEchipa List<Functie>
+         * @return lista List<Utilizator>
+         */
+        @Override
+        public List<Utilizator> findByJudetSiEchipa(final Judet jude, final List<Functie> listaEchipa) {
+                return utilizatorRepository.findByCodJudetAndTeamIn(jude, listaEchipa);
+        }
+
+        /**
          * Metodă care caută utilizatori după localitate.
          * @param loca Localitate
          * @return lista List<Utilizator>
@@ -439,17 +505,6 @@ public class UtilizatorServiceImpl implements UtilizatorService {
         public List<Utilizator> findByName() {
                 final String nume = Constante.DESTINATAR;
                 return utilizatorRepository.findByNume(nume);
-        }
-
-        /**
-         * Metodă care caută utilizatori după județ și echipă.
-         * @param jude Judet
-         * @param listaEchipa List<Functie>
-         * @return lista List<Utilizator>
-         */
-        @Override
-        public List<Utilizator> findByJudetSiEchipa(final Judet jude, final List<Functie> listaEchipa) {
-                return utilizatorRepository.findByCodJudetAndTeamIn(jude, listaEchipa);
         }
 
         /**
@@ -556,6 +611,50 @@ public class UtilizatorServiceImpl implements UtilizatorService {
                         closeSession();
                 }
 
+        }
+
+        /**
+         * Metodă care obține numărul de registre din baza de date
+         * @param filtruUtilizator FiltruUtilizator
+         * @return int
+         */
+        @Override
+        public int getCounCriteriaCentral(final FiltruUtilizator filtUtiliz) {
+                try {
+                        this.session = this.sessionFactory.openSession();
+                        final Criteria teria = this.session.createCriteria(Utilizator.class);
+                        creaCriteriaUtilizatorLocali(filtUtiliz, teria);
+                        teria.setProjection(Projections.rowCount());
+                        final Long cnt = (Long) teria.uniqueResult();
+
+                        return Math.toIntExact(cnt);
+                }
+                finally {
+                        closeSession();
+                }
+
+        }
+
+        /**
+         * Metoda care incarca datele personale ale utilizatorului
+         * @param fileBlob byte[] fisier care se va stoca in baza de date
+         * @param utilizator Utilizator
+         * @return usuario
+         */
+        private void incarcareDatePersonaleUser(final byte[] fileBlob, final Utilizator utilizator) {
+                utilizator.setPhoto(fileBlob);
+        }
+
+        /**
+         * Metodă care primeste un fișier din care se recupereaza datele pentru a genera un Document care va fi stocat
+         * în baza de date. Lasă obiectul pregatit pentru salvare.
+         * @param file byte[] fisier care se va stoca in baza de date
+         * @param utilizator Utilizator
+         * @return Document document stocat in bbdd
+         */
+        @Override
+        public Utilizator incarcareImaginaFaraStocare(final byte[] file, final Utilizator user) throws IOException {
+                return creareImagine(file, user);
         }
 
         /**

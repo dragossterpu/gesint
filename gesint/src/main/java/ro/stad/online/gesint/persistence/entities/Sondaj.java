@@ -15,9 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -36,6 +34,7 @@ import lombok.Setter;
 import lombok.ToString;
 import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.constante.NumarMagic;
+import ro.stad.online.gesint.persistence.entities.enums.SituatieSondajEnum;
 import ro.stad.online.gesint.persistence.entities.enums.TipSondajEnum;
 
 /**
@@ -107,16 +106,17 @@ public class Sondaj extends AbstractEntity implements Serializable {
         /**
          * Tabla unde salvam voturile unui sondaj
          */
-        @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
-        @JoinTable(name = "UTILIZATOR_SONDAJ", joinColumns = { @JoinColumn(name = "ID_SONDAJ") }, inverseJoinColumns = {
-                        @JoinColumn(name = "USERNAME") })
-        private List<Utilizator> utilizatori;
+
+        @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+        @JoinColumn(name = "id_sondaj")
+        private List<UtilizatorSondaj> utilizatori;
 
         /**
          * Sondaj activ.
          */
         @Column(name = "ACTIV")
-        private Boolean activ;
+        @Enumerated(EnumType.STRING)
+        private SituatieSondajEnum activ;
 
         /**
          * Raspunsurile sondajului.

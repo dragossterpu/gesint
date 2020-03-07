@@ -2,7 +2,9 @@ package ro.stad.online.gesint.persistence.repositories;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.Localitate;
@@ -27,6 +29,22 @@ public interface LocalitateRepository extends CrudRepository<Localitate, Long> {
          * @return lista de localitati.
          */
         List<Localitate> findAllByJudet(Judet judet);
+
+        /**
+         * Metodă care cauta toate localitatile judetelor trecuta ca parametru
+         * @param judete List<Judet>
+         * @return lista List<Localitate> lista de localitati.
+         */
+        @Query(value = "select * from localitate where cod_judet in ( :judete) order by nume asc", nativeQuery = true)
+        List<Localitate> findAllByJudete(@Param("judete") List<Judet> judete);
+
+        /**
+         * Metodă care cauta toate localitatile judetelor trecuta ca parametru
+         * @param idsLoc List<Long>
+         * @return lista List<Localitate> lista de localitati.
+         */
+        @Query(value = "select * from localitate where nume in ( :idsLoc ) ", nativeQuery = true)
+        List<Localitate> findAllById(@Param("idsLoc") List<String> idsLoc);
 
         /**
          * Cauta o lista de localitati ale unui judet.

@@ -30,6 +30,13 @@ public interface JudetService {
         Judet fiindOne(Judet judet);
 
         /**
+         * Cauta judete
+         * @param List<String> string
+         * @return List<Judet> judete
+         */
+        List<Judet> findById(List<String> string);
+
+        /**
          * Cauta un judet
          * @param string Judetul
          * @return Judet judet

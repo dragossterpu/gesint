@@ -190,6 +190,12 @@ public class RezultateBean implements Serializable {
         private transient RegistruActivitateService regActividadService;
 
         /**
+         * Componente de utilidades.
+         */
+        @Autowired
+        private transient Utilitati utilitati;
+
+        /**
          * Căutați rezultate pe baza filtrului de căutare.
          */
         public void cautareRezultate() {
@@ -216,7 +222,7 @@ public class RezultateBean implements Serializable {
                         this.model.load(0, NumarMagic.NUMBERFIFTEEN, null, SortOrder.DESCENDING, null);
                         // Obtinem data alegerilor in format dd/MM/yyyy
                         if (!this.model.getDatasource().isEmpty()) {
-                                this.dataAlegerilor = Utilitati.getFechaFormateada(
+                                this.dataAlegerilor = this.utilitati.getDataFormatata(
                                                 model.getDatasource().get(0).getDataAlegerilor(), Constante.FORMATDATE);
                         }
                         this.listaRezultate = rezultateDaoService.filterGeneraleRezultate(filtruRezultat);

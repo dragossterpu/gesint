@@ -11,7 +11,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -24,6 +23,7 @@ import ro.stad.online.gesint.constante.Constante;
 import ro.stad.online.gesint.model.filters.FiltruSondaj;
 import ro.stad.online.gesint.persistence.entities.Sondaj;
 import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
+import ro.stad.online.gesint.persistence.entities.enums.SituatieSondajEnum;
 import ro.stad.online.gesint.persistence.repositories.SondajRepository;
 import ro.stad.online.gesint.services.SondajService;
 import ro.stad.online.gesint.util.FacesUtilities;
@@ -81,12 +81,13 @@ public class SondajServiceImpl implements SondajService, Serializable {
          */
         @SuppressWarnings(Constante.UNCHECKED)
         @Override
+        @Transactional
         public List<Sondaj> cautareSondajeCriteria(final int first, final int pageSize, final String sortField,
                         final SortOrder sortOrder, final FiltruSondaj filtruSondaj) {
                 try {
 
-                        session = sessionFactory.openSession();
-                        final Criteria criteria = session.createCriteria(Sondaj.class);
+                        this.session = this.sessionFactory.openSession();
+                        final Criteria criteria = this.session.createCriteria(Sondaj.class);
                         creaCriteria(filtruSondaj, criteria);
                         criteria.setFirstResult(first);
                         criteria.setMaxResults(pageSize);
@@ -105,9 +106,9 @@ public class SondajServiceImpl implements SondajService, Serializable {
                         return criteria.list();
                 }
                 finally {
-                        if ((session != null) && session.isOpen()) {
+                        if ((this.session != null) && this.session.isOpen()) {
                                 try {
-                                        session.close();
+                                        this.session.close();
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
@@ -131,22 +132,13 @@ public class SondajServiceImpl implements SondajService, Serializable {
                                 Constante.DATAINCEPERE);
                 UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(filtruSondaj.getDataPanaSondaj(), criteria,
                                 Constante.DATAINCEPERE);
-                UtilitatiCriteria.setConditieCriteriaEgalitateBoolean(filtruSondaj.getActiv(), criteria, "activ");
+                UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruSondaj.getActiv(), criteria, Constante.ACTIV);
                 UtilitatiCriteria.setConditieCriteriaDataMaiMare(filtruSondaj.getDateFromCreated(), criteria,
                                 Constante.DATECREATE);
                 UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(filtruSondaj.getDateUntilCreated(), criteria,
                                 Constante.DATECREATE);
                 UtilitatiCriteria.setConditieCriteriaEgalitateEnum(filtruSondaj.getTipSondaj(), criteria, "tipSondaj");
-                // daca este null nu a fost selectata situatia sondajului
 
-                if (filtruSondaj.getValidat() != null) {
-                        if (filtruSondaj.getValidat()) {
-                                criteria.add(Restrictions.isNull(Constante.DATEDELETED));
-                        }
-                        else {
-                                criteria.add(Restrictions.isNotNull(Constante.DATEDELETED));
-                        }
-                }
         }
 
         /**
@@ -155,29 +147,29 @@ public class SondajServiceImpl implements SondajService, Serializable {
          * @return sondaj Sondaj
          */
         @Override
-        public Sondaj fiindOne(final Sondaj sondaj) {
-                return sondajRepository.findOne(sondaj.getId());
+        public Sondaj fiindOne(final Sondaj sond) {
+                return this.sondajRepository.findOne(sond.getId());
         }
 
         /**
-         * Metoda care obține numărul de registre din baza de date
+         * Metodă care obține numărul de registre din baza de date
          * @param filtruSondaj FiltruSondaj
-         * @return int
+         * @return cnt Long
          */
         @Override
         public int getCounCriteria(final FiltruSondaj filtruSondaj) {
                 try {
-                        session = sessionFactory.openSession();
-                        final Criteria crit = session.createCriteria(Sondaj.class);
+                        this.session = this.sessionFactory.openSession();
+                        final Criteria crit = this.session.createCriteria(Sondaj.class);
                         creaCriteria(filtruSondaj, crit);
                         crit.setProjection(Projections.rowCount());
                         final Long cnt = (Long) crit.uniqueResult();
                         return Math.toIntExact(cnt);
                 }
                 finally {
-                        if ((session != null) && session.isOpen()) {
+                        if ((this.session != null) && this.session.isOpen()) {
                                 try {
-                                        session.close();
+                                        this.session.close();
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
@@ -191,42 +183,73 @@ public class SondajServiceImpl implements SondajService, Serializable {
         }
 
         /**
-         * Metoda care salveaza sau actualizeaza un sondaj
+         * Metodă care salvează sau actualizează un sondaj
          * @param sondaj Sondaj
          * @return sondaj Sondaj
          */
         @Override
         @Transactional(readOnly = false)
-        public Sondaj save(final Sondaj sondaj) {
-                return sondajRepository.save(sondaj);
+        public Sondaj save(final Sondaj sond) {
+                return this.sondajRepository.save(sond);
         }
 
         /**
-         * Metoda care obține numărul de registre din baza de date
-         * @param filtruSondaj FiltruSondaj
+         * Metodă care obține numărul de registre din baza de date
          * @return List<Sondaj>
          */
         @SuppressWarnings("unchecked")
         @Override
         public List<Sondaj> cautareSondajeFinalizate() {
                 try {
-                        session = sessionFactory.openSession();
-                        final Criteria crit = session.createCriteria(Sondaj.class);
+                        this.session = this.sessionFactory.openSession();
+                        final Criteria crit = this.session.createCriteria(Sondaj.class);
                         UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(new Date(), crit, "dataFinalizare");
-                        UtilitatiCriteria.setConditieCriteriaEgalitateBoolean(true, crit, "activ");
+                        UtilitatiCriteria.setConditieCriteriaEgalitateEnum(SituatieSondajEnum.ACTIV, crit,
+                                        Constante.ACTIV);
                         crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
                         return crit.list();
                 }
                 finally {
-                        if ((session != null) && session.isOpen()) {
+                        if ((this.session != null) && this.session.isOpen()) {
                                 try {
-                                        session.close();
+                                        this.session.close();
                                 }
                                 catch (final DataAccessException e) {
                                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
                                                         RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
                                         log.error(RegistruEnum.EROARE.getDescriere()
                                                         .concat(" a aparut o eroare la accesarea bazei de date"));
+                                }
+                        }
+                }
+        }
+
+        /**
+         * Metodă care se folosește pentru a căuta sondaje programate pentru a le activa.
+         * @return List<Sondaj>
+         */
+        @SuppressWarnings("unchecked")
+        @Override
+        public List<Sondaj> cautareSondajePentruActivare() {
+                try {
+                        this.session = this.sessionFactory.openSession();
+                        final Criteria crit = this.session.createCriteria(Sondaj.class);
+                        UtilitatiCriteria.setConditieCriteriaDataMaiMicaSauEgala(new Date(), crit, "dataIncepere");
+                        UtilitatiCriteria.setConditieCriteriaEgalitateEnum(SituatieSondajEnum.NEINCEPUT, crit,
+                                        Constante.ACTIV);
+                        crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+                        return crit.list();
+                }
+                finally {
+                        if ((this.session != null) && this.session.isOpen()) {
+                                try {
+                                        this.session.close();
+                                }
+                                catch (final DataAccessException e) {
+                                        FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_ERROR,
+                                                        RegistruEnum.EROARE.getDescriere(), Constante.DESCEROAREMESAJ);
+                                        log.error(RegistruEnum.EROARE.getDescriere()
+                                                        .concat(" a apărut o eroare la accesarea bazei de date"));
                                 }
                         }
                 }

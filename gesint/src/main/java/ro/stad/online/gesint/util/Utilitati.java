@@ -132,7 +132,7 @@ public class Utilitati {
          * @param data Date
          * @return zile int
          */
-        public static Long getDiasHastaHoy(final Date data) {
+        public static Long getZilePanaAzi(final Date data) {
                 final LocalDate azi = LocalDate.now();
                 long zile = 0;
                 LocalDate dataIncepand = null;
@@ -150,7 +150,7 @@ public class Utilitati {
          * @return data formatata
          */
 
-        public static String getFechaFormateada(final Date date, final String pattern) {
+        public String getDataFormatata(final Date date, final String pattern) {
                 final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
                 return sdf.format(date);
         }

@@ -39,12 +39,15 @@ import ro.stad.online.gesint.persistence.entities.Intrebare;
 import ro.stad.online.gesint.persistence.entities.RaspunsSuport;
 import ro.stad.online.gesint.persistence.entities.Sondaj;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
+import ro.stad.online.gesint.persistence.entities.UtilizatorSondaj;
 import ro.stad.online.gesint.persistence.entities.enums.RegistruEnum;
 import ro.stad.online.gesint.persistence.entities.enums.SectiuniEnum;
+import ro.stad.online.gesint.persistence.entities.enums.SituatieSondajEnum;
 import ro.stad.online.gesint.services.IntrebareService;
 import ro.stad.online.gesint.services.RaspunsSuportService;
 import ro.stad.online.gesint.services.RegistruActivitateService;
 import ro.stad.online.gesint.services.SondajService;
+import ro.stad.online.gesint.services.SondajVotService;
 import ro.stad.online.gesint.services.StatisticaService;
 import ro.stad.online.gesint.services.impl.DocumentServiceImpl;
 import ro.stad.online.gesint.util.FacesUtilities;
@@ -83,20 +86,26 @@ public class SondajBean implements Serializable {
         private transient Sondaj sondajActiv;
 
         /**
-         * Variala utilizata pentru injectarea serviciului de sondale.
+         * Variala utilizata pentru injectarea serviciului de sondaje.
          */
         @Autowired
         private transient SondajService sondajService;
 
         /**
-         * Lazy model pentru sondje.
+         * Variala utilizata pentru injectarea serviciului de votanti de sondaj.
+         */
+        @Autowired
+        private transient SondajVotService sondajVotService;
+
+        /**
+         * Lazy model pentru sondaje.
          */
         private transient LazyDataSondaje model;
 
         /**
-         * Lazy model pentru sondaje active.
+         * Lazy model pentru sondaje active .
          */
-        private transient LazyDataSondaje modelActiv;
+        private transient LazyDataSondaje modelSondajeActive;
 
         /**
          * Clasa de căutare a sondajelor.
@@ -257,10 +266,10 @@ public class SondajBean implements Serializable {
          * @return modelActiv
          */
         public void cautareSondajeActive() {
-                this.filtruSondaj.setActiv(true);
-                this.modelActiv.setCautare(this.filtruSondaj);
-                this.modelActiv.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATECREATE, SortOrder.DESCENDING, null);
-
+                this.filtruSondaj.setActiv(SituatieSondajEnum.ACTIV);
+                this.modelSondajeActive.setCautare(this.filtruSondaj);
+                this.modelSondajeActive.load(0, NumarMagic.NUMBERFIFTEEN, Constante.DATECREATE, SortOrder.DESCENDING,
+                                null);
         }
 
         /**
@@ -298,14 +307,6 @@ public class SondajBean implements Serializable {
         public void curatareCautare() {
                 this.filtruSondaj = new FiltruSondaj();
                 this.model = new LazyDataSondaje(this.sondajService);
-        }
-
-        /**
-         * Metodă folosită pentru a curăța filtrele de căutarea.
-         */
-        public void curatareCautareSondajActiv() {
-                this.filtruSondaj = new FiltruSondaj();
-                this.modelActiv = new LazyDataSondaje(this.sondajService);
         }
 
         /**
@@ -379,7 +380,7 @@ public class SondajBean implements Serializable {
         }
 
         /**
-         * Metodă folosită pentru a încarca utilizatorului pe care dorim să le modificăm în formular.
+         * Metodă folosită pentru a încarca datele sondajului pe care dorim să le modificăm.
          * @param sondajModifca Sondaj recuperat din formularul de căutare
          * @throws IOException posibila exceptie
          * @return pagina modificareSondaj
@@ -417,13 +418,13 @@ public class SondajBean implements Serializable {
                 for (int i = 0; i < NUMBERCOLUMNTABLA; i++) {
                         this.list.add(Boolean.TRUE);
                 }
-                curatareCautareSondajActiv();
                 this.model = new LazyDataSondaje(this.sondajService);
-                this.modelActiv = new LazyDataSondaje(this.sondajService);
+                this.modelSondajeActive = new LazyDataSondaje(this.sondajService);
                 this.raspuns = new RaspunsSuport();
                 this.graficaVoturi = new PieChartModel();
-                Utilitati.cautareSesiune("sondajBean");
                 cautareSondajeActive();
+                Utilitati.cautareSesiune("sondajBean");
+
         }
 
         /**
@@ -458,15 +459,17 @@ public class SondajBean implements Serializable {
         public String salvatiSondajul(final Sondaj sond) {
                 try {
                         this.sondaj = sond;
-                        this.sondaj.setActiv(true);
-                        this.sondaj.setProcentajAbt((float) 0.00);
-                        this.sondaj.setProcentajDa((float) 0.00);
-                        this.sondaj.setProcentajNu((float) 0.00);
-                        this.sondaj.setTotalVoturi(0);
-                        this.sondaj.setTotalVoturiAbt(0);
-                        this.sondaj.setTotalVoturiDa(0);
-                        this.sondaj.setTotalVoturiNu(0);
+                        extractValidareSondaj();
+
+                        this.sondaj.setProcentajAbt((float) NumarMagic.ZEROZERO);
+                        this.sondaj.setProcentajDa((float) NumarMagic.ZEROZERO);
+                        this.sondaj.setProcentajNu((float) NumarMagic.ZEROZERO);
+                        this.sondaj.setTotalVoturi(NumarMagic.NUMBERZERO);
+                        this.sondaj.setTotalVoturiAbt(NumarMagic.NUMBERZERO);
+                        this.sondaj.setTotalVoturiDa(NumarMagic.NUMBERZERO);
+                        this.sondaj.setTotalVoturiNu(NumarMagic.NUMBERZERO);
                         this.sondajService.save(this.sondaj);
+                        cautareSondajeActive();
                         final String descriere = "Sondajul a fost salvat cu succes: ";
                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
                                         RegistruEnum.INREGISTRARE.getDescriere(), descriere);
@@ -490,6 +493,26 @@ public class SondajBean implements Serializable {
         }
 
         /**
+         * Metodă care verifică dacă data de începere a sondajului este acum sau posterioară
+         */
+        private void extractValidareSondaj() {
+                // Verificam daca data de incepere a sondajului este acum sau posterioara
+                Boolean activar = false;
+                Date dataActuala = new Date();
+                Date dataForm = this.sondaj.getDataIncepere();
+                if (dataForm.after(dataActuala) || dataForm.equals(dataActuala)) {
+                        activar = true;
+                }
+                // Daca nu este ..il punem inactiv
+                if (activar) {
+                        this.sondaj.setActiv(SituatieSondajEnum.NEINCEPUT);
+                }
+                else {
+                        this.sondaj.setActiv(SituatieSondajEnum.ACTIV);
+                }
+        }
+
+        /**
          * Metodă folosită pentru a salva votul sondajului în baza de date.
          * @param vot String
          * @return pagina rezultate /sondaj/rezultate
@@ -498,11 +521,13 @@ public class SondajBean implements Serializable {
                 try {
                         this.sondaj = this.sondajActiv;
                         selectVotSondaj(vot);
-                        final List<Utilizator> useri = this.sondaj.getUtilizatori();
                         final Utilizator user = this.utilitati.getUtilizatorLogat();
-                        useri.add(user);
-                        this.sondaj.setUtilizatori(useri);
+                        UtilizatorSondaj userSondaj = new UtilizatorSondaj();
+                        userSondaj.setSondaj(this.sondaj);
+                        userSondaj.setUsername(user);
+                        this.sondajVotService.save(userSondaj);
                         this.sondajService.save(this.sondaj);
+                        cautareSondajeActive();
                         final String descriere = "Votul dumneavoastră a fost înregistrat cu succes. Vă mulțumim! ";
                         FacesUtilities.setMesajConfirmareDialog(FacesMessage.SEVERITY_INFO,
                                         RegistruEnum.INREGISTRARE.getDescriere(), descriere);
@@ -521,7 +546,7 @@ public class SondajBean implements Serializable {
         }
 
         /**
-         * Metodă folosită pentru a selecta tipul de vot si al seta in sondaj
+         * Metodă folosită pentru a selecta tipul de vot și al seta în sondaj
          * @param vot
          */
         private void selectVotSondaj(final String vot) {
@@ -573,13 +598,13 @@ public class SondajBean implements Serializable {
          */
         public Boolean valideazaVot(final Sondaj sond) {
                 Boolean potiVota = true;
-                final List<Utilizator> useri = sond.getUtilizatori();
+                final List<UtilizatorSondaj> useriSondaj = sondajVotService.findAllBySondaj(sond);
                 final Utilizator user = this.utilitati.getUtilizatorLogat();
-                if (!useri.isEmpty()) {
-                        for (final Utilizator utilizat : useri) {
+                if (!useriSondaj.isEmpty()) {
+                        for (final UtilizatorSondaj utilizat : useriSondaj) {
                                 // Daca utilizatorul logat a votat si se regaseste pe lista celor care au votat se
                                 // ascunde iconul care permite votul
-                                if (utilizat.getUsername().equals(user.getUsername())) {
+                                if (utilizat.getUsername().getUsername().equals(user.getUsername())) {
                                         potiVota = false;
                                 }
                         }
@@ -587,6 +612,16 @@ public class SondajBean implements Serializable {
 
                 return potiVota;
 
+        }
+
+        /**
+         * Metodă folosită pentru a dechide formularul de înregistrare al sondajelor noi, inițializând tot ceea ce este
+         * necesar pentru afișarea corectă a paginii (enums, sondaj nou,..etc).
+         * @return url-ul páginii de inregistrare a sondajului
+         */
+        public String getFormInregistrareSondaj() {
+                this.sondaj = new Sondaj();
+                return "/sondaj/ceazaSondaj.xhtml?faces-redirect=true";
         }
 
 }

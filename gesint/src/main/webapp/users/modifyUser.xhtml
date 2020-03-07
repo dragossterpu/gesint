@@ -156,7 +156,7 @@
 										<f:selectItem itemLabel="Toate" itemValue="" />
 										<f:selectItems value="#{userBean.judete}" var="judet" itemLabel="#{judet.nume}" itemValue="#{judet.nume}" />
 										 <p:ajax event="change" update="municipiuSelectat"
-											listener="#{userBean.actualLocalitati(userBean.judetSelect.nume)}" />   
+											listener="#{userBean.actualizareLocalitati(userBean.judetSelect.nume)}" />   
 									</p:selectOneMenu> 								
 								</div>
 							</div>

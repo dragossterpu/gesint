@@ -1,10 +1,5 @@
-<ui:composition template="../layouts/layoutInterior2.xhtml"
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<ui:composition template="../layouts/layoutInterior2.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<ui:define name="content">
 	    <h:form id="cautareSondaje">
 		<div class="filtru">
@@ -40,28 +35,17 @@
 			    </div>						
 			    <div class="ui-g coloanaCautare">
 				<div class="ui-g-12 ui-md-6 ui-lg-6">
-				    <h:outputLabel for="activ" value="Validate:" />
+				    <h:outputLabel for="activ" value="Situatie:" />
 				</div>
 				<div class="ui-g-12 ui-md-6 ui-lg-6">
-				    <p:selectOneMenu id="activ" value="#{sondajBean.filtruSondaj.activ}" class="selectFiltru">
-					<f:selectItem itemLabel="TOATE" itemValue="" />
-					<f:selectItem itemLabel="ÎN CURS" itemValue="true" />
-					<f:selectItem itemLabel="FINALIZATE" itemValue="false" />
-				    </p:selectOneMenu>
+				     <p:importEnum type="ro.stad.online.gesint.persistence.entities.enums.SituatieSondajEnum" var="activos" allSuffix="ALL_ENUM_VALUES" />
+				      <p:selectOneMenu  value="#{sondajBean.filtruSondaj.activ}" id="activ" class="selectFiltru"  >
+                                        <f:selectItem itemLabel="Alege unul..." itemValue="" />
+                                        <f:selectItems value="#{activos.ALL_ENUM_VALUES}" var="activ" itemLabel="#{activ.description}" itemValue="#{activ}" />
+                                   </p:selectOneMenu>
 				</div>
 			   </div>
-			   <div class="ui-g coloanaCautare">
-				<div class="ui-g-12 ui-md-6 ui-lg-6">
-				    <h:outputLabel for="validate" value="Situație:" />
-				</div>
-				<div class="ui-g-12 ui-md-6 ui-lg-6">
-				    <p:selectOneMenu id="validate" value="#{sondajBean.filtruSondaj.validat}" class="selectFiltru">
-					<f:selectItem itemLabel="TOATE" itemValue="" />
-					<f:selectItem itemLabel="ACTIVE" itemValue="true" />
-					<f:selectItem itemLabel="ELIMINATE" itemValue="false" />
-				    </p:selectOneMenu>
-				</div>
-			  </div>
+			
 			<div class="ui-g coloanaCautare">
 			     <div class="ui-g-12 ui-md-6 ui-lg-6">
 				<h:outputLabel for="dateFrom" value="Data înregistrării începând:" />
@@ -104,7 +88,7 @@
 	       </div>						
 	       <div class="rezultateFiltru">
 		   <p:outputPanel layout="block" id="panelSondaje">
-			 <p:dataTable id="tablaSondaje" var="sondaj" rowIndexVar="rowIndex" value="#{sondajBean.model}"  rows="15"  draggableColumns="true" paginator="true" lazy="true" resizableColumns="true"  
+			 <p:dataTable id="tablaSondaje" var="sondaj" rowIndexVar="rowIndex" value="#{sondajBean.model}"  rows="10"  draggableColumns="true" paginator="true" lazy="true" resizableColumns="true"  
 			  sortOrder="descending" styleClass="modHeaderTable" onkeypress="if (event.keyCode == 13) {return false; }"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
 			  rowKey="#{sondaj.id}" rowsPerPageTemplate="5,10,15" pageLinks="4" paginatorPosition="bottom" emptyMessage="Nu există niciun rezultat care să corespundă parametrilor căutării dvs." paginatorAlwaysVisible="false">				
 			    <f:facet name="header">
@@ -135,17 +119,17 @@
 			     </p:outputPanel>
 			</f:facet>	
 			<p:ajax event="rowSelect" oncomplete="PF('dlg').show()" update=":cautareSondaje:dialog" />											
-			<p:column headerText="Întrebare" style="width:42%;text-align:center;" sortBy="#{sondaj.intrebare}" visible="#{sondajBean.list[0]}" exportable="#{sondajBean.list[0]}">							
+			<p:column headerText="Întrebare" style="width:39%;text-align:center;" sortBy="#{sondaj.intrebare}" visible="#{sondajBean.list[0]}" exportable="#{sondajBean.list[0]}">							
 			     <h:outputText escape="false" id="descriereIntrebare" value="#{sondaj.intrebare.length() gt 40 ? fn:substring(sondaj.intrebare,0,40).concat('...') : sondaj.intrebare}"></h:outputText>
 			     <p:tooltip id="toolTipText" for="descriereIntrebare" value="#{sondaj.intrebare}" position="top" />	
 			</p:column>						
-			<p:column headerText="% DA" style="width:9%;text-align:center;" sortBy="#{sondaj.procentajDa}" visible="#{sondajBean.list[1]}" exportable="#{sondajBean.list[1]}">
+			<p:column headerText="% DA"  style="width:9%;text-align:center;" sortBy="#{sondaj.procentajDa}" visible="#{sondajBean.list[1]}" exportable="#{sondajBean.list[1]}">
 			     <b><h:outputText value="#{sondaj.procentajDa}" />%</b>
 			</p:column>		
-			<p:column headerText="% NU" style="width:9%;text-align:center;" sortBy="#{sondaj.procentajNu}" visible="#{sondajBean.list[2]}" exportable="#{sondajBean.list[2]}">
+			<p:column headerText="% NU"  style="width:9%;text-align:center;" sortBy="#{sondaj.procentajNu}" visible="#{sondajBean.list[2]}" exportable="#{sondajBean.list[2]}">
 			     <b><h:outputText value="#{sondaj.procentajNu}" />%</b>
 			</p:column>	
-			<p:column headerText="% Abtineri" style="width:12%; text-align:center;" sortBy="#{sondaj.procentajAbt}" visible="#{sondajBean.list[3]}" exportable="#{sondajBean.list[3]}">
+			<p:column headerText="% Abtineri"  style="width:13%; text-align:center;" sortBy="#{sondaj.procentajAbt}" visible="#{sondajBean.list[3]}" exportable="#{sondajBean.list[3]}">
 			     <b><h:outputText value="#{sondaj.procentajAbt}" />%</b>
 			</p:column>	
 			<p:column headerText="Data sondajului" sortBy="#{sondaj.dataIncepere}" style="width:17%; text-align:center;" visible="#{sondajBean.list[4]}" exportable="#{sondajBean.list[4]}">
@@ -153,9 +137,10 @@
 	                            <f:convertDateTime pattern="dd/MM/yyyy" timeZone="Europe/Madrid" />
 	                        </h:outputText>
 	                </p:column>
-			<p:column headerText="Stare" sortBy="#{sondaj.activ}" visible="#{sondajBean.list[5]}" exportable="#{sondajBean.list[5]}" style="width:14%; text-align:center;">
-			     <h:outputText styleClass="fa fa-check-circle" value=" ACTIV" rendered="#{sondaj.activ}" />
-			     <h:outputText styleClass="fa fa-times-circle" value=" FINALIZAT" rendered="#{not sondaj.activ}"  />
+			<p:column headerText="Stare" sortBy="#{sondaj.activ}" visible="#{sondajBean.list[5]}"   exportable="#{sondajBean.list[5]}" style="width:16%; text-align:center;">
+			     <h:outputText styleClass="fa fa-check-circle modIcon" value=" ACTIV" rendered="#{sondaj.activ.name eq 'ACTIV'}" />
+			     <h:outputText styleClass="fa fa-times-circle modIcon" value=" FINALIZAT" rendered="#{ sondaj.activ.name eq'FINALIZAT'}"  />
+			     <h:outputText styleClass="fa fa-exclamation-triangle modIcon" value=" NEÎNCEPUT" rendered="#{sondaj.activ.name eq 'NEINCEPUT'}" />
 			</p:column>						
 			<p:column headerText="Voturi" style="width:10%;" sortBy="#{sondaj.totalVoturi}" visible="#{sondajBean.list[6]}" exportable="#{sondajBean.list[6]}">
 			     <b><h:outputText value="#{sondaj.totalVoturi}" /></b>
@@ -163,7 +148,7 @@
 			<p:column styleClass="butonTabla" headerText="" style="width:16%;">
                        	    <h:commandLink title="Detalii sondaj" styleClass="fa fa-fw fa-align-left  ui-button ui-state-default ui-CommandLink modBtn ui-CommandLink-icono"
 				action="#{sondajBean.detaliiSondaj(sondaj)}"   />
-			    <p:commandButton title="Eliminare" icon="fa fa-trash" styleClass="modBtn" actionListener="#{sondajBean.eliminareSndaj(sondaj)}" update=":cautareSondaje:panelSondaje">
+			    <p:commandButton title="Eliminare" icon="fa fa-trash" styleClass="modBtn" actionListener="#{sondajBean.eliminareSondaj(sondaj)}" update=":cautareSondaje:panelSondaje">
 			        <p:confirm header="Eliminare sondaj" message="Sigur doriți să eliminați acest sondaj?" icon="fa fa-warning-sign" />
 			     </p:commandButton>
 			</p:column>  																

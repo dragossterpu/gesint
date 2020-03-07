@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ro.stad.online.gesint.constante.Constante;
+import ro.stad.online.gesint.persistence.entities.enums.SituatieSondajEnum;
 import ro.stad.online.gesint.persistence.entities.enums.TipSondajEnum;
 
 /**
@@ -76,11 +77,6 @@ public class FiltruSondaj implements Serializable {
         /**
          * Filtru activ.
          */
-        private Boolean activ;
-
-        /**
-         * Filtru validate.
-         */
-        private Boolean validat;
+        private SituatieSondajEnum activ;
 
 }

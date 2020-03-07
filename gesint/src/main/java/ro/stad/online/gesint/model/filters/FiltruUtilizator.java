@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.stad.online.gesint.persistence.entities.Functie;
 import ro.stad.online.gesint.persistence.entities.Judet;
 import ro.stad.online.gesint.persistence.entities.Localitate;
 import ro.stad.online.gesint.persistence.entities.Utilizator;
@@ -81,9 +82,14 @@ public class FiltruUtilizator implements Serializable {
         private Localitate localitate;
 
         /**
-         * Filtru nivel de studii utilizator.
+         * Filtru localitate utilizator.
          */
-        private EducatieEnum educatie;
+        private List<Localitate> listaLocalitatiSelectate;
+
+        /**
+         * Filtru lista nivel de studii utilizator.
+         */
+        private List<EducatieEnum> listaEducatie;
 
         /**
          * Filtru sex utilizator.
@@ -96,9 +102,19 @@ public class FiltruUtilizator implements Serializable {
         private String idJudet;
 
         /**
+         * Filtru judet utilizator.
+         */
+        private List<String> listaIdJudet;
+
+        /**
          * Filtru localitate utilizator.
          */
         private Long idLocalitate;
+
+        /**
+         * Filtru localitate utilizator.
+         */
+        private List<String> listaIdLocalitate;
 
         /**
          * Filtru stare civila utilizator.
@@ -137,6 +153,12 @@ public class FiltruUtilizator implements Serializable {
         private Judet judetSelectat;
 
         /**
+         * VariablA utilizata pentru judetul selectionat.
+         *
+         */
+        private List<Judet> listaJudeteSelectate;
+
+        /**
          * Lista utilizatorilor selectați.
          */
         private List<Utilizator> utilizatoriSelectionati;
@@ -150,4 +172,9 @@ public class FiltruUtilizator implements Serializable {
          * Variable para functie
          */
         private Long idFunctia;
+
+        /**
+         * Variabla pentru lista de functii
+         */
+        private List<Functie> listaFunctii;
 }
