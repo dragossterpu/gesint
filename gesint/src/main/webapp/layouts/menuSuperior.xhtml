@@ -12,14 +12,11 @@
 				<p:menuitem value="Corespondență electronică (EMAIL)" icon="fa fa-fw fa-envelope-square" outcome="/corespondente/corespondente" styleClass="itemInceput" />
 			</p:submenu>
 			<p:submenu label="Democracy 2.0" icon="fa fa-fw fa-group" styleClass="itemD2">
-				<p:menuitem value="Crează sondaj" outcome="/sondaj/creazaSondaj"/>				
-				<p:separator />	
 				<p:menuitem value="Rezultate sondaj" outcome="/sondaj/rezultate" />
+				<p:menuitem value="Voteaza sondaj" outcome="/sondaj/voteaza" />
 				<p:separator />	
-				<p:menuitem value="Suport votare" outcome="/sondaj/suport" />
-				<p:menuitem value="Voteaza sondaj" actionListener="#{sondajBean.getFormInregistrareSondaj}"  />
-			</p:submenu>
-		
+				<p:menuitem value="Suport votare" outcome="/sondaj/suport" />				
+			</p:submenu>	
 			<p:submenu label="Setările sistemului" icon="fa fa-fw fa-sun-o" styleClass="itemAdministracion" rendered="#{p:ifAnyGranted('ROLE_ADMIN')}">								
 				<p:menuitem value="Activități/Registru de activitate" icon="fa fa-fw fa-edit" outcome="/regActivitate/registreActivitate" />	
 				<p:menuitem value="Proprietăţi" icon="fa fa-fw fa-edit" outcome="/enConstruccion"/>
